@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Marco_Bone",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Marco_Bone",
+  "parent":{
+    "name":"Macro",
+    "path":"folders/Scripts/Macro.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

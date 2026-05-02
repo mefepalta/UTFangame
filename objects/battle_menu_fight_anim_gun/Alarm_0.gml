@@ -1,0 +1,2 @@
+instance_create_depth(320,150,DEPTH_BATTLE.BULLET_OUTSIDE_HIGH*2,obj_circular_movement_projectiles)
+image_alpha=0

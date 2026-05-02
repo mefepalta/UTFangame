@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Descend_Board",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Descend_Board",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Battle_SlamDown",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Battle_SlamDown",
+  "parent":{
+    "name":"Slam",
+    "path":"folders/Scripts/Battle/Slam.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

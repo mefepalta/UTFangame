@@ -1,0 +1,1 @@
+Anim_Create(id , "image_angle" , 0 , 1 , 0 , add_angle , 20)

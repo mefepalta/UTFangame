@@ -1,0 +1,9 @@
+depth=DEPTH_BATTLE.BG;
+x=0;
+y=480;
+image_xscale=2000;
+image_yscale=2;
+image_blend=c_purple;
+gradient_timer=0;
+shake_alpha=0
+close_gradient=1;

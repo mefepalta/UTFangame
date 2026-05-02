@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"MakeSlash",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MakeSlash",
+  "parent":{
+    "name":"Slash",
+    "path":"folders/Objects/Slash.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,1 @@
+draw_sprite(s_sanswalk, image_index, x, y);

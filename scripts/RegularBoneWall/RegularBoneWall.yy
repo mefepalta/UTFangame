@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"RegularBoneWall",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RegularBoneWall",
+  "parent":{
+    "name":"Bullet",
+    "path":"folders/Scripts/Battle/Bullet.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

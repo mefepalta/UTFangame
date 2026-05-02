@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"MakeBoneRight",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MakeBoneRight",
+  "parent":{
+    "name":"Bullets",
+    "path":"folders/Scripts/Battle/Bullets.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

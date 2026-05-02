@@ -1,0 +1,10 @@
+depth = -999999999999999999;
+image_alpha = 0;
+diddyvalue = false;
+diddytimer = 0;
+target_y = y;
+target_x = x;
+move_speedy = 0.05;
+move_speedx = 0.025;
+hsp = 0;
+vsp = 0;

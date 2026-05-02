@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"RegularBlasterCircle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RegularBlasterCircle",
+  "parent":{
+    "name":"Bullet",
+    "path":"folders/Scripts/Battle/Bullet.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

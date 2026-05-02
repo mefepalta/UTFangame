@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"DrawGUIRectangle_UI",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DrawGUIRectangle_UI",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

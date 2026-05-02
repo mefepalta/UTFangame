@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"flash_on",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"flash_on",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

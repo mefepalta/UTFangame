@@ -1,0 +1,14 @@
+if!surface_exists(surf)
+surf=surface_create(640,480)
+surface_set_target(surf)
+draw_surface(application_surface,0,0)
+surface_reset_target()
+draw_set_color(c_black)
+draw_rectangle(0,0,640,480,false)
+draw_set_color(c_white)
+s=max(camera.scale_x,camera.scale_y)
+for(i=(640-640*s)/2-w*640*s;i<=(640-640*s)/2+w*640*s;i+=640*s)
+{
+	for(ii=(480-480*s)/2-h*480*s;ii<=(480-480*s)/2+h*480*s;ii+=480*s)
+		draw_surface_ext(surf,x+i,y+ii,s,s,0,c_white,1)
+}

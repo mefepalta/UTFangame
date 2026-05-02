@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"MakeBoneCircle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MakeBoneCircle",
+  "parent":{
+    "name":"Bone",
+    "path":"folders/Scripts/Battle/Bone.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

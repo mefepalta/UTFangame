@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"bgm_homicide",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":369.3453,
+  "name":"bgm_homicide",
+  "parent":{
+    "name":"TML Engine Template",
+    "path":"TML Engine Template.yyp",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"bgm_homicide.mp3",
+  "type":0,
+  "volume":1.0,
+}

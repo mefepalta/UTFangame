@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"discord_init_dll",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"discord_init_dll",
+  "parent":{
+    "name":"Discord",
+    "path":"folders/Scripts/Discord.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

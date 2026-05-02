@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"discord_free_app",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"discord_free_app",
+  "parent":{
+    "name":"Discord",
+    "path":"folders/Scripts/Discord.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

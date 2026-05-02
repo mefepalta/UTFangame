@@ -1,0 +1,1 @@
+draw_sprite(spr_char_frisk_right_dark, 0, x, y);

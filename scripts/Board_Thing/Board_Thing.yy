@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Board_Thing",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Board_Thing",
+  "parent":{
+    "name":"Objects",
+    "path":"folders/Objects.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
