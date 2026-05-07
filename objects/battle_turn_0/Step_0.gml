@@ -12,6 +12,7 @@ if (_intro_timer == 1)
 {
 	audio_play_sound(snd_glisterbones,1,true);
 	battle_enemy_engage.p2_head_sprite = spr_p2_head;
+	instance_create_depth(0, 0, 0, o_swoosh_spawner);
 }
 if (_intro_timer == 20)
 {

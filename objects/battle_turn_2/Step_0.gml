@@ -12,10 +12,7 @@ if (room == room_battle)
 {
 	if (_timer = 1)
 	{
-		//audio_play_sound(snd_chevalier,1,true);
 	    Battle_SetBoardSizeCubic(65,65,110,110);
-		//Battle_SetSoul(battle_soul_blue);
-		//audio_play_sound(snd_bell,2,0);
 	}
 	if (_timer == 40)
 	{
@@ -164,5 +161,92 @@ if (room == room_battle_1)
 	if (_timer == 1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
+	}
+	if (_timer = 10)
+	{
+		Battle_SetBoardSizeCubic(85,65,40,40);
+		Anim_Create(battle_board, "x", ANIM_TWEEN.EXPO, ANIM_EASE.OUT, bottom_box - 50, -230, 50);
+	}
+	if (_timer = 60)
+	{
+		RegularBlaster(320,-50,battle_soul.x + 50,top_box-100,270,270,20,10,2,2,30);
+	}
+	if (_timer == 70)
+	{
+		Anim_Create(battle_board, "x", ANIM_TWEEN.LINEAR, ANIM_EASE.IN, bottom_box - 280, 460, 350);
+		RegularBone(right_box,top_box,33,-2,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,124,-2,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer = 130)
+	{
+		RegularBlaster(320,-50,battle_soul.x + 50,top_box-100,270,270,20,10,2,2,30);
+	}
+	if (_timer == 140)
+	{
+		RegularBone(right_box,top_box,124,-2,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,33,-2,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer = 200)
+	{
+		RegularBlaster(320,-50,battle_soul.x + 50,top_box-100,270,270,20,10,2,2,30);
+	}
+	if (_timer == 210)
+	{
+		RegularBone(right_box,top_box,33,-2,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,124,-2,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer = 270)
+	{
+		RegularBlaster(320,-50,battle_soul.x + 50,top_box-100,270,270,20,10,2,2,30);
+	}
+	if (_timer == 280)
+	{
+		RegularBone(right_box,top_box,124,-2,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,33,-2,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer = 340)
+	{
+		RegularBlaster(320,-50,battle_soul.x + 50,top_box-100,270,270,20,10,2,2,30);
+	}
+	if (_timer == 350)
+	{
+		RegularBone(right_box,top_box,33,-2,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,124,-2,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer = 410)
+	{
+		Battle_SlamUp();
+		RegularBlaster(320,-50,left_box - 50,top_box + 20,0,0,20,10,2,2,30);
+	}
+	if (_timer = 460)
+	{
+		Battle_SlamDown();
+		RegularBlaster(320,-50,left_box - 50,bottom_box - 20,0,0,20,10,2,2,30);
+	}
+	if (_timer == 510)
+	{
+		Battle_SetSoul(battle_soul_red);
+		Anim_Create(battle_board, "x", ANIM_TWEEN.LINEAR, ANIM_EASE.IN, bottom_box + 180, -240, 50);
+	}
+	if (_timer == 560)
+	{
+		Battle_SetBoardSizeCubic(65,65,150,150);
+	}
+	if (_timer == 590)
+	{
+		RegularBone(left_box,top_box,182,0,3,270,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,182,0,-3,90,0,0,1,0,0,0,0,true);
+	}
+	if (_timer == 640)
+	{
+		RegularBone(left_box,bottom_box,182,0,-3,270,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,top_box,182,0,3,90,0,0,1,0,0,0,0,true);
+	}
+	if (_timer == 710)
+	{
+		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+		Battle_SetSoul(battle_soul_red);
+		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_EndTurn();
 	}
 }

@@ -1,5 +1,4 @@
 ///@desc Turn Preparation Start
-Battle_SetBoardSizeCubic(65,65,150,150);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 with (battle_enemy_engage)
 {
@@ -20,9 +19,11 @@ global.checkornot = false;
 
 if (room == room_battle)
 {
+	Battle_SetBoardSizeCubic(65,65,150,150);
 	sansy.text = "{font 3}{voice 3}{squish 1.2}{head 2}But actually seeing it&happen in person?{pause}{clear}{head 3}A pile of dust where&life once stood?{pause}{clear}{head 11}Now that's an image&nearly impossible to&get out of your mind.";
 }
 if (room == room_battle_1)																																																																		   
 {
+	Battle_SetBoardSizeCubic(65,65,250,250);
 	sansy.text= "{font 3}{voice 3}{head 5}Admitting this is gonna&be a bit of a challenge&for me, but...{pause}{clear}{head 14}Honestly...&the thought of them&fighting...{sleep 100}{head 13} scared me.";
 }

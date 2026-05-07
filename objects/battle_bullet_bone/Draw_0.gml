@@ -55,20 +55,25 @@ if(out = 0){
 	}surface_reset_target();
 }
 else{
-	depth = DEPTH_BATTLE.BULLET_OUTSIDE_HIGH;
-	draw_sprite_ext(spr_bone_body,0,x,y,length/2,1,angle,blend,1);
-		if(bottom = 1){
-			draw_sprite_ext(spr_bone_head,0,x-lengthdir_x(length/2,angle),y+lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
-			draw_sprite_ext(spr_bone_head,1,x+lengthdir_x(length/2,angle),y-lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
-		}
-		if(bottom = 0){
-			draw_sprite_ext(spr_bone_head,0,x-lengthdir_x(length/2,angle),y+lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
-			draw_sprite_ext(spr_bone_bottom,1,x+lengthdir_x(length/2,angle),y-lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
-		}
-		if(bottom = 2){
-			draw_sprite_ext(spr_bone_bottom,0,x-lengthdir_x(length/2,angle),y+lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
-			draw_sprite_ext(spr_bone_head,1,x+lengthdir_x(length/2,angle),y-lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
-		}
+    depth = DEPTH_BATTLE.BULLET_OUTSIDE_HIGH;
+    draw_sprite_ext(spr_bone_body,0,x,y,length/2,1,angle,blend,1);
+        if(bottom = 1){
+            draw_sprite_ext(spr_bone_head,0,x-lengthdir_x(length/2,angle),y+lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
+            draw_sprite_ext(spr_bone_head,1,x+lengthdir_x(length/2,angle),y-lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
+        }
+        if(bottom = 0){
+            draw_sprite_ext(spr_bone_head,0,x-lengthdir_x(length/2,angle),y+lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
+            draw_sprite_ext(spr_bone_bottom,1,x+lengthdir_x(length/2,angle),y-lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
+        }
+        if(bottom = 2){
+            draw_sprite_ext(spr_bone_bottom,0,x-lengthdir_x(length/2,angle),y+lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
+            draw_sprite_ext(spr_bone_head,1,x+lengthdir_x(length/2,angle),y-lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
+        }
+        // ↓↓↓ EKSİK OLAN BU ↓↓↓
+        if(bottom = 9){
+            draw_sprite_ext(spr_bone_head,0,x-lengthdir_x(length/2,angle),y+lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
+            draw_sprite_ext(spr_bone_head,1,x+lengthdir_x(length/2,angle),y-lengthdir_x(length/2,angle-90),1,1,angle+180,blend,1);
+        }
 }
 
 //draw_set_color(c_red)

@@ -24,5 +24,5 @@ if (room == room_battle)
 }
 if (room == room_battle_1)																																																																		   
 {
-	sansy.text= "{font 3}{voice 3}{head 11}We spent every waking&moment...{pause}{clear}{head 10}Every possible second&of our lives...{pause}{clear}{head 6}...preparing for&something like you to&come steal it from us.";
+	sansy.text= "{font 3}{voice 3}{squish 1.2}{head 11}We spent every waking&moment...{pause}{clear}{head 10}Every possible second&of our lives...{pause}{clear}{head 6}...preparing for&something like you to&come steal it from us.";
 }

@@ -23,6 +23,6 @@ if (room == room_battle)
 }
 if (room == room_battle_1)																																																																		   
 {
-	Battle_SetBoardSizeCubic(65,65,65,65);
-	sansy.text= "{font 3}{voice 3}{head 14}117.{pause}{clear}{head 15}That's how many&Monsters were&entrusted to me when I&became Alphys' vice&captain.{pause}{clear}{head 25}We swore to have each&other's backs.{pause}{clear}{head 1}And that no matter&what, we would never&give up on each other.{pause}{clear}{head 12}I wouldn't even be&ALIVE if it weren't&for them!";
+	Battle_SetBoardSizeCubic(65,65,125,125);
+	sansy.text= "{font 3}{voice 3}{squish 1.2}{head 14}117.{pause}{clear}{head 15}That's how many&Monsters were&entrusted to me when I&became Alphys' vice&captain.{pause}{clear}{head 25}We swore to have each&other's backs.{pause}{clear}{head 1}And that no matter&what, we would never&give up on each other.{pause}{clear}{head 12}I wouldn't even be&ALIVE if it weren't&for them!";
 }

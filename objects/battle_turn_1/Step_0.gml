@@ -119,25 +119,58 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	var platform = makeplatform(left_box+50,bottom_box + 50,60,0,0,true,0);
 	if (_timer == 1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
-	}
-	if (_timer = 1)
-	{
 		Battle_SlamDown();
 		battle_enemy_engage.p2_armright_sprite = spr_p2_arm_right_slamdown;
-	}
-	if (_timer = 5)
-	{
-		platform.vspeed = -1;
 	}
 	if (_timer = 7)
 	{
 		battle_enemy_engage.p2_armright_sprite = spr_p2_arm_right;
 	}
-	if (_timer == 1000)
+	if (_timer > 10) and (_timer < 221) and (_timer % 55 == 0)
+	{
+		RegularBone(left_box,bottom_box,82,5,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box,top_box,72,3,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,82,-5,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,top_box,72,-3,0,180,0,0,1,0,0,0,0,true);
+	}
+	if (_timer = 230)
+	{
+		RegularBlaster(320,-50,left_box + 130,top_box - 70,180,270,20,1,3,2,50);
+	}
+	if (_timer = 340)
+	{
+		Battle_SetBoardSizeCubic(65,65,65,65);
+		Anim_Create(battle_board, "x", ANIM_TWEEN.EXPO, ANIM_EASE.OUT, bottom_box - 50, 230, 70);
+	}
+	if (_timer = 420)
+	{
+		Anim_Create(battle_board, "x", ANIM_TWEEN.LINEAR, ANIM_EASE.IN, bottom_box + 180, -250, 350);
+	}
+	if (_timer > 350) and (_timer < 800) and (_timer % 10 == 0)
+	{
+		RegularBone(right_box,top_box,72,-5,0,180,0,0,1,0,0,0,0,true);
+	}
+	if (_timer > 350) and (_timer < 800) and (_timer % 50 == 0)
+	{
+		RegularBone(left_box,bottom_box,32,4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box - 15,bottom_box,32,4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box - 30,bottom_box,32,4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box - 45,bottom_box,32,4,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer > 381) and (_timer < 800) and (_timer % 20 == 0)
+	{
+		audio_play_sound(snd_stab,2,false);
+		RegularBone(left_box,bottom_box,152,6.5,0,0,2,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,152,-6.5,0,0,2,0,1,0,0,0,0,true);
+	}
+	if (_timer == 830)
+	{
+		RegularBone(right_box,bottom_box,87,-4,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer == 900)
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
 		Battle_SetSoul(battle_soul_red);
