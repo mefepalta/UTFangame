@@ -1,4 +1,5 @@
 event_inherited();
+global.go_dodge = "block";
 
 _dir=choose(DIR.LEFT,DIR.RIGHT);
 _input_acceptable=true;

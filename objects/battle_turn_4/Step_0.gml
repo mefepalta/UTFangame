@@ -70,20 +70,58 @@ if (room == room_battle_1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
 	}
-	/* (_timer == 10)
-	{
-		for (var i = 195; i > 165; i -= 5)
-		{
-			var bone = RegularBone(left_box + 100,top_box - 50, 40,0, 0, i+90,0,1,1,0,0,0,0,true);
-			bone.direction = i;
-			bone.speed = 10;
-		}
-	}*/
 	if (_timer = 10)
 	{
-		MakeBoneCircle(20,3,40,0,30,40,left_box,top_box,0)
+		Battle_SlamDown();
+		RegularBlaster(320,-50,left_box - 50,bottom_box - 20,0,0,10,20,2,2,50);
+		RegularBlaster(320,-50,right_box + 50,bottom_box - 20,180,180,10,20,2,2,50);
+		//MakeBoneCircle(20,3,40,0,30,40,left_box,top_box,1,0,1,250,260,260,360)
 	}
-	if (_timer == 710)
+	if (_timer = 100)
+	{
+		Battle_SetBoardSizeCubic(65,65,150,150);
+	}
+	if (_timer = 120)
+	{
+		plat = makeplatform(left_box + 155, bottom_box - 30, 60, 0,0,true,0);
+	}
+	if (_timer > 150) and (_timer < 550)
+	{
+		if (_timer % 6 == 0)
+		{
+			RegularBone(left_box,down_box,80+sin(_timer*0.11)*-50,2.5,0,0,0,0,1,0,0,0,0,true);
+		}
+		if (_timer % 45 == 0)
+		{
+			RegularBone(left_box,bottom_box,152,4,0,0,2,0,1,0,0,0,0,true);
+			RegularBone(right_box,bottom_box,152,-4,0,0,2,0,1,0,0,0,0,true);
+		}
+	}
+	if (_timer = 630)
+	{
+		RegularBone(left_box,bottom_box,112,4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box,top_box,22,4,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,112,-4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,top_box,22,-4,0,180,0,0,1,0,0,0,0,true);
+	}
+	if (_timer = 670)
+	{
+		RegularBlaster(320,-50,left_box + 155,top_box - 40,270,270,10,20,3,2,50);
+	}
+	if (_timer = 770)
+	{
+		if(instance_exists(plat)){
+		    instance_destroy(plat);
+		}
+	}
+	if (_timer = 790)
+	{
+		RegularBone(left_box,bottom_box,62,4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,62,-4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box - 110,bottom_box,152,4,0,0,1,0,1,0,0,0,0,true);
+		RegularBone(right_box + 110,bottom_box,152,-4,0,0,1,0,1,0,0,0,0,true);
+	}
+	if (_timer == 900)
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
 		Battle_SetSoul(battle_soul_red);

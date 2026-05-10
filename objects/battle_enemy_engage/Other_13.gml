@@ -36,19 +36,17 @@ switch(Battle_GetMenu()){
         }
         break;
 	}else if global.go_dodge="miss"{
-		var dmg=-1;
-        var hp_orig=_hp;
-        
-        _hp=(_hp-dmg >= 0 ? _hp-dmg : 0);
-        
-        //Create damage number
-        /*var inst=instance_create_depth(320,y-300,0,battle_damage);
-        inst.damage=dmg;
-        inst.bar_hp_max=_hp_max;
-        inst.bar_hp_original=hp_orig;
-        inst.bar_hp_target=_hp;*/
-
-        break;
+	    var dmg=-1;
+	    var hp_orig=_hp;
+    
+	    // MISS yazısını göster
+	    var inst=instance_create_depth(x,y-250,0,battle_damage);
+	    inst.damage=dmg;
+	    inst.bar_visible=false; // HP barı gösterme
+	    inst.bar_hp_max=_hp_max;
+	    inst.bar_hp_original=hp_orig;
+	    inst.bar_hp_target=_hp;
+	    break;
 	}else if global.go_dodge="block"{
 		
 		var dmg=-1;

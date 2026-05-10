@@ -13,4 +13,25 @@ if(autoDestroy){
 		instance_destroy()
 	}
 }
+
+if (_dynamic){
+    _dynamic_lifetime--;
+    if (_dynamic_lifetime <= 0){
+        instance_destroy();
+    }
+    
+    // Pendulum
+    _dynamic_speed = lerp(_dynamic_speed, -1 * _dynamic_dir, 0.03);
+    if (abs(_dynamic_speed) > 0.9 && sign(_dynamic_speed) != _dynamic_dir){
+        _dynamic_dir = -_dynamic_dir;
+    }
+    hspeed = _base_hspeed * _dynamic_speed;
+    vspeed = _base_vspeed * _dynamic_speed;
+}
+
+// Y-scale ayrı
+if (_dynamic_scale){
+    _scale_offset = sin(count * _scale_speed) * 0.3;
+    _length = clamp(_length + _scale_offset, 10, 40);
+}
 	

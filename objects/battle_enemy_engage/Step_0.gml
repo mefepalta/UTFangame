@@ -489,7 +489,10 @@ if (global.checkornot == true)
 }
 if (global.p1sanshp == true)
 {
-	room_goto(room_p15);
+	if (room == room_battle)
+	{
+		room_goto(room_p15);
+	}
 	_head_image = 15;
 	_head_alpha = 1;
 	_body_alpha = 1;

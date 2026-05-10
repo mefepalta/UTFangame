@@ -1,5 +1,5 @@
 if(color = BONE.WHITE){
-	blend = c_white;
+	blend = make_colour_rgb(70,70,110);
 }
 if(color = BONE.BLUE){
 	blend = make_color_rgb(20,196,255);

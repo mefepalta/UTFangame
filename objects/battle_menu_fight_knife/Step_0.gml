@@ -1,5 +1,6 @@
 if(_input_acceptable){
 	if((_dir==DIR.LEFT&&_aim_x<=battle_board.x-battle_board.left-sprite_get_width(spr_battle_menu_fight_aim)/2) || (_dir==DIR.RIGHT&&_aim_x>=battle_board.x+battle_board.right+sprite_get_width(spr_battle_menu_fight_aim)/2)){
+			global.go_dodge = "miss";
 			Battle_SetMenuFightDamage(-1);
 			Battle_EndMenuFightAim();
 			_input_acceptable=false;

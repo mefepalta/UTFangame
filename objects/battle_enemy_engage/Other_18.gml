@@ -5,10 +5,16 @@
 var turn_number = Battle_GetTurnNumber()
 //Prepare the attack
 if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.FIGHT){
-	//Battle_SetTurnNumber(Battle_GetTurnNumber()+1);
-        var turn = asset_get_index(("battle_turn_" + string(turn_number)))
+    if (global.go_dodge == "miss"){
+        Battle_SetTurnNumber(Battle_GetTurnNumber()-1);
+        var skip_turn = asset_get_index("battle_skip_turn_0");
+        if object_exists(skip_turn)
+            instance_create_depth(0, 0, 0, skip_turn);
+    } else {
+        var turn = asset_get_index(("battle_turn_" + string(turn_number)));
         if object_exists(turn)
-            instance_create_depth(0, 0, 0, turn)
+            instance_create_depth(0, 0, 0, turn);
+    }
 }
 if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.ACT) or (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.ITEM){
 	Battle_SetTurnNumber(Battle_GetTurnNumber()-1);

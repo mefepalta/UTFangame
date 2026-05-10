@@ -5,7 +5,11 @@ if(bar_visible&&damage>0){
 }
 
 if(damage<=0){
-	draw_sprite_ext(spr_blocked_damage,0,xstart,y,1,1,0,c_white,1);
+    if(global.go_dodge == "miss"){
+        draw_sprite_ext(spr_battle_damage_miss,0,xstart,y,1,1,0,c_white,1);
+    }else{
+        draw_sprite_ext(spr_blocked_damage,0,xstart,y,1,1,0,c_white,1);
+    }
 }else{
 	var STR=string(damage);
 	var LEN=string_length(STR);

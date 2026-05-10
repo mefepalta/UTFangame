@@ -154,16 +154,28 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 			}
 		}
 		inst_plat = instance_place(x+xx,y+yy-1,battle_platform1);
-		if(instance_exists(inst_plat)&&move > 0&&!(abs(inst_plat.angle)-abs(dir)=0&&abs(inst_plat.angle)-abs(dir)=180)){
-			on_platform = 1;
-			jump_state = 0;
-			move = 0;
-			if(impact = 1){
-				gravity_fall = 0.15
-				Camera_Shake(8,8,1,1,1,1);
-				impact = 0;
-			}
-			
+		if(instance_exists(inst_plat) && move > 0 && (inst_plat.angle mod 180) == ((dir + 90) mod 180)){
+		    on_platform = 1;
+		    jump_state = 0;
+		    move = 0;
+    
+		    // Platforma gömüldüyse dışarı çıkar
+		    var _pushx = 0;
+		    var _pushy = 0;
+		    if(dir = 270) _pushy = -1;
+		    if(dir = 90)  _pushy =  1;
+		    if(dir = 0)   _pushx = -1;
+		    if(dir = 180) _pushx =  1;
+		    while(place_meeting(x, y, inst_plat)){
+		        x += _pushx;
+		        y += _pushy;
+		    }
+    
+		    if(impact = 1){
+		        gravity_fall = 0.15;
+		        Camera_Shake(8,8,1,1,1,1);
+		        impact = 0;
+		    }
 		}
 		//碰到支撑物时停止下落并改变状态
 	}
@@ -178,20 +190,17 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
         fx = -1//((- sprite_height) / 2)
     else if (dir == 0)
         fx = 1//(sprite_height / 2)
-	if(instance_exists(inst_plat)&&!(abs(abs(inst_plat.angle)-abs(dir))=0||abs(abs(inst_plat.angle)-abs(dir))=180)){
-		while(place_meeting(x+fx,y+fy,inst_plat)&&place_meeting(x,y,inst_plat)){
-			//show_debug_message("exists plat, angle..dir..angle..dir")
-			move = 0;
-			jump_state = 0;
-	        mx = 0;
-	        my = 0;
+	if(instance_exists(inst_plat) && (inst_plat.angle mod 180) != ((dir + 90) mod 180)){
+	    while(place_meeting(x+fx,y+fy,inst_plat)&&place_meeting(x,y,inst_plat)){
+	        move = 0; jump_state = 0;
+	        mx = 0; my = 0;
 	        if(dir = 270)my = -1.5;
-			if(dir = 90)my = 1;
+	        if(dir = 90)my = 1;
 	        if(dir = 180)mx = 1;
 	        if(dir = 0)mx = -1;
 	        x += mx;
 	        y += my;
-		}
+	    }
 	}
 
 	switch(dir){
