@@ -39,3 +39,9 @@ if(_state==-1){
 		instance_destroy();
 	}
 }
+if(_state==-1){
+    if(!instance_exists(ui_dialog)){
+        _state=0;
+        event_user(0);
+    }
+}

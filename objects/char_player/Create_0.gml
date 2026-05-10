@@ -40,3 +40,4 @@ _moveable_save=true;
 _moveable_warp=true;
 _moveable_encounter=true;
 _moveable_box=true;
+_moveable_chest = true;

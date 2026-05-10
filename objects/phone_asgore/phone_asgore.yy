@@ -1,12 +1,12 @@
 {
   "$GMObject":"",
-  "%Name":"phone_toriel",
+  "%Name":"phone_asgore",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":10,"eventType":7,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"phone_toriel",
+  "name":"phone_asgore",
   "overriddenProperties":[],
   "parent":{
     "name":"Phone",

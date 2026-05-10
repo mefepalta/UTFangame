@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"overworld_bg",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":128.68498,
+  "exportDir":"",
+  "name":"overworld_bg",
+  "parent":{
+    "name":"Flag",
+    "path":"folders/Scripts/Flag.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"overworld_bg.ogg",
+  "volume":1.0,
+}

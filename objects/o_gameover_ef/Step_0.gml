@@ -16,8 +16,9 @@ if (Input_IsPressed(INPUT.CONFIRM)) and (readyornot = true)
 }
 if (nextroomtimer == 80)
 {
-	audio_stop_all();
-	room_goto(room_area_0);
+    audio_stop_all();
+    Player_Load(0);
+    room_goto(room_area_0);
 }
 if (image_alpha < target_alpha) {
     image_alpha += fade_speed;

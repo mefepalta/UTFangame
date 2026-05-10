@@ -25,6 +25,9 @@ if(instance_exists(_inst_stat_1)){
 if(instance_exists(_inst_phone)){
 	instance_destroy(_inst_phone);
 }
+if(instance_exists(_inst_kills)){
+    instance_destroy(_inst_kills);
+}
 
 if(instance_exists(char_player)){
 	char_player._moveable_menu=true;

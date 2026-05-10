@@ -4,7 +4,7 @@
 	_body_speed=0;
 	_body_loop=true;
 	_action_step=1;
-	items = [item_sour_tea, item_caviar, item_green_apple, item_green_apple1,item_maleficent_tyrant,item_maleficent_tyrant1,item_maleficent_tyrant2,item_ramen];
+	//items = [item_sour_tea, item_caviar, item_green_apple, item_green_apple1,item_maleficent_tyrant,item_maleficent_tyrant1,item_maleficent_tyrant2,item_ramen];
 
 	global.slam_power = 0.15*5
 	global.slam_damage = false

@@ -16,7 +16,7 @@ if(_menu==-1){
 			audio_play_sound(snd_menu_switch,0,false);
 		}
 	}else if(Input_IsPressed(INPUT.DOWN)){
-		if(_choice<(Phone_GetNumber()>0 ? 2 : 1)){
+		if(_choice<2){
 			_choice+=1;
 			audio_play_sound(snd_menu_switch,0,false);
 		}
@@ -44,20 +44,25 @@ if(_menu==-1){
 		instance_destroy();
 	}
 }else if(_menu==1){
-	if(Input_IsPressed(INPUT.UP)){
-		if(_choice_item>0){
-			_choice_item-=1;
-			audio_play_sound(snd_menu_switch,0,false);
-		}
-	}else if(Input_IsPressed(INPUT.DOWN)){
-		if(_choice_item<Item_GetNumber()-1){
-			_choice_item+=1;
-			audio_play_sound(snd_menu_switch,0,false);
-		}
-	}else if(Input_IsPressed(INPUT.CANCEL)){
-		_menu=0;
-		event_user(0);
-	}
+    if(Input_IsPressed(INPUT.UP)){
+        if(_choice_item>0){
+            _choice_item-=1;
+            audio_play_sound(snd_menu_switch,0,false);
+        }
+    }else if(Input_IsPressed(INPUT.DOWN)){
+        if(_choice_item<Item_GetNumber()-1){
+            _choice_item+=1;
+            audio_play_sound(snd_menu_switch,0,false);
+        }
+    }else if(Input_IsPressed(INPUT.CONFIRM)){ // EKLE
+        _choice_item_operate=0;
+        _menu=2;
+        event_user(0);
+        audio_play_sound(snd_menu_confirm,0,false);
+    }else if(Input_IsPressed(INPUT.CANCEL)){
+        _menu=0;
+        event_user(0);
+    }
 }else if(_menu==2){
 	if(Input_IsPressed(INPUT.LEFT)){
 		if(_choice_item_operate>0){

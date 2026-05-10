@@ -1,6 +1,8 @@
 if(_state==0||_state==1){
-	draw_sprite_ext(spr_pixel,0,108,118,424,174,0,c_black,1);
-	draw_sprite_ext(spr_pixel,0,108+6,118+6,424-6*2,174-6*2,0,c_black,0.5);
+    var _border_color = (_state==1 ? c_yellow : c_white);
+    draw_sprite_ext(spr_pixel,0,108,118,424,174,0,c_black,1);
+    draw_sprite_ext(spr_pixel,0,108+6,118+6,424-6*2,174-6*2,0,_border_color,1);
+    draw_sprite_ext(spr_pixel,0,108+12,118+12,424-12*2,174-12*2,0,c_black,1);
 }
 
 if(_state==0){

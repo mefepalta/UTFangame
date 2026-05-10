@@ -1,6 +1,7 @@
 if (!gop) and (place_meeting(x,y,char_player)) and (room == room_area_0)
 {
 	char_player.moveable=false;
+	char_player._moveable_menu=false;
 	camera.target=spor;
 	
 	gop=true;
@@ -28,80 +29,96 @@ if (room == room_area_0)
 	{
 	default:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* ...{pause}{clear}* I don't understand.{pause}{clear}* This place... you...{pause}{clear}* I feel like we've been here&for as long as time.{pause}{clear}* is this my fate? To face&you until the end of time?{pause}{clear}* Well then, I accept my fate.{pause}{clear}* If this means our people are&safe, then I'll stand here until&the end of my days.{pause}{clear}* I am Sans! The Endless Knight!{pause}{clear}* This is the end!");
-	}
-	break;
-	case 11:
-	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* Hey, calm down. You look&redder then any tomato I've&ever seen.");
-	}
-	break;
-	case 10:
-	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* You're back... I mean, here.{pause}{clear}* Sorry, I've just been got a&huge sense of deja vu.{pause}{clear}* ...{pause}{clear}* Whatever.");
+		Dialog_Add("{font 3}{voice 3}* ...{pause}{clear}* I don't understand.{pause}{clear}* This place... you...{pause}{clear}* I feel like we've been here&  for as long as time.{pause}{clear}* is this my fate? To face&  you until the end of time?{pause}{clear}* Well then, I accept my fate.{pause}{clear}* If this means our people are&  safe, then I'll stand here&  until the end of my days.{pause}{clear}* I am Sans!&  The Endless Knight!{pause}{clear}* This is the end!");
+	    Dialog_Start();
 	}
 	break;
 	case 9:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* You know... a small white&dog stole my special attack&right before you showed up.{pause}{clear}* Well that's fine, I'll just&settle for a regular legion of&magic attacks instead.");
+		Dialog_Add("{font 3}{voice 3}* Papyrus used to tell me this&  story.{pause}{clear}* The one about a golden leaf.{pause}{clear}* Basically, it fell from a&  tree made of gold and flowed&  down a river.{pause}{clear}* By the time it reached&  someone, its color faded,&  and it was gray.{pause}{clear}* The further it let the&  current take it, the more&  color it lost.{pause}{clear}* Until it was deemed totally&  worthless by the people who&  found it.{pause}{clear}* We all had our own&  interpretations of it...{pause}{clear}* But seeing you just...&  brought it back to mind,&  I guess.");
+	    Dialog_Start();
 	}
 	break;
 	case 8:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* Alphys told me humans were&threatening foreboding&creatures.{pause}{clear}* That tomato red face of&yours makes that hard to take&seriously.");
+		Dialog_Add("{font 3}{voice 3}* Well, that stance looks&  familiar.{pause}{clear}* It's the same one you used&  against... well... everyone.{pause}{clear}* The only difference is that&  you seem less into it than&  normal.{pause}{clear}* You look tired.{pause}{clear}* You sure you want all this?");
+	    Dialog_Start();
 	}
 	break;
 	case 7:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* The snow is nice outside.{pause}{clear}* Such a calming view, you&could sit back, and watch the&cold snow fall from above.{pause}{clear}* We could have shared such a&charming time here, too.{pause}{clear}* Well... I guess that's&behind us now.");
+		Dialog_Add("{font 3}{voice 3}* You're different.{pause}{clear}* I'm used to seeing a certain&  spark in your eyes.{pause}{clear}* But now... It's grayed out.{pause}{clear}* I barely recognized you.{pause}{clear}* ...What happened, exactly?{pause}{clear}* Well, it's a good thing I&  haven't lost MY spark.");
+	    Dialog_Start();
 	}
 	break;
 	case 6:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* That face makes me think&you just had everything taken&from you.{pause}{clear}* What's the matter? I&thought you were supposed to&be the brute strong type.");
+		Dialog_Add("{font 3}{voice 3}* The snow's nice.{pause}{clear}* Why don't you spend some&  time relaxing by the window?&  I do that sometimes.{pause}{clear}* We could have shared such a&  charming time here, too.{pause}{clear}* ...Sorry for getting&  sentimental on you.{pause}{clear}* It's just that... it feels&  like I've been standing here&  for an eternity.{pause}{clear}* And eternity... really gets&  you thinking about some&  things.");
+	    Dialog_Start();
 	}
 	break;
 	case 5:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* ...{pause}{clear}* Should I ask why you look&so red?");
+		Dialog_Add("{font 3}{voice 3}* For whatever reason, when I&  first saw you...{pause}{clear}* I could've sworn we've been&  talking for ages.{pause}{clear}* Were we friends, in another&  life, somewhere?");
+	    Dialog_Start();
 	}
 	break;
 	case 4:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* I don't know why, I feel&like we've been fighting for&ages.{pause}{clear}* Though.... we basically just&met.{pause}{clear}* Hm...{pause}{clear}* Well, that's besides the&point.");
+		Dialog_Add("{font 3}{voice 3}* Tch... what're YOU so&  worked up about with that&  disappointed look?{pause}{clear}* What, after my captain,&  fighting ME just isn't good&  enough for you, is that it?!{pause}{clear}* Well, lucky for you, then,&  I already forgot what I was&  going to say.{pause}{clear}* So we can skip the&  introductions.");
+	    Dialog_Start();
 	}
 	break;
 	case 3:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* Greetings...{pause}{clear}* ...{pause}{clear}* That face... you need to&cool off a bit.{pause}{clear}* Well, too bad...{pause}{clear}* You won't have much time to.");
+		Dialog_Add("{font 3}{voice 3}* Heh...{pause}{clear}* You startled me.{pause}{clear}* For a second there, I&  could've sworn you were about to hit me.{pause}{clear}* But the hitting comes DURING&  the duel.{pause}{clear}* And I had my guard down.{pause}{clear}* Humans still have honor,&  right?");
+	    Dialog_Start();
 	}
 	break;
 	case 2:
 	if (gop1 == 350){
+		Dialog_Add("{font 3}{voice 3}* Okay... that's weird.{pause}{clear}* I felt a bit of panic when I&  saw you.{pause}{clear}* Like I just missed an&  opportunity to attack, and&  you were about to...{pause}{clear}* ...{pause}{clear}* Well, our fight hasn't even&  started yet, so it doesn't&  matter.{pause}{clear}* And something tells me&  you've BEEN ready.{pause}{clear}* Well... your move.");
 		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* ...{pause}{clear}* That face...{pause}{clear}* Have we met before or&something?");
 	}
 	break;
 	case 1:
 	if (gop1 == 350){
+		_dialog_part1 = 1;
+		Dialog_Add("{font 3}{voice 3}* Okay... so what was that?{pause}{clear}* It couldn't have been a&  dream... could it?{pause}{clear}* I swear I was just...");
 		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* Greetings, human.{pause}{clear}* did you think I wouldn't&notice you sneaking by just&now?{pause}{clear}* Not at all. I know exactly&how you humans work inside,&and out.{pause}{clear}* ...{pause}{clear}* ...{pause}{clear}* That look on your face...{pause}{clear}* You've heard all of this&before.{pause}{clear}* Hm.{pause}{clear}* Well, either way...{pause}{clear}* FIGHTING YOU SEEMS LIKE MY&ONLY OPTION!");
+	}
+	if (_dialog_part1 == 1 && !instance_exists(ui_dialog)){
+	    _dialog_part1 = 2;
+	    alarm[2] = 120;
+	}
+	if (_dialog_part1 == 3){
+	    _dialog_part1 = 4;
+		obj_snas.image_index = 0;
+	    Dialog_Add("{font 3}{voice 3}* ...!{pause}{clear}* You're here already?!{pause}{clear}* How?!{pause}{clear}* But I... I.. uhh...{pause}{clear}* I mean... ugh...{pause}{clear}* Hey. {pause}{clear}* Have we met before?{pause}{clear}* I can't get this image out&  of my head...{pause}{clear}* It's like we were just&  here...{pause}{clear}* Hmph... well...{pause}{clear}* Whatever you're playing&  at...{pause}{clear}* It won't work!{pause}{clear}* Yeah, your mind games won't&  work on me!");
+	    Dialog_Start();
+	}
+	if (_dialog_part1 == 4 && !instance_exists(ui_dialog)){
+    _dialog_done1 = true;
 	}
 	break;
 	case 0:
 	if (gop1 == 350){
-		Dialog_Start()
-		Dialog_Add("{font 3}{voice 3}* Greetings, human.{pause}{clear}* Did you think I wouldn't&notice you sneaking by just&now?{pause}{clear}* Not at all. I know exactly&how you humans work inside,&and out.{pause}{clear}* ...{pause}{clear}* The snow is nice outside.{pause}{clear}* Such a calming view, you&could sit back, and watch the&cold snow fall from above.{pause}{clear}* We could have shared such a&charming time here, too.{pause}{clear}* ...{pause}{clear}* I am no stranger to death,&human.{pause}{clear}* Living in this world for so&long, you are bound to hear&about it.{pause}{clear}* One way or another.{pause}{clear}* How a monster would die...{pause}{clear}* Or rather, how a monster&would be turned to dust just&like that.{pause}{clear}* Though, this never crossed&my mind that it would happen&to Papyrus, of all people.{pause}{clear}* Or even Alphys, for that&matter.{pause}{clear}* Yet here we stand. Facing&one another.{pause}{clear}* And here I am.{pause}{clear}* Standing right in front of&the beast who started this&whole mess.{pause}{clear}* So the coldest thing here,&isn't the snow, only your&heart.{pause}{clear}* ...");
+	    _dialog_part = 1;
+	    Dialog_Add("{font 3}{voice 3}* Mind if I ask a personal&  question?{pause}{clear}* About your home.{pause}{clear}* Does it snow where you're&  from? On the surface?{pause}{clear}* Papyrus used to take me&  here when I was little.{pause}{clear}* Most of the time, we'd just&  sit there, completely silent.{pause}{clear}* But sometimes...{pause}{clear}* He'd prattle on about all&  the names of stars he could&  remember.{pause}{clear}* I think he called them...&  constellations, or something&  like that.{pause}{clear}* Just the two of us, alone...{pause}{clear}* My only brother.{pause}{clear}* ...{pause}{clear}* You know, if magic wasn't a&  real thing...{pause}{clear}* ...I'd swear it was back&  then.{pause}{end}");
+	    Dialog_Start();
+	}
+	if (_dialog_part == 1 && !instance_exists(ui_dialog)){
+	    _dialog_part = 2;
+	    alarm[1] = 120;
+	}
+	if (_dialog_part == 3){
+	    _dialog_part = 4;
+		obj_snas.image_index = 0;
+	    Dialog_Add("{font 3}{voice 3}* ...{pause}{clear}* Tch...{pause}{end}");
+	    Dialog_Start();
+	}
+	if (_dialog_part == 4 && !instance_exists(ui_dialog)){
+    _dialog_done = true;
 	}
 	break;
 	}
@@ -115,11 +132,17 @@ if (room == room_area_1)
 	}
 }
 
-if (!instance_exists(text_typer)) and (gop1 > 355) and (room == room_area_0)
+if (!instance_exists(text_typer)) and (gop1 > 355) and (room == room_area_0) and (_dialog_done and global.death_count == 0)
 {
-	go_battle++;
-	o_fog.diddyvalue = true;
-	o_heartow.diddyvalue = true;
+    go_battle++;
+    o_fog.diddyvalue = true;
+    o_heartow.hvalue = true;
+}
+if (!instance_exists(text_typer)) and (gop1 > 355) and (room == room_area_0) and (_dialog_done1 and global.death_count == 1)
+{
+    go_battle++;
+    o_fog.diddyvalue = true;
+    o_heartow.hvalue = true;
 }
 if (!instance_exists(text_typer)) and (gop1 > 250) and (room == room_area_1)
 {

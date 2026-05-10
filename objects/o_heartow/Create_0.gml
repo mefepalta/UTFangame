@@ -1,7 +1,7 @@
 depth = -999999999999999999;
 image_alpha = 0;
-diddyvalue = false;
-diddytimer = 0;
+hvalue = false;
+htimer = 0;
 target_y = y;
 target_x = x;
 move_speedy = 0.05;

@@ -60,6 +60,8 @@ if(_menu==3){
 		var lv=Flag_Get(FLAG_TYPE.STATIC,FLAG_STATIC.LV);
 		var lv_xp=Player_GetLvExp(lv+1);
 		var kills=Flag_Get(FLAG_TYPE.STATIC,FLAG_STATIC.KILLS);
+		_inst_kills = instance_create_depth(188+6+190, 52+6+345, 0, text_typer);
+		_inst_kills.text = _prefix+"{color `red`}KILLS: "+string(kills+117);
 		_inst_stat_1.text=_prefix+"{define `EXP` "+string(xp)+"}{define `EXP_NEXT` "+(lv_xp!=-1 ? string(lv_xp-xp) : "`N/A`")+"}"+Lang_GetString("ui.menu.stat.1")+(kills>0 ? "{define `KILLS` "+string(kills)+"}"+Lang_GetString("ui.menu.stat.2") : "");
 	}
 }else{
@@ -69,6 +71,9 @@ if(_menu==3){
 	if(instance_exists(_inst_stat_1)){
 		instance_destroy(_inst_stat_1);
 	}
+	if(instance_exists(_inst_kills)){
+        instance_destroy(_inst_kills);
+    }
 }
 
 if(_menu==4){

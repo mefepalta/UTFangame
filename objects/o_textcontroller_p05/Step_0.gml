@@ -57,4 +57,4 @@ if (p05 > 2950)
 	room_goto(room_battle);
 }
 	
-//if(keyboard_check_pressed(vk_space)) room_goto(room_battle);
+if(keyboard_check_pressed(vk_space)) room_goto(room_battle);
