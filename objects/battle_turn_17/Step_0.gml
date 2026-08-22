@@ -70,7 +70,7 @@ if (room == room_battle)
 	if (_timer == 1450)
 	{
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* He can't meet your eyes.")
 		Battle_EndTurn();
 	}
 }
@@ -84,7 +84,7 @@ if (room == room_battle_1)
 	if (_timer == 1000)
 	{
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* Alphys cracks her knuckles.")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;

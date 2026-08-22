@@ -101,7 +101,7 @@ if (room == room_battle)
 		if !(instance_exists(anotherTest))
 		{
 			Battle_SetSoul(battle_soul_red);
-			Battle_SetMenuDialog("* He's preparing something.")
+			Battle_SetMenuDialog("* Just as weak as everyone&  else.")
 			Battle_EndTurn();
 		}
 	}
@@ -172,7 +172,7 @@ if (room == room_battle_1)
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* Here they come!")
 		Battle_EndTurn();
 	}
 }

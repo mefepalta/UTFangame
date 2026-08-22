@@ -200,21 +200,12 @@ if (room == room_battle)
 	}
 	if (_timer = 1450)
 	{
-		Battle_SetMenuDialog("* He doesn't look happy.")
+		Battle_SetMenuDialog("* The last hope.")
 		Battle_EndTurn();
 	}
 }
 if (room == room_battle_1)
 {
-	// GECICI TEST: turuncu kismi (fake + koridor) atlayip dogrudan mavi bolume gecer.
-	// Geri acmak icin bu blogun tamamini sil.
-	if (_timer == 1)
-	{
-		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
-		faz = 2;
-		_timer = 2029;
-	}
-
 	if (_timer == arm_reset)
 	{
 		battle_enemy_engage.p2_armright_sprite = spr_p2_arm_right;
@@ -566,7 +557,7 @@ if (room == room_battle_1)
 
 	if (_timer == 4540)
 	{
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* Papyrus won't stop grinning.")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;

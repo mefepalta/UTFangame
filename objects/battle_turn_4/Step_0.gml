@@ -59,7 +59,7 @@ if (room == room_battle)
 	if (_timer == 900)
 	{
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* He doesn't look happy.")
+		Battle_SetMenuDialog("* Smells like bones.")
 		Battle_EndTurn();
 	}
 }
@@ -125,7 +125,7 @@ if (room == room_battle_1)
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* Papyrus is trying hard not&  to fall asleep.")
 		Battle_EndTurn();
 	}
 }

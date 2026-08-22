@@ -211,7 +211,7 @@ if (room == room_battle_1)
 	{
 		Battle_SetSoul(battle_soul_red);
 		Battle_SetBoardSizeCubic(65,65,125,125);
-		Battle_SetMenuDialog("* Sans flips a bone in mid-air.")
+		Battle_SetMenuDialog("* You should really stop&  reading all these.")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
@@ -318,7 +318,7 @@ if (_timer == 800)
 if (_timer == 900)
 {
 	Battle_SetSoul(battle_soul_red);
-	Battle_SetMenuDialog("* Sans flips a bone in mid-air.")
+	Battle_SetMenuDialog("* Sans flips a bone mid-air&  to look intimidating.")
 	if (instance_exists(o_sans_blockp2))
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;

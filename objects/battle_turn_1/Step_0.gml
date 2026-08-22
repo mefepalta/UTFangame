@@ -113,7 +113,7 @@ if (room == room_battle)
 	if (_timer == 1000)
 	{
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* Ash fills the air.")
 		Battle_EndTurn();
 	}
 }
@@ -174,7 +174,7 @@ if (room == room_battle_1)
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* Second time's a charm.")
 		Battle_EndTurn();
 	}
 }

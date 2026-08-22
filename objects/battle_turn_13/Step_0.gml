@@ -96,7 +96,7 @@ if (room == room_battle)
 	}
 	if (_timer = 720)
 	{
-		Battle_SetMenuDialog("* He doesn't look happy.")
+		Battle_SetMenuDialog("* His eyes flare with resolve.")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
@@ -587,7 +587,7 @@ if (room == room_battle_1)
 	if (fade_at > 0) and (_timer == fade_at+2442)
 	{
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* He doesn`t look happy.")
+		Battle_SetMenuDialog("* He seems somewhere else.")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;

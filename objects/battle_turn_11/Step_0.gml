@@ -551,7 +551,7 @@ if (_timer == 1500)
 {
 	Battle_SetSoul(battle_soul_red);
 	audio_play_sound(snd_ding,2,false);
-	Battle_SetMenuDialog("* There's no going back.")
+	Battle_SetMenuDialog("* Sans mutters the Guard's&  mantra under his breath.")
 	if (instance_exists(o_sans_blockp2))
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;

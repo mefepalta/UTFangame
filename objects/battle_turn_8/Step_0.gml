@@ -129,7 +129,7 @@ if (room == room_battle_1)
 	{
 		Battle_SetSoul(battle_soul_red);
 		Battle_SetBoardSizeCubic(65,65,125,125);
-		Battle_SetMenuDialog("* Sans stares you down.")
+		Battle_SetMenuDialog("* The real final battle has&  just begun!")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
@@ -212,7 +212,7 @@ if (_timer == 860)
 if (_timer == 940)
 {
 	Battle_SetSoul(battle_soul_red);
-	Battle_SetMenuDialog("* Sans stares you down.")
+	Battle_SetMenuDialog("* He anticipates your next&  move.")
 	if (instance_exists(o_sans_blockp2))
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;

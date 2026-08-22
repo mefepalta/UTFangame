@@ -31,7 +31,7 @@ if (room == room_battle_1)
 	sansy.text="{speaker 1}{font 4}{voice 4}{pap_head 1}ALWAYS SO&MELODRAMATIC,&SANS.{pause}{clear}{pap_head 0}LET'S JUST GET A&MOVE ON ALREADY.{pause}{clear}"
 	+"{speaker 0}{font 3}{voice 3}{head 4}I don't remember&taking orders from&you, Papyrus.{pause}{clear}{head 17}And in case you&forgot, I'm still&your boss.{pause}{clear}"
 	+"{speaker 2}{font 2}{voice 2}{alp_head 5}And I'm BOTH your&guy's boss!{pause}{clear}{alp_head 4}So you boneheads&better listen up!{pause}{clear}{alp_head 0}We won't defeat them&if we don't work as&a team.{pause}{clear}{alp_head 1}So here's the plan.{pause}{clear}{alp_head 5}We hit 'em with&EVERYTHING we have!{pause}{clear}{alp_head 4}Pouring every last bit&of power we can muster&into one last focused&attack!{pause}{clear}"
-	+"{speaker 1}{font 4}{voice 4}{pap_head 11}EHH, THAT PLAN&SOUNDS LIKE&SOMETHING YOU DO{pause}{clear}RIGHT BEFORE YOU&LOSE.{pause}{clear}"
+	+"{speaker 1}{font 4}{voice 4}{pap_head 11}EHH, SOUNDS MORE&LIKE A LAST-DITCH&EFFORT{pause}{clear}RIGHT BEFORE YOU&LOSE.{pause}{clear}"
 	+"{speaker 0}{font 3}{voice 3}{head 14}And one we're gonna&have to bet on.{pause}{clear}{head 13}I can't hold out much&longer...{pause}{clear}{head 25}My power is...{pause}{clear}"
 	+"{speaker 2}{font 2}{voice 2}{alp_head 5}Then shut up and&fight!{pause}{clear}"
 	+"{speaker 1}{font 4}{voice 4}{pap_head 16}ROGER.";

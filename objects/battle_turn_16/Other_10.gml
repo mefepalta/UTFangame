@@ -35,18 +35,13 @@ if (room == room_battle_1)
 		alp_state = 2;
 	}
 
-	// Metin Step_0'da, iyilestirme bitince kullanilacak
-		phase2_text="{speaker 1}{font 4}{voice 4}{pap_head 0}THERE YA GO.&GUESSING IT'S A&BIT FOR YOU,&NOW.{pause}{clear}"
-	+"{speaker 2}{font 2}{voice 2}{alp_head 5}We had them right&there! What are you&doing?!{pause}{clear}{alp_head 4}You really trust this&guy?!{pause}{clear}"
-	+"{speaker 0}{font 3}{voice 3}{head 13}Uhh...{pause}{clear}"
-	+"{speaker 1}{font 4}{voice 4}{pap_head 1}COME OOOON,&DON'TJA WANT A&FAIR FIGHT?{pause}{clear}"
-	+"{speaker 0}{font 3}{voice 3}{head 12}What do I care about&being ''Fair''?!{pause}{clear}"
-	+"{speaker 1}{font 4}{voice 4}{pap_head 11}OH, I SEE.&YOU'RE CHICKEN.{pause}{clear}{pap_head 4}YOU DON'T WANT&TO FACE THE&HUMAN ON EQUAL&FOOTING.{pause}{clear}{pap_head 12}I GUESS YOU&WON'T BE ABLE TO&SHOW OFF YOUR{pause}{clear}AMAZING POWER ON&THE HUMAN.{pause}{clear}"
-	+"{speaker 2}{font 2}{voice 2}{alp_head 5}WHAT?!{pause}{clear}"
-	+"{speaker 0}{font 3}{voice 3}{head 21}WHAT?!{pause}{clear}{head 12}I can beat them all&on my own!{pause}{clear}"
-	+"{speaker 2}{font 2}{voice 2}{alp_head 1}I don't need you guys&to help me, I can beat&them with my eyes&closed!{pause}{clear}"
-	+"{speaker 0}{font 3}{voice 3}{head 17}Fine! Have that your&way then!{pause}{clear}{head 18}I'll teach this human&a lesson, fair and&square!{pause}{clear}"
-	+"{speaker 2}{font 2}{voice 2}{alp_head 0}Yeah, hey speaking&of...{sleep 25} I want this&human all to myself!{pause}{clear}{alp_head 4}You guys get out of&here, that's an order!{pause}{clear}"
-	+"{speaker 0}{font 3}{voice 3}{head 25}Fine.{pause}{clear}"
+	// Metin Step_0'da, sahne kurulunca kullanilacak.
+	// Yesil kemikli iyilestirme sahnesi senaryodan cikarildi: bu tur artik
+	// sadece devir teslim diyalogu.
+	phase2_text="{speaker 2}{font 2}{voice 2}{alp_head 1}I've been waiting a&long time for this!{pause}{clear}{alp_head 4}You guys scram!{pause}{clear}{alp_head 1}I've got this!{pause}{clear}"
+	+"{speaker 0}{font 3}{voice 3}{head 13}Captain...&Are you sure?{pause}{clear}"
+	+"{speaker 2}{font 2}{voice 2}{alp_head 0}I've fought my fair&share of humans&before.{pause}{clear}{alp_head 0}I know what I'm&doing.{pause}{clear}{alp_head 5}THAT...{sleep 20} AND the&score's looking like&a solid 0 to 1&right now...{pause}{clear}{alp_head 5}And I've never been&more livid in my&life!{pause}{clear}"
+	+"{speaker 1}{font 4}{voice 4}{pap_head 1}AFTERLIFE.{pause}{clear}"
+	+"{speaker 0}{font 3}{voice 3}{head 25}Fine. Just...&be careful.{pause}{clear}"
 	+"{speaker 1}{font 4}{voice 4}{pap_head 1}LESS WORK FOR&ME.";
 }

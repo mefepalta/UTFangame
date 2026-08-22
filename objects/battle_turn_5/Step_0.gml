@@ -101,7 +101,7 @@ if (room ==  room_battle)
 	{
 		Battle_SetSoul(battle_soul_red);
 		Anim_Create(battle_board,"angle",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,45,-45,90);
-		Battle_SetMenuDialog("* No way out.")
+		Battle_SetMenuDialog("* He holds his spear close.")
 		Battle_EndTurn();
 	}
 }
@@ -532,7 +532,7 @@ if (room == room_battle_1)
 		battle_enemy_engage.p2_armleft_sprite = spr_p2_arm_left;
 		instance_destroy(o_fakebone);
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* Sans flips a bone in&  midair... but misses it.")
 		Battle_EndTurn();
 	}
 }
