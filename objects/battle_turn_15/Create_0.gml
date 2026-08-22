@@ -9,6 +9,7 @@ forest = [];
 forest_x = [];
 plat = noone;
 arm_reset = -1;
+roof = [];
 
 ForestMake = function(_count,_len,_sure)
 {
