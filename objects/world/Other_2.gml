@@ -41,7 +41,16 @@ instance_create_depth(0,0,0,closed_captions);
 
 application_surface_draw_enable(false);
 
-//Border_SetEnabled(true);
+if(!variable_global_exists("border_enabled")){
+	global.border_enabled=false;
+}
+if(!variable_global_exists("window_scale_index")){
+	global.window_scale_index=1;
+}
+if(!variable_global_exists("window_scale")){
+	global.window_scale=1;
+}
+Border_SetEnabled(global.border_enabled);
 window_set_caption("Swapfell DISCORD");
 Console_OutputLine("UNDERTALE by Toby Fox");
 Console_OutputLine("UNDERTALE Engine by TML");

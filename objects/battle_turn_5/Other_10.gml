@@ -24,5 +24,6 @@ if (room == room_battle)
 }
 if (room == room_battle_1)																																																																		   
 {
+	battle_enemy_engage.p2_head_sprite = spr_p2_head;
 	sansy.text= "{font 3}{voice 3}{head 2}They made a choice&that day...{pause}{clear}{head 3}To stand up knowing&exactly how that fight&would end.{pause}{clear}{head 10}Not because they&thought they could&win...{pause}{clear}{head 0}But because it was the&right thing to do.";
 }

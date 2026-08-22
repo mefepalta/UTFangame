@@ -136,10 +136,19 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
+	// Tur baslarken kafa, diyalog ifadesinden idle animasyonuna doner
+	if (_timer == 1)
+	{
+		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
+	}
 	if (_timer == 1000)
 	{
 		Battle_SetSoul(battle_soul_red);
 		Battle_SetMenuDialog("* Smells like bones.")
+		if (instance_exists(o_sans_blockp2))
+		{
+			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+		}
 		Battle_EndTurn();
 	}
 }

@@ -18,9 +18,21 @@ if (global.menu_state == "options") {
             case 0: 
                 global.fullscreen = !global.fullscreen;
                 window_set_fullscreen(global.fullscreen);
+				if(!global.fullscreen){
+					Border_SetEnabled(global.border_enabled);
+				}
                 break;
-            case 1: global.no_heal = !global.no_heal; break;
-            case 2: global.no_hit = !global.no_hit; break;
+            case 1:
+				global.border_enabled = !global.border_enabled;
+				Border_SetEnabled(global.border_enabled);
+				break;
+            case 2:
+				global.window_scale_index = (global.window_scale_index + 1) mod array_length(window_scales);
+				global.window_scale = window_scales[global.window_scale_index];
+				Border_SetEnabled(global.border_enabled);
+				break;
+            case 3: global.no_heal = !global.no_heal; break;
+            case 4: global.no_hit = !global.no_hit; break;
         }
         audio_play_sound(snd_menu_confirm, 1, false);
     }
@@ -30,33 +42,70 @@ case 0:
 	with (o_heartmenuoptions)
 	{
 		image_alpha = 1;
-		y = 258;
+		x = 323;
+		y = 218;
 	}
     break;
     case 1:	
 	with (o_heartmenuoptions)
 	{
 		image_alpha = 1;
-		y = 288;
+		x = 323;
+		y = 242;
 	}
 	break;
     case 2:	
 	with (o_heartmenuoptions)
 	{
 		image_alpha = 1;
-		y = 318;
+		x = 323;
+		y = 266;
 	}
 	break;
     case 3:	
 	with (o_heartmenuoptions)
 	{
 		image_alpha = 1;
-		y = 348;
+		x = 323;
+		y = 290;
+	}
+	break;
+    case 4:	
+	with (o_heartmenuoptions)
+	{
+		image_alpha = 1;
+		x = 323;
+		y = 314;
+	}
+	break;
+    case 5:	
+	with (o_heartmenuoptions)
+	{
+		image_alpha = 1;
+		x = 323;
+		y = 338;
 	}
 	break;
 }
+	if (menu_index == 2) {
+		var _scale_changed = false;
+		if (keyboard_check_pressed(vk_right)) {
+			global.window_scale_index = (global.window_scale_index + 1) mod array_length(window_scales);
+			_scale_changed = true;
+		}
+		if (keyboard_check_pressed(vk_left)) {
+			global.window_scale_index = (global.window_scale_index - 1 + array_length(window_scales)) mod array_length(window_scales);
+			_scale_changed = true;
+		}
+		if (_scale_changed) {
+			global.window_scale = window_scales[global.window_scale_index];
+			Border_SetEnabled(global.border_enabled);
+			audio_play_sound(snd_menu_confirm, 1, false);
+		}
+	}
+
     // Volume control
-    if (menu_index == 3) {
+    if (menu_index == 5) {
         if (keyboard_check_pressed(vk_right)) { 
             global.volume = clamp(global.volume + 0.1, 0, 1);
             audio_master_gain(global.volume);

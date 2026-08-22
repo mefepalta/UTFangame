@@ -230,3 +230,4 @@ if (storypanelval == 4190)
 {
 	Camera_Shake(2,2,1,1,5,5,0.3,0.3);
 }
+*/

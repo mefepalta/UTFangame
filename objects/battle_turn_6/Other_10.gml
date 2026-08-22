@@ -24,5 +24,6 @@ if (room == room_battle)
 }
 if (room == room_battle_1)																																																																		   
 {
+	battle_enemy_engage.p2_head_sprite = spr_p2_head;
 	sansy.text= "{font 3}{voice 3}{head 11}They kept pushing&forward, throwing&everything they had&at you.{pause}{clear}{head 16}Never wavering, not&even for a second.{pause}{clear}{head 2}I couldn't have asked&for a better team...";
 }

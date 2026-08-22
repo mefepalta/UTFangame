@@ -78,7 +78,7 @@ switch (global.menu_state)
 		  istime = true;
 		  if (target_alpha > 1)
 		  {
-			  room_goto(room_area_0);
+			  room_goto(room_area_beforesans);
 			  audio_stop_all();
 		  }
 	  }

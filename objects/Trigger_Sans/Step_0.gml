@@ -1,4 +1,4 @@
-if (!gop) and (place_meeting(x,y,char_player)) and (room == room_area_0)
+if (!gop) and (place_meeting(x,y,char_player)) and (room == room_area_beforesans)
 {
 	char_player.moveable=false;
 	char_player._moveable_menu=false;
@@ -8,7 +8,7 @@ if (!gop) and (place_meeting(x,y,char_player)) and (room == room_area_0)
 	obj_snas.image_alpha=1;
 	Anim_Create(spor,"x",ANIM_TWEEN.EXPO,ANIM_EASE.IN_OUT,spor.x,100,220,50);
 }
-if (!gop) and (place_meeting(x,y,char_player)) and (room == room_area_1)
+if (!gop) and (place_meeting(x,y,char_player)) and (room == room_area_aftersans)
 {
 	char_player.moveable=false;
 	gop=true;
@@ -23,7 +23,7 @@ if (gop == true)
 {
 	gop1++;
 }
-if (room == room_area_0)
+if (room == room_area_beforesans)
 {
 	switch (global.death_count)
 	{
@@ -123,7 +123,7 @@ if (room == room_area_0)
 	break;
 	}
 }
-if (room == room_area_1)
+if (room == room_area_aftersans)
 {
 	if (gop1 == 100)
 	{
@@ -132,24 +132,24 @@ if (room == room_area_1)
 	}
 }
 
-if (!instance_exists(text_typer)) and (gop1 > 355) and (room == room_area_0) and (_dialog_done and global.death_count == 0)
+if (!instance_exists(text_typer)) and (gop1 > 355) and (room == room_area_beforesans) and (_dialog_done and global.death_count == 0)
 {
     go_battle++;
     o_fog.diddyvalue = true;
     o_heartow.hvalue = true;
 }
-if (!instance_exists(text_typer)) and (gop1 > 355) and (room == room_area_0) and (_dialog_done1 and global.death_count == 1)
+if (!instance_exists(text_typer)) and (gop1 > 355) and (room == room_area_beforesans) and (_dialog_done1 and global.death_count == 1)
 {
     go_battle++;
     o_fog.diddyvalue = true;
     o_heartow.hvalue = true;
 }
-if (!instance_exists(text_typer)) and (gop1 > 250) and (room == room_area_1)
+if (!instance_exists(text_typer)) and (gop1 > 250) and (room == room_area_aftersans)
 {
 	go_battle++;
 }
 
-if (!instance_exists(text_typer)) and (go_battle > 90) and (room == room_area_1)
+if (!instance_exists(text_typer)) and (go_battle > 90) and (room == room_area_aftersans)
 {
 	with (obj_snas)
 	{
@@ -160,7 +160,7 @@ if (!instance_exists(text_typer)) and (go_battle > 90) and (room == room_area_1)
 		instance_create_layer(760, 165, "Instances", o_temp_sprite_1);
 	}
 }
-if (!instance_exists(text_typer)) and (go_battle > 360) and (room == room_area_1)
+if (!instance_exists(text_typer)) and (go_battle > 360) and (room == room_area_aftersans)
 {
 	char_player.moveable = true;
 	with (o_temp_sprite)

@@ -154,6 +154,14 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 			}
 		}
 		inst_plat = instance_place(x+xx,y+yy-1,battle_platform1);
+		// Platform ancak yercekiminin cektigi tarafta kalirsa destek sayilir
+		if(instance_exists(inst_plat)){
+			var _cx = (bbox_left+bbox_right)/2;
+			var _cy = (bbox_top+bbox_bottom)/2;
+			if((inst_plat.x-_cx)*xx + (inst_plat.y-_cy)*yy <= 0){
+				inst_plat = noone;
+			}
+		}
 		if(instance_exists(inst_plat) && move > 0 && (inst_plat.angle mod 180) == ((dir + 90) mod 180)){
 		    on_platform = 1;
 		    jump_state = 0;

@@ -23,5 +23,14 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	sansy.text="{font 3}{voice 3}{squish 1.2}{head 1}diddy";
+	// Sans ve Papyrus sahneyi terk eder, Alphys ortaya gecer
+	with (battle_enemy_engage)
+	{
+		p2_head_sprite = spr_p2_head;
+		p2_state = 3;				// Sans sola dogru ekran disina cikar
+		pap_state = 3;				// Papyrus da sola cikar
+		alp_state = 2;				// tek basina kaldigi icin otomatik ortaya gecer
+		alp_head_sprite = spr_alphys_head;
+	}
+	sansy.text="{speaker 2}{font 2}{voice 2}{alp_head 5}Human!{pause}{clear}{alp_head 0}I saw you tear through&our home.{pause}{clear}{alp_head 1}Snowdin, Waterfall,&the royal guard...{pause}{clear}{alp_head 0}You must've thought&you were&unstoppable...{pause}{clear}{alp_head 3}Even got the best of&me when we first met.{pause}{clear}{alp_head_spr `spr_alphys_head_mad`}{alp_head 1}But that changes&nothing!{pause}{clear}{alp_head 0}This time, there will&be no mistakes!";
 }

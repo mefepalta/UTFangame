@@ -16,9 +16,19 @@ _dynamic_dir = 1        // 1 ileri, -1 geri
 _dynamic_lifetime = 120  // Kaç frame yaşayacak, ayarlayabilirsin
 _dynamic_scale = false   // Y-scale ayrı kontrol
 _scale_offset = 0       // Y-scale dalgalanması için
+_snake_time = random(100);  // Her kemik farklı fazdan başlasın
+_snake_freq_x = random_range(0.05, 0.12);
+_snake_freq_y = random_range(0.03, 0.09);
+_snake_amp_x = random_range(1.5, 3.0);
+_snake_amp_y = random_range(0.8, 2.0);
+_snake_jolt_timer = irandom(60);
+_snake_jolt_x = 0;
+_snake_jolt_y = 0;
+_snake = false
 _scale_speed = random_range(0.05, 0.15)
 _base_hspeed = 0
 _base_vspeed = 0
+_angle_option = false;
 
 autoDestroy=true
 

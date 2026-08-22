@@ -7,6 +7,10 @@ function Battle_SetMenu() {
 		CALL=argument[1];
 	}
 
+	if(variable_global_exists("no_heal") && global.no_heal && MENU==BATTLE_MENU.ITEM){
+		return false;
+	}
+
 	battle._menu=MENU;
 	Battle_SetDialog("",false,false);
 	Battle_SetDialog("",false,true);
@@ -21,7 +25,7 @@ function Battle_SetMenu() {
 	//战斗/行动目标
 	if(MENU==BATTLE_MENU.FIGHT_TARGET || MENU==BATTLE_MENU.ACT_TARGET){
 		//越界归零
-		if(Battle_GetMenuChoiceEnemy()>=Battle_GetEnemyNumber()){
+		if(Battle_GetMenuChoiceEnemy()>=Battle_GetEnemyTargetNumber()){
 			Battle_SetMenuChoiceEnemy(0,false);
 		}
 		
@@ -29,8 +33,7 @@ function Battle_SetMenu() {
 		var proc=0;
 		//创建敌人列表文字
 		repeat(3){
-			var inst=Battle_GetEnemy(proc);
-			if(instance_exists(inst)){
+			if(Battle_IsEnemyTargetable(proc)){
 				if(Battle_IsEnemySpareable(proc)){
 					text+="{color `yellow`}"
 				}

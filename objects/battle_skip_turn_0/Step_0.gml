@@ -2078,17 +2078,21 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	if (_timer % 40 == 0) and (_timer >  10)
+	if (_timer % 40 == 0) and (_timer > 10) and (_timer < 500)
 	{
 		RegularBone(left_box,bottom_box,80,1,0,0,0,0,1,0,0,0,0,true);
 		RegularBone(right_box,top_box,80,-1,0,180,0,0,1,0,0,0,0,true);
 	}
-	/*if (_timer == 1)
+	// Bu blokta Battle_EndTurn cagrisi yoktu; item/ACT ile gelen skip turn
+	// hic bitmiyor ve sonsuz donguye giriyordu.
+	if (_timer == 560)
 	{
+		Battle_SetSoul(battle_soul_red);
+		Battle_SetMenuDialog("* Smells like bones.")
+		if (instance_exists(o_sans_blockp2))
+		{
+			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+		}
 		Battle_EndTurn();
 	}
-	if (_timer == 20)
-	{
-		Battle_EndTurn();
-	}*/
 }

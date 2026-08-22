@@ -23,5 +23,16 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	sansy.text="{font 3}{voice 3}{squish 1.2}{head 1}diddy";
+	with (battle_enemy_engage)
+	{
+		p2_head_sprite = spr_p2_head;
+		// Papyrus bu turun ortasinda canlaniyor. Tur tekrar oynarsa sahne bir
+		// daha oynamaz, o yuzden bastan sahnede duruyor.
+		pap_state = (global.p2_revived_pap ? 2 : 0);
+		alp_state = 2;
+	}
+	sansy.text="{font 3}{voice 3}{head 14}My only regret was not&doing the same for&him...{pause}{clear}{head 13}And never having&the courage to&say...{sleep 30} thank you.{pause}{clear}{head 25}Two words...{pause}{clear}Was it really so hard?{pause}{clear}{head 15}What would he even&say...{sleep 30} if he saw me&now?{pause}{clear}"
+	+"{revive 1}"
+	+"{speaker 1}{font 4}{voice 4}{pap_head 9}SURPRISE,&SURPRISE, LITTLE&HUMAN!{pause}{clear}{pap_head 16}YOUR GOOD PAL&PAPYRUS IS BACK&FROM THE DEAD!{pause}{clear}"
+	+"{speaker 0}{font 3}{voice 3}{head 6}These powers make no&sense.{pause}{clear}{head 2}But I guess I can&solve the mysteries of&that, later.";
 }

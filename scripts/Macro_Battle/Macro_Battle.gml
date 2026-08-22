@@ -124,5 +124,12 @@ function Macro_Battle() {
 		DURATION
 	};
 
+	//Sarı ruh atağındaki hedef türleri
+	enum DR_TARGET{
+		NORMAL,		//hem küçük hem büyük mermi yok eder
+		BIG,		//sadece büyük mermi yok eder
+		MIRROR		//mermiyi yansıtır, ruha hasar vermez
+	};
+
 
 }

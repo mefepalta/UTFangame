@@ -2,12 +2,13 @@
 function Battle_ConvertMenuChoiceEnemyToEnemySlot() {
 	var CHOICE_ENEMY=argument[0];
 
-	if(CHOICE_ENEMY<Battle_GetEnemyNumber()){
+	// Liste yalnizca hedeflenebilir dusmanlardan olusuyor
+	if(CHOICE_ENEMY<Battle_GetEnemyTargetNumber()){
 		var proc=0;
 		var proc2=0;
 		var result=-1;
 		repeat(3){
-			if(instance_exists(Battle_GetEnemy(proc))){
+			if(Battle_IsEnemyTargetable(proc)){
 				if(proc2==CHOICE_ENEMY){
 					result=proc;
 					break;

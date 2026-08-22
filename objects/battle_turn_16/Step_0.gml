@@ -178,10 +178,79 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	if (_timer == 1000)
+	if (_timer == 1)
 	{
+		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
+		// Bu tur bir saldiri degil: ruh sabit dursun
+		with (battle_soul) { moveable = false; }
+	}
+
+	//----------------------------------------------------------------------
+	// Papyrus yesil kemigi firlatir, kemik ruha ulasinca can dolar
+	//----------------------------------------------------------------------
+	if (_timer == 50)
+	{
+		bone_on = true;
+		with (battle_enemy_engage)
+		{
+			other.bone_x = pap_draw_x - 50;		// kolunun ucu
+			other.bone_y = y - 110;
+		}
+		audio_play_sound(snd_ding,2,false);
+	}
+
+	if (bone_on) and (instance_exists(battle_soul))
+	{
+		var _bd = point_distance(bone_x,bone_y,battle_soul.x,battle_soul.y);
+		bone_dir = point_direction(bone_x,bone_y,battle_soul.x,battle_soul.y);
+		bone_ang += bone_spin;			// yol boyunca kendi etrafinda doner
+		if (_bd > 8)
+		{
+			// Yaklastikca yavaslar
+			var _bs = clamp(_bd*0.07,1.5,5);
+			bone_x += lengthdir_x(_bs,bone_dir);
+			bone_y += lengthdir_y(_bs,bone_dir);
+		}
+		else
+		{
+			bone_on = false;
+			heal_done = true;
+			Player_Heal(9999999);
+			audio_play_sound(snd_item_heal,2,false);
+		}
+	}
+
+	//----------------------------------------------------------------------
+	// Iyilestirme bitince diyalog basliyor (atagin BASINDA degil SONUNDA)
+	//----------------------------------------------------------------------
+	if (heal_done) and (!dialog_started)
+	{
+		heal_wait += 1;
+		if (heal_wait > 35)
+		{
+			dialog_started = true;
+			battle_enemy_engage.p2_head_sprite = spr_p2_head;
+			var _dlg = instance_create_depth(0,0,0,battle_dialog_enemy);
+			_dlg.text = phase2_text;
+		}
+	}
+
+	//----------------------------------------------------------------------
+	// Diyalog bitti: Sans ve Papyrus sahneden ayrilir, tur kapanir
+	//----------------------------------------------------------------------
+	if (dialog_started) and (!instance_exists(battle_dialog_enemy))
+	{
+		with (battle_enemy_engage)
+		{
+			p2_state = 3;		// Sans cikiyor
+			pap_state = 3;		// Papyrus cikiyor
+		}
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_SetMenuDialog("* Alphys stares you down.")
+		if (instance_exists(o_sans_blockp2))
+		{
+			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+		}
 		Battle_EndTurn();
 	}
 }

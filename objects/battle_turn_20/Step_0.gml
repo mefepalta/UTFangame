@@ -1,3 +1,9 @@
+// Tur baslarken Sans'in kafasi diyalog ifadesinden idle animasyonuna doner
+if (room == room_battle_1) and (_timer == 1)
+{
+	battle_enemy_engage.p2_head_sprite = spr_p2_idle;
+}
+
 var horizontal_stab = ((battle_board.y-(battle_board.down+battle_board.right))-60)
 
 var left_box = (battle_board.x-battle_board.left)-5;
@@ -364,6 +370,10 @@ if (_timer > 4120)
 	{
 		audio_play_sound(snd_chance,1,true);
 		Battle_SetMenuDialog("* ...")
+		if (instance_exists(o_sans_blockp2))
+		{
+			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+		}
 		Battle_EndTurn();
 		global.finalstretch = 1;
 		global.go_dodge="damage"

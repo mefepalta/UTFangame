@@ -5,7 +5,12 @@ event_user(4);
 if(_paused&&Input_IsPressed(INPUT.CONFIRM)){
 	_paused=false;
 }
-if(_skippable&&!_paused&&Input_IsPressed(INPUT.CANCEL)){
+// Canlandirma sahnesi oynarken metin atlanamaz. Yoksa X'e basinca beklemeyi
+// gecip diyalog karartmanin altinda ilerliyor ve replikler sahnenin uzerine
+// biniyordu.
+var _cutscene=(instance_exists(o_monster_soul) && o_monster_soul.active);
+
+if(_skippable&&!_paused&&!_cutscene&&Input_IsPressed(INPUT.CANCEL)){
 	_skipping=true;
 	_sleep=0;
 	_char_frame_remain=0;

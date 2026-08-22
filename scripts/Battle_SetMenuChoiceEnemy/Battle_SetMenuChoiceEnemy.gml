@@ -7,7 +7,7 @@ function Battle_SetMenuChoiceEnemy() {
 		CALL=argument[1];
 	}
 
-	if(ENEMY>=0 && ENEMY<Battle_GetEnemyNumber()){
+	if(ENEMY>=0 && ENEMY<Battle_GetEnemyTargetNumber()){
 		battle._menu_choice_enemy=ENEMY;
 	
 		if(CALL){

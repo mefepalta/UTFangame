@@ -24,8 +24,13 @@ if battle._menu_choice_enemy = _enemy_slot {
         break;
 }
 
-if battle._menu_choice_enemy = _enemy_slot {
-}switch(Battle_GetMenuChoiceButton()){
+// Phase 2'de Papyrus ve Alphys de birer slot; ACT > Check baskasina yapildiysa
+// Sans'in metnini basmayalim.
+if(Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy())!=_enemy_slot){
+	exit;
+}
+
+switch(Battle_GetMenuChoiceButton()){
 case BATTLE_MENU_CHOICE_BUTTON.ACT:
      switch(Battle_GetMenuChoiceAction()){
 		 case 0:  ///Check

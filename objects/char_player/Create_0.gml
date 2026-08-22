@@ -1,17 +1,17 @@
 event_inherited();
 
 global.canskip=true;
-if (global.death_count > 0) and (room == room_area_0)
+if (global.death_count > 0) and (room == room_area_beforesans)
 {
 	x = 90;
 	y = 160;
 }
-else if (!global.death_count > 0) and (room == room_area_0)
+else if (!global.death_count > 0) and (room == room_area_beforesans)
 {
 	x = 100;
 	y = 140;
 }
-if (room == room_area_1)
+if (room == room_area_aftersans)
 {
 	x = 650;
 	y = 180;

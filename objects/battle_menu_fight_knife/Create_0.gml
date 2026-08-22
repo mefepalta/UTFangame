@@ -1,6 +1,11 @@
 event_inherited();
 global.go_dodge = "block";
 
+// Hedef Sans degilse onu gizlemeyelim: phase 2de Papyrus/Alphys de birer slot,
+// birine vurunca Sans kaybolup blok sprite'i cikiyordu.
+var _target_slot=Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy());
+var _hit_sans=(instance_exists(battle_enemy_engage) && _target_slot==battle_enemy_engage._enemy_slot);
+
 _dir=choose(DIR.LEFT,DIR.RIGHT);
 _input_acceptable=true;
 _aim_x=0;
@@ -10,7 +15,7 @@ image_alpha=0;
 image_yscale=2;
 
 if(_dir==DIR.LEFT){
-	if (!global.finalstretch == 1)
+	if (_hit_sans) and (!global.finalstretch == 1)
 	{
 		with (battle_enemy_engage)
 		{
@@ -29,7 +34,7 @@ if(_dir==DIR.LEFT){
 			p2_thingy_alpha = 0;
 		}
 	}
-	else
+	else if (_hit_sans)
 	{
 		with(battle_enemy_engage)
 		{
@@ -41,7 +46,7 @@ if(_dir==DIR.LEFT){
 	Anim_Create(id,"image_xscale",ANIM_TWEEN.QUINT,ANIM_EASE.OUT,1.3,0.7,40);
 	Anim_Create(id,"_aim_x",ANIM_TWEEN.SINE,ANIM_EASE.IN,_aim_x,-(battle_board.left+battle_board.right+sprite_get_width(spr_battle_menu_fight_aim)),75);
 }else{
-	if (!global.finalstretch == 1)
+	if (_hit_sans) and (!global.finalstretch == 1)
 	{
 		with (battle_enemy_engage)
 		{
@@ -60,7 +65,7 @@ if(_dir==DIR.LEFT){
 			p2_thingy_alpha = 0;
 		}
 	}
-	else
+	else if (_hit_sans)
 	{
 		with(battle_enemy_engage)
 		{

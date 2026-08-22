@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Battle_EnemyTargetable",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Battle_EnemyTargetable",
+  "parent":{
+    "name":"Enemy",
+    "path":"folders/Scripts/Battle/Enemy.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

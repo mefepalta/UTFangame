@@ -1,10 +1,10 @@
-if(bar_visible&&damage>0){
+if(bar_visible&&(damage>0||force_number)){
 	draw_sprite_ext(spr_pixel,0,(xstart-bar_width/2)-2,(ystart+18)-2,bar_width+3,17,0,c_black,1);
 	draw_sprite_ext(spr_pixel,0,xstart-bar_width/2,ystart+18,bar_width,13,0,c_dkgray,1);
 	draw_sprite_ext(spr_pixel,0,xstart-bar_width/2,ystart+18,bar_width/bar_hp_max*_bar_hp,13,0,c_lime,1);
 }
 
-if(damage<=0){
+if(damage<=0&&!force_number){
     if(global.go_dodge == "miss"){
         draw_sprite_ext(spr_battle_damage_miss,0,xstart,y,1,1,0,c_white,1);
     }else{

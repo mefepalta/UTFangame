@@ -1,3 +1,3 @@
-sprite=-1;
+sprite=spr_border_hall;
 
 alarm[0]=1;

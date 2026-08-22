@@ -9,6 +9,10 @@ function Item_CallEvent() {
 		SLOT=argument[2];
 	}
 
+	if(variable_global_exists("no_heal") && global.no_heal && (room==room_battle || room==room_battle_1)){
+		return false;
+	}
+
 	if(Item_IsValid(ITEM)&&(Item_IsSlotValid(SLOT)||SLOT==-1)){
 		var INST=instance_create_depth(0,0,0,ITEM);
 		INST._item_slot=SLOT;

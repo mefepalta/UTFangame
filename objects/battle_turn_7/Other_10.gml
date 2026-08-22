@@ -24,5 +24,6 @@ if (room == room_battle)
 }
 if (room == room_battle_1)																																																																		   
 {
+	battle_enemy_engage.p2_head_sprite = spr_p2_head;
 	sansy.text= "{font 3}{voice 3}{head 9}My Captain was the&same way...{pause}{clear}{head 2}With a heart of gold,&she made for the&perfect role model.{pause}{clear}{head 10}Amazingly charismatic,&impossibly patient,&unbelievably loyal...{pause}{clear}Brave, fearless,&determined, you name&it.{pause}{clear}{head 14}Yeah... just about&everything I could've&been.{pause}{clear}{head 15}Everything I messed up&on.";
 }

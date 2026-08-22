@@ -1,10 +1,16 @@
-// Time since game start in seconds
-var elapsed = (current_time - start_time) / 1000;
+var val = o_story.storypanelval;
 
-// Start new line when time is reached
 if (current_line + 1 < array_length(dialogue)) {
-    if (elapsed >= dialogue[current_line + 1].time) {
+    if (val >= dialogue[current_line + 1].time) {
         current_line++;
-        line_start_time = elapsed; // record start of this line
+        
+        // Clear the previous text_typer when a new one appears
+        if (instance_exists(_inst_text)) {
+            instance_destroy(_inst_text);
+        }
+        
+        // Create the new text_typer without {end}
+        _inst_text = instance_create_depth(85, 310, -9999, text_typer);
+        _inst_text.text = _prefix + dialogue[current_line].text;
     }
 }

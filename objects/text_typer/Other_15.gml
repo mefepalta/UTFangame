@@ -80,5 +80,7 @@ _group_voice[1,0]=snd_text_voice_typer;
 _group_voice[2,0]=snd_text_voice_alphys;
 _group_voice[3,0]=snd_text_voice_sans;
 _group_voice[4,0]=snd_text_voice_papyrus;
+_group_voice[5,0] = snd_text_voice_undyne;
+_group_voice[6,0] = snd_text_voice_default;
 
 _group_face[1]=sans_face;

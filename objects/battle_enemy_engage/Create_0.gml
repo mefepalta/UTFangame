@@ -93,7 +93,7 @@
 	global.go_dodge="block";     /// Set this to "missed" so enemy can miss the bullets
 
 	Flag_Set(FLAG_TYPE.STATIC,FLAG_STATIC.BATTLE_MENU_FIGHT_OBJ,battle_menu_fight_knife);
-	Border_SetEnabled(false);
+	Border_SetEnabled(global.border_enabled);
 	instance_create_depth(0,0,0,black_splash)
 
 	_bottom_cloak_anim=0;
@@ -299,7 +299,7 @@
 	global.go_dodge="block";     /// Set this to "missed" so enemy can miss the bullets
 
 	Flag_Set(FLAG_TYPE.STATIC,FLAG_STATIC.BATTLE_MENU_FIGHT_OBJ,battle_menu_fight_knife);
-	Border_SetEnabled(false);
+	Border_SetEnabled(global.border_enabled);
 	instance_create_depth(0,0,0,black_splash)
 
 	_bottom_cloak_anim=0;
@@ -391,6 +391,89 @@
 	p2_cape_y=0;
 	p2_cape_image=0;
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PHASE 2 KADROSU: PAPYRUS & ALPHYS
+// state: 0 = sahnede degil, 1 = beliriyor, 2 = sahnede, 3 = sahneden ayriliyor
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Karakterler alpha ile degil, ekran disina kayarak girip cikiyor.
+	// state: 0 = sahne disinda, 1 = sahneye giriyor, 2 = sahnede, 3 = sahneden cikiyor
+	//
+	// Konumlar sabit degil: sahnedeki karakter sayisina gore Step_0'da
+	// hesaplaniyor. Tek karakter ortada durur, iki/uc karakterde ekran esit
+	// parcalara bolunur ve herkes kendi parcasinin ortasina yerlesir.
+	// Soldan saga sira: Papyrus, Sans, Alphys.
+	// Yeni savas = canlandirma sahneleri bastan oynayabilir
+	global.p2_revived_pap=false;
+	global.p2_revived_alp=false;
+
+	layout_margin=40;		// kenarlarda birakilan bosluk
+	layout_speed=0.07;		// yer degistirme hizi
+	off_left=-180;			// sahne disi (sol) x
+	off_right=820;			// sahne disi (sag) x
+
+	p2_state=2;				// Sans normalde sahnede
+	p2_draw_x=320;			// Sans'in ciziim x'i (nesnenin x'i sabit kalir)
+	p2_off_x=0;				// = p2_draw_x - x
+	p2_shake_x=0;			// SADECE Sans'a vurulunca titrer
+	p2_snap=false;			// true ise bir sonraki adimda hedefe isinlanir
+
+	// Sans senaryo geregi sahne disinda mi? o_sans_blockp2 bunu okuyor,
+	// yoksa oyuncu vurdugunda alphalar 0 olunca blok sprite'i ortada beliriyor.
+	p2_offstage=false;
+
+	// Sans slotunu birakmiyor (tur dagitimi ona bagli) ama sahne disindayken
+	// FIGHT/ACT hedef listesinde gorunmemeli. Bkz. Battle_EnemyTargetable.
+	_not_targetable=false;
+
+	pap_state=0;
+	pap_alpha=1;
+	pap_draw_x=-180;		// sahne disinda (sol) basliyor
+	pap_shake_x=0;
+	pap_snap=false;			// true ise bir sonraki adimda hedefe isinlanir
+	pap_wiggle=0;
+	pap_bob=0;				// nefes salinimi (bacak skew'i de bunu takip eder)
+	pap_arm_angle=0;
+	pap_head_sprite=spr_papyrus_head;
+	pap_head_image=0;
+	pap_body_sprite=spr_papyrus_body;
+	// 1. kare govdeye AYRI bir el daha ekliyor; spr_papyrus_arm ile birlikte
+	// Papyrus iki elli gorunuyordu. Dogrusu 0. kare.
+	pap_body_image=0;
+	pap_legs_sprite=spr_papyrus_legs;
+	pap_legs_image=0;
+	pap_arm_sprite=spr_papyrus_arm;
+	pap_arm_image=0;
+
+	// Papyrus'un bloklamasi: onunden bir kemik duvari yukseliyor.
+	// Yukselme sprite'in 4 karesine cizilmis, o yuzden kareleri oynatiyoruz.
+	// Sprite zaten 2x cizilmis (146x222) ve origin'i alt-orta, o yuzden olcek 1.
+	pap_block_sprite=spr_papyrus_blockwall_up;
+	pap_block_state=0;			// 0 = yok, 1 = yukseliyor, 2 = bekliyor, 3 = iniyor
+	pap_block_image=0;
+	pap_block_speed=0.5;		// kare/adim
+	pap_block_hold=45;			// tepede bekleme suresi (adim)
+	pap_block_timer=0;
+	pap_block_shake_x=0;		// vurus aninda Papyrus degil DUVAR titrer
+
+	alp_state=0;
+	alp_alpha=1;
+	alp_draw_x=820;			// sahne disinda (sag) basliyor
+	alp_shake_x=0;
+	alp_snap=false;
+	alp_wiggle=0;
+	alp_bob=0;
+	alp_armleft_angle=0;
+	alp_armright_angle=0;
+	alp_head_sprite=spr_alphys_head;
+	alp_head_image=0;
+	alp_body_sprite=spr_alphys_body;
+	alp_body_image=0;
+	alp_armleft_sprite=spr_alphys_arm_left;
+	alp_armright_sprite=spr_alphys_arm_right;
+	alp_eye_sprite=spr_alphys_eye;		// gozunun uzerindeki parlama efekti
+	alp_eye_image=0;
+	alp_eye_visible=true;
 
 	_hp=5000;
 	_hp_max=5000;

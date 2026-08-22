@@ -37,7 +37,7 @@ if(!instance_exists(ui_dialog) && !instance_exists(ui_box) && _moveable_chest){
     }
 }
 event_inherited();
-if (room == room_area_0)
+if (room == room_area_beforesans)
 {
 	with (o_temp_sprite)
 	{

@@ -1,6 +1,19 @@
 ///@desc Turn Preparation Start
 Battle_SetBoardSizeCubic(65,65,120,120);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
+
+// Asagidaki global.sanstalk diyaloglari phase 1'e ait. Phase 2'de bunlar
+// calisirsa yanlis replik (ya da default'taki yer tutucu) cikiyor; balon da
+// kapanmadigi icin turn preparation bitmiyor. Phase 2'de balonu hemen kapat.
+if (room == room_battle_1)
+{
+	with (battle_dialog_enemy)
+	{
+		instance_destroy();
+	}
+	exit;
+}
+
 switch (global.sanstalk)
 {
 	case 23:

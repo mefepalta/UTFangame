@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"DR_Target",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DR_Target",
+  "parent":{
+    "name":"Bullet",
+    "path":"folders/Objects/Battle/Bullet.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

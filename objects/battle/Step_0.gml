@@ -35,7 +35,7 @@ if(_state==BATTLE_STATE.MENU){
 					Battle_SetMenu(BATTLE_MENU.ACT_TARGET);
 					break;
 				case 2:
-					if(Item_GetNumber()>0){
+					if(!(variable_global_exists("no_heal") && global.no_heal) && Item_GetNumber()>0){
 						Battle_SetMenu(BATTLE_MENU.ITEM);
 					}else{
 						audio_stop_sound(snd_menu_confirm);
@@ -59,7 +59,7 @@ if(_state==BATTLE_STATE.MENU){
 			}
 		}else if(Input_IsPressed(INPUT.DOWN)){
 			var enemy=_menu_choice_enemy+1;
-			if(enemy<Battle_GetEnemyNumber()){
+			if(enemy<Battle_GetEnemyTargetNumber()){
 				audio_play_sound(snd_menu_switch,0,false);
 				Battle_SetMenuChoiceEnemy(enemy);
 			}
@@ -109,7 +109,7 @@ if(_state==BATTLE_STATE.MENU){
 			}
 		}else if(Input_IsPressed(INPUT.DOWN)){
 			var enemy=_menu_choice_enemy+1;
-			if(enemy<Battle_GetEnemyNumber()){
+			if(enemy<Battle_GetEnemyTargetNumber()){
 				audio_play_sound(snd_menu_switch,0,false);
 				Battle_SetMenuChoiceEnemy(enemy);
 			}

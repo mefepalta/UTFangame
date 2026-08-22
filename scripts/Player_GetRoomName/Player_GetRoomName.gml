@@ -5,10 +5,10 @@ function Player_GetRoomName() {
         case -1:
             name="--";
             break;
-        case room_area_0:
+        case room_area_beforesans:
             name="Last Corridor";
             break;
-        case room_area_1:
+        case room_area_aftersans:
             name="Last Corridor";
             break;
     }

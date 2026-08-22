@@ -2,12 +2,14 @@
 function Battle_ConvertEnemySlotToMenuChoiceEnemy() {
 	var ENEMY=argument[0];
 
-	if(instance_exists(Battle_GetEnemy(ENEMY))){
+	// Sadece hedeflenebilir dusmanlar listeye giriyor, sira numarasi da
+	// onlara gore hesaplanmali.
+	if(Battle_IsEnemyTargetable(ENEMY)){
 		var proc=0;
 		var proc2=0;
 		var result=-1;
 		repeat(3){
-			if(instance_exists(Battle_GetEnemy(proc))){
+			if(Battle_IsEnemyTargetable(proc)){
 				if(proc==ENEMY){
 					result=proc2;
 					break;

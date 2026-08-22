@@ -1,5 +1,15 @@
-surface_free(_surface);
-surface_free(_surface1);
-surface_free(_surface2);
-surface_free(_surface3);
-surface_free(_surface4);
+if(surface_exists(_surface)){
+	surface_free(_surface);
+}
+if(surface_exists(_surface1)){
+	surface_free(_surface1);
+}
+if(surface_exists(_surface2)){
+	surface_free(_surface2);
+}
+if(surface_exists(_surface3)){
+	surface_free(_surface3);
+}
+if(surface_exists(_surface4)){
+	surface_free(_surface4);
+}

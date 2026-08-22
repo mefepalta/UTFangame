@@ -11,4 +11,8 @@ switch(effect){
 		}
 		_effect_shook=!_effect_shook;
 		break;
+	case 1:
+    _offset_x = 0;
+    _offset_y = sin(current_time * 0.005 + x * 0.1) * 2;
+    break;
 }

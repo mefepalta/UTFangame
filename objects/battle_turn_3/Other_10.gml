@@ -25,5 +25,6 @@ if (room == room_battle)
 if (room == room_battle_1)																																																																		   
 {
 	Battle_SetBoardSizeCubic(65,65,250,250);
+	battle_enemy_engage.p2_head_sprite = spr_p2_head;
 	sansy.text= "{font 3}{voice 3}{head 5}Admitting this is gonna&be a bit of a challenge&for me, but...{pause}{clear}{head 14}Honestly...&the thought of them&fighting...{sleep 100}{head 13} scared me.";
 }

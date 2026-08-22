@@ -22,6 +22,15 @@ MODE = 0
 SIDE = 0   /// 0 IS NORMAL, 1 IS THE OPPOSITE SIDE
 SPIKE = true
 
+/// Balonun hangi karakterin ustunde duracagi ({speaker} etiketi ile ayarlanir)
+/// 0 = Sans, 1 = Papyrus, 2 = Alphys. Ofsetler Step_0'da her adim
+/// yeniden hesaplaniyor ki karakter sahnede yururken balon onu takip etsin.
+SPEAKER = 0
+SPEAKER_X = 0
+SPEAKER_Y = 0
+SPEAKER_HALFW = 70		/// konusanin govde yari genisligi
+SPEAKER_GAP = 18		/// karakterle balon arasindaki bosluk
+
 _spike_extra_x = 0
 _spike_extra_y = 0
 ANGLE_BUBBLE = 0

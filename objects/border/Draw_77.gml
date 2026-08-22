@@ -26,7 +26,17 @@ if(_enabled){
 			draw_sprite_ext(spr_border_outline,0,(SW-960*SF)/2,(SH-540*SF)/2,960/sprite_get_width(spr_border_outline)*SF,540/sprite_get_height(spr_border_outline)*SF,0,c_white,_alpha);
 		}
 	}
+	draw_sprite_ext(spr_pixel,0,(SW-960*SF)/2+160*SF,(SH-540*SF)/2+30*SF,640*SF,480*SF,0,c_black,1);
 	draw_surface_ext(application_surface,(SW-960*SF)/2+160*SF,(SH-540*SF)/2+30*SF,SF,SF,0,c_white,1);
+	var _gx=(SW-960*SF)/2+160*SF;
+	var _gy=(SH-540*SF)/2+30*SF;
+	var _gw=640*SF;
+	var _gh=480*SF;
+	var _line=max(1,SF);
+	draw_sprite_ext(spr_pixel,0,_gx,_gy-_line,_gw,_line,0,c_white,_alpha);
+	draw_sprite_ext(spr_pixel,0,_gx-_line,_gy,_line,_gh,0,c_white,_alpha);
+	draw_sprite_ext(spr_pixel,0,_gx+_gw,_gy,_line,_gh,0,c_white,_alpha);
+	draw_sprite_ext(spr_pixel,0,_gx,_gy+_gh,_gw+_line,_line,0,c_white,_alpha);
 }else{
 	var SW=(window_get_fullscreen() ? display_get_width() : window_get_width());
 	var SH=(window_get_fullscreen() ? display_get_height() : window_get_height());

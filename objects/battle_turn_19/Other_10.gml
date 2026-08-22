@@ -23,5 +23,15 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	sansy.text="{font 3}{voice 3}{squish 1.2}{head 1}diddy";
+	// Sans geri doner, Papyrus ortadan kendi yerine cekilip sonra sahneden cikar
+	with (battle_enemy_engage)
+	{
+		p2_head_sprite = spr_p2_head;
+		p2_state = 1;				// Sans soldan geri yuruyor
+		pap_state = 2;				// Papyrus ortadan kendi yerine donuyor
+		alp_state = 0;				// Alphys 18. turda gitmisti
+	}
+	sansy.text="{speaker 0}{font 3}{voice 3}{head 2}Come on, Papyrus, let&me have a crack at&'em.{pause}{clear}"
+	+"{speaker 1}{font 4}{voice 4}{pap_head 1}SUIT YOURSELF. I&WAS GETTING&TIRED ANYWAY.{pause}{clear}{pap_state 3}"
+	+"{speaker 0}{font 3}{voice 3}{head 17}No more will we suffer&at the hands of&humanity.{pause}{clear}{head 9}We will finally see&the sun, feel the&warmth.{pause}{clear}{head 12}And feel a sense of&gratitude in the fact&that you no longer&exist in our world.";
 }

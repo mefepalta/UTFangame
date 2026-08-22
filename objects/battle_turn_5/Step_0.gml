@@ -111,7 +111,433 @@ if (room == room_battle_1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
 	}
-	if (_timer % 40 == 0) and (_timer >  10)
+	if (_timer == 40)
+	{
+		audio_play_sound(snd_grab,2,false);
+		battle_enemy_engage.p2_armleft_sprite = spr_p2_arm_left_1;
+		instance_create_depth(left_box + 60, top_box - 120,-999,o_fakebone);
+	}
+	if (_timer > 10) and (_timer % 90 == 0) and (_timer < 801)
+	{
+		audio_play_sound(snd_swift,2,false);
+		var _bx = left_box + 60;
+		var _by = top_box - 100;
+		var dir = point_direction(_bx, _by, battle_soul.x, battle_soul.y);
+		var spd = random_range(2, 4);
+		var bone = RegularBone(_bx, _by, 26, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, true);
+		bone._snake = true;
+		bone._base_hspeed = lengthdir_x(spd*0.7, dir);
+		bone._base_vspeed = lengthdir_y(spd*0.7, dir);
+	}
+	if (_timer ==  10)
+	{
+		audio_play_sound(snd_stab,2,false);
+		var bone = RegularBone(left_box,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 10;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 10;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 10;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -10;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -10;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -10;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  80)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 5;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 5;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 5;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -15;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -15;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -15;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  150)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 10;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 10;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 10;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -10;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -10;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -10;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  220)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 15;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 15;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 15;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -5;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -5;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -5;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  290)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 10;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 10;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 10;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -10;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -10;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -10;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  360)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 5;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 5;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 5;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -15;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -15;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -15;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  430)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 10;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 10;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 10;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -10;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -10;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -10;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  500)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 15;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 15;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 15;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -5;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -5;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -5;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  570)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 10;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 10;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 10;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -10;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -10;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -10;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  640)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 5;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 5;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,5,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 5;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -15;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -15;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-15,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -15;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  710)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 10;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 10;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,10,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 10;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -10;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -10;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-10,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -10;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer ==  780)
+	{
+		var bone = RegularBone(left_box,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone._dynamic = true;
+		bone._dynamic_lifetime = 180;
+		bone._base_hspeed = 15;
+		bone._base_vspeed = 0;
+		var bone1 = RegularBone(left_box - 10,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone1._dynamic = true;
+		bone1._dynamic_lifetime = 180;
+		bone1._base_hspeed = 15;
+		bone1._base_vspeed = 0;
+		var bone2 = RegularBone(left_box - 20,bottom_box,152,15,0,0,0,0,1,0,0,0,0,true);
+		bone2._dynamic = true;
+		bone2._dynamic_lifetime = 180;
+		bone2._base_hspeed = 15;
+		bone2._base_vspeed = 0;
+		var bone3 = RegularBone(right_box,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone3._dynamic = true;
+		bone3._dynamic_lifetime = 180;
+		bone3._base_hspeed = -5;
+		bone3._base_vspeed = 0;
+		var bone4 = RegularBone(right_box + 10,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone4._dynamic = true;
+		bone4._dynamic_lifetime = 180;
+		bone4._base_hspeed = -5;
+		bone4._base_vspeed = 0;
+		var bone5 = RegularBone(right_box + 20,bottom_box,152,-5,0,0,0,0,1,0,0,0,0,true);
+		bone5._dynamic = true;
+		bone5._dynamic_lifetime = 180;
+		bone5._base_hspeed = -5;
+		bone5._base_vspeed = 0;
+	}
+	if (_timer == 850)
+	{
+		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+		battle_enemy_engage.p2_armleft_sprite = spr_p2_arm_left;
+		instance_destroy(o_fakebone);
+		Battle_SetSoul(battle_soul_red);
+		Battle_SetMenuDialog("* Smells like bones.")
+		Battle_EndTurn();
+	}
+}
+
+	/*if (_timer % 40 == 0) and (_timer >  10)
 	{
 		var bone = RegularBone(left_box,bottom_box,80,3,0,0,0,0,1,0,0,0,0,true);
 		bone._dynamic = true;          // Pendulum hareketi
@@ -120,16 +546,4 @@ if (room == room_battle_1)
 		bone._base_vspeed = 0;
 		var bone1 = RegularBone(right_box,top_box,80,-1,0,180,0,0,1,0,0,0,0,true);
 		bone1._dynamic_scale = true;    // Y-scale dalgalanması (opsiyonel)
-	}
-	/*if (_timer == 10)
-	{
-		MakeBoneExplode(battle_soul.x,battle_soul.y,0,50);
 	}*/
-	if (_timer == 1000)
-	{
-		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
-		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Smells like bones.")
-		Battle_EndTurn();
-	}
-}
