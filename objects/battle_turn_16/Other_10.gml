@@ -23,9 +23,8 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	// Bu turda saldiri yok: Papyrus yesil kemikle canini dolduruyor ve diyalog
-	// ATAK BITTIKTEN SONRA basliyor. O yuzden burada diyalog kutusu acmiyoruz;
-	// acsaydik turn preparation kapanmaz ve sahne hic baslamazdi.
+	// Diyalog ATAK BITTIKTEN SONRA basliyor. O yuzden burada diyalog kutusu
+	// acmiyoruz; acsaydik turn preparation kapanmaz ve atak hic baslamazdi.
 	if (instance_exists(sansy)) { instance_destroy(sansy); }
 
 	with (battle_enemy_engage)
@@ -35,9 +34,7 @@ if (room == room_battle_1)
 		alp_state = 2;
 	}
 
-	// Metin Step_0'da, sahne kurulunca kullanilacak.
-	// Yesil kemikli iyilestirme sahnesi senaryodan cikarildi: bu tur artik
-	// sadece devir teslim diyalogu.
+	// Metin Step_0'da, atak bitince kullanilacak.
 	phase2_text="{speaker 2}{font 2}{voice 2}{alp_head 1}I've been waiting a&long time for this!{pause}{clear}{alp_head 4}You guys scram!{pause}{clear}{alp_head 1}I've got this!{pause}{clear}"
 	+"{speaker 0}{font 3}{voice 3}{head 13}Captain...&Are you sure?{pause}{clear}"
 	+"{speaker 2}{font 2}{voice 2}{alp_head 0}I've fought my fair&share of humans&before.{pause}{clear}{alp_head 0}I know what I'm&doing.{pause}{clear}{alp_head 5}THAT...{sleep 20} AND the&score's looking like&a solid 0 to 1&right now...{pause}{clear}{alp_head 5}And I've never been&more livid in my&life!{pause}{clear}"

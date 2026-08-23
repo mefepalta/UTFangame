@@ -1292,6 +1292,7 @@
     {"id":{"name":"spr_dr_bullet_big","path":"sprites/spr_dr_bullet_big/spr_dr_bullet_big.yy",},},
     {"id":{"name":"spr_dr_bullet_small","path":"sprites/spr_dr_bullet_small/spr_dr_bullet_small.yy",},},
     {"id":{"name":"spr_dr_dash","path":"sprites/spr_dr_dash/spr_dr_dash.yy",},},
+    {"id":{"name":"spr_dr_guest","path":"sprites/spr_dr_guest/spr_dr_guest.yy",},},
     {"id":{"name":"spr_dr_soul_yellow","path":"sprites/spr_dr_soul_yellow/spr_dr_soul_yellow.yy",},},
     {"id":{"name":"spr_effect_bg_br","path":"sprites/spr_effect_bg_br/spr_effect_bg_br.yy",},},
     {"id":{"name":"spr_exclamation","path":"sprites/spr_exclamation/spr_exclamation.yy",},},

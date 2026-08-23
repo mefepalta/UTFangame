@@ -10,7 +10,7 @@ if (room == room_battle_1)
 {
 	/*Battle_SetState(BATTLE_STATE.TURN_PREPARATION);
 	Battle_SetTurnNumber(0);*/
-	Battle_SetTurnNumber(15);
+	Battle_SetTurnNumber(16);
 }
 /*if (global.no_heal == false)
 {
