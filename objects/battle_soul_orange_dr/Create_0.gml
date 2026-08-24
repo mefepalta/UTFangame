@@ -16,6 +16,15 @@ orbs=[];
 tap_cd=0;
 tap_cd_max=24;
 
+//--- Zincir dash ---
+//Güç hareketi bir MAVİ engeli kırdığında vuruş penceresi baştan başlıyor.
+//Yani dash tek bir input; süresince önüne gelen mavi engelleri kendisi
+//kırıyor ve her kırılış onu uzatıyor. Menzil içinde kıracak bir şey
+//kaldığı sürece zincir sonsuza kadar sürebiliyor; kırılacak bir şey
+//bulamadığı anda pencere dolup dash bitiyor.
+//Oyuncunun tek işi zincir sürerken sağa sola gidip mavi pencerelere
+//hizalanmak: hizasız kalan bar kırılmıyor ve zincir orada kopuyor.
+
 //--- Dash efekti (Deltarune SOUL sheet'indeki 3 kare) ---
 //Sprite'ın origin'i kuyruğun değil kafanın merkezinde: kafa ruhun üstünde
 //kalıyor, kuyruk arkaya uzanıyor. Yön sabit yukarı, girdiyle değişmiyor.
@@ -37,6 +46,14 @@ function fire_dash(SC){
 //--- Vuruş dalgası ---
 strike_time=0;
 strike_max=12;
+//Zincir sürerken pencere daha uzun tutuluyor. Kırılış bar menzile GİRDİĞİ
+//anda oluyor, yani sıradaki bar tam bir aralık kadar geride kalıyor:
+//12 kare ona yetmiyordu. 26 kare güvenli tavanı ~150 px yapıyor.
+chain_time=26;
+//Acik pencerenin suresi. Cizimdeki halka animasyonu buna gore ilerliyor;
+//strike_max sabitine bakilsaydi zincirde oran 1i asip yaricap negatife
+//duserdi.
+strike_dur=12;
 strike_pow=0;
 strike_rad=0;
 
@@ -86,6 +103,14 @@ function start_jump(RING){
 	jump_buffer=0;
 	fire_dash(1.3);
 	audio_play_sound(snd_bell,0,false);
+
+	//Halkaya binmek de zinciri uzatiyor: vurus penceresi bastan basliyor,
+	//boylece halkadan sonra gelen mavi barlar ayni dash ile kiriliyor.
+	//Bunlar olmadan dash halkaya biner binmez oluyordu.
+	strike_pow=2;
+	strike_rad=78;
+	strike_time=chain_time;
+	strike_dur=chain_time;
 }
 
 //--- Dünya hızı: koridor, kemikler ve daireler bunu okuyor ---
@@ -99,6 +124,7 @@ world_mul=1;
 function do_strike(POW){
 	strike_pow=POW;
 	strike_time=strike_max;
+	strike_dur=strike_max;
 	strike_rad=(POW==2 ? 78 : 52);
 
 	if(POW==2){

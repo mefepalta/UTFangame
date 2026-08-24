@@ -49,5 +49,42 @@ if (box_on) and (instance_exists(battle_board))
 	draw_set_color(c_white);
 }
 
+//--------------------------------------------------------------------------
+// Beklenmedik Konuk
+//--------------------------------------------------------------------------
+// Hazirlik ve atilis sirasinda mavi: o an SADECE guc dash isliyor demek.
+// Savrulunca bir an beyaz parliyor. Beklerken hafifce inip cikiyor.
+if (gst_alpha > 0)
+{
+	var _gc = c_white;
+	if (gst_state == 1) or (gst_state == 2) { _gc = make_color_rgb(30,55,175); }
+	if (gst_flash > 0) { _gc = c_white; }
+	var _sars = (gst_state == 1) ? irandom_range(-3,3) : 0;
+	var _gy = gst_y+((gst_state == 0) ? dsin(gst_bob*3)*4 : 0);
+	draw_sprite_ext(spr_dr_guest,0,gst_x+_sars,_gy,gst_scale,gst_scale,0,_gc,gst_alpha);
+	draw_set_color(c_white);
+	draw_set_alpha(1);
+}
+
 // Blasterlar oyunun kendi nesnesi oldugu icin cizimleri kendilerine ait;
 // burada bir sey yapmiyoruz.
+
+//--------------------------------------------------------------------------
+// Sigara dumani
+//--------------------------------------------------------------------------
+// Her kume yukseldikce buyuyup soluyor. Alfa once hizla aciliyor, sonra
+// karesel sonuyor: duman boyle dagiliyor.
+// spr_papyrus_smoke'un origin'i SAG-ALT kosede (28,24), o yuzden gorsel
+// merkezin kume noktasina denk gelmesi icin cizim yeri kaydiriliyor.
+if (array_length(duman) > 0)
+{
+	for (var _i = 0; _i < array_length(duman); _i++)
+	{
+		var _dm = duman[_i];
+		var _o = _dm.t/_dm.omur;
+		var _sc = 0.5+1.3*_o;
+		var _al = 0.55*min(1,_o*6)*(1-_o)*(1-_o);
+		draw_sprite_ext(spr_papyrus_smoke,0,_dm.x+14*_sc,_dm.y+12*_sc,_sc,_sc,0,c_white,_al);
+	}
+	draw_set_alpha(1);
+}

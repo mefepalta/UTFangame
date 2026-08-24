@@ -57,9 +57,9 @@ if (room == room_battle_1) //and (global.sansp2headsprite == false)
 		var _pr = _px + 68;
 		var _pt = _py - 100 + pap_bob;		// 50 (origin.y) * 2
 		draw_sprite_pos(pap_legs_sprite,pap_legs_image,_pl,_pt,_pr,_pt,_pr,_py,_pl,_py,pap_alpha);
-		draw_sprite_ext(pap_arm_sprite,pap_arm_image,_px-50,_py-110+pap_bob,2,2,pap_arm_angle,c_white,pap_alpha);
+		draw_sprite_ext(pap_arm_sprite,pap_arm_image,_px-50,_py-110+pap_bob,2,2,pap_arm_angle,c_white,pap_alpha*pap_arm_alpha);
 		draw_sprite_ext(pap_body_sprite,pap_body_image,_px-8,_py-86+pap_bob,2,2,0,c_white,pap_alpha);
-		draw_sprite_ext(pap_head_sprite,pap_head_image,_px-14,_py-164+pap_bob,2,2,0,c_white,pap_alpha);
+		draw_sprite_ext(pap_head_sprite,pap_head_image,_px-14,_py-164+pap_bob,2,2,0,c_white,pap_alpha*pap_head_alpha);
 
 		// Bloklama: onunden yukselen kemik duvari. Papyrus'un parcalarindan
 		// SONRA cizilir ki onunde dursun. Sprite 2x cizilmis, origin alt-orta,

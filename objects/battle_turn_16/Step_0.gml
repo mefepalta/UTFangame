@@ -178,10 +178,29 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	//----------------------------------------------------------------------
-	// Turuncu ruh koridoru. Diyalog atagin SONUNDA basliyor.
-	// Bolumler asagida "PATTERN" basliklari altinda; atak_son Create_0'da.
-	//----------------------------------------------------------------------
+	//======================================================================
+	// TURUNCU RUH ATAGI
+	//======================================================================
+	// Bes bolum, her biri ayri bir fiil, sonuncusu ikisini carpistiriyor:
+	//
+	//   1  zincir barlari   -> dash: tek vurus, sonra sadece hizalanma
+	//   2  kutular          -> dash + serit degistirme + blaster
+	//   3  ziplama zinciri  -> halkalari tutturma
+	//   4  bileklik+ziplama -> bar "zipla" der, bileklik "simdi degil" der
+	//   5  kapanis          -> hizli bir zincir kosusu
+	//
+	// TETIKLER KARE DEGIL YOL. Bolumler once sabit karelere baglanmisti ama
+	// dunya dash ile 2.4 katina kadar hizlaniyor: iyi oynayan oyuncu bir
+	// bolumu erken bitirip bir sonrakini sabit karesinde bekliyordu, yani
+	// iyi oynadikca atak boslasiyordu. Simdi her bolum, dunyanin kat ettigi
+	// toplam yol bir esige gelince doguyor. Esikler bir onceki bolumun son
+	// parcasi kalbi gectikten hemen sonrasina denk gelecek sekilde secildi,
+	// dolayisiyla tempo oyuncunun elinde ve hicbir zaman bosluk acilmiyor.
+	//
+	// Konuk (mini-boss) bu atakta yok, bir sonrakinde kullanilacak.
+	// Calisan hali a02e0eb commitinde; oraya donerken kendi nesnesine
+	// tasinacak ki her tur cagirabilsin.
+	//======================================================================
 	if (_timer == 1)
 	{
 		audio_play_sound(snd_bell,2,0);
@@ -203,41 +222,185 @@ if (room == room_battle_1)
 		Camera_Shake(3,3,2,2);
 	}
 
-	// Ruh kosu pozisyonuna (ekranin alt kismina) kayiyor
+	// Ruh kosu pozisyonuna (ekranin alt kismina) kayiyor.
 	if (_timer == 60)
 	{
 		Anim_Create(battle_soul,"y",ANIM_TWEEN.CUBIC,ANIM_EASE.IN_OUT,battle_soul.y,400-battle_soul.y,50);
 	}
 
-	//======================================================================
-	// PATTERN 1 -- kemik bilekligi
-	//======================================================================
-	// Bileklikler kalbin USTUNDEN gecen halkalar: yerdeyken zararsizlar,
-	// ziplayan kalp iceri girip carpiyor. Beyaz barlar tam tersi. Ikisi
-	// sirayla geliyor: bar "zipla", bileklik "ziplama".
-	//======================================================================
-	if (_timer == 150)
+	//----------------------------------------------------------------------
+	// Dunyanin kat ettigi yol. Her sey bu hizla indigi icin bolum esikleri
+	// de buradan okunuyor: oyuncu ne kadar hizlanirsa atak o kadar hizli
+	// akiyor, arada bosluk kalmiyor.
+	//----------------------------------------------------------------------
+	if (instance_exists(battle_dr_corridor))
 	{
-		CarRun(3,600);
-		// Bileklikler 610 / 1210 / 1810 px sonra kalbe variyor.
-		// Halka+bar ciftleri onlarin arasina denk geliyor: yay 760-1020,
-		// 1360-1620, 1960-2220 arasi, yani hicbiri bileklikle cakismiyor.
-		JumpRing(0,340);
-		JumpBar(466);
-		JumpRing(-60,940);
-		JumpBar(1066);
-		JumpRing(55,1540);
-		JumpBar(1666);
+		yol += battle_dr_corridor.scroll_spd;
 	}
 
+	//======================================================================
+	// BOLUM 1 -- zincir barlari        ilk bar 440, son bar 800
+	// Bes mavi bar 120 px arayla. Tek guc dashi hepsini kiriyor; oyuncunun
+	// isi zincir surerken pencerelere hizalanmak. Atagin dilini aciyor.
+	//======================================================================
+	if (bolum == 0) and (_timer >= 60)
+	{
+		bolum = 1;
+		// Butun esikler bu ana gore. Koridor 20. karede acildigi icin yol
+		// buraya gelene kadar 160 px birikmis oluyordu; sifirlanmasaydi
+		// asagidaki mesafelerin hepsi o kadar kayardi.
+		yol = 0;
+		ChainRun(4,120,60);
+	}
+
+	//======================================================================
+	// BOLUM 2 -- kutular               ilk duvar 1080, son duvar 2120
+	// Zincirin bittigi yerden 280 px sonra basliyor. Once 80 px idi -- niyet
+	// son zincir barini kiran dashin kutunun alt duvarina da uzanmasiydi ama
+	// iki mavi pencere ayni hizada olmadigi icin o baglanti zaten guvenilir
+	// calismiyordu, sadece iki bolum ust uste binmis gibi duruyordu.
+	// Esik dusuk cunku kutular ekranin cok uzerinde doguyor: ilk duvar
+	// dogum noktasindan 590 px sonra kalbe variyor.
+	//======================================================================
+	if (bolum == 1) and (yol >= 490)
+	{
+		bolum = 2;
+		BoxRun(3,116,120,340,40);
+	}
+
+	if (box_on) and (instance_exists(battle_soul))
+	{
+		var _kmul = 1;
+		if (instance_exists(battle_soul_orange_dr)) { _kmul = battle_soul_orange_dr.world_mul; }
+		// Kutular ve blasterlar barlarla ayni hizda kayiyor (bar spd_y'si 4),
+		// boylece duvarlar kutulardan hic ayrilmiyor.
+		var _kay = 4*_kmul;
+		var _nb = array_length(boxes);
+		for (var _i = 0; _i < _nb; _i++) { boxes[_i].y += _kay; }
+
+		// Kalp bir kutunun icindeyse kati yan duvarlar arasinda tutuluyor
+		for (var _i = 0; _i < _nb; _i++)
+		{
+			var _kb = boxes[_i];
+			if (battle_soul.y > _kb.y-_kb.h/2) and (battle_soul.y < _kb.y+_kb.h/2)
+			{
+				var _kcx = battle_board.x+_kb.ox;
+				battle_soul.x = clamp(battle_soul.x,_kcx-_kb.w/2+9,_kcx+_kb.w/2-9);
+			}
+		}
+
+		// Ekranin altina inen kutular listeden dusuyor, hepsi bitince bolum
+		// kendini kapatiyor. BoxStop cagirmiyoruz cunku o butun barlari yok
+		// eder ve o sirada hala inen bir duvar varsa gozle gorulur sekilde
+		// kaybolurdu.
+		for (var _i = _nb-1; _i >= 0; _i--)
+		{
+			if (boxes[_i].y-boxes[_i].h/2 > 520) { array_delete(boxes,_i,1); }
+		}
+		if (array_length(boxes) == 0) { box_on = false; }
+	}
+
+	//----------------------------------------------------------------------
+	// Blaster isaretcileri. Kutu bolumune bagli degiller: her bolum
+	// BlastMark ile kendi blasterini koyabiliyor.
+	//----------------------------------------------------------------------
+	if (array_length(blasts) > 0)
+	{
+		var _bmul = 1;
+		if (instance_exists(battle_soul_orange_dr)) { _bmul = battle_soul_orange_dr.world_mul; }
+		for (var _i = array_length(blasts)-1; _i >= 0; _i--)
+		{
+			blasts[_i].y += 4*_bmul;
+			if (!blasts[_i].dogdu)
+			{
+				if (blasts[_i].y >= blast_warn)
+				{
+					blasts[_i].dogdu = true;
+					DrBlaster(blasts[_i].side,blasts[_i].y);
+				}
+			}
+			else if (blasts[_i].y > 620)
+			{
+				array_delete(blasts,_i,1);
+			}
+		}
+	}
+
+	//======================================================================
+	// BOLUM 3, 4, 5 -- kosu birimleri
+	//======================================================================
+	// Atagin ikinci yarisi ayni cumlenin bes tekrari, ama uzunluklari farkli:
+	//
+	//   U1  2 gercek halka + tuzak      780 px
+	//   U2  3 gercek halka + tuzak     1040 px
+	//   U3  1 gercek halka + tuzak      520 px
+	//   U4  3 gercek halka + tuzak     1040 px
+	//   U5  2 gercek halka + tuzak      780 px
+	//
+	// Her birim: halka - bar - (halka - bar) ... - TUZAK - BILEKLIK, hepsi
+	// 130 px arayla. Gercek halkalarin arkasinda beyaz bar var, yani binmek
+	// zorunlu. Tuzak son gercek halkayla ayni seritte ve ondan 260 px sonra:
+	// zincirin dogal devami. Hicbir sey yapilmazsa zincir ona biniyor ve
+	// bileklige girilir. Dogru oynanis seritten cikip yere inmek.
+	//
+	// Uzunluklar bilerek esit degil. Hep iki halkada bir tuzak gelseydi
+	// oyuncu sayarak oynardi; boyle her seferinde bilekligin kendisine
+	// bakmak zorunda.
+	//
+	// Seritler: her birimin ilk halkasi bir oncekinin tuzagindan 100-120 px
+	// uzakta. Zincirden kopmaya yetecek kadar cok (halka yakalama toleransi
+	// 32 px), yayin icinde alinamayacak kadar az degil (260 px'lik yayda
+	// ~140 px gidilebiliyor). Yani tuzaktan kacmakla bir sonraki halkaya
+	// hazirlanmak ayni hareket oluyor.
+	//
+	// Bileklikler: 3200, 4240, 4760, 5800, 6580 -- aralari 1040/520/1040/780.
+	//======================================================================
+	if (bolum == 2) and (yol >= 1400)
+	{
+		bolum = 3;
+		audio_play_sound(snd_exclamation,0,false);
+		BlastMark(930,-1);
+		JumpUnit(1150,[0,-70]);				// 2550, tuzak 3070
+		JumpUnit(1930,[45,-50,60]);			// 3330, tuzak 4110
+	}
+
+	if (bolum == 3) and (yol >= 3400)
+	{
+		bolum = 4;
+		JumpUnit(970,[-45]);				// 4370, tuzak 4630
+		JumpUnit(1490,[55,-35,65]);			// 4890, tuzak 5670
+	}
+
+	if (bolum == 4) and (yol >= 4900)
+	{
+		bolum = 5;
+		JumpUnit(1030,[-55,50]);			// 5930, tuzak 6450
+	}
+
+	//----------------------------------------------------------------------
+	// Bileklikler
+	//----------------------------------------------------------------------
+	// Kalbin USTUNDEN gecen kapali halkalar: yerdeyken zararsizlar, ama
+	// ziplayan kalp iceri girip carpiyor. Beyaz barlarin tam tersi.
+	//----------------------------------------------------------------------
 	if (car_on)
 	{
 		var _cmul = 1;
 		if (instance_exists(battle_soul_orange_dr)) { _cmul = battle_soul_orange_dr.world_mul; }
-		// Donus gorsel; inis dunya hiziyla, engellerle ayni carpanla.
+		// Donus gorsel: dunya hizlanmasi buraya yumusatilarak yansiyor.
 		car_ang += car_spin*(1+(_cmul-1)*0.4);
 		var _cn = array_length(cars);
 		for (var _i = 0; _i < _cn; _i++) { cars[_i].y += 4*_cmul; }
+
+		// Ekranin altina inen bileklikler listeden dusuyor. Once bolum
+		// gecisinde CarStop cagriliyordu ama son bileklik o esikten sonra
+		// geliyordu: kalbin altindan gecerken bir anda yok oluyordu.
+		for (var _i = _cn-1; _i >= 0; _i--)
+		{
+			if (cars[_i].y > 560) { array_delete(cars,_i,1); }
+		}
+		_cn = array_length(cars);
+		if (_cn == 0) { car_on = false; }
 
 		// Sadece havadaki kalp bileklige carpiyor
 		var _havada = false;
@@ -273,241 +436,176 @@ if (room == room_battle_1)
 		}
 	}
 
-	if (_timer == 720)
-	{
-		CarStop();
-	}
-
-	//======================================================================
-	// PATTERN 2 -- Beklenmedik Konuk
-	//======================================================================
-	if (_timer == 800)
-	{
-		GuestStart(gst_max);
-	}
-
-	if (gst_on) and (instance_exists(battle_soul))
-	{
-		gst_t += 1;
-		gst_bob += 1;
-		if (gst_flash > 0) { gst_flash -= 1; }
-
-		var _gl = battle_board.x-battle_board.left+56;
-		var _gr = battle_board.x+battle_board.right-56;
-
-		if (gst_state == 0)
-		{
-			// Uzakta bekliyor, yavasca saga sola surukleniyor
-			gst_y += (gst_home_y-gst_y)*0.08;
-			gst_x += gst_vx;
-			if (gst_x < _gl) { gst_x = _gl; gst_vx = abs(gst_vx); }
-			if (gst_x > _gr) { gst_x = _gr; gst_vx = -abs(gst_vx); }
-
-			if (gst_cycle >= gst_max)
-			{
-				if (gst_t > 40) { GuestStop(); }
-			}
-			else if (gst_t > gst_bekle)
-			{
-				gst_state = 1;
-				gst_t = 0;
-				audio_play_sound(snd_exclamation,0,false);
-			}
-		}
-		else if (gst_state == 1)
-		{
-			// Hazirlik: titriyor ve son ana kadar kalbi takip ediyor
-			gst_tx = battle_soul.x;
-			gst_ty = battle_soul.y;
-			if (gst_t > gst_hazir)
-			{
-				gst_state = 2;
-				gst_t = 0;
-				audio_play_sound(snd_swift,0,false);
-				Camera_Shake(3,3,2,2);
-			}
-		}
-		else if (gst_state == 2)
-		{
-			// Atilis. Dunya da hizlaniyor: dash atmisiz gibi.
-			if (instance_exists(battle_soul_orange_dr))
-			{
-				battle_soul_orange_dr.speed_boost = 1;
-			}
-			var _gd = point_direction(gst_x,gst_y,gst_tx,gst_ty);
-			gst_x += lengthdir_x(gst_spd,_gd);
-			gst_y += lengthdir_y(gst_spd,_gd);
-			if (gst_y > 520) or (gst_t > 90)
-			{
-				// Isabet etmeden gecti, geri donuyor
-				gst_state = 3;
-				gst_t = 0;
-				gst_rvx = 0;
-				gst_rvy = 0;
-			}
-		}
-		else
-		{
-			// Savrulma sonrasi yerine donus
-			gst_x += gst_rvx;
-			gst_y += gst_rvy;
-			gst_rvx *= 0.92;
-			gst_rvy *= 0.92;
-			gst_x += (battle_board.x-gst_x)*0.04;
-			gst_y += (gst_home_y-gst_y)*0.06;
-			if (gst_t > 55)
-			{
-				gst_state = 0;
-				gst_t = 0;
-			}
-		}
-
-		// Dash tutturuldu mu. Menzil kontrolu konugun buyuk govdesi icin
-		// biraz genisletildi (+22), yoksa sprite'in kenari kalbe degiyor
-		// ama merkez menzilin disinda kaliyordu.
-		if (gst_state == 1) or (gst_state == 2)
-		{
-			var _gmes = point_distance(battle_soul.x,battle_soul.y,gst_x,gst_y);
-			var _savruldu = false;
-			if (instance_exists(battle_soul_orange_dr))
-			{
-				if (battle_soul_orange_dr.strike_time > 0)
-				and (_gmes <= battle_soul_orange_dr.strike_rad+22)
-				{
-					_savruldu = true;
-				}
-			}
-
-			if (_savruldu)
-			{
-				var _sd = point_direction(battle_soul.x,battle_soul.y,gst_x,gst_y);
-				gst_rvx = lengthdir_x(16,_sd);
-				gst_rvy = lengthdir_y(16,_sd);
-				gst_state = 3;
-				gst_t = 0;
-				gst_cycle += 1;
-				gst_flash = 14;
-				audio_play_sound(snd_break_0,0,false);
-				Camera_Shake(5,5,3,3);
-			}
-			else if (gst_state == 2) and (_gmes <= 30)
-			{
-				if (global.kr)
-				{
-					if (!instance_exists(hurtkr)) { instance_create_depth(0,0,0,hurtkr); }
-				}
-				else if (global._inv < 1)
-				{
-					Battle_CallSoulEventHurt();
-				}
-			}
-		}
-	}
-
-	// Konuk erkenden kacarsa kalan bos zamani atla
-	if (_timer > 860) and (_timer < 1600) and (!gst_on)
-	{
-		_timer = 1600;
-	}
-
-	//======================================================================
-	// PATTERN 3 -- kucuk kutular
-	//======================================================================
-	if (_timer == 1650)
-	{
-		BoxRun(5,116,100,260,52);
-	}
-
-	if (box_on) and (instance_exists(battle_soul))
-	{
-		var _kmul = 1;
-		if (instance_exists(battle_soul_orange_dr)) { _kmul = battle_soul_orange_dr.world_mul; }
-		// Kutular ve blasterlar barlarla ayni hizda kayiyor (bar spd_y'si 4),
-		// boylece duvarlar kutulardan hic ayrilmiyor.
-		var _kay = 4*_kmul;
-		var _nb = array_length(boxes);
-		var _nl = array_length(blasts);
-		for (var _i = 0; _i < _nb; _i++) { boxes[_i].y += _kay; }
-		for (var _i = 0; _i < _nl; _i++) { blasts[_i].y += _kay; }
-
-		// Kalp bir kutunun icindeyse kati yan duvarlar arasinda tutuluyor
-		for (var _i = 0; _i < _nb; _i++)
-		{
-			var _kb = boxes[_i];
-			if (battle_soul.y > _kb.y-_kb.h/2) and (battle_soul.y < _kb.y+_kb.h/2)
-			{
-				var _kcx = battle_board.x+_kb.ox;
-				battle_soul.x = clamp(battle_soul.x,_kcx-_kb.w/2+9,_kcx+_kb.w/2-9);
-			}
-		}
-
-		// Isaretci blast_warn e ulasinca gercek blaster doguyor. Sonrasini
-		// blaster kendi hallediyor: sarj, ates, kayma, hasar.
-		for (var _i = 0; _i < _nl; _i++)
-		{
-			if (blasts[_i].dogdu) { continue; }
-			if (blasts[_i].y < blast_warn) { continue; }
-			blasts[_i].dogdu = true;
-			DrBlaster(blasts[_i].side,blasts[_i].y);
-		}
-	}
-
-	if (_timer == 2150)
-	{
-		BoxStop();
-	}
-
-	//======================================================================
-	// PATTERN 4 -- asil ziplama bolumu
-	// Halkalar 260 px arayla: bu ruhun jump_dist i, yani bir zincirden
-	// digerine tam denk geliyor. Aralarindaki beyaz barlar havadaki kalbe
-	// degmiyor, dolayisiyla tek hasarsiz yol ziplamayi kacirmamak.
-	//======================================================================
-	if (_timer == 2200)
-	{
-		audio_play_sound(snd_exclamation,0,false);
-		JumpRing(0,0);
-		JumpBar(130);
-		JumpRing(-60,260);
-		JumpBar(390);
-		JumpRing(55,520);
-		JumpBar(650);
-		JumpRing(-50,780);
-		JumpBar(910);
-		JumpRing(70,1040);
-		JumpBar(1170);
-		JumpRing(0,1300);
-	}
-
 	//----------------------------------------------------------------------
-	// Koridor kapaniyor, sahne diyaloga hazirlaniyor
+	// Turuncu bolum bitti: sari ruha geciliyor
 	//----------------------------------------------------------------------
-	if (_timer == atak_son)
+	if (bolum == 5) and (yol >= atak_yol)
 	{
-		// Hangi pattern yarim kalirsa kalsin sahne temizleniyor
-		CarStop();
-		GuestStop();
-		BoxStop();
-		with (battle_regularbone) { instance_destroy(); }
-		with (battle_gasterblaster) { instance_destroy(); }
-		DrCorridorStop();
-		instance_create_depth(0,0,0,battle_soul_red_effect);
-		Battle_SetSoul(battle_soul_red);
-		Anim_Destroy(battle_board,"up");
-		Anim_Destroy(battle_board,"down");
-		Anim_Destroy(battle_board,"left");
-		Anim_Destroy(battle_board,"right");
-		Battle_SetBoardSizeCubic(65,65,125,125,40);
-		battle_soul.x = battle_board.x;
-		battle_soul.y = battle_board.y;
-		with (battle_soul) { moveable = false; }
-		Camera_Shake(3,3,2,2);
+		bolum = 6;
+		SariBasla();
 	}
+
+	//======================================================================
+	// SARI RUH ATAGI
+	//======================================================================
+	// Ruh kutunun merkezine cakili, sadece 8 yone nisan aliyor. Bolum uc
+	// hedef tipi uzerine kurulu ve ucu de ayri bir sey istiyor:
+	//
+	//   NORMAL  her mermiyle oluyor. Talebi nisan hizi: 8 yonden geliyorlar
+	//           ve kucuk merminin 9 karelik bekleme suresi var.
+	//   BIG     sadece guc vurusu deliyor. Talebi TAAHHUT: 32 kare sarj
+	//           gerekiyor ve sarj sirasinda kucuk mermi atilamiyor, cunku
+	//           kucuk mermi Z'ye BASILDIGI anda cikiyor. Yani buyugu
+	//           kirmak, normallerin arasinda 32 karelik bir bosluk bulmak
+	//           demek.
+	//   MIRROR  mermiyi geldigi yone geri yansitiyor ve yansiyan mermi
+	//           ruha hasar veriyor. Talebi SABIR: o hatta atis yapilamaz.
+	//           Kutuya yaklasinca kendiliginden sonuyor (fade_start 105,
+	//           fade_end 58), yani beklemek bir cozum. Kendisi hasar
+	//           vermiyor, sadece bir yonu kapatiyor.
+	//
+	// Zorluk ucunun ust uste binmesinden geliyor: aynalar tam buyuk
+	// hedeflerin ONUNE konuyor, yani once aynanin sonmesini bekleyip sonra
+	// sarj etmek gerekiyor -- ve o sirada normaller akmaya devam ediyor.
+	//
+	// Yol sureleri (mesafe 360): NORMAL spd 2.4 -> 150 kare,
+	// BIG spd 1.5 -> 240 kare, MIRROR spd 2.0 -> sonene kadar ~151 kare.
+	// Asagidaki yorumlardaki sayilar VARIS karesi.
+	//======================================================================
+	if (sari_on)
+	{
+		sari_t += 1;
+
+		//--- 1. dalga: ramp. Tek tek, 30 kare arayla, sekiz yonu tanitiyor.
+		if (sari_t == 0)   { DrTarget(DR_TARGET.NORMAL,90,2.4); }		// varis 150
+		if (sari_t == 30)  { DrTarget(DR_TARGET.NORMAL,180,2.4); }		// 180
+		if (sari_t == 60)  { DrTarget(DR_TARGET.NORMAL,0,2.4); }		// 210
+		if (sari_t == 90)  { DrTarget(DR_TARGET.NORMAL,270,2.4); }		// 240
+		if (sari_t == 120) { DrTarget(DR_TARGET.NORMAL,135,2.4); }		// 270
+		if (sari_t == 150) { DrTarget(DR_TARGET.NORMAL,315,2.4); }		// 300
+
+		//--- 2. dalga: ciftler. Iki hedef 12 kare arayla zit yonlerden;
+		//--- kucuk merminin beklemesi 9 kare, yani tam sigiyor. Arada ilk
+		//--- buyuk hedef var: sarji normallerin arasina sokmak gerekiyor.
+		if (sari_t == 190) { DrTarget(DR_TARGET.NORMAL,45,2.4); }		// 340
+		if (sari_t == 190) { DrTarget(DR_TARGET.BIG,0,1.5); }			// 430
+		if (sari_t == 202) { DrTarget(DR_TARGET.NORMAL,225,2.4); }		// 352
+		if (sari_t == 235) { DrTarget(DR_TARGET.NORMAL,90,2.4); }		// 385
+		if (sari_t == 247) { DrTarget(DR_TARGET.NORMAL,270,2.4); }		// 397
+		if (sari_t == 295) { DrTarget(DR_TARGET.NORMAL,135,2.4); }		// 445
+		if (sari_t == 307) { DrTarget(DR_TARGET.NORMAL,315,2.4); }		// 457
+		if (sari_t == 340) { DrTarget(DR_TARGET.NORMAL,180,2.4); }		// 490
+
+		//--- 3. dalga: ayna 90 hattini kapatiyor, arkasinda buyuk hedef.
+		//--- Ayna once dogdugu ve daha hizli oldugu icin onde: 90'a atis
+		//--- yapan mermiyi kendine geri yer. Ayna 530'da soner, buyuk
+		//--- 645'te varir -- yani once beklemek, sonra sarj etmek gerekiyor.
+		//--- Bu sirada normaller 22 kare arayla akmaya devam ediyor ve
+		//--- hicbiri 90'dan gelmiyor, yoksa aynaya carparlardi.
+		if (sari_t == 360) { DrTarget(DR_TARGET.NORMAL,0,2.4); }		// 510
+		if (sari_t == 379) { DrTarget(DR_TARGET.MIRROR,90,2.0); }		// soner 530
+		if (sari_t == 380) { DrTarget(DR_TARGET.NORMAL,225,2.4); }		// 530
+		if (sari_t == 402) { DrTarget(DR_TARGET.NORMAL,45,2.4); }		// 552
+		if (sari_t == 405) { DrTarget(DR_TARGET.BIG,90,1.5); }			// 645
+		if (sari_t == 424) { DrTarget(DR_TARGET.NORMAL,180,2.4); }		// 574
+		if (sari_t == 446) { DrTarget(DR_TARGET.NORMAL,315,2.4); }		// 596
+		if (sari_t == 468) { DrTarget(DR_TARGET.NORMAL,270,2.4); }		// 618
+		if (sari_t == 490) { DrTarget(DR_TARGET.NORMAL,135,2.4); }		// 640
+
+		//--- Final: ucu birden, ciftler halinde. Ikinci ayna 225 hattini
+		//--- kapatiyor, arkasindaki buyuk hedef 830'da variyor.
+		if (sari_t == 512) { DrTarget(DR_TARGET.NORMAL,90,2.4); }		// 662
+		if (sari_t == 524) { DrTarget(DR_TARGET.NORMAL,270,2.4); }		// 674
+		if (sari_t == 550) { DrTarget(DR_TARGET.NORMAL,0,2.4); }		// 700
+		if (sari_t == 562) { DrTarget(DR_TARGET.NORMAL,180,2.4); }		// 712
+		if (sari_t == 574) { DrTarget(DR_TARGET.MIRROR,225,2.0); }		// soner 725
+		if (sari_t == 590) { DrTarget(DR_TARGET.BIG,225,1.5); }			// 830
+		if (sari_t == 590) { DrTarget(DR_TARGET.NORMAL,135,2.4); }		// 740
+		if (sari_t == 602) { DrTarget(DR_TARGET.NORMAL,315,2.4); }		// 752
+		if (sari_t == 625) { DrTarget(DR_TARGET.NORMAL,45,2.4); }		// 775
+		if (sari_t == 637) { DrTarget(DR_TARGET.NORMAL,0,2.4); }		// 787
+		if (sari_t == 658) { DrTarget(DR_TARGET.NORMAL,90,2.4); }		// 808
+		if (sari_t == 670) { DrTarget(DR_TARGET.NORMAL,180,2.4); }		// 820
+
+		//--- Bolum bitti: kirmizi ruha geciliyor ---
+		if (sari_t == sari_son)
+		{
+			sari_on = false;
+			KirmiziBasla();
+		}
+	}
+
+
+	//======================================================================
+	// KIRMIZI RUH BOLUMU
+	//======================================================================
+	// Kisa tutuldu: turuncu ve sari zaten uzun, ucu birden cok olurdu.
+	// Iki eleman var.
+	//
+	//   BLASTER CEMBERI  Kutunun etrafinda bir cember; hepsi ayni anda
+	//                    doguyor ama SIRAYLA atesliyorlar. Isinlar merkezden
+	//                    gectigi icin her atesle guvenli bolge donuyor ve
+	//                    ruhun onunla birlikte donmesi gerekiyor. Kutu KARE
+	//                    oldugu icin her acidan 61 px guvenli serit kaliyor;
+	//                    dikdortgen kutuda yatay isinlar icin bu 36 idi.
+	//
+	//   YILDIRIMLAR      AlphysBigBolt: ekranin uzerinde dogup asagi inen
+	//                    buyuk bolt, kutuya girdigi anda PATLIYOR ve cevreye
+	//                    kavis cizen boltlar saciyor. Dogumdan patlamaya 48
+	//                    kare var, uyari o. Cemberin donusu ruhu bir yone
+	//                    iterken patlama o bolgeyi kapatiyor.
+	//
+	// Sonda ikisi ust uste biniyor: cember B atesini surerken yildirimlar
+	// da dusuyor.
+	//======================================================================
+	if (kir_on)
+	{
+		kir_t += 1;
+
+		//--- Cember A: 8 blaster, 26 kare arayla atesliyorlar ---
+		// Dogum 30, ilk ates 77, son ates 259.
+		if (kir_t == 30) { BlasterCircle(8,190,0,26); }
+
+		//--- Yildirim dalgasi: yukaridan dusup kutuda patlayan uc bolt ---
+		if (kir_t == 250) { Yildirim(-55,6,2.4); }	// patlama 298
+		if (kir_t == 285) { Yildirim(45,7,2.6); }	// 333
+		if (kir_t == 320) { Yildirim(0,8,2.2); }	// 368
+
+		//--- Cember B: 6 blaster, 24 kare arayla, aci kaydirilmis ---
+		// Dogum 400, ilk ates 447, son ates 567.
+		if (kir_t == 400) { BlasterCircle(6,190,30,24); }
+
+		//--- Final: cember B atesini surerken yildirimlar da dusuyor ---
+		if (kir_t == 440) { Yildirim(-40,6,2.4); }	// patlama 488
+		if (kir_t == 480) { Yildirim(55,6,2.6); }	// 528
+		if (kir_t == 520) { Yildirim(0,8,2.4); }	// 568
+
+		//--- Bolum bitti: atak kapaniyor ---
+		if (kir_t == kir_son)
+		{
+			kir_on = false;
+			bitis_kare = _timer;
+			with (battle_gasterblaster) { instance_destroy(); }
+			with (battle_gasterblaster_beam) { instance_destroy(); }
+			with (o_alphys_bolt) { instance_destroy(); }
+			with (o_alphys_bigbolt) { instance_destroy(); }
+			Anim_Destroy(battle_board,"up");
+			Anim_Destroy(battle_board,"down");
+			Anim_Destroy(battle_board,"left");
+			Anim_Destroy(battle_board,"right");
+			Battle_SetBoardSizeCubic(65,65,125,125,30);
+			battle_soul.x = battle_board.x;
+			battle_soul.y = battle_board.y;
+			with (battle_soul) { moveable = false; }
+			Camera_Shake(3,3,2,2);
+		}
+	}
+
 
 	//----------------------------------------------------------------------
 	// Devir teslim diyalogu
 	//----------------------------------------------------------------------
-	if (_timer == atak_son+70) and (!dialog_started)
+	if (bitis_kare > 0) and (_timer == bitis_kare+70) and (!dialog_started)
 	{
 		dialog_started = true;
 		battle_enemy_engage.p2_head_sprite = spr_p2_head;

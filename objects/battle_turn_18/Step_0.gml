@@ -136,19 +136,568 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	// Tur baslarken kafa, diyalog ifadesinden idle animasyonuna doner
+	//======================================================================
+	// PAPYRUS'UN TURUNCU RUH KORIDORU
+	//======================================================================
+	// Tur 16'daki koridorun daha uzun ve cok daha yogun hali:
+	//   tur 16 -> ~45 oge / 6860 px
+	//   tur 18 -> 89 oge / 11540 px
+	// Yardimci fonksiyonlarin hepsi Create_0'da, tur 16'dakiyle ayni.
+	//
+	// Bolumlerin sirasi (parantez icindekiler ogenin kalbe VARDIGI yol):
+	//   A  zincir barlari      440 - 1040
+	//   B  kutular            1295 - 2285
+	//   C  ziplama zinciri    2390 - 4080
+	//   D  zincir barlari     4190 - 4790
+	//   E  ziplama zinciri    4900 - 6590
+	//   F  kutular            6700 - 8040
+	//   G  zincir barlari     8150 - 8700
+	//   H  ziplama zinciri    8810 - 9720
+	//   I  zincir barlari     9840 - 10500
+	//   J  kutular           10610 - 11540
+	//
+	// KONUK KORIDORUN ICINDE DEGIL, SONUNDA. Mini-boss oldugu icin baska
+	// patternlerle ayni anda calisinca hasar almamak imkansiz oluyordu:
+	// guc dash 40 kare basili tutmak istiyor, o sure boyunca oyuncu zaten
+	// kemik kirmakla / serit degistirmekle mesgul. Koridor bitince tek
+	// basina geliyor (asagida FINAL basligi).
+	//
+	// Bolum tetikleri kare degil YOL: dunya dash ile 2.4 katina kadar
+	// hizlaniyor, sabit kareler iyi oynayan oyuncuya bosluk acardi.
+	//======================================================================
 	if (_timer == 1)
 	{
+		audio_play_sound(snd_bell,2,0);
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
 	}
-	if (_timer == 1000)
+
+	// Koridor aciliyor: kutu ekran boyu uzuyor, ruh turuncuya donuyor.
+	// Other_12'nin 25 karelik kutu animasyonu bunu ezmesin diye once iptal.
+	if (turuncu_acik) and (_timer == 20)
 	{
+		instance_create_depth(0,0,0,battle_soul_red_effect);
+		Anim_Destroy(battle_board,"up");
+		Anim_Destroy(battle_board,"down");
+		Anim_Destroy(battle_board,"left");
+		Anim_Destroy(battle_board,"right");
+		Battle_SetBoardSizeCubic(320,160,120,120,40);
+		Battle_SetSoul(battle_soul_orange_dr);
+		DrCorridor(false,4);
+		Camera_Shake(3,3,2,2);
+	}
+
+	// Ruh kosu pozisyonuna (ekranin alt kismina) kayiyor.
+	if (turuncu_acik) and (_timer == 60)
+	{
+		Anim_Create(battle_soul,"y",ANIM_TWEEN.CUBIC,ANIM_EASE.IN_OUT,battle_soul.y,400-battle_soul.y,50);
+	}
+
+	//----------------------------------------------------------------------
+	// Dunyanin kat ettigi yol. Butun bolum esikleri buradan okunuyor.
+	//----------------------------------------------------------------------
+	if (instance_exists(battle_dr_corridor))
+	{
+		yol += battle_dr_corridor.scroll_spd;
+	}
+
+	//----------------------------------------------------------------------
+	// GECICI: turuncu kapaliyken tur bos kalmasin diye dogrudan sigara
+	// sahnesine gidiliyor. KIRMIZI/MAVI BOLUM BURAYA GELECEK.
+	//----------------------------------------------------------------------
+	if (!turuncu_acik) and (bolum == 0) and (_timer == 30)
+	{
+		bolum = 12;
+		bitis_kare = _timer;
+	}
+
+	//======================================================================
+	// BOLUM TETIKLERI
+	//======================================================================
+	// Her satir bir ogeyi DOGURUYOR; oge yukaridan kayarak yorumdaki yola
+	// variyor. Tetikler bilerek ust uste biniyor: bir bolum hala inerken
+	// sonrakinin dogmasi gerekiyor, yoksa aralarinda bosluk kaliyor.
+	// Ziplama halkalari ~900 px yukarida dogmak zorunda, yoksa ekranin
+	// ortasinda birden beliriyorlar.
+	//======================================================================
+	if (turuncu_acik) and (bolum == 0) and (_timer >= 60)
+	{
+		// Koridor 20. karede acildigi icin buraya gelene kadar yol birikmis
+		// oluyor; sifirlanmasaydi butun esikler o kadar kayardi.
+		bolum = 1;
+		yol = 0;
+		ChainRun(6,120,60);					// A: 440-1040
+	}
+
+	if (bolum == 1) and (yol >= 700)
+	{
+		bolum = 2;
+		BoxRun(3,110,120,320,45);			// B: 1295-2285
+	}
+
+	if (bolum == 2) and (yol >= 1490)
+	{
+		bolum = 3;
+		JumpUnit(900,[0,-70]);				// C: 2390-3040
+		JumpUnit(1680,[50,-45,60]);			//    3170-4080
+	}
+
+	if (bolum == 3) and (yol >= 3750)
+	{
+		bolum = 4;
+		ChainRun(6,120,60);					// D: 4190-4790
+		BlastMark(700,-1);
+	}
+
+	if (bolum == 4) and (yol >= 4000)
+	{
+		bolum = 5;
+		JumpUnit(900,[-50]);				// E: 4900-5290
+		JumpUnit(1420,[55,-40,65,-30]);		//    5420-6590
+	}
+
+	if (bolum == 5) and (yol >= 6105)
+	{
+		bolum = 6;
+		BoxRun(4,104,110,300,40);			// F: 6700-8040
+	}
+
+	if (bolum == 6) and (yol >= 7710)
+	{
+		bolum = 7;
+		ChainRun(6,110,60);					// G: 8150-8700
+	}
+
+	if (bolum == 7) and (yol >= 7760)
+	{
+		bolum = 8;
+		JumpUnit(1050,[-55,50,-45]);		// H: 8810-9720
+	}
+
+	if (bolum == 8) and (yol >= 9400)
+	{
+		bolum = 9;
+		ChainRun(7,110,60);					// I: 9840-10500
+	}
+
+	if (bolum == 9) and (yol >= 10015)
+	{
+		bolum = 10;
+		BoxRun(3,104,110,300,40);			// J: 10610-11540
+		BlastMark(1100,1);
+	}
+
+	//======================================================================
+	// FINAL -- BEKLENMEDIK KONUK, TEK BASINA
+	//======================================================================
+	// Konuk bir mini-boss: baska patternlerle ayni anda calisirsa hasar
+	// almamak imkansiz oluyor. Ozellikle guc dash 40 kare basili tutmak
+	// istiyor ve o sure boyunca oyuncu zaten kemik kirmak, serit degistirmek
+	// veya halkaya binmek zorunda kaliyordu -- ikisi ayni ele sigmiyor.
+	//
+	// Bu yuzden koridor tamamen bittikten SONRA, tek basina geliyor. Dunya
+	// akmaya devam ediyor (kalp kosuyor) ama artik hicbir sey dogmuyor:
+	// oyuncunun tek isi sarj edip dogru anda birakmak.
+	//
+	// Bolum iki sekilde bitiyor:
+	//   - Konuk 8 kez savrulunca kendi kendine cekiliyor (gst_max)
+	//   - ya da guvenlik siniri: 3600 px. Konuk'un atilisini savurmak yerine
+	//     yana kacarak da atlatmak mumkun (kilitlenen hedef sabit), yani
+	//     hic puskurtmeyen bir oyuncuda bolum sonsuza kadar surerdi.
+	//======================================================================
+	if (bolum == 10) and (yol >= atak_yol)
+	{
+		bolum = 11;
+		GuestStart(8);
+		konuk_son = yol+3600;
+	}
+
+	if (bolum == 11) and ((!gst_on) or (yol >= konuk_son))
+	{
+		bolum = 12;
+		GuestStop();
+		bitis_kare = _timer;
+	}
+
+
+	if (box_on) and (instance_exists(battle_soul))
+	{
+		var _kmul = 1;
+		if (instance_exists(battle_soul_orange_dr)) { _kmul = battle_soul_orange_dr.world_mul; }
+		// Kutular ve blasterlar barlarla ayni hizda kayiyor (bar spd_y'si 4),
+		// boylece duvarlar kutulardan hic ayrilmiyor.
+		var _kay = 4*_kmul;
+		var _nb = array_length(boxes);
+		for (var _i = 0; _i < _nb; _i++) { boxes[_i].y += _kay; }
+
+		// Kalp bir kutunun icindeyse kati yan duvarlar arasinda tutuluyor
+		for (var _i = 0; _i < _nb; _i++)
+		{
+			var _kb = boxes[_i];
+			if (battle_soul.y > _kb.y-_kb.h/2) and (battle_soul.y < _kb.y+_kb.h/2)
+			{
+				var _kcx = battle_board.x+_kb.ox;
+				battle_soul.x = clamp(battle_soul.x,_kcx-_kb.w/2+9,_kcx+_kb.w/2-9);
+			}
+		}
+
+		// Ekranin altina inen kutular listeden dusuyor, hepsi bitince bolum
+		// kendini kapatiyor. BoxStop cagirmiyoruz cunku o butun barlari yok
+		// eder ve o sirada hala inen bir duvar varsa gozle gorulur sekilde
+		// kaybolurdu.
+		for (var _i = _nb-1; _i >= 0; _i--)
+		{
+			if (boxes[_i].y-boxes[_i].h/2 > 520) { array_delete(boxes,_i,1); }
+		}
+		if (array_length(boxes) == 0) { box_on = false; }
+	}
+
+	//----------------------------------------------------------------------
+	// Blaster isaretcileri. Kutu bolumune bagli degiller: her bolum
+	// BlastMark ile kendi blasterini koyabiliyor.
+	//----------------------------------------------------------------------
+	if (array_length(blasts) > 0)
+	{
+		var _bmul = 1;
+		if (instance_exists(battle_soul_orange_dr)) { _bmul = battle_soul_orange_dr.world_mul; }
+		for (var _i = array_length(blasts)-1; _i >= 0; _i--)
+		{
+			blasts[_i].y += 4*_bmul;
+			if (!blasts[_i].dogdu)
+			{
+				if (blasts[_i].y >= blast_warn)
+				{
+					blasts[_i].dogdu = true;
+					DrBlaster(blasts[_i].side,blasts[_i].y);
+				}
+			}
+			else if (blasts[_i].y > 620)
+			{
+				array_delete(blasts,_i,1);
+			}
+		}
+	}
+
+	//----------------------------------------------------------------------
+	// Bileklikler
+	//----------------------------------------------------------------------
+	// Kalbin USTUNDEN gecen kapali halkalar: yerdeyken zararsizlar, ama
+	// ziplayan kalp iceri girip carpiyor. Beyaz barlarin tam tersi.
+	//----------------------------------------------------------------------
+	if (car_on)
+	{
+		var _cmul = 1;
+		if (instance_exists(battle_soul_orange_dr)) { _cmul = battle_soul_orange_dr.world_mul; }
+		// Donus gorsel: dunya hizlanmasi buraya yumusatilarak yansiyor.
+		car_ang += car_spin*(1+(_cmul-1)*0.4);
+		var _cn = array_length(cars);
+		for (var _i = 0; _i < _cn; _i++) { cars[_i].y += 4*_cmul; }
+
+		// Ekranin altina inen bileklikler listeden dusuyor. Once bolum
+		// gecisinde CarStop cagriliyordu ama son bileklik o esikten sonra
+		// geliyordu: kalbin altindan gecerken bir anda yok oluyordu.
+		for (var _i = _cn-1; _i >= 0; _i--)
+		{
+			if (cars[_i].y > 560) { array_delete(cars,_i,1); }
+		}
+		_cn = array_length(cars);
+		if (_cn == 0) { car_on = false; }
+
+		// Sadece havadaki kalp bileklige carpiyor
+		var _havada = false;
+		if (instance_exists(battle_soul_orange_dr)) { _havada = battle_soul_orange_dr.airborne; }
+
+		if (_havada) and (instance_exists(battle_soul))
+		{
+			var _sw = battle_soul.sprite_width/2;
+			var _sh = battle_soul.sprite_height/2;
+			for (var _c = 0; _c < _cn; _c++)
+			{
+				if (abs(cars[_c].y-battle_soul.y) > 80) { continue; }
+				for (var _i = 0; _i < car_n; _i++)
+				{
+					var _sg = CarSeg(_i,cars[_c].y);
+					// Arka yari kutunun arkasindan geciyor, tehdit degil
+					if (_sg.on <= 0.15) { continue; }
+					var _kal = 5*_sg.sc/2+2;
+					if (battle_soul.x+_sw > min(_sg.x1,_sg.x2)) and (battle_soul.x-_sw < max(_sg.x1,_sg.x2))
+					and (battle_soul.y+_sh > _sg.y-_kal) and (battle_soul.y-_sh < _sg.y+_kal)
+					{
+						if (global.kr)
+						{
+							if (!instance_exists(hurtkr)) { instance_create_depth(0,0,0,hurtkr); }
+						}
+						else if (global._inv < 1)
+						{
+							Battle_CallSoulEventHurt();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//======================================================================
+	// BEKLENMEDIK KONUK
+	//======================================================================
+	// Ayrintili aciklama Create_0'da. Ozet: sadece GUC DASH puskurtuyor ve
+	// savrulmadan savrulmaya gecen sure 56 kare, guc dash'in istedigi 40
+	// karelik sarj tam oturuyor.
+	//======================================================================
+	if (gst_on) and (instance_exists(battle_soul))
+	{
+		gst_t += 1;
+		gst_bob += 1;
+		if (gst_flash > 0) { gst_flash -= 1; }
+
+		var _gl = battle_board.x-battle_board.left+56;
+		var _gr = battle_board.x+battle_board.right-56;
+
+		if (gst_state == 0)
+		{
+			// Uzakta bekliyor, yavasca saga sola surukleniyor
+			gst_y += (gst_home_y-gst_y)*0.08;
+			gst_x += gst_vx;
+			if (gst_x < _gl) { gst_x = _gl; gst_vx = abs(gst_vx); }
+			if (gst_x > _gr) { gst_x = _gr; gst_vx = -abs(gst_vx); }
+
+			if (gst_cycle >= gst_max)
+			{
+				if (gst_t > 40) { GuestStop(); }
+			}
+			else if (gst_t > gst_bekle)
+			{
+				gst_state = 1;
+				gst_t = 0;
+				audio_play_sound(snd_exclamation,0,false);
+			}
+		}
+		else if (gst_state == 1)
+		{
+			// Hazirlik: titriyor ve son ana kadar kalbi takip ediyor. Guc
+			// dash'i sarj edip birakmak icin acilan pencere burasi.
+			gst_tx = battle_soul.x;
+			gst_ty = battle_soul.y;
+			if (gst_t > gst_hazir)
+			{
+				gst_state = 2;
+				gst_t = 0;
+				audio_play_sound(snd_swift,0,false);
+				Camera_Shake(3,3,2,2);
+			}
+		}
+		else if (gst_state == 2)
+		{
+			// Atilis. Dunya da hizlaniyor: dash atmisiz gibi.
+			if (instance_exists(battle_soul_orange_dr))
+			{
+				battle_soul_orange_dr.speed_boost = 1;
+			}
+			var _gd = point_direction(gst_x,gst_y,gst_tx,gst_ty);
+			gst_x += lengthdir_x(gst_spd,_gd);
+			gst_y += lengthdir_y(gst_spd,_gd);
+			if (gst_y > 520) or (gst_t > 90)
+			{
+				// Isabet etmeden gecti, geri donuyor
+				gst_state = 3;
+				gst_t = 0;
+				gst_rvx = 0;
+				gst_rvy = 0;
+			}
+		}
+		else
+		{
+			// Savrulma sonrasi yerine donus
+			gst_x += gst_rvx;
+			gst_y += gst_rvy;
+			gst_rvx *= 0.92;
+			gst_rvy *= 0.92;
+			gst_x += (battle_board.x-gst_x)*0.04;
+			gst_y += (gst_home_y-gst_y)*0.06;
+			if (gst_t > gst_geri)
+			{
+				gst_state = 0;
+				gst_t = 0;
+			}
+		}
+
+		// Puskurtme. Menzil kontrolu Konuk'un buyuk govdesi icin biraz
+		// genisletildi (+22), yoksa sprite'in kenari kalbe degiyor ama
+		// merkez menzilin disinda kaliyordu.
+		//
+		// strike_pow == 2 SART: sadece guc dash isliyor. Ufak dash, yani
+		// Z'ye basar basmaz cikan vurus, Konuk'a gecmiyor.
+		if (gst_state == 1) or (gst_state == 2)
+		{
+			var _gmes = point_distance(battle_soul.x,battle_soul.y,gst_x,gst_y);
+			var _savruldu = false;
+			if (instance_exists(battle_soul_orange_dr))
+			{
+				if (battle_soul_orange_dr.strike_time > 0)
+				and (battle_soul_orange_dr.strike_pow == 2)
+				and (_gmes <= battle_soul_orange_dr.strike_rad+22)
+				{
+					_savruldu = true;
+				}
+			}
+
+			if (_savruldu)
+			{
+				var _sd = point_direction(battle_soul.x,battle_soul.y,gst_x,gst_y);
+				gst_rvx = lengthdir_x(16,_sd);
+				gst_rvy = lengthdir_y(16,_sd);
+				gst_state = 3;
+				gst_t = 0;
+				gst_cycle += 1;
+				gst_flash = 14;
+				audio_play_sound(snd_break_0,0,false);
+				Camera_Shake(5,5,3,3);
+			}
+			else if (gst_state == 2) and (_gmes <= 30)
+			{
+				if (global.kr)
+				{
+					if (!instance_exists(hurtkr)) { instance_create_depth(0,0,0,hurtkr); }
+				}
+				else if (global._inv < 1)
+				{
+					Battle_CallSoulEventHurt();
+				}
+			}
+		}
+	}
+
+	//======================================================================
+	// PAPYRUS'UN SIGARA SAHNESI
+	//======================================================================
+	// Koridor da Konuk da bitti: kutu normale doner, ruh kirmizi olur ve
+	// Papyrus bir mola verir. Adimlar:
+	//   1  kutu/ruh yerine oturdu, ilk replik bekleniyor
+	//   2  "MIND IF I TAKE A QUICK SMOKE BREAK?" oynuyor
+	//   3  sigara pozu + duman
+	//   4  eski sprite'lara donuldu
+	//   5  "AH, NOTHING BEATS A CIGAR AM I RIGHT?" oynuyor
+	//   6  tur kapandi
+	//======================================================================
+	if (bolum == 12) and (_timer == bitis_kare+35)
+	{
+		bolum = 13;
+		CarStop();
+		BoxStop();
+		DrCorridorStop();
+		with (battle_regularbone) { instance_destroy(); }
+		with (battle_gasterblaster) { instance_destroy(); }
+		with (battle_gasterblaster_beam) { instance_destroy(); }
+		instance_create_depth(0,0,0,battle_soul_red_effect);
+		Anim_Destroy(battle_board,"up");
+		Anim_Destroy(battle_board,"down");
+		Anim_Destroy(battle_board,"left");
+		Anim_Destroy(battle_board,"right");
+		// Sahne boyunca normal bir atak kutusu. Menu kutusu (283 genislik)
+		// diyalog icin cok genis duruyordu; tur 16'nin diyalog sahnesi de
+		// bu olcuyu kullaniyor.
+		Battle_SetBoardSizeCubic(65,65,125,125,30);
 		Battle_SetSoul(battle_soul_red);
+		sahne = 1;
+		sahne_kare = _timer;
+	}
+
+	//---------------------------------------------------- 1. replik
+	if (sahne == 1) and (_timer == sahne_kare+45)
+	{
+		sahne = 2;
+		var _dlg = instance_create_depth(0,0,0,battle_dialog_enemy);
+		_dlg.text = "{speaker 1}{font 4}{voice 4}{pap_head 1}MIND IF I TAKE A&QUICK SMOKE&BREAK?";
+	}
+
+	//---------------------------------------------------- sigara pozu
+	// spr_papyrus_smoking kafayi VE kolu de iceriyor; ayri cizilen o iki
+	// parca gizleniyor, yoksa ust uste binerler. Bacaklar sprite'in disinda
+	// kaldigi icin dokunulmuyor.
+	if (sahne == 2) and (!instance_exists(battle_dialog_enemy))
+	{
+		sahne = 3;
+		sahne_kare = _timer;
+		duman_t = 0;
+		with (battle_enemy_engage)
+		{
+			pap_body_sprite = spr_papyrus_smoking;
+			pap_body_image = 0;
+			pap_head_alpha = 0;
+			pap_arm_alpha = 0;
+		}
+	}
+
+	//---------------------------------------------------- duman uretimi
+	if (sahne == 3)
+	{
+		duman_t += 1;
+		if (duman_t % 11 == 0) and (instance_exists(battle_enemy_engage))
+		{
+			// Ucun ekran karsiligi Create_0'da hesaplandi
+			var _ux = 0;
+			var _uy = 0;
+			with (battle_enemy_engage)
+			{
+				_ux = pap_draw_x+pap_shake_x-38;
+				_uy = y-178+pap_bob;
+			}
+			DumanEkle(_ux,_uy);
+		}
+
+		if (_timer == sahne_kare+300)
+		{
+			sahne = 4;
+			sahne_kare = _timer;
+			with (battle_enemy_engage)
+			{
+				pap_body_sprite = spr_papyrus_body;
+				pap_body_image = 0;
+				pap_head_alpha = 1;
+				pap_arm_alpha = 1;
+			}
+		}
+	}
+
+	//---------------------------------------------------- 2. replik
+	if (sahne == 4) and (_timer == sahne_kare+35)
+	{
+		sahne = 5;
+		var _dlg = instance_create_depth(0,0,0,battle_dialog_enemy);
+		_dlg.text = "{speaker 1}{font 4}{voice 4}{pap_head 4}AH, NOTHING&BEATS A CIGAR&AM I RIGHT?";
+	}
+
+	//---------------------------------------------------- tur kapaniyor
+	if (sahne == 5) and (!instance_exists(battle_dialog_enemy))
+	{
+		sahne = 6;
+		// Menunun varsayilan kutusu BATTLE_BOARD sabitlerinde (Macro_Battle)
+		Anim_Destroy(battle_board,"up");
+		Anim_Destroy(battle_board,"down");
+		Anim_Destroy(battle_board,"left");
+		Anim_Destroy(battle_board,"right");
+		Battle_SetBoardSizeCubic(BATTLE_BOARD.UP,BATTLE_BOARD.DOWN,BATTLE_BOARD.LEFT,BATTLE_BOARD.RIGHT);
 		Battle_SetMenuDialog("* Papyrus is enjoying himself.")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
 		}
 		Battle_EndTurn();
+	}
+
+	//---------------------------------------------------- duman hareketi
+	// Yukselirken yavasliyor (kaldirma kuvveti soner), yatayda yavas bir
+	// salinimla suruklenir. Buyume ve solma cizimde.
+	if (array_length(duman) > 0)
+	{
+		for (var _i = array_length(duman)-1; _i >= 0; _i--)
+		{
+			var _dm = duman[_i];
+			_dm.t += 1;
+			_dm.vy *= 0.985;
+			_dm.vx *= 0.99;
+			_dm.x += _dm.vx+dsin(_dm.t*2.6+_dm.tohum)*0.35;
+			_dm.y += _dm.vy;
+			if (_dm.t >= _dm.omur) { array_delete(duman,_i,1); }
+		}
 	}
 }

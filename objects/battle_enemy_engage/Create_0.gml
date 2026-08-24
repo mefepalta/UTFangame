@@ -440,6 +440,10 @@
 	// 1. kare govdeye AYRI bir el daha ekliyor; spr_papyrus_arm ile birlikte
 	// Papyrus iki elli gorunuyordu. Dogrusu 0. kare.
 	pap_body_image=0;
+	// Sigara pozunda (spr_papyrus_smoking) kafa ve kol o sprite'in
+	// icinde; ayri cizilen parcalar bunlarla gizleniyor.
+	pap_head_alpha=1;
+	pap_arm_alpha=1;
 	pap_legs_sprite=spr_papyrus_legs;
 	pap_legs_image=0;
 	pap_arm_sprite=spr_papyrus_arm;

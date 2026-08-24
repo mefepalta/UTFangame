@@ -8,8 +8,29 @@ canga=0;
 depth=DEPTH_BATTLE.BULLET_OUTSIDE_HIGH;
 
 // --- Phase 2: turuncu ruh koridoru + devir teslim diyalogu ---
-// Atak once, diyalog sonra. atak_son atagin bittigi kare.
-atak_son=2700;
+// Atak once, diyalog sonra.
+//
+// Bolum tetikleri kareye degil, dunyanin kat ettigi YOLa bagli: dunya dash
+// ile 2.4 katina kadar hizlandigi icin sabit kareler iyi oynayan oyuncuya
+// bosluk aciyordu. yol her karede koridorun scroll_spd si kadar artiyor.
+yol=0;
+bolum=0;			// hangi bolume gelindi (bkz. Step_0)
+bitis_kare=-1;		// atak bittigi kare; diyalog bunun 70 kare sonrasinda
+atak_yol=6860;		// bu yola varilinca turuncu bolum bitiyor
+
+// --- Sari ruh bolumu ---
+// Turuncu koridor bitince baslar. Sari ruh kutunun merkezine cakili,
+// sadece 8 yone nisan aliyor: bolum bir atis galerisi.
+sari_on=false;
+sari_t=0;
+sari_son=900;		// bu karede bolum bitiyor (son varis 830)
+
+// --- Kirmizi ruh bolumu ---
+// Sari bolum bitince baslar. Ruh normal hareket ediyor. Kisa tutuldu:
+// sadece iki eleman var, blaster cemberi ve yildirimlar.
+kir_on=false;
+kir_t=0;
+kir_son=650;		// bu karede bolum bitiyor
 phase2_text="";
 dialog_started=false;
 
@@ -99,19 +120,13 @@ CarBone = function(_x1,_x2,_y,_sc,_col,_al)
 	CarCap(_r-_cap/2,_y,-90,_sc,_col,_al);
 };
 
-///Bileklikleri ve her birinin 130 px altindaki zicrama halkasini dogurur.
-///@arg count	kac bileklik
-///@arg gap		bileklikler arasi dunya mesafesi
-CarRun = function(_count,_gap)
+///Tek bir bileklik koyar. Konum kalbe varana kadarki YOL cinsinden, cunku
+///her bilekligin bir tuzak halkanin yay ortasina denk gelmesi gerekiyor.
+///@arg d	kalbe varis mesafesi (px)
+CarMark = function(_d)
 {
-	cars = [];
-	for (var _i = 0; _i < _count; _i++)
-	{
-		array_push(cars,{ y: -210-_i*_gap });
-	}
+	array_push(cars,{ y: 400-_d });
 	car_on = true;
-	car_ang = 0;
-	audio_play_sound(snd_exclamation,0,false);
 };
 
 CarStop = function()
@@ -122,59 +137,13 @@ CarStop = function()
 
 
 //==========================================================================
-// PATTERN 2 -- Beklenmedik Konuk (mini-boss)
+// Beklenmedik Konuk (mini-boss) bu atakta YOK.
 //==========================================================================
-// Konuk uzakta, koridorun tepesinde bekliyor. Birkac saniyede bir kalbi
-// nisan alip kendini hizla ustune atiyor; atilirken dunya da hizlaniyor.
-// Dash tutturulunca savruluyor. Guc dash i hazirlik boyunca sarj edilip
-// tam zamaninda birakilabildigi icin kolay; ufak dash basar basmaz ciktigi
-// icin zamanlamasi zor.
-// 0 = uzakta bekliyor, 1 = hazirlik, 2 = atilis, 3 = savrulma / geri donus
-gst_state=0;
-gst_on=false;
-gst_x=320;
-gst_y=120;
-gst_home_y=120;		// bekleme yuksekligi
-gst_bekle=70;		// atilislar arasi bekleme (kare)
-gst_hazir=22;		// hazirlik suresi (kare)
-gst_vx=1.4;			// beklerken yatay suruklenme
-gst_t=0;
-gst_cycle=0;
-gst_max=4;
-gst_alpha=0;
-gst_flash=0;
-gst_bob=0;
-gst_scale=2.2;
-gst_tx=320;			// atilisin kilitlendigi hedef
-gst_ty=400;
-gst_spd=19;			// atilis hizi
-gst_rvx=0;			// savrulma hizi
-gst_rvy=0;
-
-///@arg max	kac kez savrulduktan sonra kaciyor
-GuestStart = function(_max)
-{
-	gst_max = _max;
-	gst_cycle = 0;
-	gst_on = true;
-	gst_state = 0;
-	gst_t = 0;
-	gst_x = battle_board.x;
-	gst_y = -60;
-	gst_vx = 1.4;
-	gst_flash = 0;
-	Anim_Destroy(id,"gst_alpha");
-	Anim_Create(id,"gst_alpha",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,1,25);
-	audio_play_sound(snd_exclamation,0,false);
-};
-
-GuestStop = function()
-{
-	gst_on = false;
-	Anim_Destroy(id,"gst_alpha");
-	Anim_Create(id,"gst_alpha",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,gst_alpha,-gst_alpha,25);
-};
-
+// Bir sonraki atakta kullanilacak. Calisan hali a02e0eb commitinde:
+//   git show a02e0eb:objects/battle_turn_16/Create_0.gml
+//   git show a02e0eb:objects/battle_turn_16/Step_0.gml
+// Oraya donerken kendi nesnesine (battle_dr_guest) tasinacak ki her tur
+// cagirabilsin; simdilik burada olu kod birakmiyoruz.
 
 //==========================================================================
 // PATTERN 3 -- kucuk kutular
@@ -185,10 +154,16 @@ GuestStop = function()
 // (battle_dr_obstacle): mavi pencere tam kutu genisligi, gerisi beyaz.
 // Boylece dunyayla birlikte kayma ve dash ile kirilma bedavaya geliyor.
 // Kutunun YAN duvarlari kati: kalp kutunun icindeyken oraya hapis.
-// Kutu boyu dash menzilinden kisa tutuluyor: kalp kutunun ortasindayken
-// iki duvar da 50 px otede, yani ufak dash (52) bile ikisini birden kiriyor.
+// Kutu boyu 120. Bir vurusun erisebildigi mesafe = menzil 78 + vurus
+// penceresi 12 kare * dash sirasindaki dunya hizi ~7 = 162 px. 120 bunun
+// altinda, yani alt duvari kiran dash zincirle ust duvari da kiriyor:
+// kutu tek dash ile geciliyor. Kalp kutunun icinde zaten mavi pencereye
+// hizali oldugu icin burada hizalanma sorunu yok, is tamamen zamanlamada.
 // Kutular arasindaki bosluga yandan blaster geliyor; blasterlar da diger
 // her sey gibi asagi kayiyor, dash olunca kayma hizlaniyor.
+// Bosluk 340, serit sapmasi 40: kutudan cikan oyuncunun bir sonraki kutuya
+// hizalanmasi 27 kare, guc dashini sarj etmesi 40 kare suruyor ve arada
+// blaster var. 260/52 iken bunlarin hepsi ayni 43 kareye sigiyordu.
 box_on=false;
 boxes=[];			// { ox, w, h, y }
 blasts=[];			// { y, side }
@@ -199,11 +174,12 @@ box_gap=260;
 // dunyayla birlikte asagi kayiyor. Cizimi, sesi, isini ve hasari kendi
 // yapiyor -- burada sadece dogus ani belirleniyor.
 //
-// Isin bastan sona uzuyor, yani yandan kacis yok. Kacis hiz: dogumdan 37
-// kare sonra atesliyor, o sirada normal hizda 148 px inmis oluyor ve tam
-// kalbin hizasinda patliyor. Dash atip dunyayi hizlandiran oyuncu blasteri
-// daha ates etmeden gecmis oluyor.
-blast_warn=232;		// blaster bu y de doguyor
+// Isin bastan sona uzuyor, yani yandan kacis yok. Kacis hiz: blaster
+// dogumundan 77 kare sonra atesliyor ve normal hizda tam kalbin hizasinda
+// patliyor. Dash atip dunyayi hizlandiran oyuncu daha ates etmeden gecmis
+// oluyor -- ve ufak dash bile yetiyor. Once 232/16 idi: orada sadece guc
+// dashi kurtariyordu, kutu duvarlariyla birlikte cok aciti.
+blast_warn=120;		// blaster bu y de doguyor (erken: uzun uyari)
 blast_len=20000;	// isin uzunlugu (px); kisaltmak istenirse buradan
 
 ///@arg side	-1 sol kenar, +1 sag kenar
@@ -213,8 +189,8 @@ DrBlaster = function(_side,_y)
 	var _hx = (_side < 0) ? (battle_board.x-battle_board.left-42) : (battle_board.x+battle_board.right+42);
 	var _ang = (_side < 0) ? 0 : 180;
 	// Son arg 1: giris animasyonu yok, blaster dogrudan yerinde doguyor.
-	// BlastCooldown 16 + agiz animasyonunun 20 karesi = 37. karede ates.
-	var _b = RegularBlaster(_hx,_y,_hx,_y,_ang,_ang,26,16,2,2,1);
+	// BlastCooldown 55 + agiz animasyonunun 20 karesi = 77. karede ates.
+	var _b = RegularBlaster(_hx,_y,_hx,_y,_ang,_ang,26,55,2,2,1);
 	_b.dr_mode = true;
 	_b.dr_len = blast_len;
 	// Bir anda belirmesin: seffaf doguyor, 30 karede opaklasiyor. Ates 37.
@@ -223,6 +199,38 @@ DrBlaster = function(_side,_y)
 	_b.image_alpha = 0;
 	Anim_Create(_b,"image_alpha",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,1,30);
 	return _b;
+};
+
+///Art arda dizilmis mavi barlar. Tek guc dash i hepsini kiriyor: her
+///kirilis vurus penceresini bastan baslatiyor. Oyuncu bu sirada sadece
+///saga sola gidip bir sonraki mavi pencereye hizalaniyor; hizasiz kalan
+///bar kirilmiyor ve zincir orada kopuyor. Kutulardan once geliyor, yani
+///mekanigi kutu duvarlarinda kullanmadan once ogretiyor.
+///@arg count	kac bar
+///@arg gap		barlar arasi dikey mesafe
+///@arg w		mavi pencere genisligi
+ChainRun = function(_count,_gap,_w)
+{
+	// Zincir dash barlari kendisi kiriyor, oyuncunun tek isi hizalanmak.
+	// Sapma 40 px: barlar arasi 120 px = 17 kare, kalp 3 px/kare ile 50 px
+	// gidebiliyor, yani yetisiyor ama bosuna da durulmuyor.
+	var _ofs = [-20,20,-20,20,-20,20];
+	for (var _i = 0; _i < _count; _i++)
+	{
+		var _b = DrBone(_ofs[_i % array_length(_ofs)],_w);
+		_b.y = -40-_i*_gap;
+	}
+	audio_play_sound(snd_exclamation,0,false);
+};
+
+///Yandan gelen bir blaster isaretcisi koyar. Konum, blasterin kalbe varana
+///kadar kat edecegi YOL cinsinden veriliyor -- her sey gibi asagi kayiyor.
+///Isaretci blast_warn'a ulasinca gercek blaster doguyor.
+///@arg d		kalbe varis mesafesi (px)
+///@arg side	-1 sol kenar, +1 sag kenar
+BlastMark = function(_d,_side)
+{
+	array_push(blasts,{ y: 400-_d, side: _side, dogdu: false });
 };
 
 ///@arg count	kac kutu
@@ -239,7 +247,12 @@ BoxRun = function(_count,_w,_h,_gap,_off)
 	for (var _i = 0; _i < _count; _i++)
 	{
 		var _ox = (_i % 2 == 0) ? -_off : _off;
-		var _y = 150-_i*_adim;
+		// Ilk kutu ekranin uzerinde doguyor. Once 150 idi ve kutu tam
+		// ekranin ortasinda birden beliriyordu: kutunun yesil yan duvarlari
+		// dogrudan ekrana ciziliyor, yani barlar gibi kutu yuzeyi tarafindan
+		// kirpilmiyorlar. -250 ile ust duvari -310'da doguyor ve her sey
+		// gibi yukaridan kayarak giriyor.
+		var _y = -250-_i*_adim;
 		array_push(boxes,{ ox:_ox, w:_w, h:_h, y:_y });
 
 		// Alt ve ust duvar. Mavi pencere tam kutu genisligi: kalp kutunun
@@ -250,15 +263,9 @@ BoxRun = function(_count,_w,_h,_gap,_off)
 		_b2.y = _y-_h/2;
 
 		// Boslugun tam ortasina bir blaster, terk edilen kutunun tarafindan.
-		// Duvar dash i ile blaster dash i arasinda 130 px (32 kare) var,
-		// ufak dash in 24 karelik beklemesine rahat siginiyor.
 		if (_i < _count-1)
 		{
-			array_push(blasts,{
-				y: _y-_h/2-_gap/2,
-				side: (_ox < 0) ? -1 : 1,
-				dogdu: false
-			});
+			BlastMark(400-(_y-_h/2-_gap/2),(_ox < 0) ? -1 : 1);
 		}
 	}
 	box_on = true;
@@ -269,7 +276,6 @@ BoxStop = function()
 {
 	box_on = false;
 	boxes = [];
-	blasts = [];
 	with (battle_dr_obstacle) { instance_destroy(); }
 	with (battle_gasterblaster) { instance_destroy(); }
 	with (battle_gasterblaster_beam) { instance_destroy(); }
@@ -303,4 +309,138 @@ JumpBar = function(_dy)
 	var _b = DrBone(-9999,2);
 	_b.y -= _dy;
 	return _b;
+};
+
+///Bir kosu birimi: bir dizi GERCEK halka, sonunda bir TUZAK + bileklik.
+///
+///Halkalar 260 px arayla -- bu ruhun jump_dist'i, yani bir yayin bitisi bir
+///sonraki halkaya tam denk geliyor ve zincir kendiliginden suruyor. Her
+///gercek halkanin 130 px arkasinda beyaz bar var: havada olmak zorunlu.
+///
+///TUZAK, son gercek halkayla AYNI SERITTE ve ondan yine 260 px sonra. Yani
+///zincirin dogal devami: hicbir sey yapilmazsa zincir ona biniyor ve 130 px
+///sonraki bileklige girilir. Dogru oynanis seritten cikip yere inmek --
+///bileklik tam kalbin dusecegi noktada duruyor, kandirma orada.
+///
+///Birimin uzunlugu serit sayisina gore degisiyor. Hep ayni olsaydi (mesela
+///her seferinde iki gercek halka) oyuncu tuzagin kacinci ziplamada
+///gelecegini sayabilirdi; degisken olunca her seferinde bilekligin kendisine
+///bakmak zorunda.
+///@arg first	ilk halkanin kalbe varis mesafesi (px)
+///@arg lanes	gercek halkalarin seritleri; tuzak sonuncusuyla ayni serite gider
+JumpUnit = function(_first,_lanes)
+{
+	var _n = array_length(_lanes);
+	for (var _i = 0; _i < _n; _i++)
+	{
+		var _d = _first+260*_i;
+		JumpRing(_lanes[_i],_d-420);
+		JumpBar(_d+130-424);
+	}
+	var _td = _first+260*_n;
+	JumpRing(_lanes[_n-1],_td-420);			// tuzak: ayni serit, zincirin devami
+	CarMark(_td+130);
+};
+
+
+///Turuncu koridordan sari ruha gecis. Koridor ve icindeki her sey
+///temizleniyor, kutu kucuk bir kareye iniyor, ruh sari oluyor.
+SariBasla = function()
+{
+	CarStop();
+	BoxStop();
+	with (battle_regularbone) { instance_destroy(); }
+	with (battle_gasterblaster) { instance_destroy(); }
+	with (battle_gasterblaster_beam) { instance_destroy(); }
+	DrCorridorStop();
+
+	instance_create_depth(0,0,0,battle_soul_red_effect);
+	Anim_Destroy(battle_board,"up");
+	Anim_Destroy(battle_board,"down");
+	Anim_Destroy(battle_board,"left");
+	Anim_Destroy(battle_board,"right");
+	Battle_SetBoardSizeCubic(40,40,40,40,45);
+	battle_board.angle = 0;
+	Battle_SetSoul(battle_soul_yellow_dr);
+	Camera_Shake(4,4,3,3);
+
+	sari_on = true;
+	sari_t = 0;
+};
+
+
+///Kutunun etrafindaki cember uzerinde bir blaster; agzi merkeze bakiyor.
+///Once cemberin disinda doguyor ve yerine ucuyor, sonra atesliyor.
+///Ates ani: dogum + ucus(26) + cool + agiz animasyonu(21).
+///@arg ang		cember uzerindeki aci
+///@arg rad		cemberin yaricapi
+///@arg cool	ateslemeden onceki ek bekleme
+BlasterRing = function(_ang,_rad,_cool)
+{
+	var _cx = battle_board.x;
+	var _cy = battle_board.y;
+	var _tx = _cx+lengthdir_x(_rad,_ang);
+	var _ty = _cy+lengthdir_y(_rad,_ang);
+	var _sx = _cx+lengthdir_x(_rad+150,_ang);
+	var _sy = _cy+lengthdir_y(_rad+150,_ang);
+	var _bak = _ang+180;
+	// XScale 1.5: isin 28*1.5 = 42 px. Kutu 130 px yuksekliginde, yani yatay
+	// bir isin gectiginde ustte ve altta 36'sar px guvenli serit kaliyor.
+	// 2 olsaydi o serit 29'a inip yatay isinlar neredeyse kacinilmaz olurdu.
+	// BlastDuration 14: isinin tehlikeli suresi ~10 (acilma) + 14 + ~12
+	// (sonme) = 36 kare. 40 verilmisti ve 20 kare arayla ateslenince ucu
+	// birden acik kaliyor, merkezden gecen isinlar kutuyu kapatiyordu.
+	return RegularBlaster(_sx,_sy,_tx,_ty,_bak,_bak,14,_cool,1.5,1.5,26);
+};
+
+///Kutunun etrafina blaster cemberi. Hepsi ayni anda doguyor ama sirayla
+///atesliyorlar: cool = i*gap. Isinlar merkezden gectigi icin her atesle
+///guvenli bolge donuyor, ruhun da onunla birlikte donmesi gerekiyor.
+///@arg count	kac blaster
+///@arg rad		cemberin yaricapi
+///@arg ang0	ilk blasterin acisi
+///@arg gap		atesler arasi kare
+BlasterCircle = function(_count,_rad,_ang0,_gap)
+{
+	for (var _i = 0; _i < _count; _i++)
+	{
+		BlasterRing(_ang0+_i*(360/_count),_rad,_i*_gap);
+	}
+};
+
+///Yukaridan dusen buyuk yildirim. Ekranin uzerinde dogup asagi iniyor,
+///kutunun icine girdigi anda PATLIYOR: kaboom, kamera sarsintisi ve
+///cevreye kavis cizerek dagilan boltlar. Sistem hazirdi, tur 14 de ayni
+///cagriyi kullaniyor.
+///Dogumdan patlamaya (kutu ustune) 48 kare var, uyari o.
+///@arg ox		kutu merkezine gore x ofseti
+///@arg fan		patlamadan cikan bolt sayisi
+///@arg curve	o boltlarin kare basina yon degisimi (kavis)
+Yildirim = function(_ox,_fan,_curve)
+{
+	return AlphysBigBolt(battle_board.x+_ox,-60,270,6,_fan,_curve);
+};
+
+///Sari bolumden kirmizi ruha gecis.
+KirmiziBasla = function()
+{
+	with (battle_dr_target) { instance_destroy(); }
+	with (battle_dr_shot) { instance_destroy(); }
+	instance_create_depth(0,0,0,battle_soul_red_effect);
+	Anim_Destroy(battle_board,"up");
+	Anim_Destroy(battle_board,"down");
+	Anim_Destroy(battle_board,"left");
+	Anim_Destroy(battle_board,"right");
+	// Kutu KARE: blaster cemberi merkezden gecen isinlar atiyor, dikdortgen
+	// kutuda yatay isinlar dikeylerden cok daha dar bir guvenli serit
+	// birakiyordu. 180x180 de her acidan 61 px kaliyor.
+	Battle_SetBoardSizeCubic(90,90,90,90,45);
+	Battle_SetSoul(battle_soul_red);
+	battle_soul.x = battle_board.x;
+	battle_soul.y = battle_board.y;
+	with (battle_soul) { moveable = true; }
+	Camera_Shake(4,4,3,3);
+
+	kir_on = true;
+	kir_t = 0;
 };

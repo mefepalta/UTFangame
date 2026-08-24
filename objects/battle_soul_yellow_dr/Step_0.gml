@@ -36,7 +36,9 @@ if(Input_IsHeld(INPUT.CONFIRM)){
 	if(charge<charge_max){
 		charge+=1;
 		if(charge==charge_max){
-			audio_play_sound(snd_chance,0,false);
+			//snd_chance bir muzik parcasi (baska yerde loop'lu caliyor); sarj her
+			//doldugunda ust uste biniyordu. Turuncu ruhta da ayni sorun vardi.
+			audio_play_sound(snd_ding,0,false);
 		}
 
 		//Dolum sürerken etraftan kalbe daireler akıyor.

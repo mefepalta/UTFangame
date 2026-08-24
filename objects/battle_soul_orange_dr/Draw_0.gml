@@ -28,7 +28,7 @@ if(SHOW){
 
 	//--- Vuruş dalgası ---
 	if(strike_time>0){
-		var T=1-(strike_time/strike_max);
+		var T=1-(strike_time/max(1,strike_dur));
 		draw_set_color(strike_pow==2 ? make_color_rgb(255,190,70) : make_color_rgb(255,140,30));
 		draw_set_alpha(1-T);
 		draw_circle(x,y,strike_rad*T,true);

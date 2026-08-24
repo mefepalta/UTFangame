@@ -49,7 +49,10 @@ if(ACTIVE && !airborne){
 		if(charge<charge_max){
 			charge+=1;
 			if(charge==charge_max){
-				audio_play_sound(snd_chance,0,false);
+				//snd_chance kullanilmisti ama o bir muzik parcasi: projede
+				//baska yerde loop'lu calisiyor ve sarj her doldugunda ust
+				//uste biniyordu. Kisa bir isaret sesi dogru olan.
+				audio_play_sound(snd_ding,0,false);
 			}
 		}
 
@@ -87,7 +90,32 @@ if(strike_time>0){
 	with(battle_dr_obstacle){
 		if(!broken && abs(y-other.y)<=other.strike_rad){
 			break_bar(other.x);
+			//break_bar vuruş mavi pencerenin dışındaysa kırmadan dönüyor,
+			//o yüzden zinciri uzatmadan önce gerçekten kırıldı mı diye
+			//bakılıyor.
+			if(broken && other.strike_pow==2){
+				//ZİNCİR: kırılan her mavi bar vuruş penceresini baştan
+				//başlatıyor, hızlanmayı tazeliyor ve dash izini yeniliyor.
+				//Böylece tek input ile art arda kırış sürüyor.
+				other.strike_time=other.chain_time;
+				other.strike_dur=other.chain_time;
+				other.speed_boost=max(other.speed_boost,1);
+				other.dash_time=other.dash_max;
+				other.dash_scale=1.15;
+
+			}
 		}
+	}
+}
+
+//SUREKLI HALKA ARAMA
+//Vurus penceresi acik oldugu SURECE daire aranir. do_strike sadece cikis
+//aninda bakiyordu; zincir (kemik kirdikca yenilenen dash) cok daha uzun
+//surdugu icin zincir devam ederken gelen halkalar yakalanmiyordu.
+if(ACTIVE && !airborne && strike_time>0 && strike_pow==2){
+	var RING=find_ring();
+	if(RING!=noone){
+		start_jump(RING);
 	}
 }
 
@@ -117,6 +145,12 @@ if(airborne){
 			jump_t=0;
 			jump_chain+=1;
 			audio_play_sound(snd_bell,0,false);
+
+			//Zincir inisi de vurus penceresini tazeliyor (bkz. start_jump)
+			strike_pow=2;
+			strike_rad=78;
+			strike_time=chain_time;
+			strike_dur=chain_time;
 		}
 	}
 
