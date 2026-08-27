@@ -2,7 +2,14 @@
 Battle_SetBoardSizeCubic(65,65,65,65);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 
-if (global.finalstretch == 0)
+// FINAL PHASE: belgede "(If you try to spare him.) Sans: ..." diyor.
+// Faz 1'in uzun merhamet repligi burada calismamali.
+if (global.p25phase >= 1)
+{
+	sansy.text = "{speaker 0}{font 3}{voice 3}...";
+}
+
+if (global.finalstretch == 0) and (global.p25phase == 0)
 {
 	sansy.text="{font 3}{voice 3}{head 3}...{pause}{clear}...What..?{pause}{clear}{head 2}What do you think&you're doing?{pause}{clear}{head 10}Mercy...&you're showing me&mercy.{pause}{clear}{head 11}No, I know what this&is.{pause}{clear}{head 25}You think that I'm&WEAK.{pause}{clear}{head 24}And you're showing ME&PITY?!{pause}{clear}{head 13}Well, I'll show you&what happens to those&who underestimate ME,&HUMAN!";
 }

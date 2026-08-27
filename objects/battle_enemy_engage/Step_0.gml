@@ -263,9 +263,21 @@ if(global.sansphase == 1)
 	wing_angle = sin(current_time / 100 * wing_speed) * 30;  // 30 = max angle
 	arm_angle  = sin(current_time / 100 * arm_speed)  * 15;
 	head_angle = sin(current_time / 100 * head_speed) * 3;
-	p2_wing_angle_diddler = sin(current_time / 100 * p2_wing_speed_diddler) * 90;  // 30 = max angle
-	p2_arm_angle_diddler  = sin(current_time / 100 * p2_arm_speed_diddler)  * 15;
-	p2_head_angle_diddler = sin(current_time / 100 * p2_head_speed_diddler) * 3;
+	// FAZ 2 SANS'ININ BOSTA DURMA HIZI
+	// Son atagin sonunda, blaster halkasindan once Sans bilerek
+	// yavaslatiliyor: o ana kadarki tempoyla halkaya girmek dogal
+	// durmuyordu, final fazdaki sakin nefes alisina gecmesi gerekiyor.
+	// global.p2_anim_hiz 1 = normal, 0.2 = final faz temposu; hedefe
+	// yumusak gecis yapiyor ki hiz aniden dusmesin.
+	// Zaman current_time yerine kendi birikeninden okunuyor -- carpani
+	// dogrudan current_time'a uygulasaydik hiz her degistiginde salinim
+	// faz atlardi.
+	global.p2_anim_hiz = lerp(global.p2_anim_hiz,global.p2_anim_hedef,0.01);
+	p2_anim_t += 16.6667*global.p2_anim_hiz;
+
+	p2_wing_angle_diddler = sin(p2_anim_t / 100 * p2_wing_speed_diddler) * 90;  // 30 = max angle
+	p2_arm_angle_diddler  = sin(p2_anim_t / 100 * p2_arm_speed_diddler)  * 15;
+	p2_head_angle_diddler = sin(p2_anim_t / 100 * p2_head_speed_diddler) * 3;
 
 	timer++;
 	if global.invinvible > 0{
@@ -277,7 +289,7 @@ if(global.sansphase == 1)
 		slam_image=0;
 		slam_alpha=0;
 	
-		_timee+=0.5;
+		_timee+=0.5*global.p2_anim_hiz;
 		//p2_body_x=sin(_timee*0.1)*-2.2/2;
 		// Genlik /4 iken ciziimde ~0.8px kaliyordu ve bacak skew'i fark edilmiyordu.
 		p2_body_y=sin(_timee*0.1)*-1.6;
@@ -576,6 +588,12 @@ if(global.sansphase == 1)
 
 	pap_draw_x = lerp(pap_draw_x,_pap_t,layout_speed);
 	alp_draw_x = lerp(alp_draw_x,_alp_t,layout_speed);
+	// FINAL PHASE kacisi: sahte iskalamada Sans yana kayip ORADA kaliyor.
+	// Kaymayi nesnenin x'ine degil YERLESIM HEDEFINE ekliyoruz -- ciziim
+	// konumu p2_draw_x'ten geliyor (p2_off_x = p2_draw_x - x) ve bu deger
+	// her kare hedefe lerp ediliyor, yani x'i oynatmak hicbir sey yapmiyordu.
+	_p2_t += global.p25_kacis;
+
 	p2_draw_x  = lerp(p2_draw_x,_p2_t,layout_speed);
 
 	if (pap_state == 1) and (abs(pap_draw_x-_pap_t) < 2) { pap_state = 2; }

@@ -7,18 +7,6 @@ canga=0;
 // icin oraya cizilen her sey arkada kaliyordu.
 depth=DEPTH_BATTLE.BULLET_OUTSIDE_HIGH;
 
-// --- Phase 2: Papyrus'un turuncu ruh koridoru ---
-// Tur 16'daki koridorun daha uzun ve cok daha zor hali. Yardimci
-// fonksiyonlar oradan birebir alindi; fark bolumlerin dizilisinde ve
-// Beklenmedik Konuk'un bu sefer asil mekanik olmasinda.
-//
-// Bolum tetikleri kareye degil, dunyanin kat ettigi YOLa bagli: dunya dash
-// ile 2.4 katina kadar hizlandigi icin sabit kareler iyi oynayan oyuncuya
-// bosluk aciyordu. yol her karede koridorun scroll_spd si kadar artiyor.
-// GECICI: turuncu koridoru kapatma anahtari. Kirmizi/mavi bolumu tek basina
-// test etmek icin false. Test bitince TRUE yapilacak.
-turuncu_acik=false;		// GECICI -- true yapilacak
-
 yol=0;
 bolum=0;			// hangi bolume gelindi (bkz. Step_0)
 atak_yol=11700;		// koridorun bittigi yol. Son oge (J kutulari) 11540te
@@ -411,6 +399,24 @@ sahne_kare=0;		// icinde bulunulan adimin basladigi kare
 duman=[];			// { x, y, vx, vy, t, omur, tohum }
 duman_t=0;
 
+///Sigara sahnesini baslatir: kutuyu normale dondurur, ruhu kirmiziya cevirir.
+///Hem turuncu koridorun hem kirmizi/mavi atagin sonunda ayni sey yapiliyor,
+///o yuzden tek yerde.
+SigaraBasla = function()
+{
+	instance_create_depth(0,0,0,battle_soul_red_effect);
+	Anim_Destroy(battle_board,"up");
+	Anim_Destroy(battle_board,"down");
+	Anim_Destroy(battle_board,"left");
+	Anim_Destroy(battle_board,"right");
+	// Sahne boyunca normal bir atak kutusu; tur 16'nin diyalog sahnesi de
+	// bu olcuyu kullaniyor.
+	Battle_SetBoardSizeCubic(65,65,125,125,30);
+	Battle_SetSoul(battle_soul_red);
+	sahne = 1;
+	sahne_kare = _timer;
+};
+
 ///Sigaranin ucundan bir duman kumesi cikarir.
 ///@arg x	ucun ekran x'i
 ///@arg y	ucun ekran y'si
@@ -425,4 +431,192 @@ DumanEkle = function(_x,_y)
 		omur: 80+irandom(40),
 		tohum: irandom(359)
 	});
+};
+
+
+//==========================================================================
+// KIRMIZI / MAVI RUH ATAGI -- yardimcilar
+//==========================================================================
+// RegularBone(x,y,uzunluk,hspeed,vspeed,aci,RENK,inside,alpha,PAPYRUS,
+//             center,bottom,aciHizi,autoDestroy)
+//   RENK   : 0 beyaz, 1 aqua, 2 turuncu
+//   PAPYRUS: dogrudan image_index olarak kullaniliyor
+//            (battle_regularbone/Draw_0); spr_bone_origin_down iki kareli,
+//            yani 1 = Papyrus kemigi. Bu atakta HEPSI 1.
+//   aci    : alttan cikan kemik 0, ustten sarkan 180
+kir_on=false;
+kir_t=0;
+
+///Kirmizi/mavi bolumu baslatir.
+KirmiziBasla = function()
+{
+	kir_on = true;
+	kir_t = 0;
+};
+
+KirSol = function() { return (battle_board.x-battle_board.left)-5; };
+KirSag = function() { return (battle_board.x+battle_board.right)+5; };
+KirDip = function() { return (battle_board.y+battle_board.down)-2; };
+KirTep = function() { return (battle_board.y-battle_board.up)+2; };
+
+///Motorun _dynamic modunu takar: hiz her kare -1'e dogru 0.03 ile
+///lerp'lenir, kemik 22. karede durup geri doner.
+///@arg bone	kemik
+///@arg hspd	taban yatay hiz
+///@arg omur	kac kare yasayacak (donmeden silinmesi isteniyorsa kisa)
+KemikDinamik = function(_bone,_hspd,_omur)
+{
+	_bone._dynamic = true;
+	_bone._dynamic_lifetime = _omur;
+	_bone._base_hspeed = _hspd;
+	_bone._base_vspeed = 0;
+	// Sonumleme orani 0.03 yerine 0.015: kemik AYNI noktada donuyor ama
+	// yariya inen hizla basliyor. Donus mesafesi hiz/oran ile olceklendigi
+	// icin oran yariya inince ayni mesafeye yarim hizla variliyor.
+	_bone._dynamic_rate = 0.015;
+	return _bone;
+};
+
+///A/B/C -- tek bir ivmeli tam boy kemik. Kemikler AYRI AYRI doguyor;
+///yelpaze acilimi dogus zamanlarinin farkindan geliyor, sabit ofsetten degil.
+///Yon degistirme noktalari simulasyonla secildi:
+///   hiz 22 -> soldan gelen x 365'te (ortanin sagi), sagdan gelen x 275'te
+///   hiz 13 -> sol x 280 / sag x 360, yani merkezdeki 80 px guvenli kaliyor
+///@arg yon	 1 = soldan saga, -1 = sagdan sola
+///@arg hiz	 taban hiz (isaretsiz)
+///@arg renk 0 beyaz, 1 aqua, 2 turuncu
+YelpazeKemik = function(_yon,_hiz,_renk)
+{
+	var _x = (_yon > 0) ? KirSol()-10 : KirSag()+10;
+	var _h = _hiz*_yon;
+	var _b = RegularBone(_x,KirDip(),152,_h,0,0,_renk,0,1,1,0,0,0,true);
+	KemikDinamik(_b,_h,180);
+	audio_play_sound(snd_stab,2,false);
+	return _b;
+};
+
+///D -- bir kenardan IKI mavi (aqua) kemik. Aqua kemik durdugun surece
+///zararsiz. Sabit hizla geciyorlar, _dynamic yok.
+///@arg yon	1 = soldan, -1 = sagdan
+MaviKemik = function(_yon)
+{
+	var _x = (_yon > 0) ? KirSol()-10 : KirSag()+10;
+	var _h = 6*_yon;
+	RegularBone(_x,KirDip(),152,_h,0,0,1,0,1,1,0,0,0,true);
+	RegularBone(_x-36*_yon,KirDip(),152,_h,0,0,1,0,1,1,0,0,0,true);
+	audio_play_sound(snd_swift,2,false);
+};
+
+///E/G -- turuncu ivmeli kemik. Turuncu kemik HAREKET ETTIGIN surece
+///zararsiz. Bunlar yon DEGISTIRMIYOR: hiz 36 verilip omur 20'de kesiliyor,
+///yani karsi duvara hala hareket halindeyken varip siliniyorlar. Gorunum
+///"yavaslayip gecip gitti" oluyor, geri donmuyorlar.
+///@arg yon	1 = soldan, -1 = sagdan
+TuruncuKemik = function(_yon)
+{
+	var _x = (_yon > 0) ? KirSol()-10 : KirSag()+10;
+	var _h = 18*_yon;
+	var _b = RegularBone(_x,KirDip(),152,_h,0,0,2,0,1,1,0,0,0,true);
+	KemikDinamik(_b,_h,38);
+	audio_play_sound(snd_swift,2,false);
+	return _b;
+};
+
+///F -- bosluklu kemik: sagdan gelen, arasinda gecilecek bosluk olan cift.
+///Kutu 130 px yuksek; bosluk 46 px, tek ziplamada gecilecek olcude.
+///@arg nere	0 = bosluk ALTTA, 1 = ORTADA, 2 = USTTE
+BosluklKemik = function(_nere)
+{
+	var _x = KirSag()+10;
+	var _t = KirTep();
+	var _d = KirDip();
+	switch (_nere)
+	{
+		case 0:
+			// Bosluk altta: sadece ustten sarkan uzun kemik
+			RegularBone(_x,_t,96,-4,0,180,0,0,1,1,0,0,0,true);
+		break;
+		case 1:
+			// Bosluk ortada: ustten ve alttan birer kisa kemik
+			RegularBone(_x,_t,50,-4,0,180,0,0,1,1,0,0,0,true);
+			RegularBone(_x,_d,50,-4,0,0,0,0,1,1,0,0,0,true);
+		break;
+		default:
+			// Bosluk ustte: sadece alttan cikan uzun kemik
+			RegularBone(_x,_d,96,-4,0,0,0,0,1,1,0,0,0,true);
+		break;
+	}
+	audio_play_sound(snd_stab,2,false);
+};
+
+///G -- kutunun dibini dolduran kemik duvari. Kirmizi serit duvarin kendi
+///uyarisi (warningDuration); bizim RegularBoneWall'da zaten var.
+DipDuvar = function()
+{
+	var _gen = battle_board.left+battle_board.right+20;
+	// DIR.UP duvari kutunun UST kenarina koyuyor (_bone_y = y-up,
+	// battle_regularbonewall/Create_0), duvar ALTTA olacagi icin DIR.DOWN.
+	RegularBoneWall(DIR.DOWN,_gen,14,58,KirSol(),KirDip(),50,900,1,false);
+};
+
+///G -- duvarin ustunde durulan yapiskan platform.
+SticikPlatform = function()
+{
+	var _p = instance_create_depth(battle_board.x,KirDip()-62,DEPTH_BATTLE.BULLET,battle_platform1);
+	_p.width = 48;
+	_p.sticky = 1;
+	_p.move_x = 1.2;
+	// bounce_x KAPALI: battle_platform1'in kendi sekmesi sadece 'block'
+	// objelerinden calisiyor (Step_2), bu atakta block yok. Kutu
+	// kenarlarindan sekme Step_0'da elle yapiliyor.
+	_p.bounce_x = false;
+	_p.auto_destroy = false;
+	return _p;
+};
+
+///Sans'in hancerleri. Aslinda bir RegularBone: alfa acilirken sprite
+///geriye savruluyor (telegraf), _wait karesinde firliyor. Tarif
+///battle_turn_11'deki Dagger'dan; tek fark 10. arguman 1, yani Papyrus
+///kemik sprite'i. Aci kurali: _ang = gidis yonu - 90.
+///@arg dx	dogus x
+///@arg dy	dogus y
+///@arg len	uzunluk
+///@arg hsp	firladiktan sonraki yatay hiz
+///@arg vsp	dikey hiz
+///@arg ang	sprite acisi (gidis yonu - 90)
+///@arg wait	kac kare sonra firlayacak
+Hancer = function(_dx,_dy,_len,_hsp,_vsp,_ang,_wait)
+{
+	var _b = RegularBone(_dx,_dy,_len,0,0,_ang-110,0,1,0,1,1,0,0,true);
+	Anim_Create(_b,"_alpha",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,1,12);
+	Anim_Create(_b,"_angle",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,_ang-110,110,18);
+	Anim_Create(_b,"hspeed",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,_hsp,5,_wait);
+	Anim_Create(_b,"vspeed",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,_vsp,5,_wait);
+	return _b;
+};
+
+///H -- yandan gelen hancer: alt duvara PARALEL, platformun hemen ustunden.
+///@arg yon	1 = soldan saga, -1 = sagdan sola
+HancerYatay = function(_yon)
+{
+	var _x = battle_board.x-_yon*(battle_board.left+26);
+	var _y = KirDip()-70;
+	return Hancer(_x,_y,58,16*_yon,0,(_yon > 0) ? 270 : 90,26);
+};
+
+///I -- yukarida belirip ruha nisan alan hancer. Yon dogus aninda
+///kilitleniyor: telegraf boyunca ruh kacabilir.
+HancerNisan = function()
+{
+	var _x = battle_board.x+irandom_range(-150,150);
+	var _y = battle_board.y-battle_board.up-irandom_range(30,110);
+	var _cx = battle_board.x;
+	var _cy = battle_board.y;
+	if (instance_exists(battle_soul))
+	{
+		_cx = battle_soul.x;
+		_cy = battle_soul.y;
+	}
+	var _d = point_direction(_x,_y,_cx,_cy);
+	return Hancer(_x,_y,58,lengthdir_x(13,_d),lengthdir_y(13,_d),_d-90,30);
 };

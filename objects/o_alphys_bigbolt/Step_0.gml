@@ -12,7 +12,15 @@ if (_state == 0)
 	var _bt = battle_board.y-battle_board.up;
 	var _bb = battle_board.y+battle_board.down;
 
-	if (x > _bl) and (x < _br) and (y > _bt) and (y < _bb)
+	// serbest_y >= 0 ise kutuya degme kurali gecerli degil: bolt verilen
+	// yukseklige inince patliyor. Kutunun ekranin tamami oldugu bolumlerde
+	// carpacak yuzey olmadigi icin gerekiyor -- yoksa ekrana girer girmez
+	// patlardi. Varsayilan -1, yani eski davranis aynen duruyor.
+	if (serbest_y >= 0)
+	{
+		if (y >= serbest_y) { Explode(); }
+	}
+	else if (x > _bl) and (x < _br) and (y > _bt) and (y < _bb)
 	{
 		Explode();
 	}

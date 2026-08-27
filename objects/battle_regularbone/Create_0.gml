@@ -13,6 +13,10 @@ _bottom = 0
 _dynamic = false  // Default kapalı
 _dynamic_speed = 1.0    // Hız çarpanı
 _dynamic_dir = 1        // 1 ileri, -1 geri
+_dynamic_rate = 0.03    // Hiz sonumleme orani. Dusurulunce kemik daha YAVAS
+                        // baslar ama ayni mesafede doner: donus mesafesi
+                        // hiz/oran ile olceklendigi icin oran yariya inince
+                        // ayni noktaya yarim hizla varilir.
 _dynamic_lifetime = 120  // Kaç frame yaşayacak, ayarlayabilirsin
 _dynamic_scale = false   // Y-scale ayrı kontrol
 _scale_offset = 0       // Y-scale dalgalanması için

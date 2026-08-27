@@ -173,7 +173,7 @@ if (room == room_battle_1)
 
 	// Koridor aciliyor: kutu ekran boyu uzuyor, ruh turuncuya donuyor.
 	// Other_12'nin 25 karelik kutu animasyonu bunu ezmesin diye once iptal.
-	if (turuncu_acik) and (_timer == 20)
+	if (_timer == 20)
 	{
 		instance_create_depth(0,0,0,battle_soul_red_effect);
 		Anim_Destroy(battle_board,"up");
@@ -187,7 +187,7 @@ if (room == room_battle_1)
 	}
 
 	// Ruh kosu pozisyonuna (ekranin alt kismina) kayiyor.
-	if (turuncu_acik) and (_timer == 60)
+	if (_timer == 60)
 	{
 		Anim_Create(battle_soul,"y",ANIM_TWEEN.CUBIC,ANIM_EASE.IN_OUT,battle_soul.y,400-battle_soul.y,50);
 	}
@@ -200,15 +200,192 @@ if (room == room_battle_1)
 		yol += battle_dr_corridor.scroll_spd;
 	}
 
-	//----------------------------------------------------------------------
-	// GECICI: turuncu kapaliyken tur bos kalmasin diye dogrudan sigara
-	// sahnesine gidiliyor. KIRMIZI/MAVI BOLUM BURAYA GELECEK.
-	//----------------------------------------------------------------------
-	if (!turuncu_acik) and (bolum == 0) and (_timer == 30)
+	//======================================================================
+	// KIRMIZI / MAVI RUH ATAGI
+	//======================================================================
+	// Sira (kullanicinin tarifi):
+	//   A  soldan 5 ivmeli kemik, ortanin SAGINDA yon degistiriyorlar
+	//   B  sagdan 5 ivmeli kemik, ortanin SOLUNDA yon degistiriyorlar
+	//   C  iki taraftan ayni anda; kutunun TAM ORTASI guvenli nokta
+	//   D  sagdan ve soldan ikiser mavi kemik, SONRA ruh maviye doner
+	//   E  sagdan turuncu ivmeli kemikler; sol duvarda donmuyor, yavaslayip
+	//      soldan cikiyorlar
+	//   F  sagdan uc bosluklu kemik: bosluk sirasiyla ALT, ORTA, UST
+	//   G  soldan turuncu kemikler, hemen ardindan slam down + kemik duvari
+	//      ve uzerinde sticky platform
+	//   H  iki yandan, platformun hemen ustunden, alt duvara paralel 4 hancer
+	//   I  kirmizi ruh; yukarida 30 hancer belirip ruha nisan alarak atesleniyor
+	//
+	// KEMIKLER AYRI AYRI DOGUYOR. Sabit ofsetli grup degil: her kemik kendi
+	// karesinde dogdugu icin yelpaze acilimi kendiliginden olusuyor.
+	//
+	// YON DEGISTIRME NOKTALARI HESAPLANDI, tahmin degil. Motorun _dynamic
+	// modu (battle_regularbone/Step_0) hizi her kare -1'e dogru 0.03 ile
+	// lerp'liyor; kemik 22. karede duruyor ve geri donuyor. O egri simule
+	// edilip her hedefe denk gelen _base_hspeed secildi:
+	//   soldan -> x 365'te donus (ortanin sagi)      : +22
+	//   sagdan -> x 275'te donus (ortanin solu)      : -22
+	//   iki taraf, merkez guvenli: sol +13 (x 280), sag -13 (x 360)
+	//   turuncu: -36, omur 20 -> sol duvara hala hareketliyken variyor,
+	//            donmeden siliniyor ("yavaslama gibi")
+	//
+	// Kemiklerin hepsi Papyrus sprite'i (RegularBone'un 10. argumani = 1).
+	//======================================================================
+	if (kir_on)
 	{
-		bolum = 12;
-		bitis_kare = _timer;
+		kir_t += 1;
+
+		//------------------------------------------------------- kurulum
+		if (kir_t == 60)
+		{
+			instance_create_depth(0,0,0,battle_soul_red_effect);
+			Anim_Destroy(battle_board,"up");
+			Anim_Destroy(battle_board,"down");
+			Anim_Destroy(battle_board,"left");
+			Anim_Destroy(battle_board,"right");
+			Battle_SetBoardSizeCubic(65,65,160,160,20);
+			Battle_SetSoul(battle_soul_red);
+			battle_soul.x = battle_board.x;
+			battle_soul.y = battle_board.y;
+		}
+
+		//---------------------------------------- A: soldan, sagda donuyor
+		if (kir_t >= 90) and (kir_t <= 122)
+		{
+			if ((kir_t-90) % 8 == 0) { YelpazeKemik(1,10.6,0); }
+		}
+
+		//---------------------------------------- B: sagdan, solda donuyor
+		if (kir_t >= 200) and (kir_t <= 232)
+		{
+			if ((kir_t-200) % 8 == 0) { YelpazeKemik(-1,10.6,0); }
+		}
+
+		//------------------------ C: iki taraftan, merkez guvenli kaliyor
+		if (kir_t >= 310) and (kir_t <= 342)
+		{
+			if ((kir_t-310) % 8 == 0)
+			{
+				YelpazeKemik(1,6.3,0);
+				YelpazeKemik(-1,6.3,0);
+			}
+		}
+
+		//------------------ D: ikiser mavi kemik, SONRA ruh maviye doner
+		if (kir_t == 430) { MaviKemik(-1); }		// sagdan iki
+		if (kir_t == 446) { MaviKemik(1); }			// soldan iki
+		if (kir_t == 480)
+		{
+			instance_create_depth(0,0,0,battle_soul_blue_effect);
+			Battle_SetSoul(battle_soul_blue);
+		}
+
+		//----------------- E: sagdan turuncu, yavaslayip soldan cikiyorlar
+		if (kir_t >= 520) and (kir_t <= 556)
+		{
+			if ((kir_t-520) % 12 == 0) { TuruncuKemik(-1); }
+		}
+
+		//------------------- F: uc bosluklu kemik -- alt, orta, ust bosluk
+		// Aralar tek ziplamada gecilecek kadar: -4 px/kare ve 45 kare ara,
+		// yani aralarinda 180 px var.
+		if (kir_t == 600) { BosluklKemik(0); }		// bosluk ALTTA
+		if (kir_t == 645) { BosluklKemik(1); }		// bosluk ORTADA
+		if (kir_t == 690) { BosluklKemik(2); }		// bosluk USTTE
+
+		//--------------- G: soldan turuncu, ardindan duvar ve platform
+		if (kir_t >= 750) and (kir_t <= 774)
+		{
+			if ((kir_t-750) % 12 == 0) { TuruncuKemik(1); }
+		}
+
+		if (kir_t == 810)
+		{
+			// GIF olcumu: kutu bu noktada 65,65,160,160'tan 65,65,75,75
+			// kareye iniyor (kare 530-570 arasi gecis).
+			Anim_Destroy(battle_board,"up");
+			Anim_Destroy(battle_board,"down");
+			Anim_Destroy(battle_board,"left");
+			Anim_Destroy(battle_board,"right");
+			Battle_SetBoardSizeCubic(65,65,75,75,30);
+			Battle_SlamDown();
+			audio_play_sound(snd_impact,2,false);
+			DipDuvar();
+			SticikPlatform();
+		}
+
+		//---------------------------- PLATFORMU KUTU ICINDE TUT
+		// battle_platform1'in bounce_x'i sadece 'block' objelerinden sekiyor
+		// (Step_2), bu atakta block yok: platform saga kayip gidiyordu ve
+		// oyuncu altindaki kemik duvarina dusuyordu. Kenarlarda yon
+		// cevirmek Step_0'da yapiliyor -- platformun kendi hareketi End
+		// Step'te oldugu icin ayni karede yeni yonde ilerliyor.
+		// x platformun MERKEZI (Draw_0: sprite width/2 olcekle merkeze
+		// ciziliyor, uclar x +- width/2).
+		if (kir_t > 810) and (instance_exists(battle_platform1))
+		{
+			with (battle_platform1)
+			{
+				var _pl = battle_board.x-battle_board.left+width*0.5+4;
+				var _pr = battle_board.x+battle_board.right-width*0.5-4;
+				if (x <= _pl) and (move_x < 0) { move_x = abs(move_x); }
+				if (x >= _pr) and (move_x > 0) { move_x = -abs(move_x); }
+				x = clamp(x,_pl,_pr);
+			}
+		}
+
+		//-------- H: iki yandan, platformun ustunden, alt duvara paralel
+		if (kir_t == 880) { HancerYatay(-1); }
+		if (kir_t == 900) { HancerYatay(1); }
+		if (kir_t == 920) { HancerYatay(-1); }
+		if (kir_t == 940) { HancerYatay(1); }
+
+		//------------------ I: kirmizi ruh, 30 hancer ruha nisan aliyor
+		if (kir_t == 1000)
+		{
+			with (battle_platform1) { instance_destroy(); }
+			with (battle_regularbonewall) { instance_destroy(); }
+			with (battle_regularbone) { instance_destroy(); }
+			instance_create_depth(0,0,0,battle_soul_red_effect);
+			Anim_Destroy(battle_board,"up");
+			Anim_Destroy(battle_board,"down");
+			Anim_Destroy(battle_board,"left");
+			Anim_Destroy(battle_board,"right");
+			Battle_SetBoardSizeCubic(65,65,160,160,25);
+			Battle_SetSoul(battle_soul_red);
+		}
+
+		// 30 hancer yukarida beliriyor. Her biri dogus aninda ruhun o anki
+		// konumuna kilitleniyor; telegraf boyunca kacmak mumkun.
+		if (kir_t >= 1040) and (kir_t <= 1156)
+		{
+			if ((kir_t-1040) % 4 == 0) { HancerNisan(); }
+		}
+
+		//---------------------------------------------------------- kapanis
+		//---------------------------------------------------------- kapanis
+		if (kir_t == 1260)
+		{
+			kir_on = false;
+			with (battle_platform1) { instance_destroy(); }
+			with (battle_regularbone) { instance_destroy(); }
+			with (battle_regularbonewall) { instance_destroy(); }
+			Anim_Destroy(battle_board,"up");
+			Anim_Destroy(battle_board,"down");
+			Anim_Destroy(battle_board,"left");
+			Anim_Destroy(battle_board,"right");
+			// Menunun varsayilan kutusu BATTLE_BOARD sabitlerinde (Macro_Battle)
+			Battle_SetBoardSizeCubic(BATTLE_BOARD.UP,BATTLE_BOARD.DOWN,BATTLE_BOARD.LEFT,BATTLE_BOARD.RIGHT);
+			Battle_SetSoul(battle_soul_red);
+			Battle_SetMenuDialog("* Papyrus is enjoying himself.")
+			if (instance_exists(o_sans_blockp2))
+			{
+				o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+			}
+			Battle_EndTurn();
+		}
 	}
+
 
 	//======================================================================
 	// BOLUM TETIKLERI
@@ -219,7 +396,7 @@ if (room == room_battle_1)
 	// Ziplama halkalari ~900 px yukarida dogmak zorunda, yoksa ekranin
 	// ortasinda birden beliriyorlar.
 	//======================================================================
-	if (turuncu_acik) and (bolum == 0) and (_timer >= 60)
+	if (bolum == 0) and (_timer >= 60)
 	{
 		// Koridor 20. karede acildigi icin buraya gelene kadar yol birikmis
 		// oluyor; sifirlanmasaydi butun esikler o kadar kayardi.
@@ -587,18 +764,7 @@ if (room == room_battle_1)
 		with (battle_regularbone) { instance_destroy(); }
 		with (battle_gasterblaster) { instance_destroy(); }
 		with (battle_gasterblaster_beam) { instance_destroy(); }
-		instance_create_depth(0,0,0,battle_soul_red_effect);
-		Anim_Destroy(battle_board,"up");
-		Anim_Destroy(battle_board,"down");
-		Anim_Destroy(battle_board,"left");
-		Anim_Destroy(battle_board,"right");
-		// Sahne boyunca normal bir atak kutusu. Menu kutusu (283 genislik)
-		// diyalog icin cok genis duruyordu; tur 16'nin diyalog sahnesi de
-		// bu olcuyu kullaniyor.
-		Battle_SetBoardSizeCubic(65,65,125,125,30);
-		Battle_SetSoul(battle_soul_red);
-		sahne = 1;
-		sahne_kare = _timer;
+		SigaraBasla();
 	}
 
 	//---------------------------------------------------- 1. replik
@@ -667,21 +833,11 @@ if (room == room_battle_1)
 	}
 
 	//---------------------------------------------------- tur kapaniyor
+	// Sigara bitti: kirmizi/mavi atak basliyor.
 	if (sahne == 5) and (!instance_exists(battle_dialog_enemy))
 	{
 		sahne = 6;
-		// Menunun varsayilan kutusu BATTLE_BOARD sabitlerinde (Macro_Battle)
-		Anim_Destroy(battle_board,"up");
-		Anim_Destroy(battle_board,"down");
-		Anim_Destroy(battle_board,"left");
-		Anim_Destroy(battle_board,"right");
-		Battle_SetBoardSizeCubic(BATTLE_BOARD.UP,BATTLE_BOARD.DOWN,BATTLE_BOARD.LEFT,BATTLE_BOARD.RIGHT);
-		Battle_SetMenuDialog("* Papyrus is enjoying himself.")
-		if (instance_exists(o_sans_blockp2))
-		{
-			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
-		}
-		Battle_EndTurn();
+		KirmiziBasla();
 	}
 
 	//---------------------------------------------------- duman hareketi

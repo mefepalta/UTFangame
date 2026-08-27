@@ -8,6 +8,15 @@ var down_box = (battle_board.y+battle_board.down)+5;
 var bottom_box = (battle_board.y+battle_board.down)-2;
 var top_box = (battle_board.y-battle_board.up)+2;
 
+// FINAL PHASE: MERCY turunda faz 1-2 atagi oynamamali. Balon kapaninca
+// tur bitiyor; Sans belgedeki gibi sadece "..." diyor.
+if (global.p25phase >= 1)
+{
+	if (_timer == 2) { Battle_SetSoul(battle_soul_red); }
+	if (_timer > 5) and (!instance_exists(battle_dialog_enemy)) { Battle_EndTurn(); }
+	exit;
+}
+
 if (_timer == 5) and (global.sanstalk <= 22)
 {
 	Battle_SetSoul(battle_soul_red)

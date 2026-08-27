@@ -76,13 +76,87 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	// Tur baslarken kafa, diyalog ifadesinden idle animasyonuna doner
 	if (_timer == 1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
 	}
-	if (_timer == 1000)
+
+	if (_timer == 20)
 	{
+		instance_create_depth(0,0,0,battle_soul_red_effect);
+		Anim_Destroy(battle_board,"up");
+		Anim_Destroy(battle_board,"down");
+		Anim_Destroy(battle_board,"left");
+		Anim_Destroy(battle_board,"right");
+		Battle_SetBoardSizeCubic(65,65,237,237,20);
+		Battle_SetSoul(battle_soul_red);
+		battle_soul.x = battle_board.x;
+		battle_soul.y = battle_board.y;
+	}
+
+	if (_timer == 86) { OrtaBlaster(); }
+
+	if (_timer >= 160) and (_timer <= 495)
+	{
+		if ((_timer-160) % 31 == 0) { DusenKemik(0); }
+	}
+
+	if (_timer == 216)
+	{
+		instance_create_depth(0,0,0,battle_soul_blue_effect);
+		Battle_SetSoul(battle_soul_blue);
+	}
+
+	if (_timer == 240) { Battle_SlamRight(); }
+	if (_timer == 270) { YanDuvar(true);  }
+
+	if (_timer == 340) { Battle_SlamLeft();  }
+	if (_timer == 370) { YanDuvar(false); }
+
+	if (_timer == 440) { Battle_SlamRight(); }
+	if (_timer == 470) { YanDuvar(true);  }
+
+	if (_timer == 530) { Battle_SlamDown(); }
+
+	if (_timer == 530)
+	{
+		Platform(T19_SUTUN_SOL);
+		Platform(T19_SUTUN_ORTA);
+		Platform(T19_SUTUN_SAG);
+	}
+
+	if (_timer >= 550) and (_timer <= 1540)
+	{
+		if ((_timer-710) % 6 == 0) { KucukKemik(); }
+	}
+
+	if (_timer >= 560) and (_timer <= 1540)
+	{
+		if ((_timer-560) % 42 == 0)  { AraKemik(false); }
+		if ((_timer-560) % 42 == 21) { AraKemik(true);  }
+	}
+
+	if (_timer ==  650) { BlasterCifti(); }
+	if (_timer ==  770) { BlasterCifti(); }
+	if (_timer == 890) { BlasterCifti(); }
+	if (_timer == 1010) { BlasterCifti(); }
+	if (_timer == 1230) { BlasterCifti(); }
+	if (_timer == 1350) { BlasterCifti(); }
+	if (_timer == 1500) { BlasterCifti(); }
+
+	if (_timer == 1580)
+	{
+		with (battle_regularbone) { instance_destroy(); }
+		with (battle_regularbonewall) { instance_destroy(); }
+		with (battle_platform1) { instance_destroy(); }
+		with (battle_gasterblaster) { instance_destroy(); }
+		with (battle_gasterblaster_beam) { instance_destroy(); }
+		instance_create_depth(0,0,0,battle_soul_red_effect);
+		Anim_Destroy(battle_board,"up");
+		Anim_Destroy(battle_board,"down");
+		Anim_Destroy(battle_board,"left");
+		Anim_Destroy(battle_board,"right");
+		Battle_SetBoardSizeCubic(BATTLE_BOARD.UP,BATTLE_BOARD.DOWN,BATTLE_BOARD.LEFT,BATTLE_BOARD.RIGHT);
 		Battle_SetSoul(battle_soul_red);
 		Battle_SetMenuDialog("* No more speeches.")
 		if (instance_exists(o_sans_blockp2))

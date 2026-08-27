@@ -1,3 +1,9 @@
+// Faz 2 bosta durma animasyonunun zaman birikeni (bkz. Step_0).
+// Her iki faz dalindan once tanimlaniyor.
+p2_anim_t=0;
+global.p2_anim_hiz=1;
+global.p2_anim_hedef=1;
+
 	depth=DEPTH_BATTLE.ENEMY;
 	global._enemy_phase_pose = 1; // Default
 	_enemy_slot=1;
@@ -407,12 +413,26 @@
 	global.p2_revived_pap=false;
 	global.p2_revived_alp=false;
 
+	// FINAL PHASE (P25) sahnesi her savasin basinda sifirlaniyor; yoksa
+	// bir onceki denemeden kalan "yenildi" durumu yeni savasa tasinirdi.
+	global.p25phase=0;
+	global.p25_dlg=false;
+	global.p25_iska=false;
+	global.p25_t=0;
+	global.p25_kacis=0;
+
+
 	layout_margin=40;		// kenarlarda birakilan bosluk
 	layout_speed=0.07;		// yer degistirme hizi
 	off_left=-180;			// sahne disi (sol) x
 	off_right=820;			// sahne disi (sag) x
 
 	p2_state=2;				// Sans normalde sahnede
+	// Uc karakteri birlikte yana kaydirmak icin ortak ofset. draw_x
+	// degerleri her kare yerlesime dogru lerp lendigi icin onlara
+	// dogrudan yazilamiyor; bu ofset cizim aninda ekleniyor.
+	kay_x=0;
+
 	p2_draw_x=320;			// Sans'in ciziim x'i (nesnenin x'i sabit kalir)
 	p2_off_x=0;				// = p2_draw_x - x
 	p2_shake_x=0;			// SADECE Sans'a vurulunca titrer

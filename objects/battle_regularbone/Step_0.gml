@@ -19,7 +19,7 @@ if (_dynamic){
     if (_dynamic_lifetime <= 0){
         instance_destroy();
     }
-    _dynamic_speed = lerp(_dynamic_speed, -1 * _dynamic_dir, 0.03);
+    _dynamic_speed = lerp(_dynamic_speed, -1 * _dynamic_dir, _dynamic_rate);
     if (abs(_dynamic_speed) > 0.9 && sign(_dynamic_speed) != _dynamic_dir){
         _dynamic_dir = -_dynamic_dir;
     }

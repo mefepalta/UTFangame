@@ -49,7 +49,7 @@ if (room == room_battle_1) //and (global.sansp2headsprite == false)
 	// Ciziim sirasi: bacaklar -> kol -> govde -> kafa
 	if (pap_alpha > 0)
 	{
-		var _px = pap_draw_x + pap_shake_x;
+		var _px = pap_draw_x + pap_shake_x + kay_x;
 		var _py = y;
 		// Bacak skew'i: alt iki kose ayakta sabit, ust iki kose govdeyle birlikte
 		// inip cikiyor. x'te hicbir kayma yok.
@@ -76,7 +76,7 @@ if (room == room_battle_1) //and (global.sansp2headsprite == false)
 	// Govdesi bacaklari da iceriyor, skew'i onun uzerinde uyguluyoruz.
 	if (alp_alpha > 0)
 	{
-		var _ax = alp_draw_x + alp_shake_x;
+		var _ax = alp_draw_x + alp_shake_x + kay_x;
 		var _ay = y;
 		draw_sprite_ext(alp_armright_sprite,0,_ax+46,_ay-74+alp_bob,2,2,alp_armright_angle,c_white,alp_alpha);
 		var _al = _ax - 66;					// 33 (origin.x) * 2
@@ -95,14 +95,25 @@ if (room == room_battle_1) //and (global.sansp2headsprite == false)
 
 	// Sans'in x'i sabit (balon ve hedefleme ona bagli); yer degistirme ve
 	// hasar titremesi sadece ciziime uygulaniyor, digerlerini etkilemiyor.
-	var _sx = x + p2_off_x + p2_shake_x;
+	var _sx = x + p2_off_x + p2_shake_x + kay_x;
 	draw_sprite_ext(p2_cape_sprite,p2_cape_image,_sx+p2_body_init_x*2+p2_body_x*2+p2_head_init_x*2+p2_head_x*2 + 3,y+p2_body_init_y*2+p2_body_y*2+p2_head_init_y*2+p2_head_y*2 - 3,2,2,p2_cape_angle,c_white,p2_cape_alpha);
 	// Bacak skew'i: ayaklar yerde sabit, ust kenar govdeyle birlikte inip cikiyor
-	var _sl = bbox_left + p2_off_x + p2_shake_x;
-	var _sr = bbox_right + p2_off_x + p2_shake_x;
-	var _st = bbox_top + p2_body_y*2;
-	draw_sprite_pos(p2leg_sprite,p2_legs_image,_sl,_st,_sr,_st,_sr,bbox_bottom,_sl,bbox_bottom,p2_legs_alpha);
-	draw_sprite_pos(p2leg_sprite1,p2_legs_image1,_sl,_st,_sr,_st,_sr,bbox_bottom,_sl,bbox_bottom,p2_legs_alpha1);
+	// kay_x BURADA DA olmali: yoksa uc karakter yana kayarken Sans'in
+	// govdesi gidiyor, bacaklari yerinde kaliyordu.
+	// Olculer bbox'tan DEGIL sprite'in kendisinden: mask_index bu satirlarin
+	// ALTINDA p2leg_sprite'a cekildigi icin bbox bir kare geriden geliyordu
+	// ve bacaklar govdeden kopuk duruyordu. Son atakta bu yuzden bacaklar
+	// tur nesnesinin Draw'inda elle ciziliyordu, ama orasi mermilerin de
+	// onunde oldugu icin bacaklar kemiklerin ve govdenin ustune biniyordu.
+	// Artik dogru geometriyle burada, yani dogru derinlikte ciziliyor.
+	// (spr_p2_legs: 47x26, origin 23,26 -- 2x cizildigi icin ikiye katlandi)
+	var _lx = x + p2_off_x + p2_shake_x + kay_x;
+	var _sl = _lx - 46;
+	var _sr = _lx + 48;
+	var _st = y - 52 + p2_body_y*2;
+	var _sb = y;
+	draw_sprite_pos(p2leg_sprite,p2_legs_image,_sl,_st,_sr,_st,_sr,_sb,_sl,_sb,p2_legs_alpha);
+	draw_sprite_pos(p2leg_sprite1,p2_legs_image1,_sl,_st,_sr,_st,_sr,_sb,_sl,_sb,p2_legs_alpha1);
 	mask_index=p2leg_sprite;
 	draw_sprite_ext(p2_armleft_sprite,p2_armleft_image,_sx+p2_body_init_x*2+p2_body_x*2+p2_head_init_x*2+p2_head_x*2 - 28,y+p2_body_init_y*2+p2_body_y*2+p2_head_init_y*2+p2_head_y*2 - 5,2,2,p2_head_angle_diddler * -0.25,c_white,p2_armleft_alpha);
 	if (p2_armright_sprite == spr_p2_arm_right or p2_armright_sprite == spr_p2_arm_right_1)

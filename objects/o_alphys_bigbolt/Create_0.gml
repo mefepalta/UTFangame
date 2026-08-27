@@ -24,6 +24,8 @@ fan_spin   = 8;
 fan_scale  = 1;
 // -----------------------------------------
 
+serbest_y = -1;		/// >= 0 ise kutu yerine bu yukseklikte patlar
+
 _state = 0;
 _t = 0;
 

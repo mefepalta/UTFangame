@@ -1,6 +1,12 @@
 event_inherited();
 global.go_dodge = "block";
 
+// FINAL PHASE: burada Sans artik blocklamiyor, gercekten hasar aliyor
+// ("sans' attacks get slower, and you are able to hit him for real").
+// Bu satir olmadan her vurusta yukaridaki "block" gecerli kaliyor ve
+// ekranda BLOCKED yazisi cikiyordu.
+if (global.p25phase >= 1) { global.go_dodge = "damage"; }
+
 // Hedef Sans degilse onu gizlemeyelim: phase 2de Papyrus/Alphys de birer slot,
 // birine vurunca Sans kaybolup blok sprite'i cikiyordu.
 var _target_slot=Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy());
@@ -15,7 +21,7 @@ image_alpha=0;
 image_yscale=2;
 
 if(_dir==DIR.LEFT){
-	if (_hit_sans) and (!global.finalstretch == 1)
+	if (_hit_sans) and (!global.finalstretch == 1) and (global.p25phase == 0)
 	{
 		with (battle_enemy_engage)
 		{
@@ -46,7 +52,7 @@ if(_dir==DIR.LEFT){
 	Anim_Create(id,"image_xscale",ANIM_TWEEN.QUINT,ANIM_EASE.OUT,1.3,0.7,40);
 	Anim_Create(id,"_aim_x",ANIM_TWEEN.SINE,ANIM_EASE.IN,_aim_x,-(battle_board.left+battle_board.right+sprite_get_width(spr_battle_menu_fight_aim)),75);
 }else{
-	if (_hit_sans) and (!global.finalstretch == 1)
+	if (_hit_sans) and (!global.finalstretch == 1) and (global.p25phase == 0)
 	{
 		with (battle_enemy_engage)
 		{

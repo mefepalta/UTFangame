@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"snd_eternal_bloom",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":108.02,
+  "exportDir":"",
+  "name":"snd_eternal_bloom",
+  "parent":{
+    "name":"Moosic",
+    "path":"folders/Sounds/Moosic.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_eternal_bloom.mp3",
+  "volume":1.0,
+}

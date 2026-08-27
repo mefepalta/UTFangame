@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"P25",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"P25",
+  "parent":{
+    "name":"Battle",
+    "path":"folders/Scripts/Battle.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
