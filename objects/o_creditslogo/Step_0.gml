@@ -1,5 +1,6 @@
 y = lerp(y, target_y, move_speed);
 diddy++;
+glow++;
 
 if (diddy == 100)
 {

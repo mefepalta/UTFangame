@@ -1,3 +1,5 @@
+sweep += 1.1;
+
 if (yesorno == true)
 {
 	target_alpha = target_alpha + 0.1;

@@ -47,7 +47,7 @@ if (_new_line)
 
     // Gozlerin ilk kez yanmasi
     if (current_line == LINE_EYECUE) {
-        audio_play_sound(snd_blueeyes, 1, false);
+        //audio_play_sound(snd_blueeyes, 1, false);
         eye_glow = 1;
     }
 

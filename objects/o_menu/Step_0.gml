@@ -1,3 +1,77 @@
+// ---------------------------------------------------------------------
+// Presentation pass: hide the raw menu instances (the Draw event redraws
+// them with a proper selection highlight), animate the emblem and push
+// the snow around. Runs before every Draw event, so nothing flickers.
+// ---------------------------------------------------------------------
+menu_t++;
+
+for (var _h = 0; _h < 4; _h++)
+{
+	with (menu_objs[_h]) { visible = false; }
+}
+with (o_heart) { visible = false; }
+
+// the selected entry slides out to the right
+for (var _d = 0; _d < 4; _d++)
+{
+	item_dx[_d] = lerp(item_dx[_d], (_d == menucounter) ? 6 : 0, 0.22);
+}
+
+// the emblem breathes
+if (instance_exists(o_swapfelldiscord_logo))
+{
+	if (logo_base_y < 0) { logo_base_y = o_swapfelldiscord_logo.y; }
+	o_swapfelldiscord_logo.y = logo_base_y + sin(menu_t * 0.025) * 2.5;
+}
+if (instance_exists(o_swapfelldiscord_spear))
+{
+	if (spear_base_y < 0) { spear_base_y = o_swapfelldiscord_spear.y; }
+	o_swapfelldiscord_spear.y = spear_base_y + sin(menu_t * 0.025) * 2.5;
+}
+
+// the main column steps aside while the options panel is open
+col_a = lerp(col_a, (global.menu_state == "options") ? 0 : 1, 0.12);
+
+// current visible rectangle
+if (view_enabled) and (view_visible[0])
+{
+	var _cam = view_camera[0];
+	vx_ = camera_get_view_x(_cam);
+	vy_ = camera_get_view_y(_cam);
+	vw_ = camera_get_view_width(_cam);
+	vh_ = camera_get_view_height(_cam);
+}
+
+// drifting snow
+if (array_length(snow) == 0)
+{
+	for (var _n = 0; _n < 70; _n++)
+	{
+		array_push(snow, {
+			px     : vx_ + random(vw_),
+			py     : vy_ + random(vh_),
+			r      : 0.5 + random(1.1),
+			vy     : 0.12 + random(0.45),
+			sway   : random(6.2831),
+			swaysp : 0.008 + random(0.020),
+			a      : 0.18 + random(0.42)
+		});
+	}
+}
+for (var _s = 0; _s < array_length(snow); _s++)
+{
+	var _f = snow[_s];
+	_f.sway += _f.swaysp;
+	_f.py   += _f.vy;
+	_f.px   += sin(_f.sway) * 0.35 - 0.10;
+	if (_f.py > vy_ + vh_ + 4)
+	{
+		_f.py = vy_ - 4;
+		_f.px = vx_ + random(vw_);
+	}
+	if (_f.px < vx_ - 4) { _f.px = vx_ + vw_ + 4; }
+}
+
 /*if (global.menu_state == "main") {
     // Navigation
     if (keyboard_check_pressed(vk_down))

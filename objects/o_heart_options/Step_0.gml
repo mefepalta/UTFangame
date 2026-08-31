@@ -1,3 +1,32 @@
+optt++;
+
+// ---------------------------------------------------------------------
+// Recalculate the panel layout so it stays centred in the visible area
+// ---------------------------------------------------------------------
+var _vx = 0, _vy = 0, _vw = room_width, _vh = room_height;
+if (view_enabled) and (view_visible[0])
+{
+	var _cam = view_camera[0];
+	_vx = camera_get_view_x(_cam);
+	_vy = camera_get_view_y(_cam);
+	_vw = camera_get_view_width(_cam);
+	_vh = camera_get_view_height(_cam);
+}
+
+panel_cx = _vx + _vw * 0.5;
+panel_cy = _vy + _vh * 0.5;
+
+var _rows    = array_length(menu_items);
+var _content = 14 + 12 + _rows * row_sp + 10 + 14;
+
+panel_top  = panel_cy - _content * 0.5 - 16;
+panel_bot  = panel_cy + _content * 0.5 + 16;
+title_y    = panel_top + 16;
+rows_y     = title_y + 14 + 12;
+hint_y     = rows_y + _rows * row_sp + 10;
+text_left  = panel_cx - panel_w * 0.5 + 46;
+text_right = panel_cx + panel_w * 0.5 - 26;
+
 if (global.menu_state == "options") {
     // Fade in
     global.fade_alpha = min(global.fade_alpha + 0.05, 1);
@@ -36,57 +65,14 @@ if (global.menu_state == "options") {
         }
         audio_play_sound(snd_menu_confirm, 1, false);
     }
-switch (menu_index) 
-{
-case 0: 
+	// the soul follows the selected row, derived from the panel layout
 	with (o_heartmenuoptions)
 	{
 		image_alpha = 1;
-		x = 323;
-		y = 218;
+		x = other.text_left - 20;
+		y = other.rows_y + other.row_sp * other.menu_index + other.line_h * 0.5;
 	}
-    break;
-    case 1:	
-	with (o_heartmenuoptions)
-	{
-		image_alpha = 1;
-		x = 323;
-		y = 242;
-	}
-	break;
-    case 2:	
-	with (o_heartmenuoptions)
-	{
-		image_alpha = 1;
-		x = 323;
-		y = 266;
-	}
-	break;
-    case 3:	
-	with (o_heartmenuoptions)
-	{
-		image_alpha = 1;
-		x = 323;
-		y = 290;
-	}
-	break;
-    case 4:	
-	with (o_heartmenuoptions)
-	{
-		image_alpha = 1;
-		x = 323;
-		y = 314;
-	}
-	break;
-    case 5:	
-	with (o_heartmenuoptions)
-	{
-		image_alpha = 1;
-		x = 323;
-		y = 338;
-	}
-	break;
-}
+
 	if (menu_index == 2) {
 		var _scale_changed = false;
 		if (keyboard_check_pressed(vk_right)) {

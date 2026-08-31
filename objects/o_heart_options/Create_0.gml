@@ -32,3 +32,23 @@ global.no_heal = false;
 global.no_hit = false;
 global.volume = 1;        // actual game volume
 global.display_volume = global.volume; // used for bar animation
+
+// ---------------------------------------------------------------------
+// Panel layout. The options screen is drawn as one centred panel; the
+// numbers below are recalculated every step from the visible area so the
+// panel always lands in the middle of the screen.
+// ---------------------------------------------------------------------
+optt = 0;
+line_h = 14;          // measured from the real font in the Draw event
+
+panel_w   = 250;
+row_sp    = 22;
+panel_cx  = 320;
+panel_cy  = 240;
+panel_top = 133;
+panel_bot = 347;
+title_y   = 149;
+rows_y    = 175;
+hint_y    = 319;
+text_left = 229;
+text_right = 423;
