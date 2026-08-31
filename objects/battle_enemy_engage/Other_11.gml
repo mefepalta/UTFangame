@@ -2,15 +2,18 @@
 if (room == room_battle)
 {
 	Battle_SetTurnNumber(1);
+	// Her yeni faz 1 dovusunde temizleniyor: teslim yoluyla bitmediyse
+	// overworld'de bagislama konusmasi oynamali.
+	global.surrender_son = false;
 	audio_play_sound(snd_chevalier,0,true);
 	//Battle_SetState(BATTLE_STATE.TURN_PREPARATION);
 	//Battle_SetTurnNumber(0);
 }
 if (room == room_battle_1)
 {
-	/*Battle_SetState(BATTLE_STATE.TURN_PREPARATION);
-	Battle_SetTurnNumber(0);*/
-	Battle_SetTurnNumber(20);
+	Battle_SetState(BATTLE_STATE.TURN_PREPARATION);
+	Battle_SetTurnNumber(0);
+	//Battle_SetTurnNumber(20);
 }
 /*if (global.no_heal == false)
 {

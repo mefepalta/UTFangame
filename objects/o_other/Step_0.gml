@@ -4,5 +4,5 @@ valval++;
 
 if (Input_IsPressed(INPUT.CONFIRM))
 {
-	room_goto(room_story);
+	room_goto(room_battle_1);
 }

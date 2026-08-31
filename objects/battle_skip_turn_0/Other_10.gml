@@ -14,6 +14,9 @@ if (room == room_battle_1)
 	exit;
 }
 
+// 1-12 arasi replikler scripts/Surrender'da tutuluyor: gercek atak
+// oynarken de ayni metin kullanildigi icin tek kaynaktan okunuyor.
+// Bu turlar normalde battle_turn_9..20'ye gidiyor; burasi yedek yol.
 switch (global.sanstalk)
 {
 	case 23:
@@ -62,51 +65,51 @@ switch (global.sanstalk)
 	break;
 	case 12:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}...{pause}{clear}So... that's it?{pause}{clear}You're really not&gonna fight?{pause}{clear}Just gonna stand&there?{pause}{clear}Come on, look at me!{pause}{clear}Look me in the eye!{pause}{clear}Right. You can't even&bring yourself to do&that, can you?{pause}{clear}Heh.{pause}{clear}You know, it's kinda&funny.{pause}{clear}I've always been known&for outsmarting my&enemies rather than&overpowering them.{pause}{clear}Never thought it'd&work on something like&you, though.";
+	sansy.text = Surrender_Text();
 	break;
 	case 11:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}Well, I suppose this&goes without saying,&but... you lost it.{pause}{clear}Whatever was&motivating you before,&pushing you to move&forward... left.{pause}{clear}Come on... can't you&show me at least a BIT&of the REAL you?";
+	sansy.text = Surrender_Text();
 	break;
 	case 10:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}You've just been&getting more pale since&you got here.{pause}{clear}Your eyes are empty...&shouldn't they reflect&some kind of color?{pause}{clear}And those movements...&It's like you're an&amateur.{pause}{clear}I have a hard time&picturing Alphys&actually losing to&something like you.{pause}{clear}So uncoordinated.";
+	sansy.text = Surrender_Text();
 	break;
 	case 9:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}You look tired.{pause}{clear}Like all you want to&do is fall asleep and&never wake up, right?{pause}{clear}Yeah... I know the&feeling.";
+	sansy.text = Surrender_Text();
 	break;
 	case 8:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}Your eyes used to be&filled with this&indescribable rage.{pause}{clear}But you can't even&bring yourself to be&upset anymore, can&you?";
+	sansy.text = Surrender_Text();
 	break;
 	case 7:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}So tell me. Genuinely,&honestly, think about&it.{pause}{clear}Does ALL of this...&TRULY give you that&same feeling?{pause}{clear}That strength? Did you&find the same passion&we have?";
+	sansy.text = Surrender_Text();
 	break;
 	case 6:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}Can you even imagine&that kind of passion?{pause}{clear}The kind of strength...&REAL strength... it&takes to care that&much?{pause}{clear}About something, or&someone?{pause}{clear}Sure, you might be&able to destroy us a&million times over...{pause}{clear}But not this!{pause}{clear}Everything we built,&everything we stand&for, will shine&forever!";
+	sansy.text = Surrender_Text();
 	break;
 	case 5:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}Did Alphys beg?{pause}{clear}Did Papyrus...{pause}{clear}Or ANY of the guards&you faced...{pause}{clear}EVER cry for mercy?{pause}{clear}Never.{pause}{clear}They cried for JOY.{pause}{clear}Knowing they served&their kingdom well.{pause}{clear}And that they could&rest easy, entrusting&its future to the next&generation.";
+	sansy.text = Surrender_Text();
 	break;
 	case 4:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}REAL fighters ALWAYS&aim for the top, and&higher!{pause}{clear}There'll always be&someone stronger.{pause}{clear}But if you don't move,&you'll just become&weaker!{pause}{clear}Until some day...&maybe today... the&weakest will beat you.";
+	sansy.text = Surrender_Text();
 	break;
 	case 3:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}So basically, instead&of TESTING yourself&and TRYING to become&stronger...{pause}{clear}You pull back?{pause}{clear}That right there tells&me you weren't even a&real warrior to begin&with.";
+	sansy.text = Surrender_Text();
 	break;
 	case 2:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}Oh, come on...{pause}{clear}I swear, you're ALL&the SAME these days.{pause}{clear}You went out of your&way to pull all these&ELABORATE stunts to&become powerful...{pause}{clear}Oh, but the MOMENT&you're on the cusp of&actually WINNING...{pause}{clear}You stop?{pause}{clear}I don't even get a&grand finale like my&captain did?!";
+	sansy.text = Surrender_Text();
 	break;
 	case 1:
 	instance_create_depth(0,0,0,battle_dialog_enemy);
-	sansy.text="{font 3}{voice 3}...{pause}{clear}After ALL this...{pause}{clear}After everything YOU&put me through...{pause}{clear}You have the AUDACITY&to mock us?{pause}{clear}I won't have it. {pause}{clear}You're finishing this&fight, one way or&another.";
+	sansy.text = Surrender_Text();
 	break
 	case 0:
 	instance_destroy(battle_dialog_enemy);

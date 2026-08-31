@@ -13,11 +13,14 @@ var stretch = cos(global.bob_timer) * 0.2; // ±0.1 scale
 image_yscale = 1 + stretch;
 if (room == room_battle_1)
 {
-		// Renk listesi: mor, turuncu, sarı
+	// Renk listesi. Eskiden mor(180,0,255) -> turuncu -> sari idi; mor ile
+	// turuncu arasindaki gecis camurlu bir kahve/yesilden geciyordu.
+	// Uculu de sicak tarafa cekildi: aradaki karisimlar temiz kaliyor ve
+	// palet Faz 1.5'in korlariyla / Faz 2 gozunun turuncusuyla ortusuyor.
 	var colors = [
-	    make_color_rgb(180, 0, 255),  // mor
-	    make_color_rgb(255, 100, 0),  // turuncu
-	    make_color_rgb(255, 220, 0),  // sarı
+	    make_color_rgb(226,  20, 150),  // magenta
+	    make_color_rgb(249, 105,   0),  // turuncu (Faz 2 gozu)
+	    make_color_rgb(255, 196,  90),  // altin
 	];
 
 	// Her renkte kaç frame kalacak

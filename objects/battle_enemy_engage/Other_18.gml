@@ -4,6 +4,10 @@
 ///@desc Turn Preparation Start
 var turn_number = Battle_GetTurnNumber()
 
+// Her tur hazirliginda sifirlaniyor; sadece Surrender ACT'i asagida
+// tekrar true yapiyor. Turun Other_10'u bunu okuyup replik seciyor.
+global.surrender_turn = false;
+
 // EMNIYET KEMERI -- final phase'de sira asla tur nesnesi olmayan bir
 // numaraya kacmasin. battle_turn_21..27 disina cikilirsa hicbir tur
 // yaratilmaz ve savas IN_TURN durumunda kilitlenir (battle/Step_0'daki
@@ -33,9 +37,22 @@ if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.FIGHT){
 }
 if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.ACT) or (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.ITEM){
 	Battle_SetTurnNumber(Battle_GetTurnNumber()-1);
-	var skip_turn = asset_get_index("battle_skip_turn_0")
-        if object_exists(skip_turn)
-            instance_create_depth(0, 0, 0, skip_turn)
+
+	// SURRENDER ACT (faz 1): jenerik skip atagi yerine GERCEK atagi oynat.
+	// sanstalk 1..12 -> battle_turn_9..20, yani teslim turu ilerledikce
+	// atak da zorlasiyor (bkz. scripts/Surrender). Atak bulunamazsa eski
+	// skip turuna dusuyoruz; akis hicbir durumda kilitlenmiyor.
+	var _tur = noone;
+	if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.ACT)
+	and (Battle_GetMenuChoiceAction() == 1)
+	and (room == room_battle) and (global.p25phase == 0)
+	{
+		_tur = Surrender_Atak();
+		if (_tur != noone) { global.surrender_turn = true; }
+	}
+	if (_tur == noone) { _tur = asset_get_index("battle_skip_turn_0"); }
+	if object_exists(_tur)
+		instance_create_depth(0, 0, 0, _tur);
 }
 if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.MERCY){
     if global.mercy>99{
@@ -67,3 +84,7 @@ if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.MERCY){
 }
 }
 
+// Surrender ACT'i menude tutup tutmayacagimiza her tur yeniden karar
+// veriliyor: faz 2'de, final phase'de, final stretch'te ve 12 tur
+// dolduktan sonra liste tek secenege (Check) iniyor.
+Battle_SetEnemyActionNumber(_enemy_slot,Surrender_ActSayisi());

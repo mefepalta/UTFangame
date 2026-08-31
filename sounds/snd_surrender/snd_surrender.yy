@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":152.06515,
+  "duration":152.06516,
   "exportDir":"",
   "name":"snd_surrender",
   "parent":{

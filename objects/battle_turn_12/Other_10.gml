@@ -31,3 +31,12 @@ if (room == room_battle_1)
 	}
 	sansy.text="{font 3}{voice 3}{head 5}I was SUPPOSED to give&him an earful on how&being late can affect&your ranking.{pause}{clear}{head 1}But the crowd thought&it was part of a bit.{pause}{clear}{head 2}So somehow, someway...{pause}{clear}{head 13}I got dragged into&his show...";
 }
+
+// SURRENDER ACT: bu tur ACT'tan geldiyse Sans'in kendi tur repligi yerine
+// teslim yayinin repligi oynuyor (bkz. scripts/Surrender). Son turda (12)
+// replik burada degil atagin sonunda oynadigi icin bu blok atlanir.
+// Normal FIGHT akisinda global.surrender_turn false, blok hic calismaz.
+if (Surrender_BasindaKonusur())
+{
+	sansy.text = Surrender_Text();
+}

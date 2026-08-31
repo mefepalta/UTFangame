@@ -1,20 +1,19 @@
-// Update global timer if not already done
-if (!variable_global_exists("bob_timer")) {
-    global.bob_timer = 0;
-}
+if (!variable_global_exists("bob_timer")) global.bob_timer = 0;
+if (!variable_global_exists("p15_sx"))    { global.p15_sx = 0; global.p15_sy = 0; }
+
 global.bob_timer += 0.01;
 
-// Bobbing movement
-var bob = sin(global.bob_timer) * 0.005; // move up/down
-y = base_y + bob;
+// Nefes salinimi + salinim hizina gore esneme
+var _bob = sin(global.bob_timer) * 0.005;
+image_yscale = 2 + cos(global.bob_timer) * 0.05;
 
-// Stretch based on bobbing speed (differential)
-var stretch = cos(global.bob_timer) * 0.05; // ±0.1 scale
-image_yscale = 2 + stretch;
-
+// Darbe yerken govdenin yatay savrulmasi (ekran sarsintisindan ayri)
+pure_x = base_x;
 if (shake_time > 0) {
-    x = x_origin + random_range(-shake_strength, shake_strength);
+    pure_x = base_x + random_range(-shake_strength, shake_strength);
     shake_time--;
-} else {
-    x = x_origin;
 }
+pure_y = base_y + _bob;
+
+x = pure_x + global.p15_sx;
+y = pure_y + global.p15_sy;

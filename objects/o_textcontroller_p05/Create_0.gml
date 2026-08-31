@@ -1,24 +1,219 @@
+// =====================================================================
+//  FAZ 0.5 - sahne yonetmeni
+//
+//  Diyalog: "Discord Sans Rewrite" (TheBlueTowel) belgesinin
+//  "Phase 0.5 Dialogue" bolumu.
+//
+//  Zamanlar snd_dynast ile senkron kalsin diye son (bos) satir yine
+//  45. saniyede duruyor; mizrak/kol animasyonu p05 = 2705'te (45.08 sn)
+//  basliyor, darbe 2730'da, oda gecisi 2950'de. Eski kilit noktalar
+//  korundu, sadece aralari dolduruldu.
+// =====================================================================
 dialogue = [
-    {time: 1, text: "Everyone..."},
-    {time: 5, text: "Every single one of those monsters who were crushed beneath your hands..."},
-    {time: 10, text: "Heartless criminals, and innocent bystanders alike."},
-    {time: 13, text: "They were nothing but simple playthings in your eyes."},
-	{time: 17, text: "a key to ultimate power."},
-	{time: 21, text: "But now we'll see who's the better one here."},
-	{time: 25, text: "Who will be the one who comes out on top."},
-	{time: 30, text: "You have no idea how long I've waited..."},
-	{time: 34, text: "Waiting for this day..."},
-	{time: 38, text: "And thus, after what you did to our kingdom..."},
-	{time: 42, text: "I think it's time for a bit of PAYBACK!"},
-	{time: 45, text: ""},
+    {time:  1,   text: "Everyone..."},
+    {time:  3,   text: "Every single one of those monsters who were crushed beneath your hands..."},
+    {time:  8,   text: "Heartless criminals, and innocent bystanders alike."},
+    {time: 12,   text: "They weren't just... obstacles."},
+    {time: 15,   text: "They were people."},
+    {time: 18,   text: "People like my brother, who wanted no part in this dumb war."},
+    {time: 22,   text: "I wanted this life."},
+    {time: 24,   text: "HE should've never been dragged into all this."},
+    {time: 27.5, text: "So it goes without saying..."},
+    {time: 30,   text: "That you aren't the only one with something to fight for down here."},
+    {time: 34.5, text: "The name's Sans! I wear it like a badge!"},
+    {time: 38,   text: "Prepare yourself..."},
+    {time: 41.5, text: "Because now, the REAL monster bares its teeth!"},
+    {time: 45,   text: ""},
 ];
 
-current_line = -1;
-start_time = current_time;
+current_line    = -1;
+start_time      = current_time;
 line_start_time = 0;
-char_speed = 0.05;
-font_custom = font_determination_mono_1;
-last_chars = 0;
-p05 = 0;
-global.sanstalk = 0;
+char_speed      = 0.05;
+font_custom     = font_determination_mono_1;
+last_chars      = 0;
+chars_visible   = 0;
+p05             = 0;
+global.sanstalk     = 0;
 global.finalstretch = 0;
+
+// Faz 1'e gecerken savas odasi siyahin icinden acilsin ve uzerine bu
+// sahnenin morundan sonup giden bir parlama binsin (bkz. battle_fader).
+global.battle_fadein     = 1;
+global.battle_fadein_col = make_colour_rgb(150, 30, 190);
+
+// ---------------------------------------------------------------------
+//  Sahne efektleri
+// ---------------------------------------------------------------------
+// Arka plan katmani depth 100, karakter parcalari depth 0. Gradyan
+// ikisinin arasina girsin diye yonetmen 50'ye aliniyor; on plan
+// efektleri (yazi, flas, sok dalgasi) Draw End'de ciziliyor.
+depth = 50;
+
+// Tum P05 parcalarinin okudugu ortak sarsinti ofseti
+global.p05_sx = 0;
+global.p05_sy = 0;
+
+shake_power = 0;    // darbeyle gelen, sonup giden sarsinti
+rumble      = 0;    // mizrak inmeden onceki surekli ugultu
+
+aura        = 0;    // arka plan gradyaninin yogunlugu (0..1)
+aura_target = 0;
+// Gece gogu sahne acilir acilmaz hazir gelmiyor; gozun karanliga
+// alismasi gibi ilk ~8 saniyede yavas yavas beliriyor.
+sky         = 0;
+pulse       = 0;    // nabiz sayaci
+
+flash       = 0;    // beyaz ekran patlamasi
+eye_glow    = 0;    // Sans'in goz parlamasi
+slash_t     = 0;    // kol savurmasinin biraktigi yay
+
+shock = [];         // sok dalgasi halkalari
+spark = [];         // kivilcimlar
+mote  = [];         // yagan kar
+star  = [];         // yildiz alani
+
+// Renkler sprite'lardan olculdu: goz #E20BB1, kemik/govde #6B6089
+COL_EYE   = make_colour_rgb(226,  11, 177);   // goz pembesi
+COL_MAG   = make_colour_rgb(255,  96, 220);   // parlak magenta
+COL_DEEP  = make_colour_rgb( 88,  40, 132);   // gradyanin ic moru
+COL_DUST  = make_colour_rgb(150, 140, 178);   // yerden kalkan toz
+// Faz 1'in gece gogune baglayan renkler (o_phase_bg ile ayni degerler)
+COL_NIGHT = make_colour_rgb( 20,  10,  44);   // derin gece indigosu
+COL_STAR  = make_colour_rgb(234, 228, 255);   // soguk beyaz yildiz
+COL_SNOW  = make_colour_rgb(206, 216, 255);   // kar
+
+// ---------------------------------------------------------------------
+//  Yildiz alani: sahne Faz 1'in gece goguyle ayni gokyuzunun altinda
+//  geciyor. Ofke buyudukce (aura) yildizlar magentanin altinda kaybolup
+//  gidiyor - Sans'in Papyrus'la baktigi gok, hiddeti kabardikca sonuyor.
+// ---------------------------------------------------------------------
+repeat (86) {
+    array_push(star, {
+        x:  random(660) - 10,
+        y:  random(470),
+        sz: random_range(0.5, 1.2),
+        a:  random_range(0.20, 0.60),
+        ph: random(6.28),
+        fl: random_range(0.010, 0.032),
+        hs: random_range(-0.012, 0.012)
+    });
+}
+repeat (18) {   // yakin katman: iri, parlak, parildayan
+    array_push(star, {
+        x:  random(660) - 10,
+        y:  random(400),
+        sz: random_range(1.3, 2.3),
+        a:  random_range(0.55, 1.00),
+        ph: random(6.28),
+        fl: random_range(0.020, 0.052),
+        hs: random_range(-0.030, 0.030)
+    });
+}
+
+// Kar: Faz 1 ile ayni (eskiden yukselen mor zerreciklerdi)
+repeat (30) {
+    array_push(mote, {
+        x:  random(660) - 10,
+        y:  random(480),
+        vs: random_range(0.20, 0.60),
+        sw: random_range(0.5, 1.5),
+        sz: random_range(0.8, 2.0),
+        a:  random_range(0.20, 0.58),
+        ph: random(6.28),
+        fl: random_range(0.014, 0.032)
+    });
+}
+
+// ---------------------------------------------------------------------
+//  Ciziim yardimcilari (Draw ve Draw End bu metotlari kullaniyor)
+// ---------------------------------------------------------------------
+
+/// Tam genislikte dikey renk gecisi (gece zemini)
+p05_vgrad = function(_y0, _y1, _c0, _a0, _c1, _a1) {
+    if (_a0 <= 0.002 && _a1 <= 0.002) return;
+    draw_primitive_begin(pr_trianglestrip);
+    draw_vertex_colour(-40, _y0, _c0, _a0); draw_vertex_colour(680, _y0, _c0, _a0);
+    draw_vertex_colour(-40, _y1, _c1, _a1); draw_vertex_colour(680, _y1, _c1, _a1);
+    draw_primitive_end();
+}
+
+/// Yumusak radyal parlama: merkez dolu, kenarlar seffaf
+p05_glow = function(_x, _y, _r, _col, _a, _yscale = 1) {
+    if (_a <= 0.002 || _r <= 0) return;
+    var _n = 26;
+    draw_primitive_begin(pr_trianglefan);
+    draw_vertex_colour(_x, _y, _col, _a);
+    for (var i = 0; i <= _n; i++) {
+        var _d = i * (360 / _n);
+        draw_vertex_colour(_x + lengthdir_x(_r, _d), _y + lengthdir_y(_r, _d) * _yscale, _col, 0);
+    }
+    draw_primitive_end();
+}
+
+/// Icten disa sonen halka (sok dalgasi). _yscale ile yere yatirilabilir.
+p05_ring = function(_x, _y, _r, _w, _col, _a, _yscale = 1) {
+    if (_a <= 0.002 || _r <= 0) return;
+    var _n = 40;
+    // ic yari
+    draw_primitive_begin(pr_trianglestrip);
+    for (var i = 0; i <= _n; i++) {
+        var _d  = i * (360 / _n);
+        var _cx = lengthdir_x(1, _d), _cy = lengthdir_y(1, _d) * _yscale;
+        var _ri = max(_r - _w, 0);
+        draw_vertex_colour(_x + _cx * _ri, _y + _cy * _ri, _col, 0);
+        draw_vertex_colour(_x + _cx * _r,  _y + _cy * _r,  _col, _a);
+    }
+    draw_primitive_end();
+    // dis yari
+    draw_primitive_begin(pr_trianglestrip);
+    for (var i = 0; i <= _n; i++) {
+        var _d  = i * (360 / _n);
+        var _cx = lengthdir_x(1, _d), _cy = lengthdir_y(1, _d) * _yscale;
+        var _ro = _r + _w;
+        draw_vertex_colour(_x + _cx * _r,  _y + _cy * _r,  _col, _a);
+        draw_vertex_colour(_x + _cx * _ro, _y + _cy * _ro, _col, 0);
+    }
+    draw_primitive_end();
+}
+
+/// Mizrak ele carptigi an: sarsinti + isik + halka + kivilcim
+p05_impact = function(_ix, _iy) {
+    shake_power = 17;
+    flash       = 1;
+    eye_glow    = 1;
+    aura_target = 1;
+    slash_t     = 0;
+
+    // Elden yayilan iki halka
+    array_push(shock, {x: _ix, y: _iy, r: 10, spd: 13, life: 30, maxlife: 30, col: COL_MAG,   ys: 1.0, w: 9});
+    array_push(shock, {x: _ix, y: _iy, r: 0,  spd: 8,  life: 42, maxlife: 42, col: c_white,   ys: 1.0, w: 5});
+    // Ayaklarin dibinde yere yayilan toz halkasi
+    array_push(shock, {x: 320,  y: 296, r: 14, spd: 11, life: 36, maxlife: 36, col: COL_EYE, ys: 0.30, w: 12});
+
+    repeat (38) {
+        var _d = random_range(190, 350);
+        var _v = random_range(2.5, 9.0);
+        array_push(spark, {
+            x:    _ix + random_range(-16, 16),
+            y:    _iy + random_range(-8, 8),
+            hs:   lengthdir_x(_v, _d),
+            vs:   lengthdir_y(_v, _d),
+            life: irandom_range(20, 44),
+            maxlife: 44,
+            col:  choose(COL_MAG, COL_EYE, c_white)
+        });
+    }
+    // Ayaklardan kalkan toz
+    repeat (16) {
+        array_push(spark, {
+            x:    320 + random_range(-46, 46),
+            y:    294 + random_range(-4, 4),
+            hs:   random_range(-3.2, 3.2),
+            vs:   -random_range(1.0, 3.4),
+            life: irandom_range(24, 46),
+            maxlife: 46,
+            col:  COL_DUST
+        });
+    }
+}

@@ -14,7 +14,7 @@ if (Input_IsPressed(INPUT.CONFIRM))
 }
 with (o_story)
 {
-	if (storypanelval > 6000)
+	if (storypanelval > son_kare)
 	{
 		other.yesorno = true;
 	}

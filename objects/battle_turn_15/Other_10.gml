@@ -36,3 +36,12 @@ if (room == room_battle_1)
 	+"{speaker 1}{font 4}{voice 4}{pap_head 9}SURPRISE,&SURPRISE, LITTLE&HUMAN!{pause}{clear}{pap_head 16}YOUR GOOD PAL&PAPYRUS IS BACK&FROM THE DEAD!{pause}{clear}"
 	+"{speaker 0}{font 3}{voice 3}{head 6}These powers make no&sense.{pause}{clear}{head 2}But I guess I can&solve the mysteries of&that, later.";
 }
+
+// SURRENDER ACT: bu tur ACT'tan geldiyse Sans'in kendi tur repligi yerine
+// teslim yayinin repligi oynuyor (bkz. scripts/Surrender). Son turda (12)
+// replik burada degil atagin sonunda oynadigi icin bu blok atlanir.
+// Normal FIGHT akisinda global.surrender_turn false, blok hic calismaz.
+if (Surrender_BasindaKonusur())
+{
+	sansy.text = Surrender_Text();
+}

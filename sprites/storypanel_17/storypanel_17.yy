@@ -50,7 +50,7 @@
   "origin":0,
   "parent":{
     "name":"Storypanels",
-    "path":"folders/Sprites/Storypanels.yy",
+    "path":"folders/Sprites/Swapfell Discord/Storypanels.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

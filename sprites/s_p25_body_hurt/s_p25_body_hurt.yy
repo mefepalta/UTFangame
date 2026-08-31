@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"Swapfell Discord",
-    "path":"folders/Sprites/Swapfell Discord.yy",
+    "name":"P25",
+    "path":"folders/Sprites/Swapfell Discord/P25.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

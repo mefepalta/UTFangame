@@ -8,6 +8,7 @@ _dialog_part = 0;
 _dialog_done = false;
 _dialog_part1 = 0;
 _dialog_done1 = false;
+_konusma_bitti = false;	/// beforesans: Sans'in konusmasi bitti mi (bkz. Step_0)
 instance_create_depth(0,0,0,spor);
 Anim_Create(id,"_blackus",0,1,1,-1,90);
 if (global.death_count == 0)

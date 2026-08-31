@@ -35,3 +35,12 @@ if (room == room_battle_1)
 	+"{speaker 1}{font 4}{voice 4}{pap_head 1}SUIT YOURSELF. I&WAS GETTING&TIRED ANYWAY.{pause}{clear}{pap_state 3}"
 	+"{speaker 0}{font 3}{voice 3}{head 17}No more will we suffer&at the hands of&humanity.{pause}{clear}{head 9}We will finally see&the sun, feel the&warmth.{pause}{clear}{head 12}And feel a sense of&gratitude in the fact&that you no longer&exist in our world.";
 }
+
+// SURRENDER ACT: bu tur ACT'tan geldiyse Sans'in kendi tur repligi yerine
+// teslim yayinin repligi oynuyor (bkz. scripts/Surrender). Son turda (12)
+// replik burada degil atagin sonunda oynadigi icin bu blok atlanir.
+// Normal FIGHT akisinda global.surrender_turn false, blok hic calismaz.
+if (Surrender_BasindaKonusur())
+{
+	sansy.text = Surrender_Text();
+}

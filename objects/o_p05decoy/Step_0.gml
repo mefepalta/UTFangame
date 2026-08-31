@@ -1,1 +1,8 @@
-//if(keyboard_check_pressed(vk_space)) room_goto(room_battle);
+if (!variable_global_exists("p05_sx")) { global.p05_sx = 0; global.p05_sy = 0; }
+
+// Poz sprite'i de sahnenin geri kalaniyla birlikte sarsilsin, ustune
+// hafif bir nefes salinimi alsin.
+bob += 0.05;
+
+x = base_x + global.p05_sx;
+y = base_y + global.p05_sy + sin(bob) * 0.8;

@@ -1,0 +1,1 @@
+destroysprites = true;

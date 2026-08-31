@@ -1,3 +1,12 @@
+// Teslim yayinin son turu (12) bu turu kullaniyor: kapanis sahnesi tam
+// oynuyor, replik sonda geliyor ve ardindan overworld'e geciliyor.
+#macro T20_TESLIM_KARARMA 100	/// perdenin inme suresi (kare)
+#macro T20_TESLIM_BEKLE    30	/// tam siyahta bekleme
+#macro T20_TESLIM_ACILMA   45	/// yeni odada perdenin acilmasi
+
+teslim_cikis = false;
+teslim_kare = 0;
+
 //==========================================================================
 // TEST ANAHTARI -- YAYINA CIKMADAN ONCE false YAPILACAK
 //==========================================================================

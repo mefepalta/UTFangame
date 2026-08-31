@@ -10,6 +10,21 @@ var top_box = (battle_board.y-battle_board.up)+2;
 
 if (room == room_battle)
 {
+	// Teslim yolunun kapanisi: perde indikten sonra overworld'e geciliyor.
+	if (teslim_cikis) and (_timer >= teslim_kare+T20_TESLIM_KARARMA+T20_TESLIM_BEKLE)
+	{
+		global.surrender_turn = false;
+		// Overworld'de hangi konusmanin oynayacagini bu belirliyor:
+		// teslim yolu mu, yoksa Sans'i bagislama yolu mu.
+		global.surrender_son = true;
+		audio_stop_all();
+		room_goto(room_area_aftersans);
+		// trigger_warp ile ayni duzen: fader kalici oldugu icin perde yeni
+		// odada geri aciliyor, yoksa ekran siyah kalirdi.
+		Fader_Fade(-1,0,T20_TESLIM_ACILMA);
+		exit;
+	}
+
 	with (o_p1final_gbsans)
 	{
 		if (sprite_index == s_p1final_sans_slash)
@@ -358,21 +373,47 @@ if (room == room_battle)
 			_head_sprite = spr_sans_head;
 		}
 		anotherTest = instance_create_depth(0,0,0,battle_dialog_enemy);
-		anotherTest.text = "{font 3}{voice 3}{squish 1.2}{head 28}Heh...{pause}{clear}{head 27}Heheheh...{pause}{clear}{head 28}Man...{pause}{clear}{head 27}Would you believe me&if I said I put&everything I had into&that last attack?{pause}{clear}{head 22}Heh...{pause}{clear}{head 19}You really are&something, huh?{pause}{clear}{head 20}All these years I've&been obsessed with&being the best...{pause}{clear}{head 21}Failure wasn't even&close to being an&option for me.{pause}{clear}{head 23}I beat everyone I&encountered through&sheer skill alone.{pause}{clear}{head 27}And to think...{pause}{clear}...it took the might&of a human... to&finally best me in&combat...!{pause}{clear}{head 22}Alphys... Toriel...{pause}{clear}{head 21}It's been an honor...{pause}{clear}{head 22}I'm done.";
+		// SURRENDER: 12. tur repligi atagin SONUNDA oynuyor -- turun basinda
+		// degil (bkz. scripts/Surrender). Normal FIGHT yolunda asagidaki
+		// yenilgi konusmasi oynuyor.
+		if (Surrender_Aktif())
+		{
+			anotherTest.text = Surrender_Text();
+		}
+		else
+		{
+			anotherTest.text = "{font 3}{voice 3}{squish 1.2}{head 28}Heh...{pause}{clear}{head 27}Heheheh...{pause}{clear}{head 28}Man...{pause}{clear}{head 27}Would you believe me&if I said I put&everything I had into&that last attack?{pause}{clear}{head 22}Heh...{pause}{clear}{head 19}You really are&something, huh?{pause}{clear}{head 20}All these years I've&been obsessed with&being the best...{pause}{clear}{head 21}Failure wasn't even&close to being an&option for me.{pause}{clear}{head 23}I beat everyone I&encountered through&sheer skill alone.{pause}{clear}{head 27}And to think...{pause}{clear}...it took the might&of a human... to&finally best me in&combat...!{pause}{clear}{head 22}Alphys... Toriel...{pause}{clear}{head 21}It's been an honor...{pause}{clear}{head 22}I'm done.";
+		}
 	}
 	if (_timer > 4120)
 	{
 		if !(instance_exists(anotherTest))
 		{
-			audio_play_sound(snd_chance,1,true);
-			Battle_SetMenuDialog("* ...")
-			if (instance_exists(o_sans_blockp2))
+			if (Surrender_Aktif())
 			{
-				o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+				// TESLIM YOLUNUN SONU. Dovus burada bitiyor: tur kapatilmiyor,
+				// menuye donulmuyor, faz 1'in son duzlugu (finalstretch)
+				// baslatilmiyor. Ekran kararip overworld'e geciliyor --
+				// Sans'in kalan replikleri orada (PDF: Overworld).
+				if (!teslim_cikis)
+				{
+					teslim_cikis = true;
+					teslim_kare = _timer;
+					Fader_Fade(0,1,T20_TESLIM_KARARMA);
+				}
 			}
-			Battle_EndTurn();
-			global.finalstretch = 1;
-			global.go_dodge="damage"
+			else
+			{
+				audio_play_sound(snd_chance,1,true);
+				Battle_SetMenuDialog("* ...")
+				if (instance_exists(o_sans_blockp2))
+				{
+					o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
+				}
+				Battle_EndTurn();
+				global.finalstretch = 1;
+				global.go_dodge="damage"
+			}
 		}
 	}
 }
