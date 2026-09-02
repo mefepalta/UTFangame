@@ -7,7 +7,7 @@ y = lerp(y, target_y, move_speedy);
 if (p1finalattack == true)
 {
 	image_speed = 1;
-	image_alpha = 1;
+	image_alpha = (gizli ? 0 : 1);
 	p1finalattackval++;
 }
 if (image_index == 21)

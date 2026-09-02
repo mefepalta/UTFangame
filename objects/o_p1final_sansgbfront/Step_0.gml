@@ -1,6 +1,19 @@
-y = lerp(y, target_y, move_speedy);
-x = lerp(x, target_x, move_speedx);
+if (manuel)
+{
+	// Havada suzuluyor: taban hedefe yaklasirken cizim ince bir sinusla
+	// inip cikiyor.
+	taban_y = lerp(taban_y, target_y, move_speedy);
+	suzul += suzul_hiz;
+	y = taban_y + dsin(suzul)*suzul_genlik;
+	x = lerp(x, target_x, move_speedx);
+}
+else
+{
+	y = lerp(y, target_y, move_speedy);
+	x = lerp(x, target_x, move_speedx);
+}
 
+if (!manuel)
 with (o_p1final_fall)
 {
 	if (p1finalattackval == 250)

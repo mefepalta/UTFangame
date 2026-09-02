@@ -2,11 +2,20 @@
 Battle_SetBoardSizeCubic(65,65,65,65);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 
+// MERHAMET CEZASI: arka plan tam burada, yani oyuncunun Mercy'ye bastigi
+// anda solmaya basliyor -- Sans'in uzun repligi de solma boyunca oynuyor.
+// Sadece mizrak sahnesinin gercekten calisacagi durumda (bkz. Step_0'daki
+// ayni kosullar), yoksa normal turlarda arka plan kaybolurdu.
+if (global.p25phase == 0) and (global.sanstalk <= 22)
+{
+	sap_bg_on = true;
+}
+
 // FINAL PHASE: belgede "(If you try to spare him.) Sans: ..." diyor.
 // Faz 1'in uzun merhamet repligi burada calismamali.
 if (global.p25phase >= 1)
 {
-	sansy.text = "{speaker 0}{font 3}{voice 3}...";
+	sansy.text = "{speaker 0}{font 3}{voice 3}{head 22}...";
 }
 
 if (global.finalstretch == 0) and (global.p25phase == 0)
@@ -16,7 +25,7 @@ if (global.finalstretch == 0) and (global.p25phase == 0)
 if (global.finalstretch == 1) and (global.sanstalk < 0)
 {
 	audio_stop_sound(snd_chance);
-	sansy.text="{font 3}{voice 3}...{pause}{clear}Heh.{pause}{clear}Wow...{pause}{clear}I mean, really, bravo.{pause}{clear}It takes guts to turn&over a new leaf.{pause}{clear}But why the change of&heart?{pause}{clear}Did you resonate with&something I said?{pause}{clear}Must be if you're&showing pity to a&poor, defenseless&monster such as&myself.{pause}{clear}But there's still&something I can't seem&to wrap my head&around...{pause}{clear}Now, how could&someone as formidable&as you...{pause}{clear}...fall for such a&simple distraction?";
+	sansy.text="{font 3}{voice 3}{head 22}...{pause}{clear}{head 28}Heh.{pause}{clear}{head 27}Wow...{pause}{clear}{head 22}I mean, really, bravo.{pause}{clear}{head 21}It takes guts to turn&over a new leaf.{pause}{clear}{head 19}But why the change of&heart?{pause}{clear}{head 20}Did you resonate with&something I said?{pause}{clear}{head 23}Must be if you're&showing pity to a&poor, defenseless&monster such as&myself.{pause}{clear}{head 12}But there's still&something I can't seem&to wrap my head&around...{pause}{clear}{head 13}Now, how could&someone as formidable&as you...{pause}{clear}{head 24}...fall for such a&simple distraction?";
 }
 if (global.finalstretch == 0) and (global.sanstalk == 23)
 {

@@ -1,4 +1,4 @@
-﻿var horizontal_stab = ((battle_board.y-(battle_board.down+battle_board.right))-60)
+var horizontal_stab = ((battle_board.y-(battle_board.down+battle_board.right))-60)
 
 var left_box = (battle_board.x-battle_board.left)-5;
 var right_box = (battle_board.x+battle_board.right)+5;
@@ -42,11 +42,11 @@ if (room == room_battle)
 	}
 	if (_timer == 560)
 	{
+		instance_create_layer(left_box + 70, top_box + 65,"Instances",o_excmark);
 		with (o_excmark)
 		{
 			image_index = 2;
 		}
-		instance_create_layer(left_box + 70, top_box + 65,"Instances",o_excmark);
 		audio_play_sound(snd_bonewarn,2,false);
 	}
 	if (_timer == 530)

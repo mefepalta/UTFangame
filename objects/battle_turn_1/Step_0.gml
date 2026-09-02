@@ -84,8 +84,8 @@ if (room == room_battle)
 	if (_timer = 570)
 	{
 		RegularBlaster(320,-50,right_box + 100,top_box + 70,180,180,20,1,2,2,50);
-		RegularBlaster(320,-50,50,top_box - 70,270,270,20,1,1,2,50);
-		RegularBlaster(320,-50,220,top_box - 70,270,270,20,1,1,2,50);
+		RegularBlaster(320,-50,80,top_box - 70,270,270,20,1,2,2,50);
+		RegularBlaster(320,-50,190,top_box - 70,270,270,20,1,2,2,50);
 	}
 	if (_timer = 670)
 	{
@@ -106,8 +106,8 @@ if (room == room_battle)
 		Battle_SetSoul(battle_soul_red);
 		audio_play_sound(snd_bell,2,0);
 		RegularBlaster(320,-50,320,top_box-100,270,270,20,20,2,2,50);
-		RegularBlaster(-50,battle_board.y,left_box-100,battle_board.y,0,0,20,20,2,2,50);
-		RegularBlaster(690,battle_board.y,right_box+100,battle_board.y,180,180,20,20,2,2,50);
+		RegularBlaster(-50,battle_board.y,left_box-100,battle_board.y,0,0,20,20,1.5,2,50);
+		RegularBlaster(690,battle_board.y,right_box+100,battle_board.y,180,180,20,20,1.5,2,50);
 		RegularBlaster(320,540,320,bottom_box+100,90,90,20,20,2,2,50);
 	}
 	if (_timer == 1000)

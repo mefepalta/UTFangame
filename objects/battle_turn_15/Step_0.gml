@@ -181,7 +181,7 @@ if (room == room_battle)
 			RegularBone(left_box,down_box,60+sin(_timer*0.1)*-30,5,0,0,0,0,1,0,0,0,0,true);
 		
 		}
-		if (_timer % 50 == 0)
+		if (_timer % 70 == 0)
 		{
 			var gbX = random_range(50,540);
 			var gbY = top_box - 80;

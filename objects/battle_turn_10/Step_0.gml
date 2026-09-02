@@ -234,9 +234,9 @@ if (_timer == 30)
 	RegularBoneWall(DIR.UP,20,1,150,left_box + 130,top_box,50,246,0,false);
 	RegularBoneWall(DIR.DOWN,20,1,150,left_box + 200,bottom_box,50,246,0,false);
 }
-if (_timer > 70) and (_timer < 286) and (_timer % 26 == 0)
+if (_timer > 70) and (_timer < 286) and (_timer % 31 == 0)
 {
-	RegularBone(left_box + 155,top_box - 20,25,0,3,270,0,0,1,0,0,0,0,true);
+	RegularBone(left_box + 155,top_box - 10,25,0,3,270,0,0,1,0,0,0,0,true);
 	RegularBone(left_box + 175,top_box - 60,25,0,3,270,0,0,1,0,0,0,0,true);
 	RegularBone(left_box + 135,top_box - 60,25,0,3,270,0,0,1,0,0,0,0,true);
 }
@@ -310,10 +310,10 @@ if (_timer == 750)
 }
 if (_timer == 800)
 {
-	RegularBone(right_box + 20,bottom_box,152,-3,0,0,1,0,1,0,0,0,0,true);
-	RegularBone(right_box + 35,bottom_box,152,-3,0,0,1,0,1,0,0,0,0,true);
-	RegularBone(left_box - 20,bottom_box,152,3,0,0,1,0,1,0,0,0,0,true);
-	RegularBone(left_box - 35,bottom_box,152,3,0,0,1,0,1,0,0,0,0,true);
+	RegularBone(right_box + 20,bottom_box,152,-5,0,0,1,0,1,0,0,0,0,true);
+	RegularBone(right_box + 35,bottom_box,152,-5,0,0,1,0,1,0,0,0,0,true);
+	RegularBone(left_box - 20,bottom_box,152,5,0,0,1,0,1,0,0,0,0,true);
+	RegularBone(left_box - 35,bottom_box,152,5,0,0,1,0,1,0,0,0,0,true);
 }
 if (_timer == 900)
 {

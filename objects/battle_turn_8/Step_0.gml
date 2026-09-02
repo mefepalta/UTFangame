@@ -158,58 +158,42 @@ if (_timer == 370)
 	Battle_SlamLeft();
 	RegularBoneWall(DIR.LEFT,140,12,70,left_box,top_box,50,180,0,false);
 }
-if (_timer == 380)
+if (_timer > 391) and (_timer < 531) and (_timer % 30 == 0)
 {
-	RegularBlaster(-50,-50,left_box + 80,top_box - 70 ,270,270,30,5,1,2,40);
-}
-if (_timer == 410)
-{
-	RegularBlaster(-50,-50,left_box + 110,top_box - 70 ,270,270,30,5,1,2,40);
+	RegularBlaster(-50,-50,battle_soul.x,top_box - 70 ,270,270,30,5,2,2,40);
 }
 if (_timer == 440)
-{
-	RegularBlaster(-50,-50,left_box + 140,top_box - 70 ,270,270,30,5,1,2,40);
-}
-if (_timer == 470)
-{
-	RegularBlaster(-50,-50,left_box + 170,top_box - 70 ,270,270,30,5,1,2,40);
-}
-if (_timer == 500)
-{
-	RegularBlaster(-50,-50,left_box + 200,top_box - 70 ,270,270,30,5,1,2,40);
-}
-if (_timer == 410)
 {
 	Battle_SetSoul(battle_soul_red);
 	audio_play_sound(snd_ding,2,false);
 }
-if (_timer > 550) and (_timer < 780) and (_timer % 60 == 0)
+if (_timer > 590) and (_timer < 820) and (_timer % 60 == 0)
 {
 	RegularBone(left_box,top_box,82,3,0,180,0,0,1,0,0,0,0,true);
 	RegularBone(right_box,top_box,82,-3,0,180,0,0,1,0,0,0,0,true);
 	RegularBone(left_box - 30,down_box,82,3,0,0,0,0,1,0,0,0,0,true);
 	RegularBone(right_box + 30,down_box,82,-3,0,0,0,0,1,0,0,0,0,true);
 }
-if (_timer == 800)
+if (_timer == 830)
 {
     Battle_SetBoardSizeCubic(65,65,65,65);
 }
-if (_timer == 820)
+if (_timer == 850)
 {
+	instance_create_layer(left_box + 70, top_box + 65,"Instances",o_excmark);
 	with (o_excmark)
 	{
 		image_index = 2;
 	}
-	instance_create_layer(left_box + 70, top_box + 65,"Instances",o_excmark);
 	audio_play_sound(snd_bonewarn,2,false);
 }
-if (_timer == 860)
+if (_timer == 890)
 {
 	RegularBone(right_box + 110,top_box + 50,150,-6,0,90,0,0,1,0,0,0,0,true);
 	RegularBone(right_box + 110,top_box + 60,150,-6,0,90,0,0,1,0,0,0,0,true);
 	RegularBone(right_box + 110,top_box + 70,150,-6,0,90,0,0,1,0,0,0,0,true);
 }
-if (_timer == 940)
+if (_timer == 970)
 {
 	Battle_SetSoul(battle_soul_red);
 	Battle_SetMenuDialog("* He anticipates your next&  move.")

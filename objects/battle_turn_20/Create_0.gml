@@ -1144,6 +1144,22 @@ F2SeritBasla = function()
 	serit_on = true;
 };
 
+///Seritleri bir adim yurutur. Faz 2'nin koridoru bunu Step_0'in kendi
+///icinde yapiyordu; faz 1'in bosluk bolumu de kullandigi icin ortak
+///fonksiyona alindi.
+F2SeritAdim = function(_carpan)
+{
+	if (!serit_on) { return; }
+	var _sn = array_length(seritler);
+	for (var _i = 0; _i < _sn; _i++)
+	{
+		var _sr = seritler[_i];
+		_sr.y -= _sr.hiz*_carpan;
+		// Ustten cikan serit altta yeniden doguyor: sayilari sabit kaliyor.
+		if (_sr.y+_sr.boy < 0) { seritler[_i] = F2SeritYap(true); }
+	}
+};
+
 F2SeritDur = function()
 {
 	serit_on = false;
@@ -2502,4 +2518,1112 @@ F2SfBitir = function()
 	// oynatiyor ve ifadeler hic gorunmuyordu.
 	battle_enemy_engage.p2_head_sprite = spr_p2_head;
 	sf_dlg = 0;
+};
+
+//==========================================================================
+// FAZ 1 SON ATAGI -- YER VURUSLARI VE CATLAYAN KUTU
+// Eskiden bu noktada Sans ziplayip asagi iniyordu (o_p1final_fall). Yeni
+// acilis bunun yerine su: Sans ayagini yere vuruyor, her vuruste kutunun
+// zemini biraz daha catliyor. Uc normal vurustan sonra ayagini havada
+// TUTUYOR -- en guclu darbeyi vurmak uzere oldugunu bu bekleme anlatiyor --
+// ve indirdiginde catlaklar butun cerceveye yayiliyor.
+//
+// Vurus sprite'i o_smaaash (s_sans_smaaaashh): 0-6 hazirlik, 7 carpma,
+// 8-9 toparlanma. Normalde kendi hizinda donuyor; burada hiz = 0 verilip
+// image_index disaridan suruluyor, cunku ayagi tam istedigimiz karede
+// dondurmemiz gerekiyor. Ses ve sarsintiyi o_smaaash kendi kare
+// degisimlerinden hallediyor.
+//
+// Catlaklar kutuya gore saklaniyor (kutu buyuyup kuculse de yerinde kalir)
+// ve her biri kendi hiziyla uzuyor; cizimleri Draw_0'da.
+//==========================================================================
+#macro T20_YV_BAS      1650	/// bolumun baslangic karesi
+#macro T20_BEYAZ_GIRIS    5	/// son tekmede beyaza gecis (kare)
+#macro T20_BEYAZ_ACIL  2030	/// beyazin acilmaya basladigi kare
+#macro T20_BEYAZ_CIKIS   45	/// beyazin acilma suresi
+#macro T20_DUSUS_SURE   120	/// Sans'in dusus sahnesi kac kare surer
+#macro T20_YV_TOPARLA    26	/// carpmadan sonra ayagin toparlanmasi
+#macro T20_YV_KOL         2	/// bir vurusun zeminde actigi catlak kolu
+#macro T20_YV_UZUN       74	/// bir catlak kolunun uzunlugu (px)
+
+/// Vurus programi. kalk = ayagi kaldirma, bekle = tepede tutma.
+/// Son vurusta bekleme uzun: en guclu darbe geliyor.
+t20_yv = [
+	{ kalk:38, bekle: 8, buyuk:false },
+	{ kalk:34, bekle:10, buyuk:false },
+	{ kalk:30, bekle:12, buyuk:false },
+	{ kalk:52, bekle:78, buyuk:true  },
+];
+
+/// Kirilmanin asamalari. kol = kac kol, uz = kol uzunlugu (-1: kutu
+/// kenarina kadar), sap = kolun yolda saptigi aci, don = kollarin baslangic
+/// acisini kaydirir ki her tekme oncekilerin arasina girsin.
+t20_catlak = [
+	{ kol: 7, uz:  22, sap:38, don: 0  },	// 1. tekme: merkezde sikisik dugum
+	{ kol: 8, uz:  58, sap:27, don:23  },	// 2. tekme: orta boy kollar
+	{ kol: 9, uz:  98, sap:21, don:11  },	// 3. tekme: uzun kollar
+	{ kol:12, uz:  -1, sap:14, don: 7  },	// 4. tekme: kenarlara ve koselere
+];
+
+/// Kirilmanin merkezi (kutu merkezine gore). Sans'in ayaginin altinda.
+catlak_ox = 0;
+catlak_oy = 0;
+
+yv_on = false;
+yv_no = 0;		/// kacinci vurus
+yv_asama = 0;	/// 0 kalkiyor | 1 tepede bekliyor | 2 carpma sonrasi
+yv_t = 0;
+catlaklar = [];
+
+///Bir dogru parcasini kutu dikdortgenine kirpar (Liang-Barsky). Parca
+///tamamen disarida ise undefined doner. Catlaklar kutuya GORE saklandigi
+///icin kutu sonradan kucultulup kaydirildiginda disari tasabiliyorlardi;
+///cizim bunun uzerinden gectigi icin artik hicbir kosulda tasmiyorlar.
+CatlakKirp = function(_x1,_y1,_x2,_y2,_l,_u,_r,_d)
+{
+	if (_r <= _l) or (_d <= _u) { return undefined; }
+	var _dx = _x2-_x1, _dy = _y2-_y1;
+	var _t0 = 0, _t1 = 1;
+	var _pp = [-_dx,_dx,-_dy,_dy];
+	var _qq = [_x1-_l,_r-_x1,_y1-_u,_d-_y1];
+	for (var _i = 0; _i < 4; _i++)
+	{
+		if (_pp[_i] == 0)
+		{
+			if (_qq[_i] < 0) { return undefined; }
+		}
+		else
+		{
+			var _t = _qq[_i]/_pp[_i];
+			if (_pp[_i] < 0)
+			{
+				if (_t > _t1) { return undefined; }
+				if (_t > _t0) { _t0 = _t; }
+			}
+			else
+			{
+				if (_t < _t0) { return undefined; }
+				if (_t < _t1) { _t1 = _t; }
+			}
+		}
+	}
+	return { x1:_x1+_t0*_dx, y1:_y1+_t0*_dy, x2:_x1+_t1*_dx, y2:_y1+_t1*_dy };
+};
+
+///Merkezden _aci yonunde kutu kenarina olan uzaklik. Son tekmede kollarin
+///tam kenara/koseye dayanmasi icin kullaniliyor.
+CatlakMenzil = function(_ox,_oy,_aci)
+{
+	var _dx = dcos(_aci), _dy = -dsin(_aci);
+	var _t = 9999;
+	if (_dx >  0.001) { _t = min(_t,( battle_board.right-_ox)/_dx); }
+	if (_dx < -0.001) { _t = min(_t,(-battle_board.left -_ox)/_dx); }
+	if (_dy >  0.001) { _t = min(_t,( battle_board.down -_oy)/_dy); }
+	if (_dy < -0.001) { _t = min(_t,(-battle_board.up   -_oy)/_dy); }
+	return _t;
+};
+
+///Merkezden disari yayilan catlak kollari. Her tekme bir asama: ilkinde
+///merkezde sikisik kucuk bir dugum olusuyor, sonrakiler kollari uzatiyor,
+///sonuncusunda kollar kenarlara ve koselere dayaniyor.
+///Noktalar kutunun MERKEZINE gore saklaniyor.
+CatlakYayil = function(_asama)
+{
+	var _a = t20_catlak[min(_asama,array_length(t20_catlak)-1)];
+	var _ox = catlak_ox, _oy = catlak_oy;
+
+	for (var _k = 0; _k < _a.kol; _k++)
+	{
+		// Kollar cevreye esit dagiliyor, uzerine biraz sapma.
+		var _aci = _k*(360/_a.kol)+random_range(-16,16)+_a.don;
+		var _uz = (_a.uz > 0) ? _a.uz*random_range(0.75,1.25)
+		                      : CatlakMenzil(_ox,_oy,_aci)*random_range(0.88,1.0);
+
+		var _p = [];
+		// Merkezde tam ust uste binmesinler diye cikis noktasi biraz dagilir.
+		var _x = _ox+random_range(-3,3), _y = _oy+random_range(-3,3);
+		array_push(_p,{ x:_x, y:_y });
+
+		var _n = irandom_range(4,7);
+		var _ac = _aci;
+		for (var _i = 0; _i < _n; _i++)
+		{
+			_ac += random_range(-_a.sap,_a.sap);
+			var _l = (_uz/_n)*random_range(0.7,1.3);
+			var _nx = _x+lengthdir_x(_l,_ac);
+			var _ny = _y+lengthdir_y(_l,_ac);
+			// Kenara varan kol ORADA biter; kenar boyunca surunmesin.
+			var _disi = (_nx < -battle_board.left+2) or (_nx > battle_board.right-2)
+			         or (_ny < -battle_board.up+2)   or (_ny > battle_board.down-2);
+			_x = clamp(_nx,-battle_board.left+2,battle_board.right-2);
+			_y = clamp(_ny,-battle_board.up+2,battle_board.down-2);
+			array_push(_p,{ x:_x, y:_y });
+			if (_disi) { break; }
+		}
+		array_push(catlaklar,{ p:_p, t:0, hiz:random_range(0.10,0.18) });
+
+		// Uzun kollarda arada bir yandan ayrilan kisa bir catlak.
+		// DIKKAT: kol kenara varinca erken bittigi icin _p, _n+1 noktadan
+		// kisa olabilir; capagin cikacagi nokta dizinin GERCEK uzunlugundan
+		// secilmeli.
+		var _sonnokta = array_length(_p)-1;
+		if (_a.uz != 0) and (irandom(2) == 0) and (_sonnokta >= 2)
+		{
+			var _d = [];
+			var _di = irandom_range(1,_sonnokta);
+			var _dx = _p[_di].x, _dy = _p[_di].y;
+			var _da = _ac+choose(-1,1)*random_range(40,80);
+			array_push(_d,{ x:_dx, y:_dy });
+			for (var _j = 0; _j < 2; _j++)
+			{
+				_da += random_range(-20,20);
+				var _dl = abs(_uz)*random_range(0.14,0.26);
+				var _ndx = _dx+lengthdir_x(_dl,_da);
+				var _ndy = _dy+lengthdir_y(_dl,_da);
+				var _ddisi = (_ndx < -battle_board.left+2) or (_ndx > battle_board.right-2)
+				          or (_ndy < -battle_board.up+2)   or (_ndy > battle_board.down-2);
+				_dx = clamp(_ndx,-battle_board.left+2,battle_board.right-2);
+				_dy = clamp(_ndy,-battle_board.up+2,battle_board.down-2);
+				array_push(_d,{ x:_dx, y:_dy });
+				if (_ddisi) { break; }
+			}
+			array_push(catlaklar,{ p:_d, t:0, hiz:random_range(0.08,0.14) });
+		}
+	}
+};
+
+///Bir carpma ani: kirilma bir asama daha buyuyor.
+YvCarp = function(_buyuk)
+{
+	CatlakYayil(yv_no);
+	if (_buyuk)
+	{
+		Camera_Shake(9,9,3,3,6,6,0.28,0.28);
+		audio_play_sound(snd_bighit,3,false);
+		// Son tekme: ekran beyaza patliyor. Kutunun kirilmasi ve bosluga
+		// gecis bu beyazin ALTINDA oluyor, yani sert bir kesme gorunmuyor.
+		fader.color = c_white;
+		Fader_Fade(0,1,T20_BEYAZ_GIRIS);
+	}
+};
+
+///Vurus programini yurutur. image_index'i elle suruyoruz ki ayak istenen
+///karede havada kalabilsin.
+YvAdim = function()
+{
+	if (!yv_on) { return; }
+	if (!instance_exists(o_smaaash)) { return; }
+
+	yv_t += 1;
+	var _v = t20_yv[min(yv_no,array_length(t20_yv)-1)];
+
+	switch (yv_asama)
+	{
+		case 0:	// ayak kalkiyor
+			o_smaaash.image_index = min(6,6*(yv_t/_v.kalk));
+			if (yv_t >= _v.kalk) { yv_asama = 1; yv_t = 0; }
+			break;
+
+		case 1:	// tepede bekleme -- son vurusta uzun
+			o_smaaash.image_index = 6;
+			if (yv_t >= _v.bekle)
+			{
+				yv_asama = 2; yv_t = 0;
+				o_smaaash.image_index = 7;	// carpma: sesi ve sarsintiyi o_smaaash veriyor
+				YvCarp(_v.buyuk);
+			}
+			break;
+
+		case 2:	// toparlanma
+			o_smaaash.image_index = min(9,7+yv_t/9);
+			if (yv_t >= T20_YV_TOPARLA)
+			{
+				yv_no += 1; yv_asama = 0; yv_t = 0;
+				if (yv_no >= array_length(t20_yv)) { yv_on = false; }
+			}
+			break;
+	}
+};
+
+///Catlaklarin uzamasi.
+CatlakAdim = function()
+{
+	for (var _i = 0; _i < array_length(catlaklar); _i++)
+	{
+		catlaklar[_i].t = min(1,catlaklar[_i].t+catlaklar[_i].hiz);
+	}
+};
+
+//==========================================================================
+// FAZ 1 SON ATAGI -- 2. KISIM: KUTU KIRILIYOR, SIYAH BOSLUK
+// Son tekme kutuyu kiriyor. Cerceve ve arka plan gradienti birlikte
+// kayboluyor, geriye siyah bosluk kaliyor; asagidan yukari suzulen
+// seritler (faz 2'nin koridorundaki sistemin aynisi) dustugumuzu
+// anlatiyor. Bu sirada asagidan yukari KEMIK SIRALARI geliyor: her
+// sirada tek bir gecit var ve gecit satirdan satira bir dilim kayiyor,
+// yani oyuncu duserken surekli yana suzuluyor.
+// Sans da yukaridan asagi dusup sahneye giriyor (o_p1final_fall).
+//
+// Bolum ilerledikce siralar hem sikilasiyor hem hizlaniyor -- dusus
+// hizlaniyor. Gecidin yeri rastgele degil: her satirda en fazla bir
+// dilim kayiyor, boylece takip edilebilir kaliyor.
+//==========================================================================
+#macro T20_VOID_BAS   2016	/// kutunun kirildigi kare
+#macro T20_VOID_SON   5300	/// bolumun bitisi (finalin kutuyu geri actigi 5090'dan hemen once)
+#macro T20_SIRA_SLOT     8	/// ekran kac dilime bolunuyor (80 px)
+#macro T20_SIRA_ARA_A   86	/// basta siralar arasi
+#macro T20_SIRA_ARA_B   54	/// sonda siralar arasi
+#macro T20_SIRA_HIZ_A  4.4	/// basta sira hizi
+#macro T20_SIRA_HIZ_B  7.2	/// sonda sira hizi
+#macro T20_SANS_DUSUS  2110	/// Sans'in yukaridan dustugu kare
+
+void_on = false;
+void_t = 0;			/// bolum ici sayac
+void_sonraki = 0;	/// bir sonraki sira hangi karede
+void_bos = floor(T20_SIRA_SLOT/2);	/// gecidin dilimi
+catlak_alpha = 1;	/// kirilirken catlaklar soluyor
+
+///Bolumun ilerlemesi (0..1) -- siralarin sikligi ve hizi buna bagli.
+VoidOran = function()
+{
+	return clamp(void_t/(T20_VOID_SON-T20_VOID_BAS),0,1);
+};
+
+// NOT: burada yukari suzulen kemik siralari vardi. Bolumun atagi yeniden
+// tarif edilecegi icin kaldirildi; bosluk bolumu su an sadece sahneyi
+// kuruyor (kutu kiriliyor, seritler akiyor, Sans dusuyor, blaster geliyor).
+
+///Kutunun kirilma ani: catlaklar soluyor, cerceve ve arka plan gidiyor,
+///geriye siyah bosluk kaliyor ve dusus basliyor.
+VoidKir = function()
+{
+	Camera_Shake(12,12,4,4,7,7,0.22,0.22);
+	audio_play_sound(snd_bighit,3,false);
+	audio_play_sound(snd_noise,1,false);
+	with (battle_regularbone) { instance_destroy(); }
+
+	// Catlaklar kutuyla birlikte kayboluyor.
+	Anim_Create(id,"catlak_alpha",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,1,-1,22);
+
+	// Arka plan gradienti soluyor -> siyah bosluk.
+	if (instance_exists(o_bg_gradient))
+	{
+		Anim_Create(o_bg_gradient,"image_alpha",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,
+			o_bg_gradient.image_alpha,-o_bg_gradient.image_alpha,26);
+	}
+
+	// Kutu ekrani asacak kadar aciliyor: kenarlik gorunmuyor, bosluktayiz.
+	// SIYAH BOSLUK
+	// Kutunun ici zaten siyah: battle_board, kutu icine arka plani
+	// (application_surface) 1-alpha_bg saydamlikla ciziyor ve alpha_bg 1
+	// iken hic cizmiyor, geriye color_bg (c_black) kaliyor. Yani yapilacak
+	// tek sey kutuyu ekrani asacak kadar acmak ve CERCEVEYI gizlemek --
+	// boylece butun ekran kutunun siyah ici oluyor.
+	// (Onceki halinde alpha_bg de sifira cekiliyordu; o tam TERSI ise
+	// yariyor, arka plani kutunun icinde gorunur kiliyordu.)
+	// Kutunun merkezi (320,320); sabit sayi yerine kenarlar merkezden
+	// hesaplaniyor ki ekranin dort tarafini da tam kapatsin. Onceki
+	// (260,250,340,340) degerinde ust kenar y=60'ta kaliyor ve tepede
+	// arka plan seridi gorunuyordu.
+	Battle_SetBoardSizeCubic(battle_board.y+12,492-battle_board.y,
+		battle_board.x+12,652-battle_board.x,30);
+	battle_board.alpha_bg = 1;
+	Anim_Create(battle_board,"alpha_frame",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,
+		battle_board.alpha_frame,-battle_board.alpha_frame,22);
+	Battle_SetSoul(battle_soul_red);
+	F2SeritBasla();
+
+	void_on = true;
+	void_t = 0;
+	void_sonraki = 40;		// ilk siraya kadar kisa bir nefes
+};
+
+///Bolumun her adimi: sirasi gelen kemik satirini birakir.
+VoidAdim = function()
+{
+	if (!void_on) { return; }
+	void_t += 1;
+	F2SeritAdim(1);		// seritler asagidan yukari suzuluyor
+};
+
+///Bolumun kapanisi: seritler duruyor, bosluk toparlaniyor.
+VoidBitir = function()
+{
+	CemberTemizle();
+	void_on = false;
+	F2SeritDur();
+	with (battle_regularbone) { instance_destroy(); }
+	// Kutu bosluk olcusunden finalin olcusune YUMUSAKCA kuculuyor.
+	// Eskiden burasi acikta kaliyordu ve 30 kare sonra tek karede
+	// (Battle_SetBoardSize) zipliyordu.
+	Battle_SetBoardSizeCubic(65,65,130,130,54);
+	// Cerceve geri geliyor (alpha_bg'ye dokunmuyoruz: zaten 1 olmali).
+	Anim_Create(battle_board,"alpha_frame",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,
+		battle_board.alpha_frame,1-battle_board.alpha_frame,28);
+	// Arka plan geri geliyor: finalin kalan sahneleri normal zeminde oynuyor.
+	if (instance_exists(o_bg_gradient))
+	{
+		Anim_Create(o_bg_gradient,"image_alpha",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,
+			o_bg_gradient.image_alpha,1-o_bg_gradient.image_alpha,34);
+	}
+};
+
+//==========================================================================
+// SANS ASAGIDAN BLASTERE BINMIS HALDE GELIYOR
+// o_p1final_sansgbfront odada ekranin altinda (224,608) duruyor ve kendi
+// Step'inde target_y'ye dogru suzuluyor. Eskiden sahneyi kendi zamanlardi
+// (o_p1final_fall sayacina bakarak); artik manuel = true ile o zincir
+// kapali, sahneyi buradan suruyoruz.
+//==========================================================================
+#macro T20_GB_GELIS   2380	/// blaster asagidan yukselmeye baslar
+#macro T20_GB_GOZ     2500	/// gozu parlar
+#macro T20_GB_Y         64	/// yerlestigi yukseklik
+
+///Blaster asagidan yukseliyor.
+GbGelis = function()
+{
+	with (o_p1final_sansgbfront)
+	{
+		manuel = true;
+		isittimeyet = false;
+		sprite_index = s_p1final_sansgbfront;
+		image_index = 0;
+		x = 224;  y = 608;
+		target_x = 224;
+		target_y = T20_GB_Y;
+		move_speedy = 0.045;
+		image_alpha = 1;
+	}
+	// Eski sahnenin kendi kendine acilmasini engelliyoruz.
+	with (o_p1final_gbtop) { manuel = true; }
+	audio_play_sound(snd_swift,2,false);
+};
+
+///Gozu parliyor: kare degisiyor ve parlama efekti dusuyor.
+GbGoz = function()
+{
+	with (o_p1final_sansgbfront)
+	{
+		sprite_index = s_p1final_sansgbfront_1;
+		image_index = 0;
+		instance_create_layer(x+50,y+43,"Instances_2",o_eyeshine);
+	}
+	audio_play_sound(snd_eye,2,false);
+	Camera_Shake(4,4,2,2);
+};
+
+//==========================================================================
+// BLASTERDEN YAYILAN DONEN CEMBERLER
+// Buyuk blasterin oldugu noktada hayali bir cember var; kemiklerin IC UCU
+// bu cemberin uzerinde duruyor ve disari dogru bakiyorlar. Cember hem
+// doniyor hem genisliyor: kemikler de onunla birlikte donuyor ve cember
+// buyudukce aralarindaki mesafe aciliyor.
+//
+// Arka arkaya gelen iki cember TERS yonlerde donuyor.
+//
+// Kemikler autoDestroy kapali olarak yaratiliyor; konumlari her adim
+// yeniden hesaplaniyor (battle_turn_10'un Fan sisteminin aynisi) ve
+// cember omrunu doldurunca hep birlikte siliniyorlar.
+//==========================================================================
+#macro T20_CEM_BAS    2560	/// ilk cember
+#macro T20_CEM_ADET      5	/// kac cember gelecek
+#macro T20_CEM_ARA      144	/// cemberler arasi -- yaricapta yine 72 px
+								/// (hiz dustugu icin kare sayisi artti)
+#macro T20_CEM_KEMIK    11	/// bir cemberdeki kemik sayisi
+#macro T20_CEM_R0       46	/// baslangic yaricapi
+#macro T20_CEM_HIZ    0.75	/// yaricapin buyume hizi -- agir agir yayiliyorlar
+#macro T20_CEM_DON     1.1	/// donme hizi (derece/kare)
+#macro T20_CEM_BOY      72	/// kemik boyu -- ic uc cemberde kaldigi icin
+								/// uzatmak cemberi bozmuyor, sadece disari uzuyor
+#macro T20_CEM_OMUR    760	/// cember kac kare sonra silinir (ekrani terk edecek kadar)
+#macro T20_CEM_SON    3620	/// son cember de sonduktan sonraki ilk kare
+								/// (sonraki pattern buradan baslayabilir)
+
+cember = [];		/// { kemik:[], r, aci, yon, t }
+cem_no = 0;
+
+///Cemberlerin merkezi: blasterin govdesi. Blaster sahnede yoksa ekranin
+///ustune dusuluyor ki hesap hicbir kosulda bozulmasin.
+CemberMerkez = function()
+{
+	if (instance_exists(o_p1final_sansgbfront))
+	{
+		return { x : o_p1final_sansgbfront.x+94, y : o_p1final_sansgbfront.y+150 };
+	}
+	return { x : 320, y : 184 };
+};
+
+///Yeni bir cember. _yon 1 veya -1: arka arkaya gelenler ters doner.
+CemberEkle = function(_yon)
+{
+	var _m = CemberMerkez();
+	var _c = { kemik : [], r : T20_CEM_R0, aci : random(360), yon : _yon, t : 0 };
+	for (var _i = 0; _i < T20_CEM_KEMIK; _i++)
+	{
+		var _a = _c.aci+_i*(360/T20_CEM_KEMIK);
+		// Aci = _a+90 : kemik cemberin uzerinden DISARI dogru uzuyor.
+		var _b = RegularBone(_m.x+lengthdir_x(_c.r,_a),_m.y+lengthdir_y(_c.r,_a),
+			0,0,0,_a+90,0,0,1,0,0,0,0,false);
+		Anim_Create(_b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,0,T20_CEM_BOY,18);
+		array_push(_c.kemik,_b);
+	}
+	array_push(cember,_c);
+	audio_play_sound(snd_exclamation,0,false);
+};
+
+///Bir cemberin kemiklerini siler.
+CemberSil = function(_i)
+{
+	var _c = cember[_i];
+	for (var _k = 0; _k < array_length(_c.kemik); _k++)
+	{
+		if (instance_exists(_c.kemik[_k])) { instance_destroy(_c.kemik[_k]); }
+	}
+	array_delete(cember,_i,1);
+};
+
+///Butun cemberleri temizler.
+CemberTemizle = function()
+{
+	for (var _i = array_length(cember)-1; _i >= 0; _i--) { CemberSil(_i); }
+	cember = [];
+};
+
+///Her adim: cemberler doner, genisler, kemikler yeniden konumlanir.
+CemberAdim = function()
+{
+	if (array_length(cember) == 0) { return; }
+	var _m = CemberMerkez();
+	for (var _i = array_length(cember)-1; _i >= 0; _i--)
+	{
+		var _c = cember[_i];
+		_c.t += 1;
+		_c.r += T20_CEM_HIZ;
+		_c.aci += _c.yon*T20_CEM_DON;
+
+		var _n = array_length(_c.kemik);
+		for (var _k = 0; _k < _n; _k++)
+		{
+			var _b = _c.kemik[_k];
+			if (!instance_exists(_b)) { continue; }
+			var _a = _c.aci+_k*(360/_n);
+			_b.x = _m.x+lengthdir_x(_c.r,_a);
+			_b.y = _m.y+lengthdir_y(_c.r,_a);
+			_b._angle = _a+90;
+		}
+
+		if (_c.t >= T20_CEM_OMUR) { CemberSil(_i); }
+	}
+};
+
+//==========================================================================
+// 2. PATTERN -- SANS SAGA KAYAR, BLASTER SOLA BAKAR
+// Onden gorunen blaster (o_p1final_sansgbfront) saga suzulup cikiyor;
+// yerine sola bakan rig geliyor: o_p1final_gbtop (blasterin kafasi,
+// 3 kare: agiz kapali/araliK/acik), o_p1final_gbbottom (alt cene) ve
+// o_p1final_gbsans (blasterin uzerindeki Sans). Ucu de kendi Step'lerinde
+// gbtop'un hedefine gore konumlaniyor, yani tek yeri surmek yetiyor.
+//
+// Atak parcalari:
+//   * blasterin agzindan sola dogru kemik yelpazesi -- eskisiyle ayni
+//     mantik ama aci araligi genis, yani kemiklerin arasi acik. Kutu artik
+//     butun ekran oldugu icin oyuncunun kacacak yeri var.
+//   * Sans'in slash animasyonu 6. karesine geldiginde ruha dogru bir
+//     kesik firlatiyor (eski sahnedeki mekanigin aynisi).
+//   * seyrek araliklarla yukaridan ve asagidan tek tek kemikler.
+//==========================================================================
+#macro T20_P2_BAS     3620	/// 2. pattern'in baslangici
+#macro T20_P2_GECIS     70	/// saga kayma / rig'in gelme suresi
+#macro T20_P2_SON     4900	/// pattern'in bitisi (bitis sahnesi buradan sonra)
+
+#macro T20_P2_YELP_ARA  110	/// kemik yelpazeleri arasi
+#macro T20_P2_YELP_A1   224	/// yelpazenin ilk acisi
+#macro T20_P2_YELP_A2   136	/// son acisi (aralik genis: kemikler seyrek)
+#macro T20_P2_YELP_N      9	/// yelpazedeki kemik sayisi
+#macro T20_P2_YELP_HIZ   10	/// kemiklerin hizi
+
+#macro T20_P2_DIK_ARA   150	/// yukaridan/asagidan gelen kemikler arasi
+#macro T20_P2_DIK_DON   2.6	/// bu kemiklerin donme hizi (derece/kare)
+
+p2_on = false;
+p2_t = 0;
+p2_savur = false;	/// savurma animasyonu oynuyor mu
+p2_kesti = false;	/// bu savurmada kesik firlatildi mi
+
+///Onden gorunen blaster saga suzuluyor, sola bakan rig sahneye giriyor.
+Gb2Basla = function()
+{
+	p2_on = true;
+	p2_t = 0;
+
+	// Sans saga kayip ekrandan cikiyor.
+	with (o_p1final_sansgbfront)
+	{
+		target_x = 760;
+		move_speedx = 0.06;
+	}
+
+	// Sola bakan rig sagdan geliyor. gbbottom ve gbsans kendi Step'lerinde
+	// gbtop'a gore konumlandigi icin sadece gbtop suruluyor.
+	with (o_p1final_gbtop)
+	{
+		manuel = true;
+		image_alpha = 1;
+		image_index = 0;
+		x = 820;  y = 160;
+		target_x = 470;  target_y = 160;
+		move_speedx = 0.045;
+		move_speedy = 0.045;
+	}
+	with (o_p1final_gbbottom) { image_alpha = 1; }
+	// s_p1final_sans 30 fps'lik 10 karelik bir sayfa; bosta DONMEMELI.
+	// Eski sahnede de image_speed 0 idi, sadece savururken 1 yapiliyordu.
+	with (o_p1final_gbsans)
+	{
+		image_alpha = 1;
+		sprite_index = s_p1final_sans;
+		image_index = 0;
+		image_speed = 0;
+	}
+	audio_play_sound(snd_swift,2,false);
+};
+
+///Blasterin agzindan sola dogru kemik yelpazesi. Aci araligi genis
+///tutuldugu icin kemiklerin arasi acik.
+Gb2Yelpaze = function()
+{
+	if (!instance_exists(o_p1final_gbtop)) { return; }
+	var _adim = (T20_P2_YELP_A1-T20_P2_YELP_A2)/max(1,T20_P2_YELP_N-1);
+	for (var _i = 0; _i < T20_P2_YELP_N; _i++)
+	{
+		var _a = T20_P2_YELP_A1-_i*_adim;
+		var _b = RegularBone(o_p1final_gbtop.x,o_p1final_gbtop.y,40,0,0,_a+90,0,1,1,0,0,0,0,true);
+		_b.direction = _a;
+		_b.speed = T20_P2_YELP_HIZ;
+	}
+	audio_play_sound(snd_stab,2,false);
+
+	// Blaster yer degistiriyor ve Sans savurma animasyonuna giriyor.
+	// ISIN ATESLENIRKEN yerinden oynamiyor: agizdan cikan isin blastere
+	// bagli, blaster kayinca isin de kayardi.
+	if (!isin_on)
+	{
+		with (o_p1final_gbtop)
+		{
+			target_x = random_range(400,560);
+			target_y = random_range(100,240);
+		}
+	}
+	// Savurma animasyonu BASTAN oynuyor. image_index sifirlanmazsa animasyon
+	// bir onceki karesinden devam edip yanlis kareleri gosteriyordu.
+	with (o_p1final_gbsans)
+	{
+		sprite_index = s_p1final_sans_slash;
+		image_index = 0;
+		image_speed = 1;
+	}
+	p2_savur = true;
+	p2_kesti = false;
+};
+
+///Yukaridan ve asagidan tek tek gelen kemikler -- seyrek, doku icin.
+Gb2DikKemik = function()
+{
+	var _x1 = random_range(40,600);
+	var _x2 = random_range(40,600);
+	// Aci 270 = asagi bakan, 90 = yukari bakan kemik. Sondan bir onceki
+	// arguman ACI HIZI: kemikler duserken/yukselirken kendi etraflarinda
+	// donuyorlar (Center 1 oldugu icin donme ekseni ortalari).
+	RegularBone(_x1,-30,60,0,3.4,270,0,0,1,0,1,0, T20_P2_DIK_DON,true);
+	RegularBone(_x2,510,60,0,-3.4,90,0,0,1,0,1,0,-T20_P2_DIK_DON,true);
+	audio_play_sound(snd_exclamation,0,false);
+};
+
+///Sans'in savurmasi kesigi firlatiyor (eski sahnenin mekanigi).
+Gb2Slash = function()
+{
+	if (!instance_exists(o_p1final_gbsans)) { return; }
+	if (!instance_exists(battle_soul)) { return; }
+	var _s = instance_create_depth(o_p1final_gbsans.x-102,o_p1final_gbsans.y+56,-99999,o_p1final_sansslash);
+	var _d = point_direction(o_p1final_gbsans.x,o_p1final_gbsans.y,battle_soul.x,battle_soul.y);
+	_s.direction = _d;
+	_s.speed = 7;
+	_s.image_angle = _d+180;
+};
+
+///Pattern'in her adimi.
+Gb2Adim = function()
+{
+	if (!p2_on) { return; }
+	p2_t += 1;
+
+	// Rig yerine oturana kadar atak baslamiyor.
+	if (p2_t < T20_P2_GECIS) { IsinAdim(); return; }
+	var _t = p2_t-T20_P2_GECIS;
+
+	if ((_t mod T20_P2_YELP_ARA) == 0) { Gb2Yelpaze(); }
+	if ((_t mod T20_P2_DIK_ARA) == 40) { Gb2DikKemik(); }
+	if ((_t mod T20_P2_ISIN_ARA) == 150) { IsinBasla(); }
+
+	// SAVURMA: animasyon bir kez bastan sona oynuyor. 6. karede TEK kesik
+	// firliyor, son karede bosta duran sprite'a donup duruyor. Onceki
+	// halinde animasyon donguye giriyordu, yani her turda yeniden 6. kareye
+	// ulasip arka arkaya kesik firlatiyordu.
+	if (p2_savur) and (instance_exists(o_p1final_gbsans))
+	{
+		var _k = floor(o_p1final_gbsans.image_index);
+		if (_k >= 6) and (!p2_kesti) { Gb2Slash(); p2_kesti = true; }
+		if (_k >= sprite_get_number(s_p1final_sans_slash)-1)
+		{
+			with (o_p1final_gbsans)
+			{
+				sprite_index = s_p1final_sans;
+				image_index = 0;
+				image_speed = 0;
+			}
+			p2_savur = false;
+		}
+	}
+
+	IsinAdim();
+};
+
+///Pattern'i kapatir (bitis sahnesi ayrica gelecek).
+Gb2Bitir = function()
+{
+	p2_on = false;
+	IsinDurdur();
+};
+
+//==========================================================================
+// BLASTER ISINI
+// Blasterin agzi aciliyor: alt cene (o_p1final_gbbottom) menteserinden
+// asagi doniyor. gbtop'un 3 karesi acilma DEGIL, catlama kareleri --
+// onlar kapanis sahnesinde kullaniliyor.
+// agizda bir daire toplaniyor ve dairenin SOLUNA dogru isin gidiyor.
+// Isin bitince agiz kapaniyor. Slash'tan seyrek geliyor ve isin boyunca
+// ekran sarsiliyor.
+//
+// Cizim Draw_0'da; hasar kontrolu burada, motorun kendi carpisma girisi
+// (Battle_CallSoulEventBulletCollision) uzerinden yapiliyor.
+//==========================================================================
+#macro T20_P2_ISIN_ARA  340	/// isinlar arasi (slash'tan seyrek)
+#macro T20_ISIN_ACIL     22	/// agzin acilmasi
+#macro T20_ISIN_TOPLA    28	/// dairenin toplanmasi
+#macro T20_ISIN_ATES     46	/// isinin suresi
+#macro T20_ISIN_KAPAN    18	/// isinin sonmesi ve agzin kapanmasi
+#macro T20_ISIN_KALIN    54	/// isinin kalinligi (px)
+#macro T20_ISIN_DAIRE    26	/// agizdaki dairenin yaricapi
+#macro T20_ISIN_AGIZ     16	/// agzin acilma acisi (derece)
+#macro T20_AGIZ_X       -72	/// agzin gbtop'a gore yeri (namlu agzi)
+#macro T20_AGIZ_Y        92
+#macro T20_AGIZ_KAY      40	/// cene acilinca agzin ne kadar asagi kaydigi
+
+isin_on = false;
+isin_faz = 0;		/// 0 acilma | 1 toplanma | 2 ates | 3 kapanma
+isin_t = 0;
+isin_x = 0;			/// agzin (dairenin) konumu -- ates aninda kilitleniyor
+isin_y = 0;
+
+///Agzin konumu: IKI PARCANIN ARASI -- ust kafanin alt cene hizasindaki
+///namlu agzi. (Once kafanin uzerine, goz hizasina denk geliyordu.)
+///Cene acildikca bosluk asagi dogru genisledigi icin isin da bir miktar
+///asagi kayiyor: aralikta kalsin.
+IsinAgiz = function()
+{
+	if (!instance_exists(o_p1final_gbtop)) { return { x : 400, y : 250 }; }
+	var _ac = instance_exists(o_p1final_gbbottom) ? o_p1final_gbbottom.agiz : 0;
+	return {
+		x : o_p1final_gbtop.x+T20_AGIZ_X,
+		y : o_p1final_gbtop.y+T20_AGIZ_Y+dsin(_ac)*T20_AGIZ_KAY
+	};
+};
+
+IsinBasla = function()
+{
+	if (isin_on) { return; }
+	isin_on = true;
+	isin_faz = 0;
+	isin_t = 0;
+	// Blaster nisan alip DURUYOR: isin boyunca hedefi bulundugu yer.
+	// (Yelpaze de bu sirada blasteri yerinden oynatmiyor, bkz. Gb2Yelpaze.)
+	with (o_p1final_gbtop) { target_x = x; target_y = y; }
+	audio_play_sound(snd_pullback,2,false);
+};
+
+IsinAdim = function()
+{
+	if (!isin_on) { return; }
+	isin_t += 1;
+
+	// Agiz her kare yeniden okunuyor -- ATES SIRASINDA DA. Onceden ates
+	// aninda konum kilitleniyordu; blaster ates ederken kayinca isin
+	// havada asili kaliyordu. Ustelik blaster zaten IsinBasla'da yerine
+	// sabitleniyor, yani kilitlemenin bir faydasi da yoktu.
+	var _a = IsinAgiz();
+	isin_x = _a.x;
+	isin_y = _a.y;
+
+	switch (isin_faz)
+	{
+		case 0:	// agiz aciliyor
+			if (instance_exists(o_p1final_gbbottom))
+			{
+				o_p1final_gbbottom.agiz = T20_ISIN_AGIZ*(isin_t/T20_ISIN_ACIL);
+			}
+			if (isin_t >= T20_ISIN_ACIL) { isin_faz = 1; isin_t = 0; }
+			break;
+
+		case 1:	// daire toplaniyor
+			if (isin_t >= T20_ISIN_TOPLA)
+			{
+				isin_faz = 2; isin_t = 0;
+				audio_play_sound(snd_bighit,2,false);
+			}
+			break;
+
+		case 2:	// isin -- ekran sarsiliyor, hasar acik
+			Camera_Shake(3,3,2,2);
+			if (instance_exists(battle_soul))
+			{
+				// Ruh isinin dikey bandinda ve agzin SOLUNDA ise vuruyor.
+				//
+				// HASAR: bu dovuste global.kr ACIK (battle_enemy_engage/Create_0),
+				// yani hasar KARMA yolundan -- hurtkr nesnesi uzerinden --
+				// gidiyor. Dogrudan Battle_CallSoulEventHurt cagirmak o yolu
+				// atliyor ve tek vurusta uzun bir dokunulmazlik biniyordu:
+				// oyuncu 4 hasar alip sonra isinin icinde durup hic hasar
+				// almiyordu. Asagisi oyunun KENDI blaster isininin
+				// (battle_gasterblaster_beam) kullandigi kalibin aynisi.
+				//
+				// (Battle_CallSoulEventBulletCollision da kullanilamiyor: o
+				// once Battle_IsBulletValid(id) diye soruyor, buradaki id ise
+				// TUR NESNESI -- battle_bullet soyundan gelmedigi icin kontrol
+				// daima false donuyordu.)
+				if (abs(battle_soul.y-isin_y) < T20_ISIN_KALIN/2)
+				and (battle_soul.x < isin_x)
+				{
+					if (global.kr)
+					{
+						if (!instance_exists(hurtkr)) { instance_create_depth(0,0,0,hurtkr); }
+					}
+					else if (global._inv < 1)
+					{
+						Battle_CallSoulEventHurt();
+						Player_Hurt(10);
+					}
+				}
+			}
+			if (isin_t >= T20_ISIN_ATES) { isin_faz = 3; isin_t = 0; }
+			break;
+
+		case 3:	// isin sonuyor, agiz kapaniyor
+			if (instance_exists(o_p1final_gbbottom))
+			{
+				o_p1final_gbbottom.agiz = T20_ISIN_AGIZ*max(0,1-isin_t/T20_ISIN_KAPAN);
+			}
+			if (isin_t >= T20_ISIN_KAPAN)
+			{
+				isin_on = false;
+				if (instance_exists(o_p1final_gbbottom)) { o_p1final_gbbottom.agiz = 0; }
+			}
+			break;
+	}
+};
+
+IsinDurdur = function()
+{
+	isin_on = false;
+	if (instance_exists(o_p1final_gbbottom)) { o_p1final_gbbottom.agiz = 0; }
+};
+
+//==========================================================================
+// KAPANIS SAHNESI (faz 1'in son atagi)
+// Pattern bitince Sans guluyor; sonra uzerlerinde iki buyuk sinematik
+// kesik cikiyor, blaster catliyor (s_p1final_gbtop'un 1. ve 2. kareleri:
+// once kirik, sonra gozu sonmus) ve rig uc parcaya ayrilip dusuyor.
+// Dusus boyunca cizgi romandaki gibi BOOM / POW patlamalari cikiyor.
+//
+// KATMAN SIRASI (GM'de kucuk depth ONDE):
+//   sinematik kesik  -9999999   en onde
+//   BOOM / POW       -1500000   Sans'in ve blaster'in onunde
+//   Sans (gbsans)     -999999
+//   blaster           -99999
+// Bu yuzden patlamalar instance_create_depth ile degil, yaratildiktan
+// SONRA depth atanarak yerlestiriliyor (Create_0'lari depth'i eziyor).
+//==========================================================================
+#macro T20_SON_GULME    150	/// kahkahanin suresi
+#macro T20_SON_SLASH    175	/// ilk kesik
+#macro T20_SON_SLASH2   183	/// ikinci kesik (capraz)
+#macro T20_SON_KIR      230	/// rig'in dagilmasi
+#macro T20_SON_POP_ARA   26	/// dususte patlama araligi
+#macro T20_SON_POP_SON  340	/// patlamalarin sonu (parcalar bu civarda ekrandan cikiyor)
+#macro T20_SON_TEMIZ    350	/// kalanlarin silinmesi
+#macro T20_SON_PERDE    270	/// beyaz perdenin acilmaya basladigi an
+#macro T20_SON_PERDE_AC  0.0125	/// perdenin acilma hizi (80 kare)
+#macro T20_SON_PERDE_KAP 0.0075	/// perdenin kapanma hizi (134 kare) --
+								/// ruhun yerine isinlandigi 5420. kareyi de ortuyor
+
+son_on = false;
+son_t = 0;
+
+///Rig'in o anki gorsel merkezi (blaster yoksa son bilinen yer).
+SonMerkez = function()
+{
+	if (instance_exists(o_p1final_gbtop)) { return { x : o_p1final_gbtop.x, y : o_p1final_gbtop.y }; }
+	return { x : 470, y : 160 };
+};
+
+///Tek bir cizgi roman patlamasi. _pow true ise POW, degilse BOOM.
+SonPop = function(_x,_y,_pow,_olcek)
+{
+	var _o = instance_create_depth(_x-61*_olcek,_y-53*_olcek,0,
+		_pow ? o_p1final_explosion_1 : o_p1final_explosion);
+	_o.manuel = true;
+	_o.depth = -1500000;
+	_o.image_xscale = _olcek;
+	_o.image_yscale = _olcek;
+};
+
+///Sinematik kesik. FIGHT menusundeki vurus animasyonunun ta kendisi
+///(spr_battle_menu_fight_anim_knife): dikey kirmizi bir yirtik, 6 kare.
+///Origin sprite'in MERKEZINDE, o yuzden verilen nokta kesigin ortasi.
+SonKesik = function(_x,_y,_aci,_ox,_oy)
+{
+	var _o = instance_create_depth(_x,_y,-9999999,o_p1final_sansslash);
+	_o.scripted = true;
+	_o.anim = true;
+	_o.sprite_index = spr_battle_menu_fight_anim_knife;
+	_o.image_index = 0;
+	_o.image_speed = 1;
+	_o.image_angle = _aci;
+	_o.image_xscale = _ox;
+	_o.image_yscale = _oy;
+	_o.image_alpha = 1;
+	_o.sure = 60;		/// emniyet: animasyon takilirsa yine de silinsin
+};
+
+///Kapanis sahnesini baslatir: butun mermiler temizlenir, Sans guler.
+SonBasla = function()
+{
+	son_on = true;
+	son_t = 0;
+	with (battle_regularbone) { instance_destroy(); }
+
+	// Blaster yerinde duruyor, agzi kapali.
+	with (o_p1final_gbtop) { target_x = x; target_y = y; image_index = 0; }
+	with (o_p1final_gbbottom) { agiz = 0; }
+
+	with (o_p1final_gbsans)
+	{
+		sprite_index = s_p1final_sans_laugh;
+		image_index = 0;
+		image_speed = 1;
+	}
+	audio_play_sound(snd_sans_laugh,3,false);
+};
+
+///Kesikler: Sans'in ve blaster'in uzerinde capraz iki buyuk kesik.
+SonSlash = function(_ikinci)
+{
+	var _m = SonMerkez();
+	if (!_ikinci)
+	{
+		// Rig'in tam uzerine, hafif egik.
+		SonKesik(_m.x-8,_m.y+8,26,4.2,3.4);
+		audio_play_sound(snd_slice,4,false);
+		Camera_Shake(7,7,3,3);
+		// Blaster catliyor (gbtop'un 1. karesi).
+		with (o_p1final_gbtop) { image_index = 1; }
+		with (o_p1final_gbbottom) { agiz = 7; }
+		// Sans donuyor: kahkaha bitti.
+		with (o_p1final_gbsans)
+		{
+			sprite_index = s_p1final_sans;
+			image_index = 0;
+			image_speed = 0;
+		}
+	}
+	else
+	{
+		// Capraz ikinci kesik.
+		SonKesik(_m.x+16,_m.y,-26,4.2,3.4);
+		audio_play_sound(snd_slice,4,false);
+		Camera_Shake(9,9,4,4);
+		SonPop(_m.x-30,_m.y+10,false,1.3);
+	}
+};
+
+///Rig dagiliyor: uc parca da kendi hiziyla dusuyor.
+SonKir = function()
+{
+	var _m = SonMerkez();
+	audio_play_sound(snd_slash_boom,4,false);
+	audio_play_sound(snd_break_0,4,false);
+	Camera_Shake(12,12,5,5);
+	SonPop(_m.x-20,_m.y-10,false,1.7);
+	SonPop(_m.x+70,_m.y+60,true,1.2);
+
+	// Kafa: gozu sonuyor, hafifce saga savrulup doniyor.
+	with (o_p1final_gbtop)
+	{
+		image_index = 2;
+		serbest = true;
+		vx = 1.3;  vy = -3.4;  vd = -1.5;
+	}
+	// Alt cene: ters yone, daha hizli doniyor.
+	with (o_p1final_gbbottom)
+	{
+		serbest = true;
+		vx = -2.7;  vy = -2.2;  vd = 3.6;
+	}
+	// Sans: en yukari firliyor, dususte sallaniyor. (Origin sprite'in
+	// sag-ust kosesinde oldugu icin donme degil salinim veriliyor, yoksa
+	// kose etrafinda yorunge cizip kayardi.)
+	with (o_p1final_gbsans)
+	{
+		serbest = true;
+		vx = -0.9;  vy = -5.6;
+		sal = 9;  sal_hiz = 3.2;
+	}
+	with (o_p1final_gbsans_expressions) { instance_destroy(); }
+};
+
+///Beyaz perdeyi acar. o_p1_shine tam ekran beyaz bir dikdortgen (spr_pixel,
+///641x481 olcekli) ve her kare image_alpha'yi target_alpha'ya dogru
+///fade_speed kadar tasiyor; bizim yapmamiz gereken sadece hedefi vermek.
+SonPerdeAc = function()
+{
+	with (o_p1_shine)
+	{
+		// Baslangicta target_alpha -1, image_alpha da oraya inmis olabilir;
+		// perde sifirdan acilsin diye once yerine oturtuluyor.
+		image_alpha = max(0,image_alpha);
+		fade_speed = T20_SON_PERDE_AC;
+		target_alpha = 1;
+	}
+};
+
+///Beyaz perdeyi kapatir: bosluk kapanip kutu yerine otururken yavasca
+///aciliyor ve arkasindan duzenlenmis savas alani cikiyor.
+SonPerdeKapat = function()
+{
+	with (o_p1_shine)
+	{
+		fade_speed = T20_SON_PERDE_KAP;
+		target_alpha = 0;
+	}
+};
+
+///Kalanlari temizler.
+SonTemizle = function()
+{
+	with (o_p1final_gbtop) { instance_destroy(); }
+	with (o_p1final_gbbottom) { instance_destroy(); }
+	with (o_p1final_gbsans) { instance_destroy(); }
+	with (o_p1final_explosion) { instance_destroy(); }
+	with (o_p1final_explosion_1) { instance_destroy(); }
+	with (o_p1final_sansslash) { instance_destroy(); }
+	son_on = false;
+};
+
+///Her adim.
+SonAdim = function()
+{
+	if (!son_on) { return; }
+	son_t += 1;
+
+	// Kahkaha bitiyor: Sans birden ciddilesiyor -- kesikten hemen once
+	// kisa bir sessizlik olsun diye.
+	if (son_t == T20_SON_GULME)
+	{
+		with (o_p1final_gbsans)
+		{
+			sprite_index = s_p1final_sans_serious;
+			image_index = 0;
+			image_speed = 0;
+		}
+		audio_play_sound(snd_warning_slash,3,false);
+	}
+	if (son_t == T20_SON_SLASH)  { SonSlash(false); }
+	if (son_t == T20_SON_SLASH2) { SonSlash(true); }
+	if (son_t == T20_SON_KIR)    { SonKir(); }
+
+	// Parcalar dusmeye basladiktan sonra beyaz perde aciliyor: hem dususu
+	// tacliyor hem de boslugun kapanmasini / kutunun kuculmesini ortuyor.
+	// (Onceden perde inis BITTIKTEN sonra geliyordu, orada sirittigi icin
+	// buraya alindi.)
+	if (son_t == T20_SON_PERDE) { SonPerdeAc(); }
+
+	// Dusen parcalarin uzerinde sirayla patlamalar.
+	if (son_t > T20_SON_KIR) and (son_t < T20_SON_POP_SON)
+	and (((son_t-T20_SON_KIR) mod T20_SON_POP_ARA) == 0)
+	{
+		var _hedef = noone;
+		var _s = irandom(2);
+		if (_s == 0) and (instance_exists(o_p1final_gbsans))  { _hedef = o_p1final_gbsans; }
+		if (_s == 1) and (instance_exists(o_p1final_gbtop))   { _hedef = o_p1final_gbtop; }
+		if (_s == 2) and (instance_exists(o_p1final_gbbottom)){ _hedef = o_p1final_gbbottom; }
+		if (_hedef == noone) and (instance_exists(o_p1final_gbtop)) { _hedef = o_p1final_gbtop; }
+		if (_hedef != noone)
+		{
+			SonPop(_hedef.x+irandom_range(-70,70),_hedef.y+irandom_range(-50,50),
+				(irandom(1) == 0),random_range(0.8,1.4));
+			audio_play_sound(snd_bighit,3,false);
+			Camera_Shake(4,4,2,2);
+		}
+	}
+
+	if (son_t == T20_SON_TEMIZ) { SonTemizle(); }
+};
+
+//==========================================================================
+// FINALDE SANS'IN INISI
+// Sans ekranin ustunden savas alanina iniyor. Hareket final faz'daki
+// inislerin aynisi: hiz sabit degil, mesafe t^2 ile artiyor -- yani
+// hizlanan bir dusus. (Nesnenin kendi lerp'i tam tersini yapiyordu.)
+//
+// s_p1final_sansfall_1 artik TEK kare: sadece dusme pozu. Onceki 22
+// karelik halinde aradaki pozlar inise uymuyordu, o yuzden kare surme
+// tamamen kalkti. Nesnenin kendi "kare 0'da yok ol" kurali da tek karede
+// hemen tetiklenecegi icin manuel bayragiyla kapatiliyor.
+//==========================================================================
+#macro T20_FIN_DUS_BAS  5500	/// inisin basladigi kare
+#macro T20_FIN_DUS_SURE  105	/// inis suresi (22 kare / 12 fps = 105 kare)
+// Yeni tek kare (eski 21. kare) sprite icinde y 252..479 arasinda; eski
+// bitis karesi (0) ise 298..501 arasindaydi. -256 ayaklari degil tuvali
+// hizaliyordu, o yuzden Sans 46 px yukari kayip basi ekrandan tasiyordu.
+// -234 ayak hizasini eskisiyle ayni yere (ekranda y 245) getiriyor.
+#macro T20_FIN_DUS_Y    -234	/// inisin bittigi y (ayak hizasi 245)
+#macro T20_FIN_DUS_EGRI  2.2	/// inis egrisi: buyuk deger = daha hizli giris
+#macro FIN_DUS_CIK        14	/// inis sprite'inin solma suresi
+
+fin_dus = false;
+fin_dus_t = 0;
+fin_dus_y0 = -608;
+
+FinDusAdim = function()
+{
+	if (!fin_dus) { return; }
+	fin_dus_t += 1;
+	var _o = min(1,fin_dus_t/T20_FIN_DUS_SURE);
+	// Sans ekranin COK ustunden (y0 -608) geliyor: yolun ilk ucte biri
+	// kadraj disinda. Duz hizlanan bir egri kullanilinca gorunur kisim
+	// sadece son 40 kare oluyordu. Bunun yerine kadraja HIZLI giriyor
+	// (girerken ~6 px/kare) ve inisi tamamlarken yavasliyor -- yani
+	// yukaridan dusup ayaklarinin uzerine konuyor.
+	var _f = 1-power(1-_o,T20_FIN_DUS_EGRI);
+	with (o_p1final_fall_1)
+	{
+		y = other.fin_dus_y0+(T20_FIN_DUS_Y-other.fin_dus_y0)*_f;
+		target_y = y;
+	}
+	if (fin_dus_t >= T20_FIN_DUS_SURE)
+	{
+		fin_dus = false;
+		// Inis bitti: yere basmanin sarsintisi.
+		// Konusun sarsintisi: sert bir carpma degil, ayaga inis.
+		Camera_Shake(4,5,2,2);
+		audio_play_sound(snd_impact,2,false);
+	}
 };

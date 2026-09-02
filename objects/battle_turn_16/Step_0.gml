@@ -56,7 +56,7 @@ if (room == room_battle)
 	}
 	if (_timer > 220) and (_timer < 720)
 	{
-		if (_timer % 45 == 0)
+		if (_timer % 52 == 0)
 		{
 			RegularBone(left_box,bottom_box,24,2.5,0,0,0,0,1,0,0,0,0,true);
 			RegularBone(left_box,top_box,104,2.5,0,180,0,0,1,0,0,0,0,true);

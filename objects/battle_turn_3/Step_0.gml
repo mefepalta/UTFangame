@@ -13,7 +13,7 @@ if (room == room_battle)
 	if (_timer == 1)
 	{
 		Battle_SlamDown();
-		Battle_SetBoardSizeCubic(65,65,220,220);
+		Battle_SetBoardSizeCubic(35,65,220,220);
 		audio_play_sound(snd_impact,2,false);
 	}
 	if (_timer > 0) and (_timer < 580) and (_timer % 50 == 0)
@@ -36,67 +36,50 @@ if (room == room_battle)
 	{
 		Battle_SetBoardSizeCubic(65,65,110,110);
 	}
-	if (_timer > 650) and (_timer < 1150) and (_timer % 60 == 0)
-	{
-		RegularBone(left_box + 120,bottom_box + 30,24,0,-2,0,0,0,1,0,0,0,0,true);
-	}
-	if (_timer > 650) and (_timer < 1150) and (_timer % 70 == 0)
-	{
-		RegularBone(left_box,bottom_box,24,2,0,0,0,0,1,0,0,0,0,true);
-	}
+	// NOT: burada eskiden left_box+120'den yukselen bir kemik vardi. O nokta
+	// kutunun tam ortasi; duvarin boslugu ortaya dustugunde oyuncuyu
+	// boslugun icinde sikistiriyordu, o yuzden kaldirildi. Zemindeki yatay
+	// kemik (asagidaki %70) dokusu saglamaya devam ediyor.
+	// NOT: burada vurus boyunca soldan saga suzulen bir zemin kemigi vardi.
+	// Dalga tavandan geldiginde oyuncu zaten asagi serite inmek zorunda
+	// oluyor ve bu kemik tam oraya denk geliyordu; kaldirildi.
 	if (_timer == 650)
 	{
 		with (o_smaaash)
 		{
-			audio_play_sound(snd_smash_rise,2,0);
+			// Yukselme sesini o_smaaash 0. karede kendisi caliyor; burada bir
+			// daha calmiyoruz. prev_frame sifirlaniyor ki dongunun kare
+			// olaylari (ozellikle 7. karedeki carpma) bastan yakalansin.
+			prev_frame = -1;
+			hiz = T3_SLAM_HIZ;	// dongu ~114 kare: dalga rahatca tarayip bitiyor
+			image_index = 0;
 			_ready = true;
 		}
 	}
-	if (_timer > 650) and (_timer % 90 == 0)
+
+	// Uc dalga: carpmalar 750, 892 ve 1034. Sonuncusu 1132'de tarayip
+	// bitiyor, bolum 1200'de kapaniyor -- hicbir dalga yarida kesilmiyor.
+	// Sok dalgasi tam YERE CARPMA karesinde basliyor -- kol kalkarken
+	// oyuncu vurusun geldigini goruyor, carpma aninda da sarsinti + dalga
+	// birlikte cikiyor. 1000'den sonra yeni dalga yok ki sonuncusu bolum
+	// bitmeden tarayip bitsin.
+	if (_timer >= 650) and (_timer <= 1050) and (o_smaaash.vurdu)
 	{
-		bluddy = random_range(0,1);
+		DalgaBasla();
 	}
-	if (bluddy < 0.5) and (bluddy >= 0)
-	{
-		if (_timer > 650) and (_timer < 1150) and (_timer % 90 == 0)
-		{
-			RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(left_box + random_range(0,00),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-		}
-		}
-	if (bluddy > 0.5) and (bluddy <= 1)
-	{
-		if (_timer > 650) and (_timer < 1150) and (_timer % 90 == 0)
-		{
-		
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-		}
-	}
-	if (_timer == 1150)
+	DalgaAdim();
+	if (_timer == 1200)
 	{
 		with (o_smaaash)
 		{
 			_ready = false;
+			hiz = 1;	// diger sahneler icin varsayilan tempoya donuyor
 		}
+		DalgaTemizle();
 		anotherTest = instance_create_depth(0,0,0,battle_dialog_enemy);
 		anotherTest.text = "{font 3}{voice 3}{head 13}{squish 1.2}you'll soon get what's&coming to you.";
 	}
-	if (_timer > 1150)
+	if (_timer > 1200)
 	{
 		if !(instance_exists(anotherTest))
 		{

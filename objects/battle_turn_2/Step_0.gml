@@ -30,21 +30,21 @@ if (room == room_battle)
 	{
 		RegularBone(right_box,top_box,104,-4,0,180,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 85)
+	if (_timer == 95)
 	{
 		RegularBone(right_box,top_box,26,-4,0,180,0,0,1,0,0,0,0,true);
 		RegularBone(left_box,top_box,26,4,0,180,0,0,1,0,0,0,0,true);
 		RegularBone(right_box,bottom_box,104,-4,0,0,0,0,1,0,0,0,0,true);
 		RegularBone(left_box,bottom_box,104,4,0,0,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 115)
+	if (_timer == 125)
 	{
 		RegularBone(right_box,top_box,104,-4,0,180,0,0,1,0,0,0,0,true);
 		RegularBone(left_box,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
 		RegularBone(right_box,bottom_box,26,-4,0,0,0,0,1,0,0,0,0,true);
 		RegularBone(left_box,bottom_box,26,4,0,0,0,0,1,0,0,0,0,true);
 	}
-	if (_timer > 135) and (_timer < 190)
+	if (_timer > 155) and (_timer < 210)
 	{
 		if (_timer % 15 == 0)
 		{
@@ -52,33 +52,25 @@ if (room == room_battle)
 		    RegularBone(left_box,bottom_box,104,4,0,0,0,0,1,0,0,0,0,true);
 		}
 	}
-	if (_timer == 215)
+	if (_timer == 235)
 	{
 	    Battle_SetBoardSizeCubic(65,65,150,150);
 		Battle_SlamDown();
 		audio_play_sound(snd_impact,2,0);
 	}
-	if (_timer == 230)
-	{
-		RegularBone(right_box,top_box,60,-4,0,180,0,0,1,0,0,0,0,true);
-		RegularBone(right_box,bottom_box,60,-4,0,0,0,0,1,0,0,0,0,true);
-	}
-	if (_timer == 235)
-	{
-		RegularBone(right_box,top_box,60,-4,0,180,0,0,1,0,0,0,0,true);
-		RegularBone(right_box,bottom_box,60,-4,0,0,0,0,1,0,0,0,0,true);
-	}
 	if (_timer == 250)
 	{
-		RegularBone(left_box,bottom_box,30,3,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,top_box,60,-4,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,60,-4,0,0,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 260)
+	if (_timer == 255)
 	{
-		RegularBone(left_box,bottom_box,60,3,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,top_box,60,-4,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,60,-4,0,0,0,0,1,0,0,0,0,true);
 	}
 	if (_timer == 270)
 	{
-		RegularBone(left_box,bottom_box,90,3,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box,bottom_box,30,3,0,0,0,0,1,0,0,0,0,true);
 	}
 	if (_timer == 280)
 	{
@@ -86,70 +78,78 @@ if (room == room_battle)
 	}
 	if (_timer == 290)
 	{
+		RegularBone(left_box,bottom_box,90,3,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer == 300)
+	{
+		RegularBone(left_box,bottom_box,60,3,0,0,0,0,1,0,0,0,0,true);
+	}
+	if (_timer == 310)
+	{
 		RegularBone(left_box,bottom_box,30,3,0,0,0,0,1,0,0,0,0,true);
 	}
 
-	if (_timer == 350)
+	if (_timer == 370)
 	{
 		RegularBone(right_box,bottom_box,94,-4,0,0,0,0,1,0,0,0,0,true);
 		RegularBone(right_box,top_box,31,-4,0,180,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 350)
+	if (_timer == 370)
 	{
 		RegularBlaster(320,-50,320,top_box-100,270,270,20,20,2,2,50);
 		RegularBlaster(320,-50,200,top_box-100,270,270,20,20,2,2,50);
 		RegularBlaster(320,-50,440,top_box-100,270,270,20,20,2,2,50);
 	}
-	if (_timer == 355)
+	if (_timer == 375)
 	{
 		RegularBone(right_box,bottom_box,74,-4,0,0,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 360)
+	if (_timer == 380)
 	{
 		RegularBone(right_box,bottom_box,54,-4,0,0,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 365)
+	if (_timer == 385)
 	{
 		RegularBone(right_box,bottom_box,34,-4,0,0,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 375)
-	{
-		RegularBone(left_box,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
-	}
-	if (_timer == 380)
-	{
-		RegularBone(left_box,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
-	}
-	if (_timer == 385)
-	{
-		RegularBone(left_box,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
-	}
-	if (_timer == 390)
-	{
-		RegularBone(right_box,bottom_box,44,-3,0,0,1,0,1,0,0,0,0,true);
-	}
 	if (_timer == 395)
 	{
-		RegularBone(right_box,bottom_box,44,-3,0,0,1,0,1,0,0,0,0,true);
+		RegularBone(left_box,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
 	}
 	if (_timer == 400)
 	{
+		RegularBone(left_box,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
+	}
+	if (_timer == 405)
+	{
+		RegularBone(left_box,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
+	}
+	if (_timer == 410)
+	{
 		RegularBone(right_box,bottom_box,44,-3,0,0,1,0,1,0,0,0,0,true);
 	}
-	if (_timer > 500) and (_timer < 560) and (_timer % 10 == 0)
+	if (_timer == 415)
+	{
+		RegularBone(right_box,bottom_box,44,-3,0,0,1,0,1,0,0,0,0,true);
+	}
+	if (_timer == 420)
+	{
+		RegularBone(right_box,bottom_box,44,-3,0,0,1,0,1,0,0,0,0,true);
+	}
+	if (_timer > 520) and (_timer < 580) and (_timer % 10 == 0)
 	{
 		RegularBone(left_box,bottom_box,70,4,0,0,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 650)
+	if (_timer == 670)
 	{
 	    Battle_SetBoardSizeCubic(65,65,65,65);
 	}
-	if (_timer > 650) and (_timer % 40 == 0) and (_timer < 1000)
+	if (_timer > 670) and (_timer % 40 == 0) and (_timer < 1020)
 	{
 		RegularBone(left_box,bottom_box,33,4,0,0,0,0,1,0,0,0,0,true);
 		RegularBone(right_box,top_box,117,-4,0,180,0,0,1,0,0,0,0,true);
 	}
-	if (_timer == 1000)
+	if (_timer == 1020)
 	{
 		Battle_SetSoul(battle_soul_red);
 		Battle_SetMenuDialog("* Sans forces a smile.")

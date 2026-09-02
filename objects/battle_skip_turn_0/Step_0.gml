@@ -1024,41 +1024,11 @@ if (room == room_battle)
 				_ready = true;
 			}
 		}
-		if (_timer > 650) and (_timer % 90 == 0)
-		{
-			bluddy = random_range(0,1);
-		}
-		if (bluddy < 0.5) and (bluddy >= 0)
-		{
-			if (_timer > 650) and (_timer < 1150) and (_timer % 90 == 0)
-			{
-				RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(left_box + random_range(0,00),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(left_box + random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			}
-			}
-		if (bluddy > 0.5) and (bluddy <= 1)
-		{
-			if (_timer > 650) and (_timer < 1150) and (_timer % 90 == 0)
-			{
-		
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-				RegularBone(right_box - random_range(0,80),top_box - 20,random_range(24,48),0,random_range(2,5),random_range(0,360),0,0,1,0,0,0,0,true);
-			}
-		}
+		// NOT: burada battle_turn_3'un eski rastgele kemik yagmurunun bir
+		// kopyasi duruyordu. O desen (random konum/boy/hiz/aci) atak 3'te
+		// sok dalgasiyla degistirildi; burasi da erisilemez durumda
+		// (sanstalk 12'de duruyor ve teslim turlari artik gercek turlari
+		// oynatiyor), o yuzden kopya silindi.
 		if (_timer == 1150)
 		{
 			with (o_smaaash)

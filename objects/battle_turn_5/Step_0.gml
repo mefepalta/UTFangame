@@ -90,10 +90,10 @@ if (room ==  room_battle)
 		Battle_SetSoul(battle_soul_red);
 		audio_play_sound(snd_ding,2,false);
 		Battle_SetBoardSizeCubic(65,65,65,65);
-		RegularBlaster(320,-50,320,top_box-100,270,270,20,20,2,2,50);
-		RegularBlaster(-50,battle_board.y,left_box-100,battle_board.y,0,0,20,20,2,2,50);
-		RegularBlaster(690,battle_board.y,right_box+100,battle_board.y,180,180,20,20,2,2,50);
-		RegularBlaster(320,540,320,bottom_box+100,90,90,20,20,2,2,50);
+		RegularBlaster(320,-50,320,top_box-100,270,270,20,20,1.75,2,50);
+		RegularBlaster(-50,battle_board.y,left_box-100,battle_board.y,0,0,20,20,1.75,2,50);
+		RegularBlaster(690,battle_board.y,right_box+100,battle_board.y,180,180,20,20,1.75,2,50);
+		RegularBlaster(320,540,320,bottom_box+100,90,90,20,20,1.75,2,50);
 	
 		Anim_Create(battle_board,"angle",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,0,45,90);
 	}

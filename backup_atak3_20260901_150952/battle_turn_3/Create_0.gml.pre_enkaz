@@ -1,0 +1,115 @@
+_timer=0;
+_start=false;
+cang=false;
+canga=0;
+
+bluddy = -1;
+smaaashready = 0
+
+//==========================================================================
+// ATAK 3 -- YER VURUSU (faz 1)
+// Eskiden her vurusta ekranin ustunden dokuz kemik dokuluyordu; konumu,
+// boyu, hizi, acisi ve hangi taraftan gelecegi tamamen random_range ile
+// seciliyordu. Boyle bir desen ezberlenemedigi icin bolum no-hit
+// oynanamiyordu.
+//
+// Yeni desen -- SOK DALGASI: Sans ayagini yere vurunca sarsinti kutuyu bir
+// uctan obur uca tariyor ve gectigi her noktada bir diken firliyor.
+// Dikenler bir vurusta HEP AYNI taraftan geliyor: bir vuruste zeminden,
+// sonrakinde tavandan. Oyuncunun tek isi dalga kendisine varmadan once
+// dogru seride gecmek -- dalganin ICINDE serit degistirmesi gerekmiyor.
+//
+// Sarsinti uzaklastikca zayifliyor: dikenler dalganin basladigi uctan
+// obur uca dogru kisaliyor, yani guvenli serit gittikce genisliyor.
+//
+// Zamanlama: kol kalkiyor (uyari), yere carpiyor ve dalga tam o karede
+// yayilmaya basliyor. Iki vurus arasinda serit degistirmeye fazlasiyla
+// yetecek bosluk var. Yon ve taraf sabit dizilerden geliyor, rastgelelik
+// hicbir yerde yok.
+//==========================================================================
+#macro T3_SLAM_HIZ    0.60	/// vurus temposu (dongu ~142 kare, hazirlik ~100)
+#macro T3_DALGA_SLOT    11	/// dalganin tarayacagi nokta sayisi (20 px arayla)
+#macro T3_DALGA_ADIM     6	/// iki nokta arasindaki gecikme -> 3.3 px/kare
+#macro T3_DALGA_BOY     88	/// dalganin basindaki diken boyu (kutu 130)
+#macro T3_DALGA_SONUM 0.20	/// uca dogru kisalma orani -- sarsinti zayifliyor
+#macro T3_DALGA_CIK      6	/// dikenin firlamasi
+#macro T3_DALGA_KAL     24	/// tepede kalmasi
+#macro T3_DALGA_IN       8	/// geri cekilmesi
+
+/// Her vurus icin: yon (1 = soldan saga) ve dikenlerin hangi taraftan
+/// geldigi (true = zemin). Ikisi de her vuruste degisiyor.
+dalga_yon   = [ 1,-1, 1,-1];
+dalga_zemin = [ 1, 0, 1, 0];
+dalga_no = 0;
+
+dalga_on = false;	/// dalga suruyor mu
+dalga_t = 0;		/// dalga basladigindan beri gecen kare
+dalga_i = 0;		/// sirada hangi nokta var
+dalga_kemik = [];
+
+///Bir dikeni firlatir. _zemin true ise zeminden yukselir, degilse tavandan
+///sarkar. Kemik once uzar, bir sure durur, sonra geri cekilir.
+///Kare 0 = Sans'in normal kemigi (1 Papyrus'unki), bottom 1 = zeminin
+///altinda kalan yuvarlak uc cizilmiyor.
+DalgaDiken = function(_bx,_zemin,_boy)
+{
+	var _y = _zemin ? (battle_board.y+battle_board.down-2) : (battle_board.y-battle_board.up+2);
+	var _aci = _zemin ? 0 : 180;
+	var _b = RegularBone(_bx,_y,0,0,0,_aci,0,0,1,0,0,1,0,false);
+	Anim_Create(_b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,0,_boy,T3_DALGA_CIK);
+	Anim_Create(_b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.IN,_boy,-_boy,
+		T3_DALGA_IN,T3_DALGA_CIK+T3_DALGA_KAL);
+	array_push(dalga_kemik,_b);
+	return _b;
+};
+
+///Sahnede kalan dikenleri toplar.
+DalgaTemizle = function()
+{
+	for (var _i = 0; _i < array_length(dalga_kemik); _i++)
+	{
+		if (instance_exists(dalga_kemik[_i])) { instance_destroy(dalga_kemik[_i]); }
+	}
+	dalga_kemik = [];
+};
+
+///Yeni bir sok dalgasi baslatir (yere carpma karesinde cagriliyor).
+DalgaBasla = function()
+{
+	DalgaTemizle();
+	dalga_on = true;
+	dalga_t = 0;
+	dalga_i = 0;
+	dalga_no += 1;
+};
+
+///Her adim: sirasi gelen dikeni firlatir. Butun noktalar tarandiktan ve
+///son diken cekildikten sonra dalga kapaniyor.
+DalgaAdim = function()
+{
+	if (!dalga_on) { return; }
+	dalga_t += 1;
+
+	var _n = (dalga_no-1) mod array_length(dalga_yon);
+	var _yon = dalga_yon[_n];
+	var _zemin = (dalga_zemin[_n] == 1);
+
+	while (dalga_i < T3_DALGA_SLOT) and (dalga_t >= dalga_i*T3_DALGA_ADIM)
+	{
+		// Yon -1 ise noktalar sagdan sola taraniyor.
+		var _slot = (_yon > 0) ? dalga_i : (T3_DALGA_SLOT-1-dalga_i);
+		var _w = battle_board.left+battle_board.right;
+		var _adim = _w/T3_DALGA_SLOT;
+		var _bx = (battle_board.x-battle_board.left)+_adim*(_slot+0.5);
+		// Sarsinti uzaklastikca zayifliyor.
+		var _boy = T3_DALGA_BOY*(1-T3_DALGA_SONUM*(dalga_i/(T3_DALGA_SLOT-1)));
+		DalgaDiken(_bx,_zemin,_boy);
+		dalga_i += 1;
+	}
+
+	if (dalga_i >= T3_DALGA_SLOT)
+	and (dalga_t > (T3_DALGA_SLOT-1)*T3_DALGA_ADIM+T3_DALGA_CIK+T3_DALGA_KAL+T3_DALGA_IN)
+	{
+		dalga_on = false;
+	}
+};

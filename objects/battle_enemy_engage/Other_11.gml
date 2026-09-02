@@ -1,9 +1,7 @@
 /// @description Battle Start
 if (room == room_battle)
 {
-	Battle_SetTurnNumber(1);
-	// Her yeni faz 1 dovusunde temizleniyor: teslim yoluyla bitmediyse
-	// overworld'de bagislama konusmasi oynamali.
+	Battle_SetTurnNumber(20);
 	global.surrender_son = false;
 	audio_play_sound(snd_chevalier,0,true);
 	//Battle_SetState(BATTLE_STATE.TURN_PREPARATION);

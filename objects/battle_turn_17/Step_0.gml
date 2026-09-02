@@ -30,19 +30,19 @@ if (room == room_battle)
 	}
 	if (_timer == 250)
 	{
-		RegularBone(left_box + 150,bottom_box,24,4,0,0,0,0,1,0,0,0,0,true);
-		RegularBone(left_box + 150,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
-		RegularBone(right_box - 150,bottom_box,24,-4,0,0,0,0,1,0,0,0,0,true);
-		RegularBone(right_box - 150,top_box,104,-4,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(left_box + 155,bottom_box,24,4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box + 155,top_box,104,4,0,180,0,0,1,0,0,0,0,true);
+		RegularBone(right_box - 155,bottom_box,24,-4,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(right_box - 155,top_box,104,-4,0,180,0,0,1,0,0,0,0,true);
 	}
 	if (_timer > 270) and (_timer < 841)
 	{
-		if (_timer % 40 == 0)
+		if (_timer % 50 == 0)
 		{
-			RegularBone(left_box + 150,bottom_box,24,3,0,0,0,0,1,0,0,0,0,true);
-			RegularBone(left_box + 100,bottom_box,152,3,0,0,1,0,1,0,0,0,0,true);
-			RegularBone(right_box - 150,bottom_box,24,-3,0,0,0,0,1,0,0,0,0,true);
-			RegularBone(right_box - 100,bottom_box,152,-3,0,0,1,0,1,0,0,0,0,true);
+			RegularBone(left_box + 155,bottom_box,24,3,0,0,0,0,1,0,0,0,0,true);
+			RegularBone(left_box + 105,bottom_box,152,3,0,0,1,0,1,0,0,0,0,true);
+			RegularBone(right_box - 155,bottom_box,24,-3,0,0,0,0,1,0,0,0,0,true);
+			RegularBone(right_box - 105,bottom_box,152,-3,0,0,1,0,1,0,0,0,0,true);
 		}
 	}
 	if (_timer == 840)
@@ -51,20 +51,20 @@ if (room == room_battle)
 	}
     if (_timer > 840) and (_timer < 1301)
 	{
-		if (_timer % 40 == 0)
+		if (_timer % 50 == 0)
 		{
-			RegularBone(left_box + 150,bottom_box,44,3,0,0,0,0,1,0,0,0,0,true);
-			RegularBone(right_box - 150,bottom_box,44,-3,0,0,0,0,1,0,0,0,0,true);
+			RegularBone(left_box + 155,bottom_box,22,3,0,0,0,0,1,0,0,0,0,true);
+			RegularBone(right_box - 155,bottom_box,22,-3,0,0,0,0,1,0,0,0,0,true);
 		}
 	}
 	if (_timer > 840) and (_timer < 1301)
 	{
 		if (_timer % 100 == 0)
 		{
-			RegularBlaster(320,-50,battle_soul.x,battle_soul.y - 40,270,270,20,1,1,1,50);
-			RegularBlaster(320,-50,battle_soul.x - 40,battle_soul.y,0,0,20,1,1,1,50);
-			RegularBlaster(320,-50,battle_soul.x,battle_soul.y + 40,90,90,20,1,1,1,50);
-			RegularBlaster(320,-50,battle_soul.x + 40,battle_soul.y,180,180,20,1,1,1,50);
+			RegularBlaster(320,-50,battle_soul.x,battle_soul.y - 40,270,270,10,1,1,1,50);
+			RegularBlaster(320,-50,battle_soul.x - 40,battle_soul.y,0,0,10,1,1,1,50);
+			RegularBlaster(320,-50,battle_soul.x,battle_soul.y + 40,90,90,10,1,1,1,50);
+			RegularBlaster(320,-50,battle_soul.x + 40,battle_soul.y,180,180,10,1,1,1,50);
 		}
 	}
 	if (_timer == 1450)

@@ -1,0 +1,65 @@
+_timer=0;
+_start=false;
+cang=false;
+canga=0;
+
+bluddy = -1;
+smaaashready = 0
+
+//==========================================================================
+// ATAK 3 -- YER VURUSU (faz 1)
+// Eskiden her vurusta ekranin ustunden dokuz kemik dokuluyordu; konumu,
+// boyu, hizi, acisi ve hangi taraftan gelecegi tamamen random_range ile
+// seciliyordu. Boyle bir desen ezberlenemedigi icin bolum no-hit
+// oynanamiyordu.
+//
+// Yeni desen: her vurus, ZEMINDEN yukselen ve icinde tek bir guvenli
+// bosluk olan bir kemik duvari uretiyor. Duvar motorun kendi
+// RegularBoneWall'undan kuruldugu icin kemikler cikmadan once bosluk
+// disindaki her yerde kirmizi/sari yanip sonen uyari beliriyor -- oyuncu
+// nereye gececegini onceden goruyor. Uyari suresi Sans'in kolunu
+// kaldirmasindan yere carpmasina kadar gecen sureye esit, yani kemikler
+// tam darbe karesinde firliyor.
+//
+// Bosluk sirasi sabit bir dizi: her oynayista ayni, yani ogrenilebilir.
+//==========================================================================
+#macro T3_SLAM_HIZ    0.75	/// vurus animasyonunun temposu (dongu ~114 kare)
+#macro T3_SLAM_UYARI    80	/// kol kalkmasindan carpmaya kadar (kare)
+#macro T3_SLAM_BOSLUK   52	/// guvenli boslugun genisligi (px)
+#macro T3_SLAM_YUK     140	/// kemik boyu -- kutu yuksekligi 130, ustunden gecilemez
+#macro T3_SLAM_KALIS    25	/// kemiklerin ayakta kalma suresi
+#macro T3_SLAM_ARALIK   11	/// kemikler arasi mesafe (motorun her yerdeki olcusu)
+
+/// Bosluk konumlari: kutunun SOL kenarindan piksel ofseti. Kutu 220 px
+/// genisliginde, bosluk 52 px, yani ofset 0..168 arasinda.
+/// Ruh 2 px/kare gidiyor, dalgalar arasinda ~86 kare bos zaman var: yani
+/// iki bosluk arasi en fazla ~170 px olabilir. Diziyi 126 px ile
+/// sinirladik, boylece gecis her zaman rahat yetisiyor.
+slam_yer = [84,0,126,42,168,84];
+slam_no = 0;
+
+///Zeminden yukselen, tek boslugu olan kemik duvari. Bosluk disinda kalan
+///iki parca ayri birer duvar olarak kuruluyor; aradaki uyarisiz serit
+///oyuncunun gecmesi gereken yer.
+SlamDuvar = function()
+{
+	var _x0 = battle_board.x-battle_board.left;
+	var _w  = battle_board.left+battle_board.right;
+	var _g  = slam_yer[slam_no mod array_length(slam_yer)];
+	slam_no += 1;
+
+	_g = clamp(_g,0,_w-T3_SLAM_BOSLUK);
+	var _sol = _g;						/// boslugun solundaki parca
+	var _sag = _w-(_g+T3_SLAM_BOSLUK);	/// sagindaki parca
+
+	if (_sol >= T3_SLAM_ARALIK)
+	{
+		RegularBoneWall(DIR.DOWN,_sol,max(1,round(_sol/T3_SLAM_ARALIK)),T3_SLAM_YUK,
+			_x0,battle_board.y+battle_board.down,T3_SLAM_UYARI,T3_SLAM_KALIS,0,false);
+	}
+	if (_sag >= T3_SLAM_ARALIK)
+	{
+		RegularBoneWall(DIR.DOWN,_sag,max(1,round(_sag/T3_SLAM_ARALIK)),T3_SLAM_YUK,
+			_x0+_g+T3_SLAM_BOSLUK,battle_board.y+battle_board.down,T3_SLAM_UYARI,T3_SLAM_KALIS,0,false);
+	}
+};
