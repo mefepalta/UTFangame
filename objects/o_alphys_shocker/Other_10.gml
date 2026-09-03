@@ -8,10 +8,7 @@ if (global.kr)
 }
 else
 {
-	if (battle_soul._inv < 1)
-	{
-		battle_soul._inv = 50;
-		instance_destroy(hurtkr);
-		Player_Hurt(4);
-	}
+	// FAZ 2 -- klasik hasar. Sok alani duruyor, tekrar vurmasini
+	// dokunulmazlik penceresi ayarliyor.
+	Battle_HurtNormal(DMG_SHOCKER);
 }

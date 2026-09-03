@@ -10,7 +10,14 @@ var top_box = (battle_board.y-battle_board.up)+2;
 
 if (_intro_timer == 1)
 {
-	audio_play_sound(snd_glisterbones,1,true);
+	// FAZ 2 TEMASI. Eskiden snd_glisterbones caliyordu; yerine bu fazin
+	// kendi parcasi kondu (snd_p2theme -- 2:06, dongulu).
+	//
+	// Ses ID'si global'e aliniyor: son atagin dev blaster halkasinda muzik
+	// kisilip tamamen susturuluyor (bkz. battle_turn_20/Step_0, sf_t 1356).
+	// Bu parca BGM sistemiyle degil DOGRUDAN audio_play_sound ile caldigi
+	// icin BGM_SetVolume'a cevap vermiyor; gain bu ID uzerinden veriliyor.
+	global.p2_bgm = audio_play_sound(snd_p2theme,1,true);
 	battle_enemy_engage.p2_head_sprite = spr_p2_head;
 	// o_swoosh_spawner kaldirildi: soldan/sagdan girip donen kutular
 	// (o_bg_swoosh) eski arka planin parcasiydi ve onun mor(180,0,255) ->

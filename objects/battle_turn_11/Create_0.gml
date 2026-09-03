@@ -23,6 +23,13 @@ WallMake = function(_len,_warn)
 		Anim_Create(_b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,0,_len,7,_warn);
 		array_push(wall,_b);
 	}
+
+	// KIRMIZI/SARI UYARI SERIDI. turn 10'daki LeftWall ile ayni gerekce:
+	// duvar RegularBoneWall degil, dogrudan RegularBone. Serit kutunun ALT
+	// kenarinda, kemiklerin cikacagi yuksekligi kapliyor.
+	var _uy = battle_warn(0,0,0,0,_warn);
+	_uy.follow_dir   = DIR.DOWN;
+	_uy.follow_thick = _len;
 };
 
 WallClear = function()

@@ -45,6 +45,20 @@ function fire_dash(SC){
 
 //--- Vuruş dalgası ---
 strike_time=0;
+
+//--- VURUS HALKASI ANAHTARI ---
+//Draw_0'daki genisleyen daire (vurus dalgasi). CIZIM KODU YERINDE,
+//sadece cizilip cizilmeyecegi buradan belirleniyor.
+//
+//KAPALI: surekli dash sirasinda her kirilan bar vurus penceresini
+//yeniden baslatiyor ve her carpismada bir halka patliyordu.
+//
+//GERI GETIRMEK ICIN: asagidaki strike_ring_ac degerini true yap.
+//  true  -> halka oyuncunun kendi vurusunda cikar, zincir
+//           tekrarlarinda cikmaz (Step_0 zinciri false'a cekiyor)
+//  false -> halka hic cizilmez
+strike_ring_ac=false;	//ANA ANAHTAR
+strike_ring=false;		//o anki vurusta cizilecek mi (do_strike kuruyor)
 strike_max=12;
 //Zincir sürerken pencere daha uzun tutuluyor. Kırılış bar menzile GİRDİĞİ
 //anda oluyor, yani sıradaki bar tam bir aralık kadar geride kalıyor:
@@ -125,6 +139,7 @@ function do_strike(POW){
 	strike_pow=POW;
 	strike_time=strike_max;
 	strike_dur=strike_max;
+	strike_ring=strike_ring_ac;	//halka ana anahtardan geliyor
 	strike_rad=(POW==2 ? 78 : 52);
 
 	if(POW==2){

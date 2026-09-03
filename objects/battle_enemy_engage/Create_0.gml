@@ -1,6 +1,30 @@
 // Faz 2 bosta durma animasyonunun zaman birikeni (bkz. Step_0).
 // Her iki faz dalindan once tanimlaniyor.
 p2_anim_t=0;
+
+//==========================================================================
+//  FAZ 1 -> FAZ 1.5 GECISI
+//==========================================================================
+//  Belirleyici darbe inince (global.p1sanshp) eskiden AYNI KARE
+//  room_goto(room_p15) caliyordu: vurus ekranda gorunmeden, muzik calarken,
+//  perde bile inmeden sahne kesiliyordu.
+//
+//  Artik uc asama var:
+//    1) BEKLE    -- darbe okunuyor. Sans yarali pozunda kaliyor (asagidaki
+//                   _head_image = 15 blogu), hasar sayisi ve sarsinti
+//                   oynuyor, muzik ayni anda soluyor.
+//    2) KARARMA  -- perde iniyor.
+//    3) SIYAH    -- tam siyahta kisa bir bekleme, sonra oda degisiyor.
+//  room_p15 de siyahtan aciliyor (bkz. o_textcontroller_p15/Create_0).
+//==========================================================================
+#macro P15_BEKLE    50	/// darbenin okunmasi icin bekleme (kare)
+#macro P15_KARARMA  55	/// perdenin inme suresi
+#macro P15_SIYAH    20	/// tam siyahta bekleme
+
+p15_gecis = 0;			/// 0 = gecis baslamadi; >0 ise kacinci karesinde
+/// Faz 2 temasinin ses ID'si (battle_turn_0 dolduruyor). Son atakta
+/// muzigi kismak icin gerekiyor; parca BGM sistemi disinda caliyor.
+global.p2_bgm = -1;
 global.p2_anim_hiz=1;
 global.p2_anim_hedef=1;
 
@@ -507,3 +531,6 @@ global.p2_anim_hedef=1;
 	Anim_Create(camera,"scale_x",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,2,-1,90);
 	Anim_Create(camera,"scale_y",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,2,-1,90);
 	
+
+// Game Over mesaji icin merhamet turu penceresi (bkz. Step_0 sonu).
+go_mercy_hold = 0;

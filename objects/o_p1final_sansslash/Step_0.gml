@@ -21,5 +21,15 @@ if (scripted)
 
 image_yscale = random_range(0.9,1.1);
 if (place_meeting(x, y, battle_soul))
-    if !(instance_exists(hurtkr))
-         instance_create_depth(0, 0, 0, hurtkr);
+{
+	if (global.kr)
+	{
+		if (!instance_exists(hurtkr)) { instance_create_depth(0, 0, 0, hurtkr); }
+	}
+	else
+	{
+		// FAZ 2 -- klasik hasar. Eskiden burada global.kr kontrolu yoktu:
+		// KR kapali olsa bile kesik hurtkr uretiyordu.
+		Battle_HurtNormal(DMG_SLASH);
+	}
+}

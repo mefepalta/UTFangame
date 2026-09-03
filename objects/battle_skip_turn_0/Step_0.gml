@@ -17,6 +17,19 @@ if (global.p25phase >= 1)
 	exit;
 }
 
+// FAZ 1 SON DUZLUK: yenilgi diyalogundan sonra ISKALAMAK HICBIR SEY YAPMAZ.
+// Nisan cubugunu bilerek kacirinca go_dodge "miss" oluyor ve motor bu skip
+// turunu yaratiyordu; asagisi ise sanstalk degerine gore replik VE atak
+// oynatiyor -- son duzlugun ortasinda alakasiz bir tur cikiyordu.
+// Artik tur aciliyor ve hemen kapaniyor: oyuncu menuye donup tekrar
+// deneyebiliyor. Replik tarafi Other_10 icinde ayni kosulla kesiliyor.
+if (global.finalstretch >= 1) and (room == room_battle)
+{
+	if (_timer == 2) { Battle_SetSoul(battle_soul_red); }
+	if (_timer > 5) and (!instance_exists(battle_dialog_enemy)) { Battle_EndTurn(); }
+	exit;
+}
+
 if (room == room_battle)
 {
 	with (o_p1final_gbsans)
@@ -382,6 +395,10 @@ if (room == room_battle)
 		{
 			if !(instance_exists(anotherTest))
 			{
+				// Gain sifirlaniyor: faz 1.5 gecisi bu parcayi ASSET uzerinden
+				// 0'a soluyor (battle_enemy_engage/Step_0). Olup yeniden
+				// denendiginde sessiz baslamasin.
+				audio_sound_gain(snd_chance,1,0);
 				audio_play_sound(snd_chance,1,true);
 				Battle_SetMenuDialog("* ...")
 				Battle_EndTurn();

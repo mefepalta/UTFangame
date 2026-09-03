@@ -652,16 +652,51 @@ if (global.checkornot == true)
 {
 	instance_destroy(battle_dialog_enemy);
 }
-if (global.p1sanshp == true)
+// FAZ 1'IN SON POZU -- SADECE FAZ 1 ODASINDA.
+// global.p1sanshp vurus indikten sonra hic sifirlanmiyor (o_credits'e
+// kadar acik kaliyor), bu blokta oda kontrolu YOKTU: faz 2'ye gecince de
+// her kare _head_image = 15 yaziliyordu. Faz 2'nin kafasi spr_p2_head
+// iken bu degeri KARE INDISI olarak kullaniyor (Draw_0), yani Sans'in
+// yuzu faz 2 boyunca faz 1'in yarali karesinde takili kaliyordu.
+if (global.p1sanshp == true) and (room == room_battle)
 {
-	if (room == room_battle)
-	{
-		room_goto(room_p15);
-	}
+	// Sans yarali pozunda kaliyor -- gecis boyunca da boyle duruyor.
 	_head_image = 15;
 	_head_alpha = 1;
 	_body_alpha = 1;
 	_legs_alpha1 = 1;
+
+	// FAZ 1 -> FAZ 1.5. Asamalar ve gerekce Create_0'da.
+	if (room == room_battle)
+	{
+		p15_gecis += 1;
+
+		// Perde inerken EKRANDA REPLIK OLMASIN. Vurus turu bitirdigi
+		// icin motor menuye/replige donuyordu; hazirligi Other_18'de
+		// kestik ama o ana kadar acilmis bir balon kalabiliyor.
+		if (instance_exists(battle_dialog_enemy)) { instance_destroy(battle_dialog_enemy); }
+		Battle_SetMenuDialog("");
+
+		if (p15_gecis == 1)
+		{
+			// Darbe aninda sarsinti; muzik de bu andan itibaren soluyor.
+			// snd_chance dogrudan audio_play_sound ile calindigi icin
+			// gain ASSET uzerinden veriliyor (butun ornekleri etkiler).
+			Camera_Shake(6,6,3,3);
+			audio_sound_gain(snd_chance,0,(P15_BEKLE+P15_KARARMA)*(1000/60));
+		}
+
+		if (p15_gecis == P15_BEKLE)
+		{
+			fader.color = c_black;
+			Fader_Fade(0,1,P15_KARARMA);
+		}
+
+		if (p15_gecis >= P15_BEKLE+P15_KARARMA+P15_SIYAH)
+		{
+			room_goto(room_p15);
+		}
+	}
 }
 if (room == room_battle)
 {
@@ -670,4 +705,35 @@ if (room == room_battle)
 if (room == room_battle_1)
 {
 	global.sansphase = 1;
+	// HASAR SISTEMI: faz 2 KARMA degil, klasik hasar kullaniyor. Bayrak her
+	// kare zorlaniyor cunku baska yerler de (battle_ui/Create_0) kuruyor;
+	// olup yeniden baslama dongusunde bir kare bile KR'ye dusmesin.
+	// Degerler: scripts/Macro_Battle -- "FAZ 2 -- NORMAL HASAR SISTEMI".
+	global.kr = false;
 }
+
+// ==================================================================
+//  GAME OVER MESAJ BILGISI
+//  Olum ANINDA degil, HER KARE yaziliyor. Boylece oyuncuyu hangi kod
+//  yolu oldururse oldursun bayrak zaten guncel oluyor; odayi degistiren
+//  tarafin bir sey yapmasi gerekmiyor.
+//    1 = Sans, 2 = Papyrus, 4 = Alphys sahnede (faz 2 kadrosu)
+//    8 = oyuncu MERHAMET turundeyken oldu
+//  Merhamet biti 60 kare tutuluyor: mizrak sahnesi oyuncuyu turun icinde
+//  olduruyor ama tur nesnesi ayni karede yok edilirse bit kacmasin.
+// ==================================================================
+// Bitler TOPLAMAYLA kuruluyor, bitsel VEYA ile degil: GML'de bitsel islemin
+// sonucu int64 tipinde oluyor ve okuyan taraftaki is_real() int64 icin FALSE
+// donuyor -- maske sessizce sifirlaniyordu.
+var _go_cast = 0;
+if (room == room_battle_1)
+{
+	if (p2_state  == 1) or (p2_state  == 2) { _go_cast += 1; }	// Sans
+	if (pap_state == 1) or (pap_state == 2) { _go_cast += 2; }	// Papyrus
+	if (alp_state == 1) or (alp_state == 2) { _go_cast += 4; }	// Alphys
+}
+if (instance_exists(battle_skip_turn_1)) { go_mercy_hold = 60; }
+else if (go_mercy_hold > 0)              { go_mercy_hold--; }
+if (go_mercy_hold > 0) { _go_cast += 8; }
+
+Flag_Set(FLAG_TYPE.TEMP, FLAG_TEMP.GAMEOVER_CAST, _go_cast);

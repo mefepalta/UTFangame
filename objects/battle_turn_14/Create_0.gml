@@ -29,6 +29,14 @@ WallMake = function(_ust,_len,_warn,_sure)
 		Anim_Create(_b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.IN,_len,-_len,12,_warn+7+_sure);
 		array_push(wall,_b);
 	}
+
+	// KIRMIZI/SARI UYARI SERIDI. Bu duvar RegularBoneWall degil, dogrudan
+	// RegularBone ile kuruluyor -- nesnenin kendi seridi yok, sadece ses
+	// vardi. Serit kemikler uzamaya baslayana kadar (_warn kare) yanip
+	// sonuyor ve kutunun ilgili kenarina yapisiyor.
+	var _uy = battle_warn(0,0,0,0,_warn);
+	_uy.follow_dir   = _ust ? DIR.UP : DIR.DOWN;
+	_uy.follow_thick = _len;
 };
 
 Salvo = function()
@@ -55,18 +63,28 @@ AimBlaster = function(_a,_sure,_bekle,_olcek)
 
 GridBeam = function(_yatay,_i,_ters)
 {
-	var _h = (battle_board.left+battle_board.right)/4;
-	var _o = (_i+0.5)*_h-(battle_board.left+battle_board.right)/2;
+	// SERIT MERKEZLERI GERCEK KENARLARDAN OLCULUYOR.
+	// Eskiden hem yatay hem dikey seritler tek bir _o ofsetiyle ve KUTU
+	// GENISLIGINDEN turetilerek battle_board.x/y'ye gore yerlesiyordu.
+	// Bu ancak kutu KARE ve battle_board.y tam ortasindayken dogru: kutu
+	// asimetrik olunca (up != down) seritler kutunun disina tasiyordu.
+	// Artik yatay seritler kutu YUKSEKLIGINE, dikey seritler GENISLIGINE
+	// bolunuyor ve ofset ust/sol KENARDAN olculuyor. Kare-merkezli kutuda
+	// sonuc eskisinin birebir aynisi.
+	var _yuk = battle_board.up+battle_board.down;
+	var _gen = battle_board.left+battle_board.right;
+	var _ly = (battle_board.y-battle_board.up)  +(_i+0.5)*_yuk/4;	/// yatay seridin y'si
+	var _lx = (battle_board.x-battle_board.left)+(_i+0.5)*_gen/4;	/// dikey seridin x'i
 	var _b;
 	if (_yatay)
 	{
-		if (_ters) { _b = RegularBlaster(760,battle_board.y+_o,battle_board.x+battle_board.right+70,battle_board.y+_o,180,180,30,14,1.8,2,44); }
-		else       { _b = RegularBlaster(-120,battle_board.y+_o,battle_board.x-battle_board.left-70,battle_board.y+_o,0,0,30,14,1.8,2,44); }
+		if (_ters) { _b = RegularBlaster(760,_ly,battle_board.x+battle_board.right+70,_ly,180,180,30,14,1.8,2,44); }
+		else       { _b = RegularBlaster(-120,_ly,battle_board.x-battle_board.left-70,_ly,0,0,30,14,1.8,2,44); }
 	}
 	else
 	{
-		if (_ters) { _b = RegularBlaster(battle_board.x+_o,600,battle_board.x+_o,battle_board.y+battle_board.down+70,90,90,30,14,1.8,2,44); }
-		else       { _b = RegularBlaster(battle_board.x+_o,-120,battle_board.x+_o,battle_board.y-battle_board.up-70,270,270,30,14,1.8,2,44); }
+		if (_ters) { _b = RegularBlaster(_lx,600,_lx,battle_board.y+battle_board.down+70,90,90,30,14,1.8,2,44); }
+		else       { _b = RegularBlaster(_lx,-120,_lx,battle_board.y-battle_board.up-70,270,270,30,14,1.8,2,44); }
 	}
 	_b._counter = 0;
 	_b.BlasterDuration = 44;

@@ -426,9 +426,10 @@ if (room == room_battle_1)
 						{
 							if (!instance_exists(hurtkr)) { instance_create_depth(0,0,0,hurtkr); }
 						}
-						else if (global._inv < 1)
+						else
 						{
-							Battle_CallSoulEventHurt();
+							// FAZ 2 -- klasik hasar (bkz. scripts/Macro_Battle)
+							Battle_HurtNormal(DMG_CAR);
 						}
 					}
 				}
@@ -593,9 +594,13 @@ if (room == room_battle_1)
 			Anim_Destroy(battle_board,"down");
 			Anim_Destroy(battle_board,"left");
 			Anim_Destroy(battle_board,"right");
+			// TAHTA GERI: kirmizi bolum icin merkez 295'e cekilmisti
+			// (bkz. Create_0, KirmiziBasla). Bolum biterken 320'ye donuyor.
+			Anim_Destroy(battle_board,"y");
+			Anim_Create(battle_board,"y",ANIM_TWEEN.CUBIC,ANIM_EASE.OUT,battle_board.y,BATTLE_BOARD.Y-battle_board.y,30);
 			Battle_SetBoardSizeCubic(65,65,125,125,30);
 			battle_soul.x = battle_board.x;
-			battle_soul.y = battle_board.y;
+			battle_soul.y = BATTLE_BOARD.Y;
 			with (battle_soul) { moveable = false; }
 			Camera_Shake(3,3,2,2);
 		}

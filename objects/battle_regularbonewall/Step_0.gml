@@ -72,7 +72,12 @@ if _warning_time = 0{
     
 			bon=instance_create_depth(_bone_x, bone_Y, 0, battle_regularbone);
 			bon._length=0
-			bon._inside=1
+			// _inside 0 = kemik KUTU YUZEYINE ciziliyor, yani kutunun disina
+			// tasan kismi kirpiliyor. Sol duvar tek basina 1 idi; DOWN, UP ve
+			// RIGHT dallarinin ucu de 0 kullaniyor. Duvar boyu genelde kutudan
+			// birkac px uzun veriliyor (kenari tam kapatsin diye) -- diger uc
+			// yonde bu tasma kirpilip gizleniyordu, SOLDA ise gorunuyordu.
+			bon._inside=0
 			bon._bottom=1
 			bon._angle=-90
 			bon._papyrus=_papyrus_mode;

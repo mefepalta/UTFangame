@@ -64,10 +64,10 @@ if (_color = 0){
 					instance_create_depth(0, 0, 0, hurtkr)
 				}
 			}else{
-				if(global._inv<1){
-					Battle_CallSoulEventHurt();
-					instance_destroy();
-				}
+				// FAZ 2 -- klasik hasar. Kemik artik YOK EDILMIYOR: uzun
+				// kemikler ve duvarlar tek dokunusta kaybolmasin. Ust uste
+				// vurmayi Battle_HurtNormal'in dokunulmazligi engelliyor.
+				Battle_HurtNormal(DMG_BONE);
 			}
 		}
 	}
@@ -83,6 +83,10 @@ if (_color = 1){
 					if (!instance_exists(hurtkr)){
 						instance_create_depth(0, 0, 0, hurtkr)
 					}
+				}else{
+					// FAZ 2. Eskiden bu dal HIC YOKTU: KR kapaliyken mavi
+					// kemikler tamamen zararsizdi.
+					Battle_HurtNormal(DMG_BONE_BLUE);
 				}
 			}
 		}
@@ -94,8 +98,14 @@ if (_color = 2){
 	if (place_meeting(x,y,battle_soul)){
 		if(battle_soul.x = battle_soul.xprevious&&battle_soul.y = battle_soul.yprevious){
 			if (_alpha = 1){
-				if (!instance_exists(hurtkr)){
-					instance_create_depth(0, 0, 0, hurtkr)
+				if(global.kr){
+					if (!instance_exists(hurtkr)){
+						instance_create_depth(0, 0, 0, hurtkr)
+					}
+				}else{
+					// FAZ 2. Eskiden burada global.kr kontrolu YOKTU: KR
+					// kapali olsa bile turuncu kemik hurtkr uretiyordu.
+					Battle_HurtNormal(DMG_BONE_ORANGE);
 				}
 			}
 		}

@@ -102,9 +102,8 @@ if(reflected && instance_exists(battle_soul)){
 				instance_create_depth(0,0,0,hurtkr);
 			}
 		}else{
-			if(global._inv<1){
-				Battle_CallSoulEventHurt();
-			}
+			// FAZ 2 -- klasik hasar (bkz. scripts/Macro_Battle)
+			Battle_HurtNormal(DMG_DR_REFLECT);
 		}
 		instance_destroy();
 		exit;

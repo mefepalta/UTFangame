@@ -15,10 +15,11 @@ if (image_alpha > dmg_alpha) and (instance_exists(battle_soul))
 		{
 			if (!instance_exists(hurtkr)) { instance_create_depth(0,0,0,hurtkr); }
 		}
-		else if (global._inv < 1)
+		else
 		{
-			// Mizrak yoluna devam ediyor; arka arkaya vurmayi _inv engelliyor.
-			Battle_CallSoulEventHurt();
+			// FAZ 2 -- klasik hasar. Mizrak yoluna devam ediyor; arka arkaya
+			// vurmayi dokunulmazlik penceresi engelliyor.
+			Battle_HurtNormal(DMG_SPEAR);
 		}
 	}
 }

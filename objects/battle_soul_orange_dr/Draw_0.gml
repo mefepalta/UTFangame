@@ -26,8 +26,8 @@ if(SHOW){
 		draw_sprite_ext(spr_dr_dash,DFR,x,y+dash_off_y,dash_scale,dash_scale,dash_dir,c_white,DAL);
 	}
 
-	//--- Vuruş dalgası ---
-	if(strike_time>0){
+	//--- Vuruş dalgası (sadece oyuncunun baslattigi vurusta) ---
+	if(strike_time>0 && strike_ring){
 		var T=1-(strike_time/max(1,strike_dur));
 		draw_set_color(strike_pow==2 ? make_color_rgb(255,190,70) : make_color_rgb(255,140,30));
 		draw_set_alpha(1-T);

@@ -268,7 +268,11 @@ if (room == room_battle_1)
 	if (_timer == 1450)
 	{
 		battle_board.angle = 0;
-		Battle_SetBoardSizeCubic(100,100,100,100,44);
+		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin diye
+		// buyume yukari kaydirildi. Toplam yukseklik AYNI (200), yani izgara
+		// hala 4 esit serit -- GridBeam artik seritleri gercek kenarlardan
+		// olctugu icin kutunun asimetrik olmasi sorun degil.
+		Battle_SetBoardSizeCubic(135,65,100,100,44);
 	}
 
 	if (_timer == 1540)

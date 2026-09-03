@@ -169,7 +169,9 @@ if (room == room_battle_1)
 
 	if (fade_at > 0) and (_timer == fade_at+20)
 	{
-		Battle_SetBoardSizeCubic(67,67,73,73,26);
+		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
+		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
+		Battle_SetBoardSizeCubic(69,65,73,73,26);
 	}
 	if (fade_at > 0) and (_timer == fade_at+64)
 	{
@@ -193,7 +195,9 @@ if (room == room_battle_1)
 	{
 		audio_play_sound(snd_impact,2,false);
 		Battle_SlamDown();
-		Battle_SetBoardSizeCubic(67,67,122,122,34);
+		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
+		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
+		Battle_SetBoardSizeCubic(69,65,122,122,34);
 	}
 	if (fade_at > 0) and (_timer == fade_at+352)
 	{

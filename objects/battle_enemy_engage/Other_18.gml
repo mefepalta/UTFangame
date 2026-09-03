@@ -1,5 +1,12 @@
 ///@desc Turn Preparation Start
 
+// FAZ 1 -> FAZ 1.5 GECISI: belirleyici vurus indiginde tur hazirligi
+// YAPILMIYOR. Vurus turu bitirdigi icin motor hemen siradaki turu
+// kuruyordu -- perde inerken yeni atak basliyor ve replik ekrana
+// dusuyordu. Gecisi battle_enemy_engage/Step_0 yurutuyor, o bitince
+// zaten oda degisiyor.
+if (global.p1sanshp) and (room == room_battle) { exit; }
+
 //Prepare the attack
 ///@desc Turn Preparation Start
 var turn_number = Battle_GetTurnNumber()

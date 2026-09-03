@@ -99,6 +99,9 @@ if(strike_time>0){
 				//Böylece tek input ile art arda kırış sürüyor.
 				other.strike_time=other.chain_time;
 				other.strike_dur=other.chain_time;
+				//Zincir yenilemesinde HALKA CIZILMIYOR: surekli dash
+				//boyunca her kirilan barda bir halka patliyordu.
+				other.strike_ring=false;
 				other.speed_boost=max(other.speed_boost,1);
 				other.dash_time=other.dash_max;
 				other.dash_scale=1.15;

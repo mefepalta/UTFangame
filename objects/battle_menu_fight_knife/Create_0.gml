@@ -7,6 +7,19 @@ global.go_dodge = "block";
 // ekranda BLOCKED yazisi cikiyordu.
 if (global.p25phase >= 1) { global.go_dodge = "damage"; }
 
+// FAZ 1'IN SON DUZLUGU: yenilgi diyalogundan sonra da Sans blocklamiyor,
+// vurus GERCEKTEN iniyor -- faz 1.5'e gecisi bu vurus tetikliyor
+// (battle_enemy_engage/Other_13 -> global.p1sanshp).
+//
+// Tur biterken go_dodge zaten "damage" yapiliyor (battle_turn_20 ve
+// battle_skip_turn_0) AMA yukaridaki 2. satir her FIGHT'ta onu "block"a
+// geri cekiyordu: ekranda BLOCKED cikiyor, hasar islenmiyor ve faz 1.5
+// gecisi hic tetiklenmiyordu. Bu yuzden ayni istisna burada da lazim.
+//
+// finalstretch faz 1'e ozel: p05/p15/p25 kontrolculeri odaya girerken
+// sifirliyor, o yuzden faz 2'yi etkilemiyor. Oda kontrolu yine de var.
+if (global.finalstretch >= 1) and (room == room_battle) { global.go_dodge = "damage"; }
+
 // Hedef Sans degilse onu gizlemeyelim: phase 2de Papyrus/Alphys de birer slot,
 // birine vurunca Sans kaybolup blok sprite'i cikiyordu.
 var _target_slot=Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy());

@@ -1,32 +1,29 @@
-draw_set_font(font_sans_1);
+/// @description Game Over yazisi -- cizim
+
 draw_set_color(c_white);
+draw_set_halign(fa_center);
+draw_set_valign(fa_top);
 
-if (current_line >= 0) {
-    var elapsed = (current_time - start_time) / 1000;
-    var text_to_show = dialogue[current_line].text;
+var _cx = room_width * 0.5;
+var _p  = pages[cur];
 
-    // Count visible characters
-    var chars_visible = floor((elapsed - line_start_time) / char_speed);
-    chars_visible = clamp(chars_visible, 0, string_length(text_to_show));
-
-    // Check each new character since last frame
-    if (chars_visible > last_chars) {
-        for (var i = last_chars + 1; i <= chars_visible; i++) {
-            var new_char = string_char_at(text_to_show, i);
-
-            // Play sound only if not space or punctuation
-            if (new_char != " " && new_char != "." && new_char != "," && new_char != "!" && new_char != "?") {
-                audio_play_sound(snd_text_voice_sans, 1, false);
-            }
-        }
-        last_chars = chars_visible;
-    }
-
-    // Take only visible characters for drawing
-    var visible_text = string_copy(text_to_show, 1, chars_visible);
-
-    // Automatic word wrapping
-    var max_width = 500;
-    var line_sep  = 40;
-    draw_text_ext(245, 390, visible_text, line_sep, max_width);
+// Sayfa konusmacisinin fontuyla ciziliyor: Papyrus'un buyuk harfli fontu,
+// Sans'in comic sans'i, anlatici/Alphys icin Determination Sans. Game Over
+// ekraninda karakterler gorunmedigi icin kimin konustugunu font veriyor.
+if (shown > 0) {
+    draw_set_font(_p.fnt);
+    draw_text_transformed(_cx, _p.y, string_copy(_p.txt, 1, shown), _p.scl, _p.scl, 0);
 }
+
+// Yanip sonen ucgen: tus adi yazmiyoruz cunku CONFIRM tusu ayarlardan
+// degistirilebiliyor.
+if (prompt_a > 0.001) {
+    var _a = prompt_a * (0.35 + 0.65 * (0.5 + 0.5 * dsin(blink * 2.4)));
+    var _y = min(_p.bot + 16, 468);
+    draw_set_alpha(_a);
+    draw_triangle(_cx - 7, _y - 4, _cx + 7, _y - 4, _cx, _y + 5, false);
+    draw_set_alpha(1);
+}
+
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);

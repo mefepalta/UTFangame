@@ -431,13 +431,26 @@ KirmiziBasla = function()
 	Anim_Destroy(battle_board,"down");
 	Anim_Destroy(battle_board,"left");
 	Anim_Destroy(battle_board,"right");
+	Anim_Destroy(battle_board,"y");
 	// Kutu KARE: blaster cemberi merkezden gecen isinlar atiyor, dikdortgen
 	// kutuda yatay isinlar dikeylerden cok daha dar bir guvenli serit
 	// birakiyordu. 180x180 de her acidan 61 px kaliyor.
+	//
+	// ALT KENAR SABIT. Kutu 90/90 kaldi -- up/down'i asimetrik yapmak
+	// BURADA CALISMAZ: cemberin isinlari battle_board.y'den geciyor ve ruh
+	// da oraya konuyor, yani battle_board.y kutunun ORTASI olmak zorunda.
+	// Onun yerine TAHTANIN KENDISI yukari kayiyor: merkez 320 -> 295, alt
+	// kenar 385'te (varsayilan DOWN) kaliyor, kutu kare ve merkezli kaliyor.
+	// Tur sonunda 320'ye geri donuyor (bkz. Step_0, kir_son blogu); ayrica
+	// Battle_SetState tur gecislerinde tahtanin y'sini zaten sifirliyor.
+	var _mrk = BATTLE_BOARD.Y-25;
+	Anim_Create(battle_board,"y",ANIM_TWEEN.CUBIC,ANIM_EASE.OUT,battle_board.y,_mrk-battle_board.y,45);
 	Battle_SetBoardSizeCubic(90,90,90,90,45);
 	Battle_SetSoul(battle_soul_red);
 	battle_soul.x = battle_board.x;
-	battle_soul.y = battle_board.y;
+	// Kutunun VARACAGI merkeze konuyor: bu bolum zaten ruhu isinlayarak
+	// yerlestiriyor, 45 kare boyunca kutuyla birlikte suruklemeye gerek yok.
+	battle_soul.y = _mrk;
 	with (battle_soul) { moveable = true; }
 	Camera_Shake(4,4,3,3);
 

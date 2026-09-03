@@ -136,13 +136,27 @@ if (room == room_battle_1)
 		if ((_timer-560) % 42 == 21) { AraKemik(true);  }
 	}
 
-	if (_timer ==  650) { BlasterCifti(); }
-	if (_timer ==  770) { BlasterCifti(); }
-	if (_timer == 890) { BlasterCifti(); }
-	if (_timer == 1010) { BlasterCifti(); }
+	// CIFT BLASTERLAR -- 120 KARELIK DUZENLI TEMPO
+	// Eskiden dizi 650/770/890/1010/1230/1350/1500 idi: 1010'dan sonra
+	// 220 karelik sebepsiz bir bosluk vardi, sonrasi da tempoya geri
+	// oturmuyordu (1350 -> 1500 arasi 150). Simdi hepsi 120 kare arayla.
+	//
+	// Dizi 650 yerine 630'da BASLIYOR ve bir cift EKLENDI (7 -> 8): boylece
+	// 120'lik tempo bolumun sonuna kadar kesintisiz gidiyor ve sonda 200
+	// karelik blastersiz bir kuyruk kalmiyor.
+	//
+	// Son cift 1470'te: blaster dogumdan atese ~88 kare aliyor (50 yol +
+	// 1 bekleme + ~7 hazirlik + 10 acilma + 20 isin), yani ~1558'de isini
+	// bitiriyor ve 1580'deki temizlige 22 kare kaliyor. Eski 1500'luk son
+	// cift bu hesaba gore GEC kaliyordu: isini bitiremeden siliniyordu.
+	if (_timer ==  630) { BlasterCifti(); }
+	if (_timer ==  750) { BlasterCifti(); }
+	if (_timer ==  870) { BlasterCifti(); }
+	if (_timer ==  990) { BlasterCifti(); }
+	if (_timer == 1110) { BlasterCifti(); }
 	if (_timer == 1230) { BlasterCifti(); }
 	if (_timer == 1350) { BlasterCifti(); }
-	if (_timer == 1500) { BlasterCifti(); }
+	if (_timer == 1470) { BlasterCifti(); }
 
 	if (_timer == 1580)
 	{

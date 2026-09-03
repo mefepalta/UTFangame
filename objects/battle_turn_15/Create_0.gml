@@ -11,7 +11,16 @@ plat = noone;
 arm_reset = -1;
 roof = [];
 
-ForestMake = function(_count,_len,_sure)
+///@arg count	kac kemik
+///@arg len		kemiklerin boyu
+///@arg sure	kac karede uzayacaklar
+///@arg [warn]	uzamadan once kirmizi/sari uyari seridi kac kare yanacak
+///
+///Yerdeki kemik ormani. Turuncu ruh bolumunden sonraki mavi ruh parkurunun
+///zemini: kemikler kutunun ALT kenarindan cikip yerinde kaliyor.
+///Eskiden uyari YOKTU -- sadece snd_exclamation caliyordu ve kemikler
+///dogrudan uzamaya basliyordu.
+ForestMake = function(_count,_len,_sure,_warn = 0)
 {
 	forest = [];
 	forest_x = [];
@@ -24,9 +33,18 @@ ForestMake = function(_count,_len,_sure)
 	{
 		var _bx = _x0+_i*_gap;
 		var _b = RegularBone(_bx,_y,0,0,0,0,0,0,1,1,0,0,0,false);
-		Anim_Create(_b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.IN,0,_len,_sure);
+		Anim_Create(_b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.IN,0,_len,_sure,_warn);
 		array_push(forest,_b);
 		array_push(forest_x,_bx);
+	}
+
+	// KIRMIZI/SARI UYARI SERIDI. Duvarlardakinin aynisi: serit kutunun ALT
+	// kenarina yapisiyor ve kemikler uzamaya baslayana kadar yanip sonuyor.
+	if (_warn > 0)
+	{
+		var _uy = battle_warn(0,0,0,0,_warn);
+		_uy.follow_dir   = DIR.DOWN;
+		_uy.follow_thick = _len;
 	}
 };
 

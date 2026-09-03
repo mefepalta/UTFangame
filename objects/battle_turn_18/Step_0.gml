@@ -603,9 +603,10 @@ if (room == room_battle_1)
 						{
 							if (!instance_exists(hurtkr)) { instance_create_depth(0,0,0,hurtkr); }
 						}
-						else if (global._inv < 1)
+						else
 						{
-							Battle_CallSoulEventHurt();
+							// FAZ 2 -- klasik hasar (bkz. scripts/Macro_Battle)
+							Battle_HurtNormal(DMG_CAR);
 						}
 					}
 				}
@@ -729,17 +730,82 @@ if (room == room_battle_1)
 				audio_play_sound(snd_break_0,0,false);
 				Camera_Shake(5,5,3,3);
 			}
-			else if (gst_state == 2) and (_gmes <= 30)
+			else if (gst_state == 2) and (_gmes <= 30) and (kon_tep_t < 0)
 			{
 				if (global.kr)
 				{
 					if (!instance_exists(hurtkr)) { instance_create_depth(0,0,0,hurtkr); }
 				}
-				else if (global._inv < 1)
+				else
 				{
-					Battle_CallSoulEventHurt();
+					// FAZ 2 -- klasik hasar (bkz. scripts/Macro_Battle)
+					Battle_HurtNormal(DMG_GUEST);
+				}
+
+				// CARPISMA TEPKISI -- ikisi de geri gidiyor.
+				// Kalp: Konuk'un TERSI yone itilip eski x'ine donuyor
+				// (asagidaki kon_tep blogu yurutuyor). Kutu kenarina
+				// dayaninca itme orada kesiliyor, disari tasmiyor.
+				var _yon = sign(battle_soul.x-gst_x);
+				if (_yon == 0) { _yon = choose(-1,1); }
+				kon_tep_x0  = battle_soul.x;
+				kon_tep_hed = clamp(kon_tep_x0+_yon*T18_TEP_MESAFE,
+				                    battle_board.x-battle_board.left+10,
+				                    battle_board.x+battle_board.right-10);
+				kon_tep_t = 0;
+				battle_soul.moveable = false;
+
+				// Konuk: savrulma yoluna giriyor (gst_state 3) ve kendi
+				// bekleme noktasina cekiliyor. Puskurtmeden farki daha
+				// yumusak olmasi (12 yerine 16) ve gst_cycle'i ARTIRMAMASI:
+				// o sayac oyuncunun basarili savurmalarini sayiyor.
+				var _kd = point_direction(battle_soul.x,battle_soul.y,gst_x,gst_y);
+				gst_rvx = lengthdir_x(12,_kd);
+				gst_rvy = lengthdir_y(12,_kd);
+				gst_state = 3;
+				gst_t = 0;
+				gst_flash = 14;
+				audio_play_sound(snd_impact,0,false);
+				Camera_Shake(5,5,3,3);
+			}
+		}
+	}
+
+	//======================================================================
+	// KONUK CARPMASI -- KALBIN GERI TEPMESI
+	//======================================================================
+	// Iki asama: once T18_TEP_ITME karede Konuk'un tersine itiliyor (hizli
+	// cikip yavasliyor), sonra T18_TEP_DONUS karede tam olarak eski x'ine
+	// donuyor. Bitince kontrol geri veriliyor.
+	//
+	// gst_on'dan BAGIMSIZ calisiyor: bolum tam bu sirada bitse bile geri
+	// tepme yarim kalmasin ve kontrol acik unutulmasin.
+	//======================================================================
+	if (kon_tep_t >= 0)
+	{
+		if (instance_exists(battle_soul))
+		{
+			kon_tep_t += 1;
+			if (kon_tep_t <= T18_TEP_ITME)
+			{
+				var _tk = kon_tep_t/T18_TEP_ITME;
+				battle_soul.x = lerp(kon_tep_x0,kon_tep_hed,1-(1-_tk)*(1-_tk));
+			}
+			else
+			{
+				var _tk = min(1,(kon_tep_t-T18_TEP_ITME)/T18_TEP_DONUS);
+				battle_soul.x = lerp(kon_tep_hed,kon_tep_x0,_tk*_tk*(3-2*_tk));
+				if (_tk >= 1)
+				{
+					battle_soul.x = kon_tep_x0;
+					battle_soul.moveable = true;
+					kon_tep_t = -1;
 				}
 			}
+		}
+		else
+		{
+			kon_tep_t = -1;
 		}
 	}
 

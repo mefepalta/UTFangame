@@ -38,10 +38,10 @@ if (room == room_battle_1)
 		Battle_SlamDown();
 		Battle_SetBoardSizeCubic(65,65,180,180);
 	}
-	if (_timer >= 60) and (_timer <= 460) and (_timer % 60 == 4)
+	if (_timer >= 60) and (_timer <= 460) and (_timer % 85 == 4)
 	{
-		RegularBone(left_box ,bottom_box,irandom_range(28,74), 3.5,0,0,0,0,1,0,0,0,0,true);
-		RegularBone(right_box,bottom_box,irandom_range(28,74),-3.5,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(left_box ,bottom_box,irandom_range(28,54), 3.5,0,0,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,irandom_range(28,54),-3.5,0,0,0,0,1,0,0,0,0,true);
 	}
 	if (_timer == 150) or (_timer == 280) or (_timer == 410)
 	{
@@ -187,7 +187,7 @@ if (room == room_battle_1)
 		makeplatform(right_box + 10,bottom_box - 30,100,-3,0,false,0);
 		RegularBlaster(-80,_wb-46,_wl-60,_wb-60,0,0,26,16,2,2,34);
 	}
-	if (_timer == 1850)
+	if (_timer == 1830)
 	{
 		WallClear();
 		Battle_SetSoul(battle_soul_red);

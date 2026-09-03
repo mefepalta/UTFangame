@@ -27,6 +27,24 @@
 
 depth = 0;
 
+//------------------------------------------------------------ global perde
+// Bu sahneye SIYAHTAN geliniyor: o_p25_battle perdeyi 180 karede tam
+// siyaha cekip odayi degistiriyor ve KALICI fader nesnesi o alfayi
+// koruyor. Bu odada onu indiren hicbir sey yoktu.
+//
+// fader DEPTH_UI.FADER (-400) ile ciziliyor, bu nesne ise depth 0:
+// daha kucuk depth ONDE demek, yani siyah perde butun panellerin
+// uzerinde kaliyor ve sahne hic gorunmuyordu.
+//
+// Sahnenin KENDI perdesi var (asagidaki "perde" degiskeni, siyahtan
+// aciliyor), o yuzden global fader burada aninda kaldiriliyor -- gorsel
+// olarak yine siyahtan aciliyoruz, sadece iki perde ust uste binmiyor.
+if (instance_exists(fader))
+{
+	Anim_Destroy(fader,"alpha");
+	fader.alpha = 0;
+}
+
 //----------------------------------------------------------- panel cercevesi
 PN_X = 40;					/// panelin sol kenari
 PN_GEN = 560;				/// panel genisligi

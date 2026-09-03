@@ -14,6 +14,18 @@ if (room == room_battle_1)
 	exit;
 }
 
+// FAZ 1 SON DUZLUK: burada da iskalamak hicbir sey yapmamali. Asagidaki
+// sanstalk replikleri son duzluge ait degil; balon aciliyor ama hemen
+// kapatiliyor ve tur sessizce bitiyor (bkz. Step_0 icindeki ayni kosul).
+if (global.finalstretch >= 1)
+{
+	with (battle_dialog_enemy)
+	{
+		instance_destroy();
+	}
+	exit;
+}
+
 // 1-12 arasi replikler scripts/Surrender'da tutuluyor: gercek atak
 // oynarken de ayni metin kullanildigi icin tek kaynaktan okunuyor.
 // Bu turlar normalde battle_turn_9..20'ye gidiyor; burasi yedek yol.

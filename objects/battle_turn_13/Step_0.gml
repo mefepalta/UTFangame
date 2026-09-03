@@ -303,7 +303,12 @@ if (room == room_battle_1)
 	}
 	if (fade_at > 0) and (_timer == fade_at+15)
 	{
-		Battle_SetBoardSizeCubic(85,85,35,35,0);
+		// ALT KENAR YERINDE KALIYOR. Eskiden (85,85,...) idi: kutu hem
+		// yukari hem ASAGI 20 px buyuyordu, alt kenar varsayilan 385'ten
+		// 405'e iniyordu. Kirmizi/mavi ruhta alt kenarin yeri sabit olmali
+		// (varsayilan BATTLE_BOARD.DOWN = 65); buyume yukari yapiliyor.
+		// Toplam yukseklik AYNI (170), yani Gate() bosluk hesabi degismiyor.
+		Battle_SetBoardSizeCubic(105,65,35,35,0);
 		Battle_SetSoul(battle_soul_red);
 	}
 	if (fade_at > 0) and (_timer == fade_at+35)
@@ -362,45 +367,40 @@ if (room == room_battle_1)
 	}
 	if (fade_at > 0) and (_timer == fade_at+683)
 	{
-		Gate(23,46,1.8,true);
-		Gate(23,46,1.8,false);
-	}
-	if (fade_at > 0) and (_timer == fade_at+750)
-	{
 		Gate(54,46,1.8,true);
 		Gate(54,46,1.8,false);
 	}
-	if (fade_at > 0) and (_timer == fade_at+817)
+	if (fade_at > 0) and (_timer == fade_at+750)
 	{
 		Gate(85,46,1.8,true);
 		Gate(85,46,1.8,false);
 	}
-	if (fade_at > 0) and (_timer == fade_at+884)
+	if (fade_at > 0) and (_timer == fade_at+817)
 	{
 		Gate(116,46,1.8,true);
 		Gate(116,46,1.8,false);
 	}
-	if (fade_at > 0) and (_timer == fade_at+951)
+	if (fade_at > 0) and (_timer == fade_at+884)
 	{
 		Gate(147,46,1.8,true);
 		Gate(147,46,1.8,false);
 	}
-	if (fade_at > 0) and (_timer == fade_at+1018)
+	if (fade_at > 0) and (_timer == fade_at+951)
 	{
 		Gate(116,46,1.8,true);
 		Gate(116,46,1.8,false);
 	}
-	if (fade_at > 0) and (_timer == fade_at+1085)
+	if (fade_at > 0) and (_timer == fade_at+1018)
 	{
 		Gate(85,46,1.8,true);
 		Gate(85,46,1.8,false);
 	}
-	if (fade_at > 0) and (_timer == fade_at+1152)
+	if (fade_at > 0) and (_timer == fade_at+1085)
 	{
 		Gate(54,46,1.8,true);
 		Gate(54,46,1.8,false);
 	}
-	if (fade_at > 0) and (_timer == fade_at+1219)
+	if (fade_at > 0) and (_timer == fade_at+1152)
 	{
 		Gate(23,46,1.8,true);
 		Gate(23,46,1.8,false);

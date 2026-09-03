@@ -225,12 +225,15 @@ if (room == room_battle_1)
 	//   mizraklarla ayni anda calisiyor. Vurus arasi 250 kare, her vurus tek
 	//   dalga bolt savuruyor -- arka planda kalmasi, one gecmemesi icin.
 	//
-	// Modda her dalga 10-12 saniye (encounter'daki wavetimer), o yuzden
-	// hepsi ~600 kare calisiyor. Unitale de 60 FPS'te dondugu icin salvo
-	// araliklari moddaki haliyle duruyor, DONUSUM YOK: 26, 45, 20, 70.
+	// Modda her dalga 10-12 saniye (encounter'daki wavetimer), yani ~600
+	// kare. Unitale de 60 FPS'te dondugu icin salvo araliklari moddaki
+	// haliyle duruyor, DONUSUM YOK: 26, 45, 20, 70.
 	//
-	// spear0 cikinca son iki dalga 600 kare one alindi; tur 4090 yerine 3430
-	// karede bitiyor.
+	// AMA pencereler bu projede 210 kareye indirildi (atak cok uzundu);
+	// ayrintili tablo asagida, kir_on blogunun basinda.
+	//
+	// spear0 cikinca son iki dalga one alindi; bolum simdi 1480 karede
+	// bitiyor (spear0'li halinde 4090, kisaltmadan once 3430 idi).
 	//
 	// spear1'in salvo araligi SABIT DEGIL, her salvoda kisaliyor; o yuzden %
 	// ile degil, bir sonraki salvo karesini tutan sayacla suruluyor.
@@ -261,64 +264,79 @@ if (room == room_battle_1)
 			Camera_Shake(3,3,2,2);
 		}
 
+		//==================================================================
+		//  DALGALAR %65 KISALTILDI
+		//==================================================================
+		//  Her dalganin mermi penceresi 600 -> 210 kare. Salvo ARALIKLARI
+		//  (26/45/20/70 ve Spear1Gap) hic degismedi: dalgalarin temposu ve
+		//  zorlugu ayni, sadece daha kisa suruyorlar. Aralar (arena degisimi
+		//  + 60 karelik giris) oldugu gibi kaldi.
+		//
+		//  Aralarina serpistirilen Alphys ataklari da ayni oranda azaldi ve
+		//  KENDI eski cadence'lariyla duruyorlar (shocker 49, bolt 120,
+		//  cekic 250) -- yani birim zamanda ayni yogunluk.
+		//
+		//    dalga        eski pencere     yeni pencere    salvo (eski->yeni)
+		//    spear4        80 -  680        80 -  290       24 -> 9
+		//    spear5       760 - 1360       370 -  580       14 -> 5
+		//    spear3      1440 - 2040       660 -  870       31 -> 11
+		//    spear1      2120 - 2720       950 - 1160       19 -> 6
+		//    spear2      2740 - 3340      1180 - 1390        9 -> 4
+		//    shocker      800 - 1290       410 -  557       11 -> 4
+		//    buyuk bolt  1480 - 1960       700 -  820        5 -> 2
+		//    cekic       2140 - 3140       970 - 1220        5 -> 2
+		//
+		//  Bolum 3430 -> 1480 kare (57 sn -> 25 sn).
+		//==================================================================
+
 		//---------------------------------------------------- 1. DALGA: spear4
-		if (kir_t >= 80) and (kir_t <= 680)
+		if (kir_t >= 80) and (kir_t <= 290)
 		{
 			if ((kir_t-80) % 26 == 0) { Spear4(); }		// mod 26
 		}
 
 		//---------------------------------------------------- 2. DALGA: spear5
-		if (kir_t == 700) { SpearArena(5); }			// Arena.resize(300,75)
+		if (kir_t == 310) { SpearArena(5); }			// Arena.resize(300,75)
 
-		if (kir_t >= 760) and (kir_t <= 1360)
+		if (kir_t >= 370) and (kir_t <= 580)
 		{
-			if ((kir_t-760) % 45 == 0) { Spear5(); }	// mod 45
+			if ((kir_t-370) % 45 == 0) { Spear5(); }	// mod 45
 		}
 
 		// Mizraklar iki yandan geliyor, yani dip serit bedava bir siginakti.
 		// Shocker breaker'lar alt duvardan vurup orayi da kapatiyor.
-		if (kir_t == 800) { AlphysShocker(battle_board.x-120,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 849) { AlphysShocker(battle_board.x+ 70,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 898) { AlphysShocker(battle_board.x- 40,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 947) { AlphysShocker(battle_board.x+130,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 996) { AlphysShocker(battle_board.x- 85,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 1045) { AlphysShocker(battle_board.x+ 20,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 1094) { AlphysShocker(battle_board.x+105,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 1143) { AlphysShocker(battle_board.x-135,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 1192) { AlphysShocker(battle_board.x+ 45,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 1241) { AlphysShocker(battle_board.x- 20,battle_board.y+battle_board.down-4,40); }
-		if (kir_t == 1290) { AlphysShocker(battle_board.x+ 90,battle_board.y+battle_board.down-4,40); }
+		if (kir_t == 410) { AlphysShocker(battle_board.x-120,battle_board.y+battle_board.down-4,40); }
+		if (kir_t == 459) { AlphysShocker(battle_board.x+ 70,battle_board.y+battle_board.down-4,40); }
+		if (kir_t == 508) { AlphysShocker(battle_board.x- 40,battle_board.y+battle_board.down-4,40); }
+		if (kir_t == 557) { AlphysShocker(battle_board.x+130,battle_board.y+battle_board.down-4,40); }
 
 		//---------------------------------------------------- 3. DALGA: spear3
-		if (kir_t == 1380) { SpearArena(3); }			// Arena.resize(150,150)
+		if (kir_t == 600) { SpearArena(3); }			// Arena.resize(150,150)
 
-		if (kir_t >= 1440) and (kir_t <= 2040)
+		if (kir_t >= 660) and (kir_t <= 870)
 		{
-			if ((kir_t-1440) % 20 == 0) { Spear3(); }	// mod 20
+			if ((kir_t-660) % 20 == 0) { Spear3(); }	// mod 20
 		}
 
 		// Homing mizraklar hep kalbin bulundugu yere geliyor, yani surekli
 		// hareket gerekiyor. Yukaridan dusup kutunun dibinde patlayan buyuk
 		// boltlar kacis yonlerini de daraltiyor.
-		if (kir_t == 1480) { AlphysBigBolt(battle_board.x-44,-60,270,6,5,2.4); }
-		if (kir_t == 1600) { AlphysBigBolt(battle_board.x+38,-60,270,6,5,2.4); }
-		if (kir_t == 1720) { AlphysBigBolt(battle_board.x-12,-60,270,6,7,2.4); }
-		if (kir_t == 1840) { AlphysBigBolt(battle_board.x+46,-60,270,6,5,2.4); }
-		if (kir_t == 1960) { AlphysBigBolt(battle_board.x-30,-60,270,6,7,2.4); }
+		if (kir_t == 700) { AlphysBigBolt(battle_board.x-44,-60,270,6,5,2.4); }
+		if (kir_t == 820) { AlphysBigBolt(battle_board.x+38,-60,270,6,7,2.4); }
 
 		//----------------------------------- 4. DALGA: spear1 + kose cekicleri
 		// Buradan sonuna kadar buyuk arena. spear0'in yerini alan cekicler AYRI
 		// bir bolum degil: kutu buyukken iki mizrak dalgasinin da arkasinda,
-		// sirayla dort koseden vuruyorlar. Her vurus tek dalga bolt savuruyor.
-		if (kir_t == 2060)
+		// sirayla koselerden vuruyorlar. Her vurus tek dalga bolt savuruyor.
+		if (kir_t == 890)
 		{
 			SpearArena(2);					// Arena.resize(565,330)
-			s1_next = 2120;
+			s1_next = 950;
 			s1_n = 0;
 			s1_ang = 0;
 		}
 
-		if (kir_t >= 2120) and (kir_t <= 2720)
+		if (kir_t >= 950) and (kir_t <= 1160)
 		{
 			if (kir_t >= s1_next)
 			{
@@ -332,11 +350,11 @@ if (room == room_battle_1)
 		//----------------------------------- 5. DALGA: spear2 + kose cekicleri
 		// Mod bu dalgada kalbi kendi kontrol override'iyle daha hizli hareket
 		// ettiriyor; spiral aksi halde kacilamiyor.
-		if (kir_t == 2740) { Spear2Speed(true); }
+		if (kir_t == 1180) { Spear2Speed(true); }
 
-		if (kir_t >= 2740) and (kir_t <= 3340)
+		if (kir_t >= 1180) and (kir_t <= 1390)
 		{
-			if ((kir_t-2740) % 70 == 0) { Spear2(); }	// mod 70
+			if ((kir_t-1180) % 70 == 0) { Spear2(); }	// mod 70
 		}
 
 		//------------------------------------ cekicler: iki dalga boyunca da
@@ -344,14 +362,14 @@ if (room == room_battle_1)
 		// Girinti 190: cekicin pivotu carpma noktasinin 144 px yaninda
 		// olusuyor, 50 px girintide pivot ekran disina tasiyor ve savurmanin
 		// tamami gorunmuyordu -- cekic sadece vurdugu an fark ediliyordu.
-		if (kir_t == 2140) { AlphysHammer(1,battle_board.x-battle_board.left+190,battle_board.y-battle_board.up,-1,1,1); }	// ust sol
-		if (kir_t == 2390) { AlphysHammer(1,battle_board.x+battle_board.right-190,battle_board.y-battle_board.up,1,1,1); }	// ust sag
-		if (kir_t == 2640) { AlphysHammer(0,battle_board.x+battle_board.right-190,battle_board.y+battle_board.down,-1,1,1); }	// alt sag
-		if (kir_t == 2890) { AlphysHammer(0,battle_board.x-battle_board.left+190,battle_board.y+battle_board.down,1,1,1); }	// alt sol
-		if (kir_t == 3140) { AlphysHammer(1,battle_board.x-battle_board.left+190,battle_board.y-battle_board.up,-1,1,1); }	// ust sol
+		//
+		// Bes vurus ikiye indi (250 karelik ara korundu). Dort kose yerine
+		// CAPRAZ iki kose seciliyor ki iki vurusla da olsa alan degissin.
+		if (kir_t == 970)  { AlphysHammer(1,battle_board.x-battle_board.left+190,battle_board.y-battle_board.up,-1,1,1); }	// ust sol
+		if (kir_t == 1220) { AlphysHammer(0,battle_board.x+battle_board.right-190,battle_board.y+battle_board.down,-1,1,1); }	// alt sag
 
 		//---------------------------------------------------------- kapanis
-		if (kir_t == 3430)
+		if (kir_t == 1480)
 		{
 			kir_on = false;
 			// Hiz takviyesi mutlaka geri alinmali, yoksa sonraki turlara sizar

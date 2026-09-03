@@ -160,6 +160,27 @@ gst_spd=19;			// atilis hizi
 gst_rvx=0;			// savrulma hizi
 gst_rvy=0;
 
+//==========================================================================
+//  KONUK CARPMASI -- GERI TEPME
+//==========================================================================
+//  Konuk kalbe degdiginde artik sadece hasar vermiyor: KALP Konuk'un tersi
+//  yone itiliyor ve sonra TAM OLARAK eski yerine donuyor, Konuk da savrulup
+//  kendi bekleme noktasina cekiliyor (savurma ile ayni yol, gst_state 3).
+//
+//  Itme YATAY: turuncu ruh zaten sadece x ekseninde hareket ediyor
+//  (bkz. battle_soul_orange_dr/Step_0 -- "Ruh Y ekseninde hareket edemez").
+//
+//  Geri tepme boyunca kontrol kapaniyor (moveable = false), yoksa oyuncunun
+//  bastigi yon itmeyle catisip kalp yerinde titriyor.
+//==========================================================================
+#macro T18_TEP_MESAFE  70	/// kalp kac px geri itiliyor
+#macro T18_TEP_ITME    10	/// itilme suresi (kare)
+#macro T18_TEP_DONUS   22	/// eski yerine donus suresi (kare)
+
+kon_tep_t   = -1;	/// -1 = geri tepme yok; >= 0 ise kacinci karesinde
+kon_tep_x0  = 0;	/// carpma anindaki x -- donulecek yer
+kon_tep_hed = 0;	/// itilecegi x
+
 ///@arg max	kac kez savruldiktan sonra kaciyor
 GuestStart = function(_max)
 {

@@ -1,8 +1,9 @@
-yesorno = false;
-image_alpha = 0;         
-target_alpha = 0;   
-fade_speed = 0.025;
-nextroomtimer = 0;
-readyornot = false;
+/// @description Cikis perdesi -- kurulum
+
+depth = -1000;        // her seyin ustunde
+
 x = 0;
 y = 0;
+image_alpha = 0;
+leaving = false;
+timer   = 0;

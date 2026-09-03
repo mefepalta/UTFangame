@@ -8,8 +8,7 @@ if (global.kr)
 }
 else
 {
-	battle_soul._inv = 50;
-	instance_destroy(hurtkr);
+	// FAZ 2 -- klasik hasar.
+	Battle_HurtNormal(DMG_SPEAR);
 	instance_destroy();
-	Player_Hurt(3);
 }

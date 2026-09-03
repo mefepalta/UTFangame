@@ -197,6 +197,14 @@ WallMake = function(_ust,_len,_warn,_sure)
 		Anim_Create(_b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.IN,_len,-_len,10,_warn+6+_sure);
 		array_push(wall,_b);
 	}
+
+	// KIRMIZI/SARI UYARI SERIDI. Bu duvar RegularBoneWall degil, dogrudan
+	// RegularBone ile kuruluyor -- nesnenin kendi seridi yok, sadece ses
+	// vardi. Serit kemikler uzamaya baslayana kadar (_warn kare) yanip
+	// sonuyor ve kutunun ilgili kenarina yapisiyor.
+	var _uy = battle_warn(0,0,0,0,_warn);
+	_uy.follow_dir   = _ust ? DIR.UP : DIR.DOWN;
+	_uy.follow_thick = _len;
 };
 
 WallClear = function()

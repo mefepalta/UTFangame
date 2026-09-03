@@ -80,6 +80,13 @@ LINE_EYECUE   = 6;    // gozlerin ilk yandigi satir (snd_blueeyes)
 audio_stop_all();
 BGM_Stop(5);
 
+// Faz 1'den SIYAH gelinip burada aciliyor. Faz 1'in son darbesi perdeyi
+// indiriyor (battle_enemy_engage/Step_0, p15_gecis), sahne de o perdenin
+// arkasindan kuruluyor -- eskiden oda aninda kesiliyordu.
+fader.color = c_black;
+fader.alpha = 1;
+Fader_Fade(1,0,50);
+
 current_line    = -1;
 start_time      = current_time;
 line_start_time = 0;
