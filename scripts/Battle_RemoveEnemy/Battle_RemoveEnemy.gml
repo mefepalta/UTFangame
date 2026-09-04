@@ -1,4 +1,3 @@
-///@arg enemy_slot
 function Battle_RemoveEnemy() {
 	var ENEMY=argument[0];
 

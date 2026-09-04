@@ -1,4 +1,3 @@
-///@arg cmd
 function Console_ExecuteCmd() {
 	if(GMU_CONSOLE_ENABLED){
 		var CMD=argument[0];

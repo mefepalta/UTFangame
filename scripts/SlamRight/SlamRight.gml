@@ -13,6 +13,4 @@ function SlamRight(){
 	    _action_step = 0
 	}
 	
-	//Anim_Create(battle_enemy_engage,"_body_init_y",ANIM_TWEEN.BACK,ANIM_EASE.OUT,battle_enemy_engage._body_init_y,3,10)
-	//Anim_Create(battle_enemy_engage,"_body_init_y",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,battle_enemy_engage._body_init_y,-1,50,50)
 }

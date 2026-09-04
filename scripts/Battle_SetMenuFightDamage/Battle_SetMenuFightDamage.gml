@@ -1,4 +1,3 @@
-///@arg damage
 function Battle_SetMenuFightDamage() {
 	var DAMAGE=argument[0];
 

@@ -38,6 +38,7 @@ instance_create_depth(0,0,0,camera);
 instance_create_depth(0,0,0,fader);
 instance_create_depth(0,0,0,border);
 instance_create_depth(0,0,0,closed_captions);
+instance_create_depth(0,0,0,o_window_light);
 
 application_surface_draw_enable(false);
 
@@ -58,6 +59,5 @@ Console_OutputLine("Engine Version: "+ENGINE_VERSION);
 Console_OutputLine("Game Name: "+GAME_NAME);
 Console_OutputLine("Game Author: "+GAME_AUTHOR);
 Console_OutputLine("Game Version: "+GAME_VERSION);
-//show_debug_overlay(true);
 
 room_goto_next();

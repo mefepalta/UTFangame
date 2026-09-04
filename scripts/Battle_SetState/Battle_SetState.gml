@@ -1,10 +1,8 @@
-///@arg state
 function Battle_SetState() {
 	var STATE=argument[0];
 
 	battle._state=STATE;
 
-	//菜单
 	if(STATE==BATTLE_STATE.MENU){
 		Battle_SetNextState(BATTLE_STATE.DIALOG);
 	
@@ -15,14 +13,12 @@ function Battle_SetState() {
 		Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.MENU_START);
 	}
 
-	//对话
 	if(STATE==BATTLE_STATE.DIALOG){
 		Battle_SetNextState(BATTLE_STATE.TURN_PREPARATION);
 	
 		Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.DIALOG_START);
 	}
 
-	//回合准备
 	if(STATE==BATTLE_STATE.TURN_PREPARATION){
 		Battle_SetNextState(BATTLE_STATE.IN_TURN);
 	
@@ -82,7 +78,6 @@ function Battle_SetState() {
 		}
 	}
 
-	//回合内
 	if(STATE==BATTLE_STATE.IN_TURN){
 		Battle_SetNextState(BATTLE_STATE.BOARD_RESETTING);
 		Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.TURN_START);
@@ -94,7 +89,6 @@ function Battle_SetState() {
 		}
 	}
 
-	//面版重置
 	if(STATE==BATTLE_STATE.BOARD_RESETTING){
 		Battle_SetNextState(BATTLE_STATE.MENU);
 	

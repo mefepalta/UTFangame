@@ -1,6 +1,5 @@
-/// @description Cikis perdesi -- kurulum
 
-depth = -1000;        // her seyin ustunde
+depth = -1000;
 
 x = 0;
 y = 0;

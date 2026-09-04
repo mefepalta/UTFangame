@@ -1,14 +1,3 @@
-///@arg target
-///@arg var_name
-///@arg tween
-///@arg ease
-///@arg start
-///@arg change
-///@arg duration
-///@arg delay*
-///@arg arg_0*
-///@arg arg_1*
-///@arg mode*
 function Anim_Create() {
 	var TARGET=argument[0];
 	var VAR_NAME=argument[1];

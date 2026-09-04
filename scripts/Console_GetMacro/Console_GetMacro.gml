@@ -1,4 +1,3 @@
-///@arg key
 function Console_GetMacro() {
 	if(GMU_CONSOLE_ENABLED){
 		var KEY=argument[0];

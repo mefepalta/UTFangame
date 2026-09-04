@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 Battle_SetBoardSizeCubic(65,65,125,125);
 with (battle_enemy_engage)
@@ -32,10 +31,6 @@ if (room == room_battle_1)
 	sansy.text="{font 3}{voice 3}{head 1}He had this sort of&way of putting people&at ease.{pause}{clear}{head 2}I'd vent a lot when we&were little, and he'd&just sit there with a&smile on his face.{pause}{clear}{head 13}He did that for&everyone else, too.";
 }
 
-// SURRENDER ACT: bu tur ACT'tan geldiyse Sans'in kendi tur repligi yerine
-// teslim yayinin repligi oynuyor (bkz. scripts/Surrender). Son turda (12)
-// replik burada degil atagin sonunda oynadigi icin bu blok atlanir.
-// Normal FIGHT akisinda global.surrender_turn false, blok hic calismaz.
 if (Surrender_BasindaKonusur())
 {
 	sansy.text = Surrender_Text();

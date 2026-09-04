@@ -1,4 +1,3 @@
-///@arg input
 function Demo_AddInput() {
 	var INPUT=argument[0];
 

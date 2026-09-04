@@ -1,6 +1,3 @@
-///@arg x
-///@arg y
-///@arg *rot
 function Battle_CreateBoardExtra(){
 	var X = argument[0];
 	var Y = argument[1];
@@ -16,5 +13,3 @@ function Battle_CreateBoardExtra(){
 	return extra;
 }
 
-//直接创建一个加框，创建后需要手动添加顶点
-//Create a Extra-Board directly,you need to add vertexes by yourself

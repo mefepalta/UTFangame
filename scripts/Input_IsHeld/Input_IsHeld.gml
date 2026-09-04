@@ -1,4 +1,3 @@
-///@arg input
 function Input_IsHeld() {
 	var INPUT=argument[0];
 

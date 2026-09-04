@@ -5,5 +5,7 @@ if (ready == 0) and (image_alpha > 0) {
 	}
 }
 if ready =-1 and (!instance_exists(text_typer)){
-	room_goto(room_battle);
+	var _back = room_battle;
+	if (global.extras_room != noone) and (room_exists(global.extras_room)) { _back = global.extras_room; }
+	room_goto(_back);
 }

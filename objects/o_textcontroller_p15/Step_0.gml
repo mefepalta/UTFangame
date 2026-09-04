@@ -2,7 +2,6 @@ p15++;
 
 var _elapsed = (current_time - start_time) / 1000;
 
-// ---- diyalog ilerlemesi ---------------------------------------------
 var _new_line = false;
 if (current_line + 1 < array_length(dialogue)) {
     if (_elapsed >= dialogue[current_line + 1].time) {
@@ -13,7 +12,6 @@ if (current_line + 1 < array_length(dialogue)) {
     }
 }
 
-// ---- harf harf yazma + ses (eskiden Draw icindeydi) ------------------
 if (current_line >= 0) {
     var _txt = dialogue[current_line].text;
     var _vis = clamp(floor((_elapsed - line_start_time) / char_speed), 0, string_length(_txt));
@@ -30,28 +28,18 @@ if (current_line >= 0) {
     chars_visible = _vis;
 }
 
-// =====================================================================
-//  SATIR GECISLERINE BAGLI OLAYLAR
-//  (Sabit p15 adimi yerine satira baglandi; boylece kare dususlerinde
-//   ses/gorsel ile yazi arasinda kayma olmuyor.)
-// =====================================================================
 if (_new_line)
 {
-    // Faz 1.5 temasi: belgede "(This is where the phase 1.5 theme would
-    // start playing.)" notunun dustugu yer.
     if (current_line == LINE_MUSIC) {
         BGM_Play(5, snd_p15theme, false);
         music_t     = 0;
         next_accent = 0;
     }
 
-    // Gozlerin ilk kez yanmasi
     if (current_line == LINE_EYECUE) {
-        //audio_play_sound(snd_blueeyes, 1, false);
         eye_glow = 1;
     }
 
-    // Muzigin ana bolumu: Sans kamburundan dogruluyor
     if (current_line == LINE_STANDUP) {
         o_p15_legs.image_index  = 0;
         o_p15_arm.image_index   = 0;
@@ -61,29 +49,23 @@ if (_new_line)
         p15_burst(320, 300, 14, 4, COL_DUST);
     }
 
-    // Ekran karariyor, anlatici devreye giriyor
     if (current_line == LINE_NARRATOR) {
         font_custom = font_determination_mono_1;
         audio_play_sound(snd_noise, 1, false);
         p15_shake(12);
     }
 
-    // Anlatici satirlarina denk gelen yukselisler
-    // "Light erupts from Sans' soul..."
     if (current_line == LINE_NARRATOR + 1) {
         p15_shake(6);
         p15_add_flare(o_p15_eye.y, 34, COL_EMBER);
     }
-    // "A searing blaze tears through the darkness, melting the walls like wax."
     if (current_line == LINE_NARRATOR + 2) {
         p15_shake(5);
         p15_add_flare(o_p15_eye.y + 40, 30, COL_FIRE);
         p15_burst(320, 470, 18, 5, COL_FIRE);
     }
-    if (current_line == LINE_NARRATOR + 3) p15_shake(8);    // "The air thrums..."
-    if (current_line == LINE_NARRATOR + 5) {                // "Power incarnate."
-        // Tum ekrani beyazlatmak yerine kenarlari kizartiyoruz; duz beyaz
-        // bir ortu sahneyi sutlu gosteriyordu.
+    if (current_line == LINE_NARRATOR + 3) p15_shake(8);
+    if (current_line == LINE_NARRATOR + 5) {
         flash = 0.3;
         beat  = 1;
         p15_shake(10);
@@ -91,37 +73,28 @@ if (_new_line)
     }
 }
 
-// ---- muzige senkron vuruslar ----------------------------------------
-// Parcanin finalinde 1.5 sn'de bir gelen sert vuruslar; her birinde
-// ekran kisa bir zonklama ve sarsinti aliyor.
 beat = max(beat - 0.06, 0);
 if (music_t >= 0) {
     music_t++;
-    var _mt = music_t / 60;                       // parca ici saniye
+    var _mt = music_t / 60;
     if (next_accent < array_length(accents) && _mt >= accents[next_accent]) {
         next_accent++;
         beat = 1;
-        p15_shake(3 + next_accent * 0.7);         // finale dogru sertlesiyor
-        // Her vurusta ekrani yalayan bir kor cizgisi; sonuncular en genis.
+        p15_shake(3 + next_accent * 0.7);
         p15_add_flare(190 + irandom_range(-70, 90), 16 + next_accent * 2,
                       (next_accent >= 7) ? COL_GOLD : COL_EMBER);
     }
 }
 
-// ---- atmosfer --------------------------------------------------------
 if (current_line < LINE_NARRATOR) {
-    // Sans konusurken: parca ilerledikce ortam isiniyor
     aura_target = 0.16 + max(current_line, 0) * 0.030 + beat * 0.22;
 } else {
-    // Anlatici bolumu: ekran karariyor, sonra isik yavasca buyuyor
-    var _nl = current_line - LINE_NARRATOR;       // 0..7
+    var _nl = current_line - LINE_NARRATOR;
     aura_target = max(0, (_nl - 0.5) * 0.16) + beat * 0.18;
 }
 aura  += (aura_target - aura) * 0.05;
 pulse += 0.055;
 
-// ---- sarsinti --------------------------------------------------------
-// Anlatici bolumunde surekli bir ugultu var ("The ground convulses...")
 if (current_line >= LINE_NARRATOR && current_line < LINE_NARRATOR + 7) {
     rumble = min(rumble + 0.03, 1.4 + (current_line - LINE_NARRATOR) * 0.35);
 } else {
@@ -141,7 +114,6 @@ if (_amp > 0.01) {
 flash    = max(flash - 0.05, 0);
 eye_glow = max(eye_glow - 0.012, 0);
 
-// ---- kivilcim / zerrecik ---------------------------------------------
 for (var i = array_length(spark) - 1; i >= 0; i--) {
     var _k = spark[i];
     _k.life--;
@@ -163,9 +135,6 @@ for (var i = 0; i < array_length(mote); i++) {
     if (_m.y < -8) { _m.y = 492; _m.x = random(640); }
 }
 
-// ---- volkan zemini: anlatici satirlariyla beliriyor -------------------
-// "The ground convulses..." ile basliyor, "melting the walls like wax"
-// satirinda tamamlaniyor.
 var _vt = 0;
 if (current_line >= LINE_NARRATOR) {
     _vt = clamp((current_line - LINE_NARRATOR) / 3, 0, 1);
@@ -183,13 +152,6 @@ if (volc > 0.01) {
     }
 }
 
-// =====================================================================
-//  ACILIS: darbeleri yiyip kafasini kaldirmasi
-//  (Ilk 4 saniye; kare hassasiyeti onemli oldugu icin p15 adimina bagli.)
-// =====================================================================
-// Darbeler: aralari giderek aciliyor (33 -> 48 adim), son darbe 2.9 sn'de.
-// Eskiden hepsi 30 adim arayla ust uste biniyordu ve "Ugh!" satiri tam
-// bunlarin ortasinda yaziliyordu; artik yazi darbeler bitmeden baslamiyor.
 for (var _h = 0; _h < array_length(HIT_STEPS); _h++)
 {
 	if (p15 != HIT_STEPS[_h]) continue;
@@ -201,7 +163,7 @@ for (var _h = 0; _h < array_length(HIT_STEPS); _h++)
 		instance_create_depth(o_p15_head.x + 15, o_p15_head.y - 50, -999999999, o_skull_particle);
 	}
 	audio_play_sound(snd_damage, 1, false);
-	p15_shake(9 - _h);                       // ilk darbeler daha sert
+	p15_shake(9 - _h);
 	p15_burst(o_p15_head.x + 12, o_p15_head.y - 44, 10, 5.5, COL_DUST);
 
 	if (_h == array_length(HIT_STEPS) - 1) {
@@ -211,10 +173,6 @@ for (var _h = 0; _h < array_length(HIT_STEPS); _h++)
 	}
 }
 
-// Kafanin kalkip gozlerin yanmasi.
-// 7 kare, kare basina 15 adim (eskiden 10) -> 1.0 sn yerine 1.5 sn.
-// Gozlerin kademe kademe yanmasi artik izlenebiliyor ve bu sirada
-// hicbir diyalog satiri yazilmiyor.
 var _rd = p15 - RAISE_START;
 if (_rd >= 0 && _rd <= RAISE_STEP * 6 && (_rd mod RAISE_STEP) == 0)
 {
@@ -223,7 +181,6 @@ if (_rd >= 0 && _rd <= RAISE_STEP * 6 && (_rd mod RAISE_STEP) == 0)
 	eye_glow = max(eye_glow, (_rd / (RAISE_STEP * 6)) * 0.55);
 }
 
-// ---- Sans'in solup gitmesi (anlatici bolumu) -------------------------
 if (current_line >= LINE_NARRATOR)
 {
 	o_p15_arm.image_alpha        -= 0.03;
@@ -235,7 +192,6 @@ if (current_line >= LINE_NARRATOR)
 	o_p15_wingthing.image_alpha  -= 0.03;
 }
 
-// ---- goz aciliyor ----------------------------------------------------
 if (p15 == 4875)
 {
 	o_p15_eye.image_alpha = 1;
@@ -254,8 +210,6 @@ if (p15 > 4875)
 	o_p15_alphys.image_alpha  += 0.001;
 	eye_glow = max(eye_glow, 0.8 + sin(pulse * 1.7) * 0.2);
 }
-// Karartmaya girerken parlama da sonsun; yoksa siyah ekranda tam parlak
-// bir yildiz asili kalip savas odasina sert kesiyor.
 if (p15 > 5100) eye_glow = min(eye_glow, max(0, 1 - (p15 - 5100) / 80));
 
 if (keyboard_check_pressed(vk_space))

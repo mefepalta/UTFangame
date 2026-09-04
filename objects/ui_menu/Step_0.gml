@@ -54,7 +54,7 @@ if(_menu==-1){
             _choice_item+=1;
             audio_play_sound(snd_menu_switch,0,false);
         }
-    }else if(Input_IsPressed(INPUT.CONFIRM)){ // EKLE
+    }else if(Input_IsPressed(INPUT.CONFIRM)){
         _choice_item_operate=0;
         _menu=2;
         event_user(0);
@@ -75,7 +75,6 @@ if(_menu==-1){
 			audio_play_sound(snd_menu_switch,0,false);
 		}
 	}else if(Input_IsPressed(INPUT.CONFIRM)){
-		//TODO
 		_menu=-1;
 		event_user(0);
 		switch(_choice_item_operate){

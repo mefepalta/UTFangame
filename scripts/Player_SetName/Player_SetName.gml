@@ -1,4 +1,3 @@
-///@arg name
 function Player_SetName() {
 	var NAME=argument[0];
 

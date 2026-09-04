@@ -1,4 +1,3 @@
-///@arg amount
 function Game_SetFrameSkip() {
 	var AMOUNT=argument[0];
 

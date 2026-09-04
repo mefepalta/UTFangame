@@ -1,7 +1,3 @@
-/*if(keyboard_check_pressed(vk_anykey))
-{
-	p1finalattack = true;
-}*/
 y = lerp(y, target_y, move_speedy);
 
 if (p1finalattack == true)

@@ -6,7 +6,7 @@ uniform vec2 resolution;
 uniform float blur_amount;
 
 void main()
-{ 
+{
 float blurSize=1.0/resolution.y * blur_amount;
 
    vec4 sum=vec4(0.0);

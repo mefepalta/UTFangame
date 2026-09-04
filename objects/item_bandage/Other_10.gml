@@ -1,4 +1,3 @@
-///@desc Use
 Dialog_Add(Lang_GetString("item.bandage.use.0")+Item_GetTextHeal(10));
 Dialog_Start();
 

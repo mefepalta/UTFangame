@@ -1,4 +1,3 @@
-///@arg enemy_slot
 function Battle_IsEnemySlotValid() {
 	var ENEMY=argument[0];
 

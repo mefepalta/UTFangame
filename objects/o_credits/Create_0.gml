@@ -6,19 +6,13 @@ creditstimer = 0;
 audio_stop_sound(snd_chance);
 audio_stop_sound(snd_menu);
 
-// ---------------------------------------------------------------------
-// Credits sequence.
-// Timings are the old ones: first board at 300, 520 steps per board and
-// the last board at 4560, so everything still lines up with the music.
-// ---------------------------------------------------------------------
 panel_start  = 300;
 panel_length = 520;
 panel_list   = [s_credits_0, s_credits_1, s_credits_2, s_credits_3,
                 s_credits_4, s_credits_5, s_credits_6, s_credits_7];
-last_start   = 4560;    // "Phase 2 Soon!" board
-last_length  = 1640;    // held until 5700, then a long fade out
+last_start   = 4560;
+last_length  = 1640;
 
-// what the Draw event puts on screen this step
 panel_sprite  = -1;
 panel_x       = 320;
 panel_y       = 250;
@@ -28,15 +22,12 @@ panel_glow    = 0;
 panel_flash   = 0;
 panel_current = -1;
 
-// ---------------------------------------------------------------------
-// Background: parallax starfield, drifting nebula pools, shooting stars
-// ---------------------------------------------------------------------
 fx_t = 0;
 
 stars = [];
 for (var _si = 0; _si < 110; _si++)
 {
-	var _layer = irandom(2);            // 0 = far away, 2 = close
+	var _layer = irandom(2);
 	array_push(stars, {
 		px    : random(660) - 10,
 		py    : random(500) - 10,

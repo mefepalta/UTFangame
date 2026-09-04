@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 Battle_SetBoardSizeCubic(65,65,125,125);
 with (battle_enemy_engage)
@@ -23,13 +22,12 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	// Sans hala sahne disinda; Papyrus geri doner, Alphys ortadan cekilir
 	with (battle_enemy_engage)
 	{
 		p2_head_sprite = spr_p2_head;
-		p2_state = 0;				// Sans hala sahne disinda
-		pap_state = 1;				// Papyrus kendi yerine geri geliyor
-		alp_state = 2;				// Alphys 17. turdan beri sahnede
+		p2_state = 0;
+		pap_state = 1;
+		alp_state = 2;
 		alp_head_sprite = spr_alphys_head_mad;
 	}
 	sansy.text="{speaker 2}{font 2}{voice 2}{alp_head 1}Hey, I told you to&stay out of my way!{pause}{clear}"
@@ -38,10 +36,6 @@ if (room == room_battle_1)
 	+"{speaker 1}{font 4}{voice 4}{pap_head 1}GOOD RIDDENCE.{pause}{clear}{pap_head 0}HEY.{pause}{clear}{pap_head 11}SO, IN CASE YOU&WEREN'T PAYING&ATTENTION...{pause}{clear}{pap_head 5}NAME'S PAPYRUS.&HI.{pause}{clear}{pap_head 13}THE SAME GUY YOU&TURNED TO DUST&BACK IN SNOWDIN.{pause}{clear}{pap_head 1}GOOD TIMES,&GOOD TIMES.{pause}{clear}{pap_head 16}MIND IF I RETURN&THE FAVOR?";
 }
 
-// SURRENDER ACT: bu tur ACT'tan geldiyse Sans'in kendi tur repligi yerine
-// teslim yayinin repligi oynuyor (bkz. scripts/Surrender). Son turda (12)
-// replik burada degil atagin sonunda oynadigi icin bu blok atlanir.
-// Normal FIGHT akisinda global.surrender_turn false, blok hic calismaz.
 if (Surrender_BasindaKonusur())
 {
 	sansy.text = Surrender_Text();

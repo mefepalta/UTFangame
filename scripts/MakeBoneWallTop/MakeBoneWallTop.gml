@@ -1,6 +1,3 @@
-///@arg pause
-///@arg length
-///@arg duration
 function MakeBoneWallTop() {
 	var PAUSE = argument[0];
 	var LENGTH = argument[1];

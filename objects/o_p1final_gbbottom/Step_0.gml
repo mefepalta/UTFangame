@@ -1,5 +1,3 @@
-// KAPANIS SAHNESI: parca serbest kaldiysa rig'i takip etmiyor, kendi
-// balistik yoluyla dusuyor ve ekranin altinda yok oluyor.
 if (serbest)
 {
 	v_t += 1;
@@ -16,7 +14,4 @@ if (!instance_exists(o_p1final_gbtop)) { exit; }
 
 x = o_p1final_gbtop.x + 68;
 y = o_p1final_gbtop.y + 32;
-// Menteser (origin) sprite'in SAG-UST kosesinde. POZITIF aci, cenenin
-// sol ucunu -- yani agzin acildigi disa bakan ucu -- asagi indiriyor.
-// Negatifi yukari kaldiriyordu, yani agzi ters yone aciyordu.
 image_angle = agiz;

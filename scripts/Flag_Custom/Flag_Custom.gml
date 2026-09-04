@@ -26,7 +26,6 @@ function Flag_Custom() {
 	Item_SetWeapon(item_stick);
 	Item_SetArmor(item_bandage);
 	
-	//Heal Items
 	Item_Add(item_sour_tea);
 	Item_Add(item_caviar);
 	Item_Add(item_maleficent_tyrant);

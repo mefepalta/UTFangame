@@ -1,4 +1,3 @@
-///@arg inv
 function Player_SetInv() {
 	var INV=argument[0];
 

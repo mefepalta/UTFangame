@@ -3,12 +3,6 @@ _start=false;
 cang=false;
 canga=0;
 
-///Tabandan ve tavandan ayni anda birer kemik. Ortada kalan bosluk
-///kutunun ici (130 px) eksi iki kemik boyu.
-///@arg x	 dogum noktasi
-///@arg alt	 taban kemiginin boyu
-///@arg ust	 tavan kemiginin boyu
-///@arg hiz	 yatay hiz (sola gitmesi icin negatif)
 F25Cift = function(_x,_alt,_ust,_hiz)
 {
 	var _t = (battle_board.y-battle_board.up)+2;

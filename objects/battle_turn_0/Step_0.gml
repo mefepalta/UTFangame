@@ -10,21 +10,8 @@ var top_box = (battle_board.y-battle_board.up)+2;
 
 if (_intro_timer == 1)
 {
-	// FAZ 2 TEMASI. Eskiden snd_glisterbones caliyordu; yerine bu fazin
-	// kendi parcasi kondu (snd_p2theme -- 2:06, dongulu).
-	//
-	// Ses ID'si global'e aliniyor: son atagin dev blaster halkasinda muzik
-	// kisilip tamamen susturuluyor (bkz. battle_turn_20/Step_0, sf_t 1356).
-	// Bu parca BGM sistemiyle degil DOGRUDAN audio_play_sound ile caldigi
-	// icin BGM_SetVolume'a cevap vermiyor; gain bu ID uzerinden veriliyor.
 	global.p2_bgm = audio_play_sound(snd_p2theme,1,true);
 	battle_enemy_engage.p2_head_sprite = spr_p2_head;
-	// o_swoosh_spawner kaldirildi: soldan/sagdan girip donen kutular
-	// (o_bg_swoosh) eski arka planin parcasiydi ve onun mor(180,0,255) ->
-	// turuncu -> sari renk dongusunu kullaniyordu. Arka plan volkana
-	// cevrilince yerinde durmuyorlardi. Bir kez yaratilip hic yok
-	// edilmedikleri icin savas boyunca da uretmeye devam ediyorlardi.
-	//instance_create_depth(0, 0, 0, o_swoosh_spawner);
 }
 if (_intro_timer == 20)
 {
@@ -32,7 +19,7 @@ if (_intro_timer == 20)
 	testDialog.text = "{font 3}{voice 3}{head 1}I get it now.{pause}{clear}{head 2}When Alphys was pushed&to the brink... {pause}{clear}{head 7}She tapped into&something greater than&herself.{pause}{clear}{head 15}Can I really do this?&What if I can't&control it?{pause}{clear}{head 14}...I'll find a way.{pause}{clear}{head 0}Because now... my soul&burns with the same&desire she once had.{pause}{clear}{head 7}Infused with every&last bit of hope this&world can offer me...{pause}{clear}{head 2}I promise that by the&end of today...{pause}{clear}{head 17}You'll know what it's&like... to face the&power of a thousand&suns!{pause}{clear}{script `flash_on`}{sleep 20}{script `testScript`}{script `flash_off`}{head 0}And know how strong&hope really is!";
 }
 
-if (_intro_timer > 20)										 
+if (_intro_timer > 20)
 {
 	if !(instance_exists(testDialog))
 	{

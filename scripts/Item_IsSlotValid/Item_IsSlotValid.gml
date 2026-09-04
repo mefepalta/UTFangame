@@ -1,4 +1,3 @@
-///@arg item_slot
 function Item_IsSlotValid() {
 	var SLOT=argument[0];
 

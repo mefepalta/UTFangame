@@ -1,8 +1,6 @@
 if wtimer == w_time
 	instance_destroy()
 
-// Kutunun kenarina yapisan mod: serit her kare yeniden olculuyor, boylece
-// kutu kayarken/boyu degisirken kemiklerle ayni yerde kaliyor.
 if (follow_dir >= 0) and (instance_exists(battle_board))
 {
 	var _wl = battle_board.x-battle_board.left;

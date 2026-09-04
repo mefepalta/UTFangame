@@ -1,4 +1,3 @@
-///@arg flee_enabled
 function Battle_SetMenuMercyFleeEnabled() {
 	var ENABLED=argument[0];
 

@@ -1,4 +1,3 @@
-// char_box User Event 0 başına:
 if(instance_exists(char_player)){
     char_player._moveable_chest = false;
     char_player._moveable_box = false;

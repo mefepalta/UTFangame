@@ -1,4 +1,3 @@
-///@arg type
 function Flag_GetRaw() {
 	var TYPE=argument[0];
 

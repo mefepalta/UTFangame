@@ -2,24 +2,17 @@ if (alpha <= 0.002) exit;
 
 var _tt   = t * 0.01;
 var _puls = 1 + sin(_tt * 2.1) * 0.06;
-var _A    = alpha * (1 + settle * 0.45);      // odaya girerken fazladan isik
+var _A    = alpha * (1 + settle * 0.45);
 
 if (!fire)
 {
-// =====================================================================
-//  FAZ 1 - GECE GOGU / TAKIMYILDIZLAR
-//  gece gecisi -> bulutsu -> yildizlar -> takimyildizlar ->
-//  kayan yildiz -> kar -> zemin -> vinyet
-// =====================================================================
 
-	// ---- gece: tepede en koyu, ufka dogru hafifce moraran gok ---------
 	bg_vgrad(    0,   150, COL_NIGHT, 0.92 * _A, COL_NIGHT, 0.80 * _A);
 	bg_vgrad(  150,   290, COL_NIGHT, 0.80 * _A, COL_NEB,   0.26 * _A);
 	bg_vgrad(  290, GND_Y, COL_NEB,   0.26 * _A, COL_ACC,   0.16 * _A);
 
 	gpu_set_blendmode(bm_add);
 
-	// ---- bulutsu: kosegen boyunca dizilmis yumusak kutleler ------------
 	for (var i = 0; i < array_length(nebula); i++) {
 	    var _nb = nebula[i];
 	    for (var k = 0; k < array_length(_nb.pieces); k++) {
@@ -30,15 +23,13 @@ if (!fire)
 	    }
 	}
 
-	// ---- yildiz alani ---------------------------------------------------
 	for (var i = 0; i < array_length(star); i++) {
 	    var _s  = star[i];
-	    var _tw = 0.45 + 0.55 * (0.5 + 0.5 * sin(_s.ph));      // yanip sonme
+	    var _tw = 0.45 + 0.55 * (0.5 + 0.5 * sin(_s.ph));
 	    draw_set_alpha(_s.a * _tw * _A);
 	    draw_set_colour(COL_STAR);
 	    var _r = _s.sz * (0.8 + _tw * 0.4);
 	    draw_rectangle(_s.x - _r, _s.y - _r, _s.x + _r, _s.y + _r, false);
-	    // Yakin katmandaki iri yildizlar dort kollu bir parilti veriyor
 	    if (_s.near && _tw > 0.75) {
 	        var _fl = _s.sz * 3.4 * _tw;
 	        draw_set_alpha(_s.a * (_tw - 0.75) * 2.2 * _A);
@@ -47,20 +38,16 @@ if (!fire)
 	    }
 	}
 
-	// ---- takimyildizlar: sirayla beliren cizgiler ------------------------
-	// Papyrus'un saydigi yildizlar; her grup sirayla yanip sonuyor.
 	for (var i = 0; i < array_length(constel); i++) {
 	    var _c  = constel[i];
 	    var _w  = 0.5 + 0.5 * sin(t * _c.spd + _c.ph);
 	    var _ca = _w * _w * _A;
 	    if (_ca <= 0.01) continue;
-	    // baglanti cizgileri
 	    draw_set_alpha(_ca * 0.30);
 	    draw_set_colour(COL_ACC);
 	    for (var k = 0; k < array_length(_c.pts) - 1; k++) {
 	        draw_line_width(_c.pts[k].x, _c.pts[k].y, _c.pts[k+1].x, _c.pts[k+1].y, 1);
 	    }
-	    // dugum yildizlari
 	    for (var k = 0; k < array_length(_c.pts); k++) {
 	        bg_glow(_c.pts[k].x, _c.pts[k].y, 13, COL_ACC, _ca * 0.55);
 	        draw_set_alpha(_ca * 0.95);
@@ -70,7 +57,6 @@ if (!fire)
 	    }
 	}
 
-	// ---- kayan yildiz ----------------------------------------------------
 	for (var i = 0; i < array_length(shoot); i++) {
 	    var _sh = shoot[i];
 	    var _f  = _sh.life / _sh.maxlife;
@@ -86,7 +72,6 @@ if (!fire)
 	    }
 	}
 
-	// ---- ufuk: karin uzerinde yildiz isiginin toplandigi ince bant -------
 	bg_glow(320, GND_Y, 330 * _puls, COL_NEB, 0.16 * _A, 0.16);
 	draw_set_colour(COL_SNOW);
 	draw_set_alpha(0.13 * _A);
@@ -95,10 +80,8 @@ if (!fire)
 	draw_set_alpha(1);
 	gpu_set_blendmode(bm_normal);
 
-	// ---- kar ortulu zemin: ufuktan asagi karariyor ------------------------
 	bg_vgrad(GND_Y, 482, COL_GND, 0.75 * alpha, COL_NIGHT, 0.95 * alpha);
 
-	// ---- yagan kar --------------------------------------------------------
 	draw_set_colour(COL_SNOW);
 	for (var i = 0; i < array_length(snow); i++) {
 	    var _f2 = snow[i];
@@ -106,7 +89,6 @@ if (!fire)
 	    draw_rectangle(_f2.x - _f2.sz, _f2.y - _f2.sz, _f2.x + _f2.sz, _f2.y + _f2.sz, false);
 	}
 
-	// ---- vinyet: gogun kenarlari kararsin ---------------------------------
 	var _vv = 0.34 * alpha;
 	draw_primitive_begin(pr_trianglestrip);
 	draw_vertex_colour(0,   0, COL_NIGHT, _vv); draw_vertex_colour(0,   482, COL_NIGHT, _vv);
@@ -119,45 +101,28 @@ if (!fire)
 }
 else
 {
-// =====================================================================
-//  FAZ 2 - VOLKAN
-//  dumanli gok -> duman kumeleri -> kaldera kizilligi -> lav nehri ->
-//  kaya sirti -> akkor catlaklar -> kivilcim -> kul -> isi titresimi
-// =====================================================================
-	var _beat = 0.5 + 0.5 * sin(_tt * 1.6);        // kalderanin nabzi
+	var _beat = 0.5 + 0.5 * sin(_tt * 1.6);
 
-	// ---- gokyuzu -------------------------------------------------------
-	// Tepe tam siyah degil, sicak-koyu bir pus: boylece uzerine cizilen
-	// koyu duman kutleleri gercekten "koyu" olarak okunabiliyor.
 	bg_vgrad(  0, 120, COL_SMOKE, 0.30 * _A, COL_SMOKE, 0.38 * _A);
 	bg_vgrad(120, 240, COL_SMOKE, 0.38 * _A, COL_MID,   0.30 * _A);
 	bg_vgrad(240, LAVA_Y, COL_MID, 0.30 * _A, COL_ACC,  0.34 * _A);
 
-	// ---- duman kumeleri: alttan aydinlanan koyu kutleler ---------------
 	for (var i = 0; i < array_length(smoke); i++) {
 	    var _s = smoke[i];
 	    var _r = _s.r * (1 + sin(_s.ph) * 0.10);
-	    // koyu govde: pusun uzerine cizilince kutle olarak beliriyor
 	    bg_glow(_s.x, _s.y - _r * 0.14, _r, COL_SKY, _s.a * 0.85 * _A, 0.50);
 	}
 	gpu_set_blendmode(bm_add);
 	for (var i = 0; i < array_length(smoke); i++) {
-	    // alt kenarinda lavdan gelen isik -> kabaran duman hissi
 	    var _s = smoke[i];
 	    var _r = _s.r * (1 + sin(_s.ph) * 0.10);
 	    bg_glow(_s.x, _s.y + _r * 0.26, _r * 0.66, COL_SMOKE, _s.a * 0.75 * _A, 0.32);
 	    bg_glow(_s.x, _s.y + _r * 0.34, _r * 0.32, COL_MID,   _s.a * 0.30 * _A, 0.26);
 	}
 
-	// ---- kaldera kizilligi: lav nehrinden yayilan genis isik -----------
 	bg_glow(320, LAVA_Y, 430 * _puls, COL_MID, (0.26 + 0.08 * _beat) * _A, 0.62);
 	bg_glow(320, LAVA_Y, 240 * _puls, COL_ACC, (0.20 + 0.09 * _beat) * _A, 0.46);
 
-	// ---- lav nehri: ust kenari dalgalanan akkor bant -------------------
-	// Ust kenar sinuslerle kivriliyor, alt kenar duz: eriyip akan bir
-	// nehir gibi duruyor, duz bir bant gibi degil.
-	// Parlaklik x boyunca da dalgalaniyor: bazi yerler kabuk baglamis gibi
-	// sonuk, bazi yerler akkor. Duz bir bant gibi durmasin.
 	var _n = 44;
 	draw_primitive_begin(pr_trianglestrip);
 	for (var i = 0; i <= _n; i++) {
@@ -181,13 +146,10 @@ else
 
 	gpu_set_blendmode(bm_normal);
 
-	// ---- on plandaki kaya sirti ---------------------------------------
-	// Kenarlarda yuksek, ortada alcak; lav nehri ortadan gorunuyor.
 	bg_ridge(ridge, 0, COL_ROCK, 0.97 * min(alpha * 1.6, 1));
 
 	gpu_set_blendmode(bm_add);
 
-	// ---- sirtin tepesinde lavdan gelen ince akkor kenar ---------------
 	draw_primitive_begin(pr_trianglestrip);
 	for (var i = 0; i < array_length(ridge); i++) {
 	    draw_vertex_colour(ridge[i].x, ridge[i].y - 5, COL_ACC, 0);
@@ -195,19 +157,12 @@ else
 	}
 	draw_primitive_end();
 
-	// ---- kayadaki akkor catlaklar -------------------------------------
-	// Her damar tepede genis, asagi indikce sivriliyor; cizgi degil,
-	// kayadan sizan erimis tas gibi. Cevresine de isi yayiliyor.
 	for (var i = 0; i < array_length(crack); i++) {
 	    var _c  = crack[i];
 	    var _np = array_length(_c.pts);
 	    var _ca = (0.26 + 0.18 * sin(t * _c.spd + _c.ph)) * _A;
 	    if (_ca <= 0.004) continue;
 
-	    // Genislikler ve parlama yaricaplari Create'te, sabit sirt
-	    // profilinden hesaplandi (pts[k].hw / pts[k].gr): kayanin ince
-	    // oldugu yerde kendiliginden kuculuyorlar, o yuzden burada hicbir
-	    // kirpma yok ve hicbir kosulda siluetin disina tasmiyorlar.
 	    for (var k = 0; k < _np; k++) {
 	        var _q = k / max(_np - 1, 1);
 	        if (_c.pts[k].gr > 2) {
@@ -215,7 +170,6 @@ else
 	        }
 	    }
 
-	    // govde: tepede sirta yapisip sifira yaklasiyor, iceri girdikce aciliyor
 	    draw_primitive_begin(pr_trianglestrip);
 	    for (var k = 0; k < _np; k++) {
 	        var _q  = k / max(_np - 1, 1);
@@ -226,7 +180,6 @@ else
 	    }
 	    draw_primitive_end();
 
-	    // akkor cekirdek (govdenin icinde kaliyor)
 	    draw_primitive_begin(pr_trianglestrip);
 	    for (var k = 0; k < _np; k++) {
 	        var _q  = k / max(_np - 1, 1);
@@ -238,7 +191,6 @@ else
 	    draw_primitive_end();
 	}
 
-	// ---- lavdan firlayan kivilcimlar ----------------------------------
 	for (var i = 0; i < array_length(spark); i++) {
 	    var _k = spark[i];
 	    var _f = _k.life / _k.maxlife;
@@ -250,7 +202,6 @@ else
 	draw_set_alpha(1);
 	gpu_set_blendmode(bm_normal);
 
-	// ---- yagan kul ------------------------------------------------------
 	draw_set_colour(COL_ASH);
 	for (var i = 0; i < array_length(ash); i++) {
 	    var _a2 = ash[i];
@@ -258,9 +209,6 @@ else
 	    draw_rectangle(_a2.x - _a2.sz, _a2.y - _a2.sz, _a2.x + _a2.sz, _a2.y + _a2.sz, false);
 	}
 
-	// ---- isi titresimi ---------------------------------------------------
-	// Lavin hemen ustunde alfasi dalgalanan yatay bantlar; Faz 1'in duz
-	// tarama cizgilerinin aksine burada hava kayniyor gibi duruyor.
 	gpu_set_blendmode(bm_add);
 	draw_set_colour(COL_ACC);
 	for (var i = 0; i < 16; i++) {

@@ -1,4 +1,3 @@
-// Tur baslarken Sans'in kafasi diyalog ifadesinden idle animasyonuna doner
 if (room == room_battle_1) and (_timer == 1)
 {
 	battle_enemy_engage.p2_head_sprite = spr_p2_idle;
@@ -303,11 +302,6 @@ if (room == room_battle_1)
 	}
 	if (fade_at > 0) and (_timer == fade_at+15)
 	{
-		// ALT KENAR YERINDE KALIYOR. Eskiden (85,85,...) idi: kutu hem
-		// yukari hem ASAGI 20 px buyuyordu, alt kenar varsayilan 385'ten
-		// 405'e iniyordu. Kirmizi/mavi ruhta alt kenarin yeri sabit olmali
-		// (varsayilan BATTLE_BOARD.DOWN = 65); buyume yukari yapiliyor.
-		// Toplam yukseklik AYNI (170), yani Gate() bosluk hesabi degismiyor.
 		Battle_SetBoardSizeCubic(105,65,35,35,0);
 		Battle_SetSoul(battle_soul_red);
 	}

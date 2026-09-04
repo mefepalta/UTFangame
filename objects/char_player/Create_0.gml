@@ -24,14 +24,28 @@ _goes=0;
 fuck_u=0;
 go_bro=true;
 
-res_idle_sprite[DIR.UP]=spr_char_frisk_up_dark;
-res_idle_sprite[DIR.DOWN]=spr_char_frisk_down_dark;
-res_idle_sprite[DIR.LEFT]=spr_char_frisk_right_dark;
-res_idle_sprite[DIR.RIGHT]=spr_char_frisk_right_dark;
-res_move_sprite[DIR.UP]=spr_char_frisk_up_dark;
-res_move_sprite[DIR.DOWN]=spr_char_frisk_down_dark;
-res_move_sprite[DIR.LEFT]=spr_char_frisk_right_dark;
-res_move_sprite[DIR.RIGHT]=spr_char_frisk_right_dark;
+if (room == room_area_beforesans || room == room_area_aftersans)
+{
+	res_idle_sprite[DIR.UP]=spr_char_frisk_up_color;
+	res_idle_sprite[DIR.DOWN]=spr_char_frisk_down_color;
+	res_idle_sprite[DIR.LEFT]=spr_char_frisk_right_color;
+	res_idle_sprite[DIR.RIGHT]=spr_char_frisk_right_color;
+	res_move_sprite[DIR.UP]=spr_char_frisk_up_color;
+	res_move_sprite[DIR.DOWN]=spr_char_frisk_down_color;
+	res_move_sprite[DIR.LEFT]=spr_char_frisk_right_color;
+	res_move_sprite[DIR.RIGHT]=spr_char_frisk_right_color;
+}
+else
+{
+	res_idle_sprite[DIR.UP]=spr_char_frisk_up_dark;
+	res_idle_sprite[DIR.DOWN]=spr_char_frisk_down_dark;
+	res_idle_sprite[DIR.LEFT]=spr_char_frisk_right_dark;
+	res_idle_sprite[DIR.RIGHT]=spr_char_frisk_right_dark;
+	res_move_sprite[DIR.UP]=spr_char_frisk_up_dark;
+	res_move_sprite[DIR.DOWN]=spr_char_frisk_down_dark;
+	res_move_sprite[DIR.LEFT]=spr_char_frisk_right_dark;
+	res_move_sprite[DIR.RIGHT]=spr_char_frisk_right_dark;
+}
 
 moveable=true;
 _moveable_dialog=true;

@@ -1,18 +1,11 @@
-///@desc Turn Preparation Start
 Battle_SetBoardSizeCubic(65,65,65,65);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 
-// MERHAMET CEZASI: arka plan tam burada, yani oyuncunun Mercy'ye bastigi
-// anda solmaya basliyor -- Sans'in uzun repligi de solma boyunca oynuyor.
-// Sadece mizrak sahnesinin gercekten calisacagi durumda (bkz. Step_0'daki
-// ayni kosullar), yoksa normal turlarda arka plan kaybolurdu.
 if (global.p25phase == 0) and (global.sanstalk <= 22)
 {
 	sap_bg_on = true;
 }
 
-// FINAL PHASE: belgede "(If you try to spare him.) Sans: ..." diyor.
-// Faz 1'in uzun merhamet repligi burada calismamali.
 if (global.p25phase >= 1)
 {
 	sansy.text = "{speaker 0}{font 3}{voice 3}{head 22}...";

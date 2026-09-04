@@ -1,7 +1,7 @@
 depth=DEPTH_BATTLE.BULLET_OUTSIDE_HIGH*2
-angle = 0; 
-orbit_radius = 5; 
-sprite_count = 8; 
+angle = 0;
+orbit_radius = 5;
+sprite_count = 8;
 
 xscale_bullet = 1.3
 yscale_bullet = 1.3
@@ -23,7 +23,6 @@ Anim_Create(id,"speed_bullet",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,12,-6,50,40)
 Anim_Create(id,"xscale_bullet",1,0,1.3,-1.3,50,30)
 Anim_Create(id,"yscale_bullet",1,0,1.3,-1.3,50,30)
 
-//Anim_Create(id,"alpha_bullet",0,1,0,1,35)
 Anim_Create(id,"alpha_bullet",0,1,1,-1,35,40)
 
 if battle_menu_fight_empty_gun._aim_perfect = true{

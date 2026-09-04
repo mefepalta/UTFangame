@@ -1,8 +1,5 @@
 event_inherited();
 
-//Ruh kutunun tam merkezinde sabit duruyor. Her karede yeniden hizalanıyor,
-//yoksa kutu yerine otururken motorun sınır kontrolü ruhu kenara itiyor
-//ve kutu hareketini bitirince ruh merkez dışında kalıyor.
 if(instance_exists(battle_board)){
 	x=battle_board.x;
 	y=battle_board.y;
@@ -27,7 +24,6 @@ if(!ACTIVE){
 aim_update();
 image_angle=aim;
 
-//--- Z basılı: büyük mermi doluyor ---
 if(Input_IsHeld(INPUT.CONFIRM)){
 	if(!charging){
 		charging=true;
@@ -36,13 +32,9 @@ if(Input_IsHeld(INPUT.CONFIRM)){
 	if(charge<charge_max){
 		charge+=1;
 		if(charge==charge_max){
-			//snd_chance bir muzik parcasi (baska yerde loop'lu caliyor); sarj her
-			//doldugunda ust uste biniyordu. Turuncu ruhta da ayni sorun vardi.
 			audio_play_sound(snd_ding,0,false);
 		}
 
-		//Dolum sürerken etraftan kalbe daireler akıyor.
-		//Dolunca yenisi üretilmiyor, yoldakiler kalbe girip bitiyor.
 		orb_timer-=1;
 		if(orb_timer<=0){
 			orb_timer=3;
@@ -55,7 +47,6 @@ if(Input_IsHeld(INPUT.CONFIRM)){
 		}
 	}
 }else if(charging){
-	//--- Bırakıldı: doluysa büyük, değilse küçük mermi ---
 	if(charge>=charge_max){
 		fire(true);
 	}
@@ -64,7 +55,6 @@ if(Input_IsHeld(INPUT.CONFIRM)){
 	orbs=[];
 }
 
-//Daireler şeffaf başlar, hızlıca opaklaşıp kalbe girer
 for(var i=array_length(orbs)-1;i>=0;i--){
 	var ORB=orbs[i];
 	ORB.dis-=ORB.spd;
@@ -74,7 +64,6 @@ for(var i=array_length(orbs)-1;i>=0;i--){
 	}
 }
 
-//--- Z'ye basıldığı an küçük mermi (dolum beklemeden) ---
 if(small_on && Input_IsPressed(INPUT.CONFIRM) && small_cd<=0){
 	fire(false);
 }

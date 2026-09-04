@@ -1,6 +1,3 @@
-///@arg box_slot
-///@arg item_slot
-///@arg item_id
 function Box_Set() {
 	var SLOT_BOX=argument[0];
 	var SLOT=argument[1];

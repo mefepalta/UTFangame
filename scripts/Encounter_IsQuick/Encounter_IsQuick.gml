@@ -1,4 +1,3 @@
-///@arg encounter_id
 function Encounter_IsQuick() {
 	var ID=argument[0];
 

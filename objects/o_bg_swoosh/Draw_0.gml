@@ -1,8 +1,7 @@
-// Renk geçişi: mor → turuncu → sarı
 var colors = [
-    make_color_rgb(180, 0, 255),  // mor
-    make_color_rgb(255, 100, 0),  // turuncu
-    make_color_rgb(255, 220, 0),  // sarı
+    make_color_rgb(180, 0, 255),
+    make_color_rgb(255, 100, 0),
+    make_color_rgb(255, 220, 0),
 ];
 
 var Sspeed = 0.02;

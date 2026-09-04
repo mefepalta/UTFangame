@@ -1,9 +1,4 @@
-///@arg up
-///@arg down
-///@arg left
-///@arg right
-///@arg time*
-function Battle_SetBoardSizeCubic(U,D,L,R) 
+function Battle_SetBoardSizeCubic(U,D,L,R)
 {
 	var TIME=25;
 	if(argument_count>=5){
@@ -45,12 +40,7 @@ function Battle_SetBoardSizeCubic(U,D,L,R)
 
 
 
-///@arg up
-///@arg down
-///@arg left
-///@arg right
-///@arg time*
-function Battle_SetBoardSize(U,D,L,R) 
+function Battle_SetBoardSize(U,D,L,R)
 {
 	var TIME=25;
 	if(argument_count>=5){

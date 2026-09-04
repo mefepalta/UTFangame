@@ -1,4 +1,3 @@
-/// @description Newcreate
 mainboard = instance_create_depth(x,y,0,battle_board_extra);
 ds_list_add(
 	mainboard.listVertex,

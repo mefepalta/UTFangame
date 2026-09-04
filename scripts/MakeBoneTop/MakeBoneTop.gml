@@ -1,16 +1,3 @@
-///@arg x
-///@arg length
-///@arg hspeed
-///@arg color
-///@arg out
-///@arg rot
-///@arg auto_destroy
-///@arg TOP
-///@arg angle
-///@arg mspd
-///@arg mx
-///@arg my
-///@arg *duration
 function MakeBoneTop() {
 	var X = argument[0];
 	var LENGTH = argument[1];

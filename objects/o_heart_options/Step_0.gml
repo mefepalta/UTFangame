@@ -1,8 +1,5 @@
 optt++;
 
-// ---------------------------------------------------------------------
-// Recalculate the panel layout so it stays centred in the visible area
-// ---------------------------------------------------------------------
 var _vx = 0, _vy = 0, _vw = room_width, _vh = room_height;
 if (view_enabled) and (view_visible[0])
 {
@@ -28,10 +25,8 @@ text_left  = panel_cx - panel_w * 0.5 + 46;
 text_right = panel_cx + panel_w * 0.5 - 26;
 
 if (global.menu_state == "options") {
-    // Fade in
     global.fade_alpha = min(global.fade_alpha + 0.05, 1);
 
-    // Navigation
     if (keyboard_check_pressed(vk_down)) {
         menu_index = (menu_index + 1) mod array_length(menu_items);
         audio_play_sound(snd_menu_switch, 1, false);
@@ -41,10 +36,9 @@ if (global.menu_state == "options") {
         audio_play_sound(snd_menu_switch, 1, false);
     }
 
-    // Toggle options
     if (Input_IsPressed(INPUT.CONFIRM)) {
         switch (menu_index) {
-            case 0: 
+            case 0:
                 global.fullscreen = !global.fullscreen;
                 window_set_fullscreen(global.fullscreen);
 				if(!global.fullscreen){
@@ -65,7 +59,6 @@ if (global.menu_state == "options") {
         }
         audio_play_sound(snd_menu_confirm, 1, false);
     }
-	// the soul follows the selected row, derived from the panel layout
 	with (o_heartmenuoptions)
 	{
 		image_alpha = 1;
@@ -90,24 +83,21 @@ if (global.menu_state == "options") {
 		}
 	}
 
-    // Volume control
     if (menu_index == 5) {
-        if (keyboard_check_pressed(vk_right)) { 
+        if (keyboard_check_pressed(vk_right)) {
             global.volume = clamp(global.volume + 0.1, 0, 1);
             audio_master_gain(global.volume);
             audio_play_sound(snd_menu_confirm, 1, false);
         }
-        if (keyboard_check_pressed(vk_left)) { 
+        if (keyboard_check_pressed(vk_left)) {
             global.volume = clamp(global.volume - 0.1, 0, 1);
             audio_master_gain(global.volume);
             audio_play_sound(snd_menu_confirm, 1, false);
         }
     }
 
-    // Smooth slider animation
     global.display_volume = lerp(global.display_volume, global.volume, 0.15);
 
-    // Close menu
     if (Input_IsPressed(INPUT.CANCEL)) {
         global.menu_state = "main";
         audio_play_sound(snd_menu_cancel, 1, false);
@@ -118,6 +108,5 @@ if (global.menu_state == "options") {
     }
 }
 else {
-    // Fade out when leaving options
     global.fade_alpha = max(global.fade_alpha - 0.05, 0);
 }

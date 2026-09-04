@@ -1,4 +1,3 @@
-///@arg time
 function Battle_SetMenuFightAnimTime() {
 	var TIME=argument[0];
 

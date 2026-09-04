@@ -1,5 +1,3 @@
-///@arg enemy_slot
-///@arg name
 function Battle_SetEnemyName() {
 	var ENEMY=argument[0];
 	var NAME=argument[1];

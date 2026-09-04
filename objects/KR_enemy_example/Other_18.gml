@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 if(_phase_pause_state==0){
 	if(_turn==0){
 		Battle_SetTurnPreparationAutoEnd(false);

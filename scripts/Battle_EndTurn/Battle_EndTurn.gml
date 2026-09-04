@@ -3,14 +3,6 @@ function Battle_EndTurn(){
 		global.warpable=false;
 		Battle_SetTurnNumber(Battle_GetTurnNumber()+1);
 	
-		/*var LAST=Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy());
-		var proc=0;
-		repeat(3){
-			if(proc!=LAST){
-				Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.TURN_END,proc);
-			}
-			proc+=1;
-		}*/
 		Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.TURN_END);
 	
 		if(instance_exists(battle_turn)){

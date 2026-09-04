@@ -1,4 +1,3 @@
-///@arg def_item
 function Player_SetDefItem() {
 	var DEF=argument[0];
 

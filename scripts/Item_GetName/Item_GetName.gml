@@ -1,4 +1,3 @@
-///@arg item_id
 function Item_GetName() {
 	var ITEM=argument[0];
 

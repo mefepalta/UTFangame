@@ -14,13 +14,8 @@ var B_R=battle_board.x+battle_board.right;
 
 surface_set_target(SURF);
 
-//DİKKAT: battle_board kutu yüzeyini ekrana basmadan önce iki kez
-//draw_surface ile kopyalıyor, bu da rengi her seferinde alfayla çarpıyor.
-//Alfa<1 ile çizilen her şey siyaha eriyor. O yüzden burada her şey alfa 1
-//çiziliyor ve saydamlık rengin kendisine gömülüyor (kutunun arkası siyah).
 draw_set_alpha(1);
 
-//Sağdan sola tam sığan, yukarıdan aşağı akan gri şeritler
 var YY=B_TOP-stripe_gap+scroll_off;
 while(YY<B_BOT+stripe_gap){
 	draw_set_color(make_color_rgb(58,58,58));
@@ -30,8 +25,6 @@ while(YY<B_BOT+stripe_gap){
 	YY+=stripe_gap;
 }
 
-//Kalbin altına doğru giden şeffafımsı kalpler (ruhla aynı yönde).
-//Solma, alfa yerine gri tint ile yapılıyor.
 var SOUL_ANG=(instance_exists(battle_soul) ? battle_soul.image_angle : 180);
 for(var i=0;i<array_length(after_imgs);i++){
 	var IMG=after_imgs[i];

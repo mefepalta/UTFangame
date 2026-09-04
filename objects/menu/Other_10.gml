@@ -1,4 +1,3 @@
-///@desc Menu Switch
 if(_menu==0){
 	_mode=file_exists(Flag_GetSavePath(FLAG_TYPE.INFO));
 	if(_mode==0){

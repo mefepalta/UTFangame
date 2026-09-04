@@ -1,6 +1,4 @@
 depth=DEPTH_BATTLE.UI_HIGH
-// x=Flash.x  ← SİL
-// y=Flash.y  ← SİL
 image_speed=1/4
 gravity=0.1
 gravity_direction=DIR.DOWN

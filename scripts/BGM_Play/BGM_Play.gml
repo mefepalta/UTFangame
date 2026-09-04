@@ -1,8 +1,3 @@
-///@arg bgm_slot
-///@arg audio
-///@arg loop*
-///@arg loop_start*
-///@arg loop_end*
 function BGM_Play() {
 	var SLOT=argument[0];
 	var AUDIO=argument[1];

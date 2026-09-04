@@ -1,13 +1,9 @@
-// ---------------------------------------------------------------------
-// Draw End: everything that belongs on top of the logo
-// ---------------------------------------------------------------------
 var _prevcol = draw_get_colour();
 
 if (impact_t >= 0)
 {
 	gpu_set_blendmode(bm_add);
 
-	// --- sparks -------------------------------------------------------
 	for (var _i = 0; _i < array_length(sparks); _i++)
 	{
 		var _sp = sparks[_i];
@@ -17,7 +13,6 @@ if (impact_t >= 0)
 		draw_line_width(_sp.px, _sp.py, _sp.px - _sp.vx * 1.8, _sp.py - _sp.vy * 1.8, max(1, 2.4 * _l));
 	}
 
-	// --- expanding shockwave: one soft ring, not a stack of outlines ---
 	if (impact_t < 34)
 	{
 		var _w   = impact_t / 34;
@@ -42,7 +37,6 @@ if (impact_t >= 0)
 		}
 	}
 
-	// --- light streaks bursting out of the impact ---------------------
 	if (impact_t < 20)
 	{
 		var _sa = power(1 - impact_t / 20, 2) * 0.55;
@@ -62,9 +56,6 @@ if (impact_t >= 0)
 	gpu_set_blendmode(bm_normal);
 }
 
-// ---------------------------------------------------------------------
-// Vignette
-// ---------------------------------------------------------------------
 draw_set_colour(c_black);
 var _vn = 44;
 for (var _v = 0; _v < _vn; _v++)
@@ -74,9 +65,6 @@ for (var _v = 0; _v < _vn; _v++)
 	draw_rectangle(vx_ + _v, vy_ + _v, vx_ + vw_ - 1 - _v, vy_ + vh_ - 1 - _v, true);
 }
 
-// ---------------------------------------------------------------------
-// The flash goes over everything, vignette included
-// ---------------------------------------------------------------------
 if (impact_t >= 0) and (impact_t < 10)
 {
 	draw_set_colour(make_colour_rgb(238, 232, 255));

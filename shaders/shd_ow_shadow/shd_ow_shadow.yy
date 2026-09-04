@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"shd_ow_shadow",
+  "name":"shd_ow_shadow",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/Shaders.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

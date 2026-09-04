@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 with (battle_enemy_engage)
 {
@@ -22,7 +21,7 @@ if (room == room_battle)
 	Battle_SetBoardSizeCubic(65,65,150,150);
 	sansy.text = "{font 3}{voice 3}{squish 1.2}{head 2}But actually seeing it&happen in person?{pause}{clear}{head 3}A pile of dust where&life once stood?{pause}{clear}{head 11}Now that's an image&nearly impossible to&get out of your mind.";
 }
-if (room == room_battle_1)																																																																		   
+if (room == room_battle_1)
 {
 	Battle_SetBoardSizeCubic(65,65,250,250);
 	battle_enemy_engage.p2_head_sprite = spr_p2_head;

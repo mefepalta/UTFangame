@@ -1,11 +1,11 @@
-angle += speed_bullet; 
+angle += speed_bullet;
 if (angle >= 360) {
-    angle -= 360; 
+    angle -= 360;
 }
 
 
 for (var n = 0; n < sprite_count; n++) {
-    var sprite_angle = angle + (360 / sprite_count) * n; 
+    var sprite_angle = angle + (360 / sprite_count) * n;
     var x_position = lengthdir_x(orbit_radius, sprite_angle);
     var y_position = lengthdir_y(orbit_radius, sprite_angle);
 

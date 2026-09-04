@@ -1,11 +1,3 @@
-///@arg shake_x
-///@arg shake_y
-///@arg shake_speed_x*
-///@arg shake_speed_y*
-///@arg shake_random_x*
-///@arg shake_random_y*
-///@arg shake_decrease_x*
-///@arg shake_decrease_y*
 function Windows_Shake() {
 
 	var X=argument[0];

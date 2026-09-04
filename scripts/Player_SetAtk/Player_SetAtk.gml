@@ -1,4 +1,3 @@
-///@arg atk
 function Player_SetAtk() {
 	var ATK=argument[0];
 

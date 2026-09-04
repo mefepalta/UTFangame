@@ -1,4 +1,3 @@
-///@desc Draw
 if(font_exists(font)){
 	draw_set_font(font);
 	if(shadow){

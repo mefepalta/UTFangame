@@ -1,14 +1,3 @@
-///@arg x
-///@arg y
-///@arg length
-///@arg hspeed
-///@arg vspeed
-///@arg color
-///@arg out
-///@arg rot
-///@arg auto_destroy
-///@arg left
-///@arg *duration
 function MakeBoneH() {
 	var X = argument[0];
 	var Y = argument[1];

@@ -1,4 +1,3 @@
-///@arg item_slot
 function Item_Remove() {
 	var SLOT=argument[0];
 

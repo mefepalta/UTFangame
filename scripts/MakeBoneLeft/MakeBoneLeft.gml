@@ -1,16 +1,3 @@
-///@arg y
-///@arg length
-///@arg vspeed
-///@arg color
-///@arg out
-///@arg rot
-///@arg auto_destroy
-///@arg left
-///@arg angle
-///@arg mspd
-///@arg mx
-///@arg my
-///@arg *duration
 function MakeBoneLeft() {
 	var Y = argument[0];
 	var LENGTH = argument[1];

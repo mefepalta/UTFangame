@@ -23,28 +23,28 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 	var isInside2 = false;
 	var isInside3 = false;
 	var isInside4 = false;
-	for(var i = 0; i < global.borderCount; i++) {	//遍历所有框，判断是否出框
+	for(var i = 0; i < global.borderCount; i++) {
 		bb = ds_list_find_value(global.borders_list,i);
 		if(bb.contains(battle_soul.x - sprite_width/2-1, battle_soul.y)) {
 			isInside1 = true;
 			break;
 		}
 	}
-	for(var i = 0; i < global.borderCount; i++) {	//遍历所有框，判断是否出框
+	for(var i = 0; i < global.borderCount; i++) {
 		bb = ds_list_find_value(global.borders_list,i);
 		if(bb.contains(battle_soul.x + sprite_width/2, battle_soul.y)) {
 			isInside2 = true;
 			break;
 		}
 	}
-	for(var i = 0; i < global.borderCount; i++) {	//遍历所有框，判断是否出框
+	for(var i = 0; i < global.borderCount; i++) {
 		bb = ds_list_find_value(global.borders_list,i);
 		if(bb.contains(battle_soul.x, battle_soul.y - sprite_height/2-1)) {
 			isInside3 = true;
 			break;
 		}
 	}
-	for(var i = 0; i < global.borderCount; i++) {	//遍历所有框，判断是否出框
+	for(var i = 0; i < global.borderCount; i++) {
 		bb = ds_list_find_value(global.borders_list,i);
 		if(bb.contains(battle_soul.x, battle_soul.y + sprite_height/2+1)) {
 			isInside4 = true;
@@ -95,14 +95,11 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 		on_platform = 0;
 		inst_plat = noone;
 	}
-	//底部无支撑时
 
 	if(on_block = 0&&on_board = 0&&on_platform = 0&&jump_state = 0){
 		jump_state = 1;
-		//show_debug_message("here is no collision part");
 		move = 0;
 	}
-	//底部无支撑时自然下落
 
 	if(jump_state != 0&&opposite_dir = 0){
 		jump_state = 2;
@@ -112,7 +109,6 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 		jump_state = 2;
 		if(impact = 0)move = 0;
 	}
-	//碰到顶时强制下落
 	
 	if(jump_state = 1){
 		if(Input_IsReleased(jump_input)){
@@ -123,7 +119,6 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 			jump_state = 2;
 		}
 	}
-	//松开跳跃键时改变状态
 	if(jump_state = 2){
 		if(move <= max_speed){
 			move += gravity_fall;
@@ -131,7 +126,6 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 		else{
 			move = max_speed;
 		}
-		//自然下落
 	
 		if(instance_position(x+xx*(sprite_width/2+1),y+yy*(sprite_height/2+1),block)){
 			on_block = 1;
@@ -154,7 +148,6 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 			}
 		}
 		inst_plat = instance_place(x+xx,y+yy-1,battle_platform1);
-		// Platform ancak yercekiminin cektigi tarafta kalirsa destek sayilir
 		if(instance_exists(inst_plat)){
 			var _cx = (bbox_left+bbox_right)/2;
 			var _cy = (bbox_top+bbox_bottom)/2;
@@ -167,7 +160,6 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 		    jump_state = 0;
 		    move = 0;
     
-		    // Platforma gömüldüyse dışarı çıkar
 		    var _pushx = 0;
 		    var _pushy = 0;
 		    if(dir = 270) _pushy = -1;
@@ -185,19 +177,18 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 		        impact = 0;
 		    }
 		}
-		//碰到支撑物时停止下落并改变状态
 	}
 
 	fx = 0
     fy = 0
     if (dir == 270)
-        fy = 1//(sprite_height / 2)
+        fy = 1
     else if (dir == 90)
-        fy = -1//((- sprite_height) / 2)
+        fy = -1
     else if (dir == 180)
-        fx = -1//((- sprite_height) / 2)
+        fx = -1
     else if (dir == 0)
-        fx = 1//(sprite_height / 2)
+        fx = 1
 	if(instance_exists(inst_plat) && (inst_plat.angle mod 180) != ((dir + 90) mod 180)){
 	    while(place_meeting(x+fx,y+fy,inst_plat)&&place_meeting(x,y,inst_plat)){
 	        move = 0; jump_state = 0;
@@ -249,7 +240,7 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 						x -= SPD/10;
 					}
 					else{
-						x = xprevious;	
+						x = xprevious;
 					}
 				}
 				break;
@@ -274,7 +265,7 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 					  x += SPD/10;
 					}
 					else{
-						x = xprevious;	
+						x = xprevious;
 					}
 				}
 				break;
@@ -299,7 +290,7 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 					  y -= SPD/10;
 					}
 					else{
-						y = yprevious;	
+						y = yprevious;
 					}
 				}
 				break;
@@ -324,11 +315,10 @@ if(Battle_GetState()==BATTLE_STATE.IN_TURN && moveable){
 					  y += SPD/10;
 					}
 					else{
-						y = yprevious;	
+						y = yprevious;
 					}
 				}
 				break;
 		}
 	}
-	//移动和开始跳跃
 }

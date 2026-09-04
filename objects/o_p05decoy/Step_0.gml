@@ -1,7 +1,5 @@
 if (!variable_global_exists("p05_sx")) { global.p05_sx = 0; global.p05_sy = 0; }
 
-// Poz sprite'i de sahnenin geri kalaniyla birlikte sarsilsin, ustune
-// hafif bir nefes salinimi alsin.
 bob += 0.05;
 
 x = base_x + global.p05_sx;

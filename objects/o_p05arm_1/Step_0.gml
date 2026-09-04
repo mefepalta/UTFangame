@@ -9,8 +9,6 @@ with (o_p05body) {
 
 angle_timer += 0.04;
 
-// Sag kol savururken sol kol dengelemek icin ters yonde, daha az aciliyor.
-// (image_xscale negatif oldugu icin acilar da ters isaretle veriliyor.)
 var _brace = 0;
 if      (_p > 2660 && _p <= 2705) _brace = ((_p - 2660) / 45) * 4;
 else if (_p > 2705 && _p <= 2716) _brace = 4 - ((_p - 2705) / 11) * 11;

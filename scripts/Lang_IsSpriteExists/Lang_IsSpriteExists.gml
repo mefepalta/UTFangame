@@ -1,4 +1,3 @@
-///@arg sprite_name
 function Lang_IsSpriteExists() {
 	var KEY=argument[0];
 

@@ -1,0 +1,1 @@
+text="* You stand in front of the final&corridor.{pause}{clear}* The snow falls, as the curtains&close on the story of the&Underground.{pause}{clear}* You can feel your DETERMINATION&flow like a river of power."

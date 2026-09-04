@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"OW_WindowLight",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OW_WindowLight",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

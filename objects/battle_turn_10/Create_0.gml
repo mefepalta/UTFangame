@@ -74,11 +74,6 @@ LeftWall = function(_count,_len,_warn)
 		array_push(wallbones,_b);
 	}
 
-	// KIRMIZI/SARI UYARI SERIDI. Bu duvar RegularBoneWall degil, dogrudan
-	// RegularBone ile kuruluyor -- yani nesnenin kendi seridi yok, sadece
-	// ses vardi. Serit kutunun SOL kenarina yapisiyor ve kemikler uzamaya
-	// baslayana kadar (_warn kare) yanip sonuyor. Kutu bu sirada boyut
-	// degistirdigi icin sabit dikdortgen ise yaramiyor, follow_dir sart.
 	var _uy = battle_warn(0,0,0,0,_warn);
 	_uy.follow_dir   = DIR.LEFT;
 	_uy.follow_thick = _len;

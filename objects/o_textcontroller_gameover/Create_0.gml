@@ -1,21 +1,6 @@
-/// @description Game Over yazisi -- mesaj secimi ve kurulum
-//
-// Metinler "Discord Sans Rewrite" senaryosunun "Game Over Dialogue"
-// bolumunden. Faz 2'de (room_battle_1) olunduyse mesaj, olum aninda SAHNEDE
-// OLAN karakterlere gore seciliyor: bir mesaj ancak konusan HERKES ekrandaysa
-// havuza giriyor. Kadro maskesini battle_soul/Step_2 yaziyor
-// (1 = Sans, 2 = Papyrus, 4 = Alphys); faz 1'de maske 0 kalir ve anlatici
-// mesajlari kullanilir.
 
 depth = -30;
 
-// ------------------------------------------------------------------
-//  KONUSMACILAR
-//  Fontlar farkli boyutlarda cizilmis (Comic Sans UT 12/25, Papyrus 12,
-//  Determination Sans 20). Ayni satir yuksekligini yakalamak icin her
-//  konusmaciya bir olcek veriliyor; olcekler TAM SAYI tutuldu ki pixel
-//  fontlar bulanik cizilmesin.
-// ------------------------------------------------------------------
 SPK_NARR = 0;
 SPK_SANS = 1;
 SPK_PAP  = 2;
@@ -24,22 +9,14 @@ SPK_ALP  = 3;
 CAST_SANS  = 1;
 CAST_PAP   = 2;
 CAST_ALP   = 4;
-CAST_MERCY = 8;      // merhamet gosterirken olundu
+CAST_MERCY = 8;
 
 spk_font  = [font_determination_sans, font_sans, font_papyrus, font_determination_sans];
 spk_scale = [1,                       2,         2,            1];
 spk_voice = [snd_text_voice_default, snd_text_voice_sans, snd_text_voice_papyrus, snd_text_voice_alphys];
 spk_need  = [0, CAST_SANS, CAST_PAP, CAST_ALP];
 
-// ------------------------------------------------------------------
-//  MESAJ HAVUZLARI
-//  Her mesaj bir satir dizisi; her satir [konusmaci, metin]. Ard arda gelen
-//  ayni konusmacinin satirlari tek sayfada birlikte gosterilir; konusmaci
-//  degisince yeni sayfaya gecilir.
-//  Uc nokta ve egik tirnak pixel fontlarda yok, duz karsiliklari yazildi.
-// ------------------------------------------------------------------
 
-// Faz 1 / kadro bilinmiyorsa: anlatici (senaryo #1-#8)
 msg_narrator = [
     [[SPK_NARR, "Your time here is far from over, human."],
      [SPK_NARR, "Rise."]],
@@ -62,7 +39,6 @@ msg_narrator = [
     [[SPK_NARR, "The sun will shine brightly on your future if you don't give up."]]
 ];
 
-// Faz 2 (senaryo "Phase 2 Game over" #1-#14)
 msg_phase2 = [
     [[SPK_ALP,  "For our fallen comrades... THIS is for you!"]],
 
@@ -97,15 +73,11 @@ msg_phase2 = [
     [[SPK_PAP,  "YOU CAME ALL THIS WAY JUST TO FAIL. TISK TISK, HUMAN."]]
 ];
 
-// Merhamet gosterirken olunduyse (senaryo: "(If you spared Sans.)")
 msg_mercy = [
     [[SPK_SANS, "Mweh heh heh!"],
      [SPK_SANS, "I'm glad to get rid of you!"]]
 ];
 
-// ------------------------------------------------------------------
-//  SATIR SARMA (konusmacinin fontu ve olcegiyle olculuyor)
-// ------------------------------------------------------------------
 WRAP_W = 576;
 
 go_wrap = function(_txt, _font, _scl) {
@@ -128,26 +100,17 @@ go_wrap = function(_txt, _font, _scl) {
     return _out;
 };
 
-// ------------------------------------------------------------------
-//  MESAJI SEC
-// ------------------------------------------------------------------
 var _cast = Flag_Get(FLAG_TYPE.TEMP, FLAG_TEMP.GAMEOVER_CAST);
-// Flag_Get bitsel islemle yazilmis bir deger dondurebilir; GML de bitsel
-// sonuclari int64 tipinde tutuyor ve is_real() int64 icin FALSE donuyor.
-// Eskiden burada is_real vardi ve dogru maskeyi sifirliyordu.
 if (!is_numeric(_cast)) _cast = 0;
 _cast = real(_cast);
-cast_mask = _cast;      // ekranda/logta teshis icin saklaniyor
+cast_mask = _cast;
 
 var _pool = [];
 var _p2   = _cast & (CAST_SANS | CAST_PAP | CAST_ALP);
 
 if ((_cast & CAST_MERCY) != 0) and ((_p2 == 0) or ((_p2 & CAST_SANS) != 0)) {
-    // Merhamet cezasi: konusan Sans, o yuzden Sans'in sahnede oldugundan
-    // (faz 1'de zaten tek dusman o) emin oluyoruz.
     _pool = msg_mercy;
 } else if (_p2 != 0) {
-    // Bir mesaj ancak KONUSAN HERKES sahnedeyse uygun.
     for (var i = 0; i < array_length(msg_phase2); i++) {
         var _m  = msg_phase2[i];
         var _ok = true;
@@ -157,10 +120,8 @@ if ((_cast & CAST_MERCY) != 0) and ((_p2 == 0) or ((_p2 & CAST_SANS) != 0)) {
         if (_ok) array_push(_pool, _m);
     }
 }
-// Faz 1, kadro bos, ya da (olmamasi gereken) bos havuz: anlatici
 if (array_length(_pool) == 0) _pool = msg_narrator;
 
-// Ust uste ayni mesaji gostermemek icin son secim hatirlaniyor.
 if (!variable_global_exists("gameover_last_msg")) global.gameover_last_msg = -1;
 var _pick = irandom(array_length(_pool) - 1);
 if (array_length(_pool) > 1) {
@@ -172,12 +133,6 @@ if (array_length(_pool) > 1) {
 }
 global.gameover_last_msg = _pick;
 
-// ------------------------------------------------------------------
-//  SAYFALARA BOL
-//  Ard arda ayni konusmaci -> tek sayfada alt alta. Konusmaci degisince
-//  yeni sayfa. #9 gibi uc kisilik mesajlar boylece ekrana sigiyor ve
-//  karsilikli konusma gibi okunuyor.
-// ------------------------------------------------------------------
 pages = [];
 var _src = _pool[_pick];
 var _cur_spk = -1;
@@ -202,32 +157,23 @@ for (var i = 0; i < array_length(_src); i++) {
     }
 }
 
-// olculer sayfa tamamlandiktan sonra hesaplaniyor
 for (var i = 0; i < array_length(pages); i++) {
     var _p = pages[i];
     draw_set_font(_p.fnt);
     _p.len = string_length(_p.txt);
     _p.h   = string_height(_p.txt) * _p.scl;
-    // Sayfa ~394e ortalanir; en uzun sayfa (Papyrus, 3 satir) da elin
-    // altina girmeden sigsin diye ust kenar 340ta kilitlenir.
     _p.y   = max(340, 394 - _p.h * 0.5);
     _p.bot = _p.y + _p.h;
 }
 
-// ------------------------------------------------------------------
-//  YAZMA DURUMU
-// ------------------------------------------------------------------
-// Eskiden zamanlama current_time (duvar saati) uzerinden yuruyordu; oyun
-// takildiginda ya da odaya gec girildiginde yazi sahneden kayiyordu.
-// Artik o_gameover_heart'in kare sayacina bagli, yani her zaman ayni yerde.
-char_speed = 2;      // kare / harf
-page_hold  = 80;     // sayfa bittikten sonra sonrakine gecme beklemesi
-cur        = 0;      // gosterilen sayfa
-shown      = 0;      // o sayfada acilan harf sayisi
+char_speed = 2;
+page_hold  = 80;
+cur        = 0;
+shown      = 0;
 wait       = 0;
 t          = 0;
 started    = false;
 done       = false;
 
-prompt_a   = 0;      // "devam" isareti
+prompt_a   = 0;
 blink      = 0;

@@ -1,5 +1,3 @@
-///@arg encounter_id
-///@arg enemy_slot
 function Encounter_GetEnemy() {
 	var ID=argument[0];
 	var ENEMY=argument[1];

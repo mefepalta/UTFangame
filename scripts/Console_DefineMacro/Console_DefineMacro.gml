@@ -1,5 +1,3 @@
-///@arg key
-///@arg value
 function Console_DefineMacro() {
 	if(GMU_CONSOLE_ENABLED){
 		var KEY=argument[0];

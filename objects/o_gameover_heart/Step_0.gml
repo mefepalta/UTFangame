@@ -1,24 +1,15 @@
-/// @description Game Over sahnesi -- zamanlama, olaylar ve fizik
 
 val_++;
 
-// ==================================================================
-//  SARSINTI
-// ==================================================================
 shake   = max(0, shake - 0.5);
 shake_x = random_range(-shake, shake);
 shake_y = random_range(-shake, shake);
 
-// ==================================================================
-//  RUHUN GIRISI
-// ==================================================================
-// Oldugu noktadan ekranin ortasina disari-yumusayan bir egriyle suzulur.
 var _in = clamp(val_ / 48, 0, 1);
 var _e  = 1 - power(1 - _in, 3);
 soul_x = lerp(start_x, home_x, _e);
 soul_y = lerp(start_y, home_y, _e);
 
-// olcek: hafif tasmali (ease-out-back) buyume
 if (val_ <= 26) {
     var _p = val_ / 26;
     soul_scale = 1 + 2.70158 * power(_p - 1, 3) + 1.70158 * power(_p - 1, 2);
@@ -26,11 +17,7 @@ if (val_ <= 26) {
     soul_scale = 1;
 }
 
-// ==================================================================
-//  KALP ATISI / TITREME
-// ==================================================================
 if (val_ < T_CRACK) {
-    // catlaktan once: lup-dap ritmi
     var _ph = val_ mod 46;
     var _b1 = (_ph < 8)               ? sin(pi * (_ph)      / 8) * 0.10  : 0;
     var _b2 = (_ph >= 10 && _ph < 16) ? sin(pi * (_ph - 10) / 6) * 0.055 : 0;
@@ -38,22 +25,15 @@ if (val_ < T_CRACK) {
     tremble_x  = 0;
 } else {
     soul_pulse = 1;
-    // catlaktan sonra: patlamaya dogru siddetlenen kesikli titreme.
-    // GIF 14 fps oldugu icin ofset 4 karede bir yenileniyor, yoksa
-    // 60 fps'te titreme parazite donusuyor.
     if (val_ mod 4 == 0) {
         var _amp = 3 + 4 * clamp((val_ - T_CRACK) / (T_BURST - T_CRACK), 0, 1);
         tremble_x = choose(-1, 1) * random_range(_amp * 0.45, _amp);
     }
 }
 
-// ==================================================================
-//  OLAYLAR
-// ==================================================================
 if (val_ == T_HURT) audio_play_sound(snd_hurt, 2, false);
 if (val_ == T_EXIT) audio_play_sound(snd_exit, 2, false);
 
-// ---- CATLAK ----
 if (val_ == T_CRACK) {
     soul_frame = 1;
     shake      = 7;
@@ -71,16 +51,10 @@ if (val_ == T_CRACK) {
     }
 }
 
-// ---- GASTER ELI ----
-// Yukselme -> ezme aninda kisa bir kasilma -> yavas nefes alma.
-// Hicbir asamada donmuyor ve dusmuyor.
 if (val_ >= T_HAND) hand_t = min(1, hand_t + 1 / 30);
 if (hand_snap > 0)  hand_snap = max(0, hand_snap - 1.1);
 hand_bob += 0.55;
 
-// ---- BEYAZA GECIS ----
-// Once yavasca beyaza doner, patlama karesinde bir cirpida siyaha duser:
-// isinlar GIF'te oldugu gibi siyah uzerinde patlar.
 if (val_ >= T_WHITE && val_ < T_BURST) {
     white_a = (val_ - T_WHITE) / (T_BURST - T_WHITE);
 } else if (val_ >= T_BURST) {
@@ -88,7 +62,6 @@ if (val_ >= T_WHITE && val_ < T_BURST) {
     white_a = max(0, white_a - 0.16);
 }
 
-// ---- PARCALANMA ----
 if (val_ == T_BURST) {
     burst_done = true;
     soul_alpha = 0;
@@ -96,7 +69,6 @@ if (val_ == T_BURST) {
     hand_snap  = 13;
     audio_play_sound(snd_break_1, 2, false);
 
-    // isinlar
     var _n  = 9;
     var _a0 = random(360);
     for (var i = 0; i < _n; i++) {
@@ -109,8 +81,6 @@ if (val_ == T_BURST) {
         });
     }
 
-    // Bes kirik parca. Her biri bir disari-acilma yonu ve bir halka fazi
-    // aliyor; aradaki gecis Step'te egriyle cozuluyor.
     var _base = random(360);
     for (var i = 0; i < 5; i++) {
         var _oa = _base + i * 72 + random_range(-20, 20);
@@ -132,7 +102,6 @@ if (val_ == T_BURST) {
         });
     }
 
-    // ince kirintilar
     repeat (20) {
         var _d = random(360);
         var _s = random_range(3.5, 9.5);
@@ -145,7 +114,6 @@ if (val_ == T_BURST) {
         });
     }
 
-    // ruh dagildiktan sonra yavasca suzulen kul
     repeat (26) {
         array_push(embers, {
             x  : random(room_width),
@@ -158,7 +126,6 @@ if (val_ == T_BURST) {
     }
 }
 
-// ---- PARAZIT ----
 if (val_ >= T_NOISE_0 && val_ <= T_NOISE_1 && ((val_ - T_NOISE_0) mod 5) == 0) {
     audio_play_sound(snd_noise, 2, false);
     bars = [];
@@ -169,10 +136,6 @@ if (val_ >= T_NOISE_0 && val_ <= T_NOISE_1 && ((val_ - T_NOISE_0) mod 5) == 0) {
             a: random_range(0.05, 0.16)
         });
     }
-    // Parazit her catirdadiginda parcalarin acisina kucuk bir sarsinti
-    // biniyor: ses ile goruntu ayni karede tepki veriyor. Genlik her
-    // vurusta artiyor, aralarda sonuyor -- yani ses bittiginde titreme de
-    // kendiliginden duruyor.
     for (var i = 0; i < array_length(shards); i++) {
         var _sh = shards[i];
         _sh.sway_amp = min(5, _sh.sway_amp + random_range(1.8, 3.2));
@@ -181,20 +144,14 @@ if (val_ >= T_NOISE_0 && val_ <= T_NOISE_1 && ((val_ - T_NOISE_0) mod 5) == 0) {
     bars = [];
 }
 
-// ---- GAME OVER muzigi ----
 if (val_ == T_LOGO) audio_play_sound(snd_gameover, 1, true);
 
-// ==================================================================
-//  KIRIK PARCALAR -- disari acilma, asili kalma, halkaya toplanma
-// ==================================================================
 if (burst_done) {
     orbit_t++;
 
-    // disari acilma egrisi (hizli cikip yavaslar)
     var _po = clamp(orbit_t / T_OUT, 0, 1);
     _po = 1 - power(1 - _po, 4);
 
-    // halkaya toplanma egrisi (yumusak basla-yumusak bitir)
     var _pi = clamp((orbit_t - T_HOLD) / (T_IN - T_HOLD), 0, 1);
     _pi = (_pi < 0.5) ? 4 * _pi * _pi * _pi : 1 - power(-2 * _pi + 2, 3) / 2;
 
@@ -203,48 +160,34 @@ if (burst_done) {
 
         _s.orb_ang += RING_SPD;
 
-        // 1) patlama noktasindan disariya
         var _hx = lerp(home_x, _s.out_x, _po);
         var _hy = lerp(home_y, _s.out_y, _po);
 
-        // 2) disarida asiliyken hafif titresim (GIF'teki kipirdama)
         var _jit = _po * (1 - _pi);
         _hx += dsin(orbit_t * 6.3 + _s.jit_ph) * 3.2 * _jit;
         _hy += dcos(orbit_t * 5.1 + _s.jit_ph) * 3.2 * _jit;
 
-        // 3) halkadaki hedef konum
         var _rx = RING_X + RING_RX * dcos(_s.orb_ang);
         var _ry = RING_Y - RING_RY * dsin(_s.orb_ang);
 
         _s.x = lerp(_hx, _rx, _pi);
         _s.y = lerp(_hy, _ry, _pi);
 
-        // sprite donusu: patlamanin savurmasi sonup yerini yavas salinima
-        // birakiyor -- takla atmiyorlar
         _s.spin *= 0.955;
         _s.rot  += _s.spin;
 
-        // Cizilecek aci = tasiyici aci
-        //   + surekli cok hafif salinim (~3.7 sn'lik nefes; asla donmus
-        //     gorunmesin, game over muzigi calarken de kipirdasin)
-        //   + parazit sesinin bindirdigi kisa titreme (yukarida besleniyor)
         _s.sway_ph  += 11;
         _s.sway_amp *= 0.93;
         _s.draw_rot = _s.rot
                     + dsin(orbit_t * 1.6 + _s.jit_ph) * 2.2
                     + dsin(_s.sway_ph) * _s.sway_amp;
 
-        // derinlik: halkanin arka yarisindaki parca elin ARKASINDA ve
-        // biraz kucuk cizilir, on yarisindaki onunde ve biraz buyuk
         var _dep = dsin(_s.orb_ang) * _pi;
         _s.behind = (_dep > 0);
         _s.sc     = SOUL_SCALE * (1 - 0.10 * _dep);
     }
 }
 
-// ==================================================================
-//  KIVILCIM / KUL / ISIN
-// ==================================================================
 for (var i = array_length(sparks) - 1; i >= 0; i--) {
     var _s = sparks[i];
     _s.age++;

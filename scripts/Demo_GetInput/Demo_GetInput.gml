@@ -1,4 +1,3 @@
-///@arg pos
 function Demo_GetInput() {
 	var POS=argument[0];
 

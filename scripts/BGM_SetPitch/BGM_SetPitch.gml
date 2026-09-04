@@ -1,5 +1,3 @@
-///@arg bgm_slot
-///@arg pitch
 function BGM_SetPitch() {
 	var SLOT=argument[0];
 	var PITCH=argument[1];

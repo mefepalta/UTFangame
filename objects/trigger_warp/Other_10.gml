@@ -1,4 +1,3 @@
-///@desc Trigger
 event_inherited();
 
 if(room_exists(target_room)){

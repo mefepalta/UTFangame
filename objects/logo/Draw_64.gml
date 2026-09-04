@@ -1,4 +1,3 @@
-//draw_sprite_ext(s_logo,0,320,210,3,3,0,c_white,1);
 if(_hint){
 	var _a = clamp(hint_t / 40, 0, 1);
 	_a = _a * _a * (3 - 2 * _a);

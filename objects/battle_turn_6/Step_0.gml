@@ -247,7 +247,7 @@ if (room == room_battle_1)
 	{
 		Battle_SetSoul(battle_soul_red);
 		Battle_SetBoardSizeCubic(65,65,125,125);
-		Battle_SetMenuDialog("* Alphys crushes a rock while&  staring you dead in the eyes.")
+		Battle_SetMenuDialog("* ...")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;

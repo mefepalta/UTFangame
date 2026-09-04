@@ -1,8 +1,3 @@
-// ---------------------------------------------------------------------
-// Presentation pass: hide the raw menu instances (the Draw event redraws
-// them with a proper selection highlight), animate the emblem and push
-// the snow around. Runs before every Draw event, so nothing flickers.
-// ---------------------------------------------------------------------
 menu_t++;
 
 for (var _h = 0; _h < 4; _h++)
@@ -11,13 +6,11 @@ for (var _h = 0; _h < 4; _h++)
 }
 with (o_heart) { visible = false; }
 
-// the selected entry slides out to the right
 for (var _d = 0; _d < 4; _d++)
 {
 	item_dx[_d] = lerp(item_dx[_d], (_d == menucounter) ? 6 : 0, 0.22);
 }
 
-// the emblem breathes
 if (instance_exists(o_swapfelldiscord_logo))
 {
 	if (logo_base_y < 0) { logo_base_y = o_swapfelldiscord_logo.y; }
@@ -29,10 +22,11 @@ if (instance_exists(o_swapfelldiscord_spear))
 	o_swapfelldiscord_spear.y = spear_base_y + sin(menu_t * 0.025) * 2.5;
 }
 
-// the main column steps aside while the options panel is open
-col_a = lerp(col_a, (global.menu_state == "options") ? 0 : 1, 0.12);
+col_a    = lerp(col_a,    (global.menu_state == "main")   ? 1 : 0, 0.12);
+extras_a = lerp(extras_a, (global.menu_state == "extras") ? 1 : 0, 0.16);
+extras_t++;
+if (extras_deny > 0) { extras_deny -= 1; }
 
-// current visible rectangle
 if (view_enabled) and (view_visible[0])
 {
 	var _cam = view_camera[0];
@@ -42,7 +36,6 @@ if (view_enabled) and (view_visible[0])
 	vh_ = camera_get_view_height(_cam);
 }
 
-// drifting snow
 if (array_length(snow) == 0)
 {
 	for (var _n = 0; _n < 70; _n++)
@@ -72,31 +65,7 @@ for (var _s = 0; _s < array_length(snow); _s++)
 	if (_f.px < vx_ - 4) { _f.px = vx_ + vw_ + 4; }
 }
 
-/*if (global.menu_state == "main") {
-    // Navigation
-    if (keyboard_check_pressed(vk_down))
-{
-	menu_index = (menu_index + 1) mod array_length(main_menu_items);
-    audio_play_sound(snd_menu_switch,2,false);
-}
-    if (keyboard_check_pressed(vk_up))
-{
-	menu_index = (menu_index - 1 + array_length(main_menu_items)) mod array_length(main_menu_items);
-	audio_play_sound(snd_menu_switch,2,false);
-}
 
-    // Select menu item
-    if (keyboard_check_pressed(vk_enter)) {
-        switch (menu_index) {
-            case 0: /* Start Game Code break;
-            case 1: // Open options
-                global.menu_state = "options";
-                global.fade_alpha = 0;
-                break;
-            case 2: game_end(); break;
-        }
-    }
-}*/
 
 switch (global.menu_state)
 {
@@ -117,6 +86,9 @@ switch (global.menu_state)
 	{
 		if (!transitioning)
 			{
+				StartRun(room_area_beforesans);
+				global.extras_room = noone;
+				next_room = room_area_beforesans;
 				transitioning = true;
 			}
 	}
@@ -127,8 +99,10 @@ switch (global.menu_state)
 	}
 	if (Input_IsPressed(INPUT.CONFIRM)) and (menucounter == 1)
 	{
-		Camera_Shake(2,2,1,1,5,5,0.3,0.3);
-		audio_play_sound(snd_damage,2,false);
+		global.menu_state = "extras";
+		extras_index = 0;
+		extras_deny  = 0;
+		audio_play_sound(snd_menu_confirm,2,false);
 	}
 	if (Input_IsPressed(INPUT.CONFIRM)) and (menucounter == 0)
 	{
@@ -152,7 +126,7 @@ switch (global.menu_state)
 		  istime = true;
 		  if (target_alpha > 1)
 		  {
-			  room_goto(room_area_beforesans);
+			  room_goto(other.next_room);
 			  audio_stop_all();
 		  }
 	  }
@@ -163,10 +137,65 @@ switch (global.menu_state)
 	}
 	break;
 	
+	case "extras":
+		with (obj_fog) { target_alpha = 0.8; }
+
+		if (Input_IsPressed(INPUT.LEFT)) and (extras_index > 0)
+		{
+			extras_index -= 1;
+			audio_play_sound(snd_menu_switch,2,false);
+		}
+		if (Input_IsPressed(INPUT.RIGHT)) and (extras_index < 1)
+		{
+			extras_index += 1;
+			audio_play_sound(snd_menu_switch,2,false);
+		}
+
+		if (!transitioning) and (Input_IsPressed(INPUT.CANCEL) or keyboard_check_pressed(ord("C")))
+		{
+			global.menu_state = "main";
+			with (obj_fog) { target_alpha = 0.4; }
+			audio_play_sound(snd_menu_cancel,2,false);
+		}
+
+		if (!transitioning) and (Input_IsPressed(INPUT.CONFIRM))
+		{
+			if (extras_index == 1) and (!global.phase2_unlocked)
+			{
+				extras_deny = 20;
+				Camera_Shake(2,2,1,1,5,5,0.3,0.3);
+				audio_play_sound(snd_damage,2,false);
+			}
+			else
+			{
+				var _troom = extras_rooms[extras_index];
+				StartRun(_troom);
+				global.sansphase   = extras_phases[extras_index];
+				global.extras_room = _troom;
+				next_room = _troom;
+				transitioning = true;
+				audio_play_sound(snd_menu_confirm,2,false);
+			}
+		}
+
+		if (transitioning)
+		{
+			with (o_transition)
+			{
+				istime = true;
+				if (target_alpha > 1)
+				{
+					room_goto(other.next_room);
+					audio_stop_all();
+				}
+			}
+		}
+		break;
+	
    case "options":
 		with (obj_fog)
 		{
-            target_alpha = 0.8; // Make fog visible
+            target_alpha = 0.8;
 			if (keyboard_check_pressed(ord("C")))
 			{
 				global.menu_state = "main";

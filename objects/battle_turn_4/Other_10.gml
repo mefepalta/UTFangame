@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 with (battle_enemy_engage)
 {
@@ -22,7 +21,7 @@ if (room == room_battle)
 	Battle_SetBoardSizeCubic(65,65,150,150);
 	sansy.text = "{font 3}{voice 3}{squish 1.2}{head 1}An old friend of mine&gave me this spear.{pause}{clear}{head 0}The brilliant Doctor&Undyne.{pause}{clear}{head 14}Designed purely from&magic for the sole&purpose of capturing a&human SOUL.";
 }
-if (room == room_battle_1)																																																																		   
+if (room == room_battle_1)
 {
 	Battle_SetBoardSizeCubic(65,65,65,65);
 	battle_enemy_engage.p2_head_sprite = spr_p2_head;

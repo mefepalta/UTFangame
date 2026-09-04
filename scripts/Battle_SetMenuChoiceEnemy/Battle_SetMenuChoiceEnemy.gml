@@ -1,5 +1,3 @@
-///@arg enemy_choice
-///@arg call_event*
 function Battle_SetMenuChoiceEnemy() {
 	var ENEMY=argument[0];
 	var CALL=true;

@@ -1,11 +1,3 @@
-///@arg x
-///@arg y
-///@arg up
-///@arg down
-///@arg left
-///@arg right
-///@arg angle
-///@arg *rot
 function Battle_CreateBoardExtraRect(){
 	var X = argument[0];
 	var Y = argument[1];
@@ -30,5 +22,3 @@ function Battle_CreateBoardExtraRect(){
 	return rect;
 }
 
-//创建一个矩形的加框
-//Create a Extra-Board that is rectangle

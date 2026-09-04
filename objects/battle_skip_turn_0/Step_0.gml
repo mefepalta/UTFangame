@@ -8,8 +8,6 @@ var down_box = (battle_board.y+battle_board.down)+5;
 var bottom_box = (battle_board.y+battle_board.down)-2;
 var top_box = (battle_board.y-battle_board.up)+2;
 
-// FINAL PHASE: ACT / ITEM turlarinda faz 1-2 atagi oynamamali. CHECK
-// metni menu diyalogu olarak zaten gosteriliyor; tur kisa kesiliyor.
 if (global.p25phase >= 1)
 {
 	if (_timer == 2) { Battle_SetSoul(battle_soul_red); }
@@ -17,12 +15,6 @@ if (global.p25phase >= 1)
 	exit;
 }
 
-// FAZ 1 SON DUZLUK: yenilgi diyalogundan sonra ISKALAMAK HICBIR SEY YAPMAZ.
-// Nisan cubugunu bilerek kacirinca go_dodge "miss" oluyor ve motor bu skip
-// turunu yaratiyordu; asagisi ise sanstalk degerine gore replik VE atak
-// oynatiyor -- son duzlugun ortasinda alakasiz bir tur cikiyordu.
-// Artik tur aciliyor ve hemen kapaniyor: oyuncu menuye donup tekrar
-// deneyebiliyor. Replik tarafi Other_10 icinde ayni kosulla kesiliyor.
 if (global.finalstretch >= 1) and (room == room_battle)
 {
 	if (_timer == 2) { Battle_SetSoul(battle_soul_red); }
@@ -187,7 +179,7 @@ if (room == room_battle)
 			RegularBone(right_box,bottom_box,32,-3,0,0,0,0,1,0,0,0,0,true);
 			RegularBone(right_box,top_box,90,-3,0,180,0,0,1,0,0,0,0,true);
 		}
-		if (_timer == 1650) //1650
+		if (_timer == 1650)
 		{
 			with (o_p1final_fall)
 			{
@@ -235,18 +227,17 @@ if (room == room_battle)
 			{
 				var slash = instance_create_depth(o_p1final_gbsans.x - 102, o_p1final_gbsans.y + 56, -99999, o_p1final_sansslash);
         
-		        // Calculate direction towards player
 				var dir = point_direction(o_p1final_gbsans.x, o_p1final_gbsans.y, battle_soul.x, battle_soul.y);
 		        slash.direction = dir;
 		        slash.speed = 7;
 		        slash.image_angle = dir + 180;
 
-		        attack_done = true; // Prevents multiple slashes per frame
+		        attack_done = true;
 		    }
 		}
 		else
 		{
-		    attack_done = false; // Reset when not on frame 3
+		    attack_done = false;
 		}
 		if (_timer == 2950)
 		{
@@ -395,9 +386,6 @@ if (room == room_battle)
 		{
 			if !(instance_exists(anotherTest))
 			{
-				// Gain sifirlaniyor: faz 1.5 gecisi bu parcayi ASSET uzerinden
-				// 0'a soluyor (battle_enemy_engage/Step_0). Olup yeniden
-				// denendiginde sessiz baslamasin.
 				audio_sound_gain(snd_chance,1,0);
 				audio_play_sound(snd_chance,1,true);
 				Battle_SetMenuDialog("* ...")
@@ -1041,11 +1029,6 @@ if (room == room_battle)
 				_ready = true;
 			}
 		}
-		// NOT: burada battle_turn_3'un eski rastgele kemik yagmurunun bir
-		// kopyasi duruyordu. O desen (random konum/boy/hiz/aci) atak 3'te
-		// sok dalgasiyla degistirildi; burasi da erisilemez durumda
-		// (sanstalk 12'de duruyor ve teslim turlari artik gercek turlari
-		// oynatiyor), o yuzden kopya silindi.
 		if (_timer == 1150)
 		{
 			with (o_smaaash)
@@ -1206,7 +1189,7 @@ if (room == room_battle)
 			RegularBone(left_box,bottom_box,33,4,0,0,0,0,1,0,0,0,0,true);
 			RegularBone(right_box,top_box,117,-4,0,180,0,0,1,0,0,0,0,true);
 		}
-		if (_timer == 1000)	
+		if (_timer == 1000)
 		{
 			Battle_SetSoul(battle_soul_red);
 			Battle_SetMenuDialog("* Sans gives you an enraged&  stare.")
@@ -2079,8 +2062,6 @@ if (room == room_battle_1)
 		RegularBone(left_box,bottom_box,80,1,0,0,0,0,1,0,0,0,0,true);
 		RegularBone(right_box,top_box,80,-1,0,180,0,0,1,0,0,0,0,true);
 	}
-	// Bu blokta Battle_EndTurn cagrisi yoktu; item/ACT ile gelen skip turn
-	// hic bitmiyor ve sonsuz donguye giriyordu.
 	if (_timer == 560)
 	{
 		Battle_SetSoul(battle_soul_red);

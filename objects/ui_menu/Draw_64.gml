@@ -12,7 +12,6 @@ if(_menu==0){
 	draw_sprite(spr_battle_soul_red,0,32+6+27,168+6+31+36*_choice);
 }
 
-//ITEM
 if(_menu==1||_menu==2){
 	draw_sprite_ext(spr_pixel,0,188,52,346,362,0,c_white,1);
 	draw_sprite_ext(spr_pixel,0,188+6,52+6,346-6*2,362-6*2,0,c_black,1);
@@ -38,13 +37,11 @@ if(_menu==2){
 	draw_sprite(spr_battle_soul_red,0,188+6+X,52+6+319);
 }
 
-//STAT
 if(_menu==3){
 	draw_sprite_ext(spr_pixel,0,188,52,346,418,0,c_white,1);
 	draw_sprite_ext(spr_pixel,0,188+6,52+6,346-6*2,418-6*2,0,c_black,1);
 }
 
-//PHONE
 if(_menu==4){
 	draw_sprite_ext(spr_pixel,0,188,52,346,270,0,c_white,1);
 	draw_sprite_ext(spr_pixel,0,188+6,52+6,346-6*2,270-6*2,0,c_black,1);

@@ -1,18 +1,3 @@
-///@arg x
-///@arg y
-///@arg length
-///@arg hspeed
-///@arg vspeed
-///@arg angle
-///@arg paps*
-///@arg rot*
-///@arg colour*
-///@arg origin*
-///@arg sinint*
-///@arg sinmult*
-///@arg sinoff*
-///@arg tri*
-///@arg top*
 function CreateBone(){
 	var _x = argument[0]
 	var _y = argument[1]

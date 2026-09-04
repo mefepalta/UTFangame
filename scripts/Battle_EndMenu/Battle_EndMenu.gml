@@ -5,7 +5,6 @@ function Battle_EndMenu() {
 		var BUTTON=Battle_GetMenuChoiceButton();
 		var MERCY=Battle_GetMenuChoiceMercy();
 	
-		//使用物品
 		if(BUTTON==BATTLE_MENU_CHOICE_BUTTON.ITEM){
 			if(variable_global_exists("no_heal") && global.no_heal){
 				Battle_SetMenu(BATTLE_MENU.BUTTON,false);
@@ -23,7 +22,6 @@ function Battle_EndMenu() {
 			}
 		}
 	
-		//计算逃跑
 		if(BUTTON==BATTLE_MENU_CHOICE_BUTTON.MERCY && MERCY==BATTLE_MENU_CHOICE_MERCY.FLEE){
 			if(Battle_IsMenuMercyFleeEnabled()){
 				var value=irandom(100)+10*Battle_GetTurnNumber();
@@ -33,11 +31,9 @@ function Battle_EndMenu() {
 			}
 		}
 	
-		//调用事件
 		Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.MENU_END);
 	
 		if(Battle_GetEnemyNumber()>0){
-			//逃跑
 			if(BUTTON==BATTLE_MENU_CHOICE_BUTTON.MERCY && MERCY==BATTLE_MENU_CHOICE_MERCY.FLEE && Battle_IsFleeable()){
 				Battle_SetState(BATTLE_STATE.RESULT);
 				Battle_SetNextState(BATTLE_STATE.RESULT);
@@ -65,7 +61,6 @@ function Battle_EndMenu() {
 					Player_SetExp(Player_GetExp()+Battle_GetRewardExp());
 					Player_SetGold(Player_GetGold()+Battle_GetRewardGold());
 					if(Player_UpdateLv()){
-						//text+="&"+Lang_GetString("battle.result.lv_up");
 						audio_play_sound(snd_level_up,0,false);
 					}
 				}

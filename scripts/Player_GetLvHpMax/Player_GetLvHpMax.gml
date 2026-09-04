@@ -1,4 +1,3 @@
-///@arg lv
 function Player_GetLvHpMax() {
 	var LV=argument[0];
 

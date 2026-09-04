@@ -1,4 +1,3 @@
-/// @description Left
 if (white == 0)
     Battle_SetSoul(battle_soul_blue)
 battle_soul.dir = DIR.LEFT

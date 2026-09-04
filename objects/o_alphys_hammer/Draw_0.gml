@@ -1,7 +1,3 @@
-// Sprite'in origin'i sapin ucunda (0,39) ve cekic o noktanin etrafinda
-// donuyor. Pivot, sapma sifirken carpma kosesi (head_corner) tam vurus
-// noktasina denk gelecek sekilde bir kez hesaplaniyor; boylece savurma
-// sirasinda bas duvardan uzaklasip yay ciziyor.
 var _m  = ((along >= 0) ? 1 : -1);
 var _a0 = WallAngle();
 var _cx = head_corner_x*hammer_scale*_m;

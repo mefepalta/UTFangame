@@ -1,4 +1,3 @@
-///@desc New Line
 _char_x=0;
 
 draw_set_font(_group_font[_font,0]);

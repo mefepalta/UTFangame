@@ -3,18 +3,17 @@ if(fast&&Input_IsPressed(INPUT.CONFIRM)){
 }else if(instance_exists(_inst)){
 	_inst._outline=false;
 
-	// Konusan karakterin anlik konumu (sahne disina/ortaya yururken balon takip etsin)
 	with (battle_enemy_engage)
 	{
 		if (other.SPEAKER == 1)
 		{
 			other.SPEAKER_X = pap_draw_x - x;
-			other.SPEAKER_Y = -64;			// Papyrus'un kafa hizasi
+			other.SPEAKER_Y = -64;
 		}
 		else if (other.SPEAKER == 2)
 		{
 			other.SPEAKER_X = alp_draw_x - x;
-			other.SPEAKER_Y = 6;			// Alphys'in kafa hizasi
+			other.SPEAKER_Y = 6;
 		}
 		else
 		{
@@ -22,16 +21,11 @@ if(fast&&Input_IsPressed(INPUT.CONFIRM)){
 			other.SPEAKER_Y = 0;
 		}
 
-		// Her karakterin govde genisligi farkli; balonun ne kadar uzakta
-		// duracagini buna gore veriyoruz. Eskiden Sans'in govde sprite'inin
-		// genisligi kullaniliyordu ve genis olan Papyrus/Alphys'e yapisiyordu.
 		if (other.SPEAKER == 1)      { other.SPEAKER_HALFW = 75; }
 		else if (other.SPEAKER == 2) { other.SPEAKER_HALFW = 90; }
 		else                         { other.SPEAKER_HALFW = 70; }
 	}
 
-	// Balon hangi yana acilsin? Sagda yer kaliyorsa saga, kalmiyorsa sola.
-	// Boylece hem karaktere yapismiyor hem de ekran disina tasmiyor.
 	var _spk_x = battle_enemy_engage.x + SPEAKER_X;
 	var _text_w = xscale_box*47;
 	var _right_edge = _spk_x + SPEAKER_HALFW + SPEAKER_GAP + 15 + _text_w;

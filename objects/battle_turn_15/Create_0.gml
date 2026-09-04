@@ -11,15 +11,6 @@ plat = noone;
 arm_reset = -1;
 roof = [];
 
-///@arg count	kac kemik
-///@arg len		kemiklerin boyu
-///@arg sure	kac karede uzayacaklar
-///@arg [warn]	uzamadan once kirmizi/sari uyari seridi kac kare yanacak
-///
-///Yerdeki kemik ormani. Turuncu ruh bolumunden sonraki mavi ruh parkurunun
-///zemini: kemikler kutunun ALT kenarindan cikip yerinde kaliyor.
-///Eskiden uyari YOKTU -- sadece snd_exclamation caliyordu ve kemikler
-///dogrudan uzamaya basliyordu.
 ForestMake = function(_count,_len,_sure,_warn = 0)
 {
 	forest = [];
@@ -38,8 +29,6 @@ ForestMake = function(_count,_len,_sure,_warn = 0)
 		array_push(forest_x,_bx);
 	}
 
-	// KIRMIZI/SARI UYARI SERIDI. Duvarlardakinin aynisi: serit kutunun ALT
-	// kenarina yapisiyor ve kemikler uzamaya baslayana kadar yanip sonuyor.
 	if (_warn > 0)
 	{
 		var _uy = battle_warn(0,0,0,0,_warn);
@@ -131,9 +120,6 @@ PapSlam = function(_spr)
 {
 	audio_play_sound(snd_exclamation,0,false);
 	Camera_Shake(4,4,2,2);
-	// Slam sprite lari kol degil GOVDE pozu: origin leri govdeninki gibi
-	// alt kenara yakin (kalca noktasi), bu yuzden govde slotuna ofsetsiz oturuyorlar.
-	// Sigara tutan kol ayri parca oldugu icin yerinde kaliyor.
 	battle_enemy_engage.pap_body_sprite = _spr;
 	battle_enemy_engage.pap_body_image = 0;
 	Anim_Create(battle_enemy_engage,"pap_body_image",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,2.99,16);

@@ -14,7 +14,6 @@ if (!bounce_x) {
     }
 }
 
-// Sticky takibi (sticky=1 için)
 if (sticky && instance_exists(battle_soul)) {
     if (variable_instance_exists(battle_soul, "inst_plat") && battle_soul.inst_plat == id && battle_soul.jump_state == 0) {
 	    if (battle_soul.inst_plat == id && battle_soul.jump_state == 0) {

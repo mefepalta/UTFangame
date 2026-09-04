@@ -1,11 +1,4 @@
-///@desc Sari ruh atagindaki hedefi dogurur.
-///Ruh sadece 8 yone nisan aldigi icin aci 45'in katina yuvarlaniyor;
-///yoksa hedef vurulamaz hale geliyor.
 
-///@arg kind					DR_TARGET.NORMAL / BIG / MIRROR
-///@arg angle					hangi yonden gelecek (0 = sag, 90 = yukari)
-///@arg spd*					hiz (0 = turun kendi varsayilani)
-///@arg dist*					dogdugu uzaklik (varsayilan 360, sekiz yonde de ekran disi)
 function DrTarget(kind,angle)
 {
 	var _spd = 0;
@@ -21,12 +14,7 @@ function DrTarget(kind,angle)
 	return _t;
 }
 
-///@desc Turuncu ruh koridoru (Deltarune kosu modu) icin kisayollar.
-///Koridor kendi zamanlayicisiyla mavi kemik bari ve ziplama halkasi uretebilir;
-///auto false verilirse uretim kapanir ve her sey elle yerlestirilir.
 
-///@arg auto*					true = koridor kendi uretsin (varsayilan false)
-///@arg base*					dunyanin taban akis hizi (varsayilan 5)
 function DrCorridor()
 {
 	var _auto = false;
@@ -42,7 +30,6 @@ function DrCorridor()
 	return _c;
 }
 
-///Koridoru ve icindeki her seyi kaldirir.
 function DrCorridorStop()
 {
 	with(battle_dr_obstacle) { instance_destroy(); }
@@ -50,15 +37,6 @@ function DrCorridorStop()
 	with(battle_dr_corridor) { instance_destroy(); }
 }
 
-///Yukaridan tek bir mavi kemik bari indirir.
-///Kirilmamis bar beyaz atak gibi hasar verir; turuncu ruhun guc hareketi
-///ya da sari ruhun guc vurusu kirar.
-///Yukaridan tek bir kemik bari indirir. Barin sadece mavi penceresi
-///guc hareketiyle kirilip gecilebiliyor; beyaz kisimlardan dash yapilamiyor
-///ve normal hasar veriyorlar.
-///@arg blueOff					mavi pencerenin kutu merkezine gore x ofseti
-///@arg blueW					mavi pencerenin genisligi
-///@arg spd*					taban hiz (varsayilan koridorun scroll_base'i)
 function DrBone(blueOff,blueW)
 {
 	var _spd = 5;
@@ -72,10 +50,6 @@ function DrBone(blueOff,blueW)
 	return _b;
 }
 
-///Yukaridan tek bir ziplama halkasi indirir. Halkalar arasi dikey mesafe
-///ruhun jump_dist'i (260) ile ayni olursa zincirlenebiliyorlar.
-///@arg off						kutu merkezine gore x ofseti
-///@arg spd*					taban hiz (varsayilan koridorun scroll_base'i)
 function DrRing(off)
 {
 	var _spd = 5;
@@ -87,13 +61,6 @@ function DrRing(off)
 	return _r;
 }
 
-///Bir kemik yigini. Hepsi ekranin ustunde, gorunmeyen yerde ayni anda
-///olusturulup aralarindaki mesafeyi koruyarak birlikte yerine kayiyorlar;
-///boylece dogus ani hic gorunmuyor. Kalbe degmeyecek bir y de duruyorlar.
-///@arg count					kac kemik
-///@arg gap						kemikler arasi dikey bosluk
-///@arg bottomY					en alttaki kemigin duracagi y
-///@arg time					kaymanin suresi
 function DrBoneWall(count,gap,bottomY,time)
 {
 	var _bas = -30;

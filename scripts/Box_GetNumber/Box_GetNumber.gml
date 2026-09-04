@@ -1,4 +1,3 @@
-///@arg box_slot
 function Box_GetNumber() {
 	var SLOT=argument[0];
 

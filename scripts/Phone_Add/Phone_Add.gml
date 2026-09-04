@@ -1,4 +1,3 @@
-///@arg phone_id
 function Phone_Add() {
 	var PHONE=argument[0];
 

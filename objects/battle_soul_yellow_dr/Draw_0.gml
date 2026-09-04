@@ -6,15 +6,12 @@ if(!SHOW){
 	exit;
 }
 
-//Geri tepme: nişan yönünün tersine kısa bir kayma
 var RX=x-lengthdir_x(recoil,aim);
 var RY=y-lengthdir_y(recoil,aim);
 
-//--- Dolum halkası: kalbin etrafına oturan hafif saydam kalp ---
 if(charging && charge>0){
 	var F=charge/charge_max;
 
-	//Tam şarj nabzı (dıştaki)
 	if(charge>=charge_max){
 		var PS=2.15+0.12*dsin(current_time/2);
 		gpu_set_blendmode(bm_add);
@@ -22,12 +19,10 @@ if(charging && charge>0){
 		gpu_set_blendmode(bm_normal);
 	}
 
-	//Dolum halkası (içteki)
 	var RS=1.5+0.45*F;
 	draw_sprite_ext(sprite_index,0,RX,RY,RS,RS,aim,c_white,0.3+0.4*F);
 }
 
-//--- Dolum daireleri: etraftan kalbe akıyor ---
 for(var i=0;i<array_length(orbs);i++){
 	var ORB=orbs[i];
 	var OX=RX+lengthdir_x(ORB.dis,ORB.ang);
@@ -41,5 +36,4 @@ for(var i=0;i<array_length(orbs);i++){
 draw_set_alpha(1);
 draw_set_color(c_white);
 
-//Kalp: ucu nişan yönüne bakıyor
 draw_sprite_ext(sprite_index,image_index,RX,RY,image_xscale,image_yscale,aim,image_blend,image_alpha);

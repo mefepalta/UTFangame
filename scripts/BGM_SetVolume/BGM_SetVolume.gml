@@ -1,6 +1,3 @@
-///@arg bgm_slot
-///@arg volume
-///@arg time*
 function BGM_SetVolume() {
 	var SLOT=argument[0];
 	var VOLUME=argument[1];

@@ -1,7 +1,3 @@
-///@arg input
-///@arg type
-///@arg device
-///@arg button
 function Input_Bind() {
 
 	var INPUT=argument[0];

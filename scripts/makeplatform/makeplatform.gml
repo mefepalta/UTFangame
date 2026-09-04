@@ -1,11 +1,4 @@
 function makeplatform(){
-///@arg x
-///@arg y
-///@arg width
-///@arg xspeed
-///@arg yspeed
-///@arg sticky
-///@arg angle
 
 var X = argument[0];
 var Y = argument[1];

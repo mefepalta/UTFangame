@@ -19,7 +19,6 @@ if(STATE==BATTLE_STATE.TURN_PREPARATION||STATE==BATTLE_STATE.IN_TURN){
 	}
 }
 
-//无敌时间闪烁
 if(global._inv>0){
 	global._inv-=1;
 	if(image_speed==0){

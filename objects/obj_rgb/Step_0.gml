@@ -9,5 +9,3 @@ if fade
 }
 if endtime=0
 instance_destroy()
-/*if global.easyeyes	//can delete
-instance_destroy()

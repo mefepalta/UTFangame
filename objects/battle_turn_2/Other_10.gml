@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 with (battle_enemy_engage)
 {
@@ -22,7 +21,7 @@ if (room == room_battle)
 	Battle_SetBoardSizeCubic(65,65,150,150);
 	sansy.text = "{font 3}{voice 3}{squish 1.2}{head 14}You're nothing new.{pause}{clear}{head 12}All the carnage...&heartache you brought?{pause}{clear}{head 14}I've seen it all&before.{pause}{clear}{head 11}Live for as long as I&have, and you're bound&to hear about it&eventually.";
 }
-if (room == room_battle_1)																																																																		   
+if (room == room_battle_1)
 {
 	Battle_SetBoardSizeCubic(65,65,150,150);
 	battle_enemy_engage.p2_head_sprite = spr_p2_head;

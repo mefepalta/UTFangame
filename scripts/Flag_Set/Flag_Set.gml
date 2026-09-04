@@ -1,6 +1,3 @@
-///@arg type
-///@arg slot
-///@arg value
 function Flag_Set() {
 	var TYPE=argument[0];
 	var SLOT=argument[1];

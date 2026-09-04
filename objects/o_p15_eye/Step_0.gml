@@ -1,6 +1,5 @@
 if (!variable_global_exists("p15_sx")) { global.p15_sx = 0; global.p15_sy = 0; }
 
-// Acildigi an bir kez buyuyup yerine oturuyor, sonra yavasca nefes aliyor
 if (image_alpha > 0)
 {
 	pop = min(pop + 1, 999);

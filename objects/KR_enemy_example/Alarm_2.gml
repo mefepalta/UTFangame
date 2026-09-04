@@ -1,4 +1,3 @@
-///@desc intro flash
 audio_play_sound(snd_noise,0,false);
 fader.alpha=0;
 face_sans_battle.emotion=1;

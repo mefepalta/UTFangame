@@ -1,4 +1,3 @@
-///@desc Soul Collision
 if (global.kr)
 {
 	if (!instance_exists(hurtkr))
@@ -8,7 +7,5 @@ if (global.kr)
 }
 else
 {
-	// FAZ 2 -- klasik hasar. Buyuk yildirim yoluna devam ediyor; arka arkaya
-	// vurmayi Battle_HurtNormal'in dokunulmazlik penceresi engelliyor.
 	Battle_HurtNormal(DMG_BOLT_BIG);
 }

@@ -2,7 +2,6 @@ if(!instance_exists(battle_board)){
 	exit;
 }
 
-//Dünyayla birlikte iniyor
 var MUL=1;
 if(instance_exists(battle_soul_orange_dr)){
 	MUL=battle_soul_orange_dr.world_mul;

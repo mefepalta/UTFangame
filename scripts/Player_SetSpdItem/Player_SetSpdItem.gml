@@ -1,4 +1,3 @@
-///@arg spd_item
 function Player_SetSpdItem() {
 	var SPD=argument[0];
 

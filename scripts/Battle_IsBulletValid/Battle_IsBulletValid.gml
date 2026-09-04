@@ -1,4 +1,3 @@
-///@arg bullet_obj/inst
 function Battle_IsBulletValid() {
 	var BULLET=argument[0];
 

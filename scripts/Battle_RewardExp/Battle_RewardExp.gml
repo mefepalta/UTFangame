@@ -1,4 +1,3 @@
-///@arg reward_exp
 function Battle_RewardExp() {
 	var EXP=argument[0];
 

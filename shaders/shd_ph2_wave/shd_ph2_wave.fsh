@@ -12,7 +12,7 @@ void main() {
     float edgeEffect = 0.0;
 
     if (v_vTexcoord.y * screenHeight <= edgeHeight || v_vTexcoord.y * screenHeight >= (screenHeight - edgeHeight)) {
-        edgeEffect = sin(time * speed + v_vTexcoord.x * Yfrequency) * Ysize; // Используем координату x для изменения во времени
+        edgeEffect = sin(time * speed + v_vTexcoord.x * Yfrequency) * Ysize;
     }
 
     vec4 distort = v_vColour * texture2D(gm_BaseTexture, vec2(v_vTexcoord.x, v_vTexcoord.y + edgeEffect));

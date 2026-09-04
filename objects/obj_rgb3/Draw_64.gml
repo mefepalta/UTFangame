@@ -15,14 +15,14 @@ if can_draw
 	surface_set_target(surf)
 	if draw_mode!=1
 	draw_surface_ext(application_surface,0,0,1,1,0,c_white,1)
-	if draw_mode=1	// Circled movement of the rgb
+	if draw_mode=1
 	{
 		dis1++
 		var displace_x=sin(dis1/30)*20
 		var displace_y=cos(dis1/30)*20
 		draw_surface(application_surface,displace_x,displace_y)
 	}
-	if draw_mode=2	//Circled movement for several rgb's
+	if draw_mode=2
 	{
 		surface_set_target(surf)
 		draw_surface_ext(application_surface,0,0,1,1,0,c_white,1)
@@ -45,9 +45,9 @@ if can_draw
 		}
 		gpu_set_blendmode(bm_normal)
 	}
-	if draw_mode=3	// Purple Drawing
+	if draw_mode=3
 	draw_surface_part_ext(application_surface,135,0,370,400,505,0,-1,1,c_white,1)
-	if draw_mode=4	// Displacing rgb drawing, if want to reset the displacement just do dis=0 anywhere else
+	if draw_mode=4
 	{
 		draw_sprite_ext(spr_pixel,0,-200,-200,880,800,0,c_black,1)
 		for(var i = 0; i <480; i++)

@@ -1,4 +1,3 @@
-///@arg phone_id
 function Phone_IsValid() {
 	var PHONE=argument[0];
 

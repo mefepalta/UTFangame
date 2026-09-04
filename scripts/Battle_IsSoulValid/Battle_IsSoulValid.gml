@@ -1,4 +1,3 @@
-///@arg soul_obj/inst
 function Battle_IsSoulValid() {
 	var SOUL=argument[0];
 

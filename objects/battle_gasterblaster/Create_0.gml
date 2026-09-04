@@ -26,10 +26,5 @@ follow=false
 alpha_is_ready = false
 can_continue=false
 
-//--- Turuncu ruh modu ---
-//Normal blaster ateslendikten sonra isinin tersi yone suruklenip cikiyor.
-//Koridorda bu istenmiyor: blaster nisan aldigi yerde kaliyor, onun yerine
-//dunyanin geri kalani gibi asagi kayiyor. dr_mode bunu aciyor.
-//dr_len isinin uzunlugu (px); dr_mode kapaliyken kullanilmiyor.
 dr_mode=false
 dr_len=20000

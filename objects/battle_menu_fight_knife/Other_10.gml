@@ -1,8 +1,4 @@
-///@desc Anim
 if(Battle_GetMenuFightDamage()>=0){
-	// Slash, secili hedefin uzerinde cikmali. Phase 2'de Papyrus ve Alphys de
-	// birer slot ve Sans'in kendisi de hizalamaya gore yer degistiriyor; bu
-	// yuzden nesnenin x'i degil ciziim konumu kullaniliyor.
 	var _slot=Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy());
 	var _tx=battle_enemy_engage.x;
 	var _ty=battle_enemy_engage.y-100;

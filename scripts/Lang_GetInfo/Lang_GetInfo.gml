@@ -1,6 +1,3 @@
-///@arg lang_name
-///@arg string_name
-///@arg default*
 function Lang_GetInfo() {
 	var LANG=argument[0];
 	var KEY=argument[1];

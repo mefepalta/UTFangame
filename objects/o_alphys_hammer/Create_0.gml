@@ -2,38 +2,33 @@ event_inherited();
 
 depth = DEPTH_BATTLE.BULLET_OUTSIDE_HIGH;
 
-// ---------------- AYARLAR ----------------
-// Cekic sapinin ucundan doner. Once duvara dik durur, yavasca geriye
-// yatar, sonra hizlanarak iner ve duvara paralel hale gelip ucuyla
-// carpar. Boltlar tam o koseden, duvardan iceri dogru fisirdir.
-wall  = 0;		/// 0 = alt duvar, 1 = ust, 2 = sol, 3 = sag
-along = 1;		/// duvar boyunca gidis yonu (+1 / -1)
+wall  = 0;
+along = 1;
 
 hit_x = battle_board.x;
 hit_y = battle_board.y + battle_board.down;
 
 hammer_scale  = 1.4;
-head_corner_x = 103;	/// sprite icinde carpma kosesi
+head_corner_x = 103;
 head_corner_y = 39;
 
-start_angle = 90;		/// duvara dik bekleme acisi
-pull_angle  = 125;		/// geriye yatma acisi
-ready_time  = 14;		/// dik bekleme
-pull_time   = 34;		/// geriye cekme -- yavas
-strike_time = 9;		/// ileri vurus -- hizli
-hold_time   = 30;		/// carptiktan sonra ekranda kalma
-leave_time  = 18;		/// cekilme suresi
+start_angle = 90;
+pull_angle  = 125;
+ready_time  = 14;
+pull_time   = 34;
+strike_time = 9;
+hold_time   = 30;
+leave_time  = 18;
 
-wave_count  = 3;		/// kac dalga bolt
-wave_delay  = 14;		/// dalgalar arasi kare
-wave_bolts  = 1;		/// her akimda kac bolt (1 = dalga basina 3 bolt)
-bolt_lean   = 25;		/// boltlarin gidis yonune yatma acisi
-bolt_fan    = 32;		/// uc akim arasindaki aci
-bolt_spread = 9;		/// ayni akimda birden fazla bolt varsa aralari
-spd_first   = 7.5;		/// ilk dalganin hizi
-spd_last    = 2.5;		/// son dalganin hizi
+wave_count  = 3;
+wave_delay  = 14;
+wave_bolts  = 1;
+bolt_lean   = 25;
+bolt_fan    = 32;
+bolt_spread = 9;
+spd_first   = 7.5;
+spd_last    = 2.5;
 bolt_spin   = 0;
-// -----------------------------------------
 
 _state = 0;
 _t = 0;
@@ -41,19 +36,17 @@ _wave = 0;
 _angle = start_angle;
 _alpha = 0;
 
-/// Cekicin duvara paralel yattigi temel aci.
 WallAngle = function()
 {
 	switch (wall)
 	{
-		case 1:  return 180;	// ust duvar
-		case 2:  return 270;	// sol duvar
-		case 3:  return 90;		// sag duvar
-		default: return 0;		// alt duvar
+		case 1:  return 180;
+		case 2:  return 270;
+		case 3:  return 90;
+		default: return 0;
 	}
 };
 
-/// Duvarin kutunun icine bakan normali.
 NormalDir = function()
 {
 	switch (wall)
@@ -65,14 +58,11 @@ NormalDir = function()
 	}
 };
 
-/// Cekicin duvar boyunca ilerledigi yon.
 TravelDir = function()
 {
 	return ((along >= 0) ? WallAngle() : WallAngle()+180);
 };
 
-/// Tek bir bolt dalgasi: uc akim. Dalga numarasi buyudukce hiz
-/// spd_first'ten spd_last'e iner, yani ilk cikanlar hizli.
 ShootWave = function(_w)
 {
 	var _spd = spd_first;

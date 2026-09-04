@@ -24,9 +24,6 @@ WallMake = function(_len,_warn)
 		array_push(wall,_b);
 	}
 
-	// KIRMIZI/SARI UYARI SERIDI. turn 10'daki LeftWall ile ayni gerekce:
-	// duvar RegularBoneWall degil, dogrudan RegularBone. Serit kutunun ALT
-	// kenarinda, kemiklerin cikacagi yuksekligi kapliyor.
 	var _uy = battle_warn(0,0,0,0,_warn);
 	_uy.follow_dir   = DIR.DOWN;
 	_uy.follow_thick = _len;
@@ -100,41 +97,14 @@ Dagger = function(_dx,_dy,_len,_hsp,_vsp,_ang,_wait)
 	return _b;
 };
 
-//==========================================================================
-// ATAK 11 -- VURUS + DUVAR + BOSLUKLU KEMIKLER (faz 1)
-// Her vuruste sunlar olur:
-//   * Battle_SlamX  -- ruh maviye doner ve yercekimi o yone bakar
-//   * o yonden bir KEMIK DUVARI (uyarili, kenari bastan basa kapar)
-//   * KARSI yondan iki cift BOSLUKLU KEMIK: biri kenardan, digeri karsi
-//     kenardan uzuyor, aralarindaki serit gecilecek yer.
-// Yani oyuncu once duvardan kacmak icin ziplamak, sonra da karsidan gelen
-// kemiklerin boslugunu tutturmak zorunda.
-//
-// ESKI HALI iki yerde bozuktu:
-//  1) 12 vurusun yonu ve boslugu elle yazilmisti: SAG bes kez, SOL iki kez
-//     geciyordu ve 890-1010-1130'da SAG uc kez pes pese geliyordu. Artik
-//     ikisi de KARISIK TORBADAN cekiliyor (torba bosalinca yeniden karisir,
-//     ust uste ayni deger gelmez), yani 4 yon x 3 bosluk esit dagiliyor.
-//  2) Bosluk, iki kemigin _length TOPLAMI sabit tutularak ayarlanmisti
-//     (hep 128). Ama kemikler dikey eksende 126 px, yatay eksende 140 px
-//     acikligi kapatiyor: ayni toplam, sag/sol duvarlarda 19 px, ust/alt
-//     duvarlarda 33 px bosluk birakiyordu. Ruh 16 px oldugu icin sag/sol
-//     vuruslari neredeyse gecilemezdi. Artik bosluk PIKSEL cinsinden sabit
-//     (T11_BOS_PX) ve kemik boylari acikliga gore hesaplaniyor -- hangi
-//     yonden gelirse gelsin bosluk ayni.
-//
-// Kemikler her yonde kutunun ayni kadar disinda doguyor, yani okuma suresi
-// de her yon icin esit.
-//==========================================================================
-#macro T11_ILK     50	/// ilk vurusun karesi
-#macro T11_ARA    125	/// vuruslar arasi -- okumaya ve yeniden konumlanmaya vakit
-#macro T11_SON   1425	/// son vurusun karesi (12 vurus)
-#macro T11_HIZ    2.8	/// bosluklu kemiklerin hizi (px/kare)
-#macro T11_BOS_PX  28	/// boslugun genisligi -- ruh 16 px, carpismada ~38 px acik
-#macro T11_UZAK    10	/// ilk kemik ciftinin kutu disindaki mesafesi
-#macro T11_CIZIM 0.833	/// kemigin cizilen boyu = 0.833 * _length
+#macro T11_ILK     50
+#macro T11_ARA    125
+#macro T11_SON   1425
+#macro T11_HIZ    2.8
+#macro T11_BOS_PX  28
+#macro T11_UZAK    10
+#macro T11_CIZIM 0.833
 
-/// Boslugun eksen uzerindeki yeri (0 = bir uc, 1 = obur uc).
 T11_YER = [0.30,0.50,0.70];
 
 t11_yon_torba = [];
@@ -142,9 +112,6 @@ t11_yon_son = -1;
 t11_bos_torba = [];
 t11_bos_son = -1;
 
-///0.._adet-1 degerlerini karisik bir torbaya doldurur. Torbanin en sonundaki
-///deger ilk cekilecek olan; bir onceki cekilisle ayni ciktiysa bir
-///oncekiyle yer degistiriyor ki ayni sey iki kez ust uste gelmesin.
 T11Karistir = function(_adet,_son)
 {
 	var _t = [];
@@ -161,7 +128,6 @@ T11Karistir = function(_adet,_son)
 	return _t;
 };
 
-///Sonraki vurus yonu (0 sol, 1 sag, 2 yukari, 3 asagi).
 T11Yon = function()
 {
 	if (array_length(t11_yon_torba) == 0) { t11_yon_torba = T11Karistir(4,t11_yon_son); }
@@ -169,7 +135,6 @@ T11Yon = function()
 	return t11_yon_son;
 };
 
-///Sonraki bosluk yeri (T11_YER icindeki sira).
 T11BoslukYeri = function()
 {
 	if (array_length(t11_bos_torba) == 0) { t11_bos_torba = T11Karistir(array_length(T11_YER),t11_bos_son); }
@@ -177,9 +142,6 @@ T11BoslukYeri = function()
 	return t11_bos_son;
 };
 
-///_acik piksellik acikligi, _yer oraninda T11_BOS_PX genisliginde bir
-///boslukla ikiye bolen kemik boylarini verir. Boylece bosluk her eksende
-///ayni pikselde kaliyor.
 T11Boy = function(_acik,_yer)
 {
 	var _yari = T11_BOS_PX/2;
@@ -188,7 +150,6 @@ T11Boy = function(_acik,_yer)
 	return [_ilk/T11_CIZIM,_son/T11_CIZIM];
 };
 
-///Tek bir vurus. Yon ve bosluk yeri torbadan geliyor.
 T11Vurus = function()
 {
 	var _yon = T11Yon();
@@ -199,8 +160,6 @@ T11Vurus = function()
 	var _dip = (battle_board.y+battle_board.down)-2;
 	var _tep = (battle_board.y-battle_board.up)+2;
 
-	// Dikey kemikler _dip.._tep arasini, yatay olanlar _sol.._sag arasini
-	// kapatiyor; ikisi ayni acikliga sahip degil, o yuzden boy ayri hesaplanir.
 	var _dikey = T11Boy(_dip-_tep,_yer);
 	var _yatay = T11Boy(_sag-_sol,_yer);
 
@@ -208,7 +167,7 @@ T11Vurus = function()
 
 	switch (_yon)
 	{
-		case 0:	// duvar SOLDAN, bosluklu kemikler sagdan geliyor
+		case 0:
 			Battle_SlamLeft();
 			RegularBoneWall(DIR.LEFT,135,12,45,_sol,_tep,65,35,0,false);
 			for (var _i = 0; _i < 2; _i++)
@@ -219,7 +178,7 @@ T11Vurus = function()
 			}
 			break;
 
-		case 1:	// duvar SAGDAN, bosluklu kemikler soldan geliyor
+		case 1:
 			Battle_SlamRight();
 			RegularBoneWall(DIR.RIGHT,135,12,45,_sag,_tep,65,35,0,false);
 			for (var _i = 0; _i < 2; _i++)
@@ -230,7 +189,7 @@ T11Vurus = function()
 			}
 			break;
 
-		case 2:	// duvar YUKARIDAN, bosluklu kemikler asagidan geliyor
+		case 2:
 			Battle_SlamUp();
 			RegularBoneWall(DIR.UP,145,12,45,_sol,_tep,65,35,0,false);
 			for (var _i = 0; _i < 2; _i++)
@@ -241,7 +200,7 @@ T11Vurus = function()
 			}
 			break;
 
-		case 3:	// duvar ASAGIDAN, bosluklu kemikler yukaridan geliyor
+		case 3:
 			Battle_SlamDown();
 			RegularBoneWall(DIR.DOWN,145,12,45,_sol,_dip,65,35,0,false);
 			for (var _i = 0; _i < 2; _i++)

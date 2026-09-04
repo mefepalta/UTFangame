@@ -1,4 +1,3 @@
-///@arg turn_obj/inst
 function Battle_IsTurnValid() {
 	var TURN=argument[0];
 

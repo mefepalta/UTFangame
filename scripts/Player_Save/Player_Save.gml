@@ -1,4 +1,3 @@
-///@arg slot
 function Player_Save() {
 	var SLOT=argument[0];
 

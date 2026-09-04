@@ -60,11 +60,6 @@ function Macro_Flag() {
         KR,
         KR_TIMER,
         FRAME_SKIP,
-        // Olum aninda faz 2 sahnesinde kim vardi (bit maskesi):
-        // 1 = Sans, 2 = Papyrus, 4 = Alphys, 8 = merhamet gosterirken oldu.
-        // 0 = faz 2 disinda oldu; o_textcontroller_gameover olum mesajini
-        // buna gore seciyor. SONA eklendi -- araya girmek sonraki uyelerin
-        // sayisal degerlerini kaydirir.
         GAMEOVER_CAST
 
     };

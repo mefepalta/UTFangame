@@ -124,79 +124,43 @@ function Macro_Battle() {
 		DURATION
 	};
 
-	//Sarı ruh atağındaki hedef türleri
 	enum DR_TARGET{
-		NORMAL,		//hem küçük hem büyük mermi yok eder
-		BIG,		//sadece büyük mermi yok eder
-		MIRROR		//mermiyi yansıtır, ruha hasar vermez
+		NORMAL,
+		BIG,
+		MIRROR
 	};
 
 
 }
 
-//==========================================================================
-//  FAZ 2 -- NORMAL HASAR SISTEMI
-//==========================================================================
-//  Faz 1 KARMA (KR) ile oynuyor: hurtkr nesnesi her ~3 karede 2 hasar
-//  vuruyor, hasarin yarisi mor bar olarak geri geliyor. Faz 2 ise KLASIK
-//  hasar kullaniyor: her mermi turunun KENDI sabit degeri var, vurus
-//  aninda dokunulmazlik penceresi aciliyor ve can geri gelmiyor.
-//
-//  Anahtar global.kr:
-//    true  -> KR yolu   (faz 1, room_battle)
-//    false -> normal yol (faz 2, room_battle_1)
-//  Odaya gore kurulumu battle_ui/Create_0 ve battle_enemy_engage/Step_0
-//  yapiyor; mermilerin icindeki "else" dallari bu fonksiyona giriyor.
-//
-//  BALANS: asagidaki sayilari degistirmek yeter, mermi kodlarina dokunmaya
-//  gerek yok. Faz 2'de can 92 (LV 19).
-//==========================================================================
 
-/// Vurustan sonraki dokunulmazlik (kare). Oyun 60 fps -> 60 = 1 saniye.
-/// Isin gibi surekli temas eden mermiler bu sure dolunca yeniden vuruyor:
-/// isinin icinde durursan saniyede bir kez, tam degeri kadar hasar alirsin.
 #macro DMG_INV            60
 
-// --- kemikler (battle_regularbone: butun kemikler, duvarlar, hancerler) --
-#macro DMG_BONE            7	/// beyaz kemik
-#macro DMG_BONE_BLUE       9	/// mavi kemik -- dururken guvenli, hareket cezali
-#macro DMG_BONE_ORANGE     9	/// turuncu kemik -- hareket ederken guvenli
+#macro DMG_BONE            7
+#macro DMG_BONE_BLUE       9
+#macro DMG_BONE_ORANGE     9
 
-// --- blasterlar ---------------------------------------------------------
-#macro DMG_BLASTER        12	/// normal gaster blaster isini
-#macro DMG_BLASTER_BIG    22	/// 20. atagin dev blaster isini
+#macro DMG_BLASTER        12
+#macro DMG_BLASTER_BIG    22
 
-// --- Sans ---------------------------------------------------------------
-#macro DMG_SLASH          18	/// Sans'in firlattigi kesik
+#macro DMG_SLASH          18
 
-// --- Alphys -------------------------------------------------------------
-#macro DMG_BOLT            6	/// kucuk yildirim
-#macro DMG_BOLT_BIG       11	/// buyuk yildirim (Yildirim / AlphysBigBolt)
-#macro DMG_SHOCKER        10	/// sok alani
-#macro DMG_SPEAR          10	/// mizrak
+#macro DMG_BOLT            6
+#macro DMG_BOLT_BIG       11
+#macro DMG_SHOCKER        10
+#macro DMG_SPEAR          10
 
-// --- sari ruh (DR) bolumu -----------------------------------------------
-#macro DMG_DR_TARGET       7	/// uzerine gelen hedef
-#macro DMG_DR_BAR          6	/// mavi kemik bari
-#macro DMG_DR_REFLECT     18	/// aynadan sekip donen KENDI mermin -- CEZA: aynaya
-								/// atmak oyuncunun kendi hatasi, ucuz olmamali
+#macro DMG_DR_TARGET       7
+#macro DMG_DR_BAR          6
+#macro DMG_DR_REFLECT     18
 
-// --- turuncu ruh parkuru ------------------------------------------------
-#macro DMG_CAR            15	/// bileklik carousel (turn 16 / 18 / 20) -- CEZA:
-								/// sadece HAVADAKI kalp carpiyor, yani yanlis
-								/// zamanda ziplamanin bedeli
-#macro DMG_GUEST          11	/// Konuk'un atilisi (turn 18 / 20)
+#macro DMG_CAR            15
+#macro DMG_GUEST          11
 
-///@arg damage
-///@arg [inv_frames]
-///@desc Faz 2'nin normal hasar yolu. Dokunulmazlik penceresi acikken
-///      hicbir sey yapmaz. Gercekten vurduysa true doner.
 function Battle_HurtNormal(_dmg,_inv = DMG_INV)
 {
 	if (global._inv > 0) { return false; }
 
-	// Dokunulmazlik her halukarda aciliyor: kacinma (dodge) sirasinda bile
-	// mermi "degdi" sayiliyor, sadece hasar islenmiyor.
 	global._inv = _inv;
 	if (global.dodge) { return false; }
 

@@ -1,7 +1,3 @@
-// Zamanlar o_story'deki panel tablosuyla birlikte hesaplandi:
-//   time = satirin yazilmaya basladigi kare
-//   bit  = satirin ekrandan kalktigi kare
-// Yazim hizi {speed 2} -> karakter basina 2 kare.
 dialogue = [
 	{time:  135, bit:  408, text: "Below stone and shadow,&lived a legendary race&of Monsters."},
 	{time:  471, bit:  772, text: "Fear swept the land as&the final human struck&the rocky surface below."},

@@ -246,7 +246,7 @@ if (room == room_battle_1)
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Here comes the trouble in&  the form of the undead.")
+		Battle_SetMenuDialog("* The real final battle has&  just begun!")
 		Battle_EndTurn();
 	}
 }

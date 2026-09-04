@@ -1,6 +1,3 @@
-///@arg type
-///@arg slot
-///@arg default*
 function Flag_Get() {
 	var TYPE=argument[0];
 	var SLOT=argument[1];

@@ -12,7 +12,6 @@ depth=top ? DEPTH_BATTLE.BULLET_OUTSIDE_HIGH : DEPTH_BATTLE.BULLET;
 
 if !top surface_set_target(Battle_GetBoardSurface());
 draw_self();
-//draw_rectangle_color(0, 0, 640, 480, c_red, c_blue, c_green, c_yellow, false);
 if place_meeting(x,y,battle_soul)
 {
 	if colour == c_aqua {

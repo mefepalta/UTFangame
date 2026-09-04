@@ -1,4 +1,3 @@
-///@desc Group & Macro
 ds_map_add(_map_macro,"true",true);
 ds_map_add(_map_macro,"false",false);
 

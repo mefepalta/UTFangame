@@ -1,4 +1,3 @@
-///@desc Update Menu 2 Text Color
 _change_inst=_inst_confirm_no;
 _change_color=(_choice_confirm==0 ? c_yellow : c_white);
 event_user(1);

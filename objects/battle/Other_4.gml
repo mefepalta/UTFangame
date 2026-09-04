@@ -1,5 +1,3 @@
-//生成实例
-//instance_create_depth(0,0,-10000000000000000000000,Obj_Fog);
 instance_create_depth(0,0,0,battle_fader);
 instance_create_depth(0,0,0,battle_board);
 instance_create_depth(0,0,0,battle_ui);
@@ -16,7 +14,6 @@ if(audio_exists(BGM)){
 	BGM_Play(5,BGM);
 }
 
-//初始化敌人
 var proc=0;
 repeat(3){
 	Battle_SetEnemy(_enemy_object[proc],proc);
@@ -25,7 +22,6 @@ repeat(3){
 
 Battle_SetNextState(BATTLE_STATE.MENU);
 
-//调用事件
 Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.BATTLE_START);
 
 Battle_GotoNextState();

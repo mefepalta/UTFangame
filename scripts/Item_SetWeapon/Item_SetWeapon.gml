@@ -1,4 +1,3 @@
-///@arg item
 function Item_SetWeapon() {
 	var ITEM=argument[0];
 

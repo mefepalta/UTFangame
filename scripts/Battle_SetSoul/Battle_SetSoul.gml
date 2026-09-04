@@ -1,4 +1,3 @@
-///@arg soul_obj
 function Battle_SetSoul() {
 	var SOUL=argument[0];
 

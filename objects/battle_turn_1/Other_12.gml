@@ -1,4 +1,3 @@
-///@desc Turn Start
 _start=true;
 Battle_SetSoul(battle_soul_red);
 if (room == room_battle)

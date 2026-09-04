@@ -1,5 +1,3 @@
-///@arg box_slot
-///@arg item_slot
 function Box_Get() {
 	var SLOT_BOX=argument[0];
 	var SLOT=argument[1];

@@ -1,8 +1,4 @@
 valval++;
 
-if (valval == 15) room_goto(room_story);
+if (valval == 15) room_goto(room_area_aftersans);
 
-/*if (Input_IsPressed(INPUT.CONFIRM))
-{
-	room_goto(room_battle);
-}

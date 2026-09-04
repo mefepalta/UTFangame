@@ -1,4 +1,3 @@
-///@arg item_id
 function Item_IsValid() {
 	var ITEM=argument[0];
 

@@ -1,14 +1,3 @@
-// =====================================================================
-//  FAZ 0.5 - sahne yonetmeni
-//
-//  Diyalog: "Discord Sans Rewrite" (TheBlueTowel) belgesinin
-//  "Phase 0.5 Dialogue" bolumu.
-//
-//  Zamanlar snd_dynast ile senkron kalsin diye son (bos) satir yine
-//  45. saniyede duruyor; mizrak/kol animasyonu p05 = 2705'te (45.08 sn)
-//  basliyor, darbe 2730'da, oda gecisi 2950'de. Eski kilit noktalar
-//  korundu, sadece aralari dolduruldu.
-// =====================================================================
 dialogue = [
     {time:  1,   text: "Everyone..."},
     {time:  3,   text: "Every single one of those monsters who were crushed beneath your hands..."},
@@ -37,57 +26,39 @@ p05             = 0;
 global.sanstalk     = 0;
 global.finalstretch = 0;
 
-// Faz 1'e gecerken savas odasi siyahin icinden acilsin ve uzerine bu
-// sahnenin morundan sonup giden bir parlama binsin (bkz. battle_fader).
 global.battle_fadein     = 1;
 global.battle_fadein_col = make_colour_rgb(150, 30, 190);
 
-// ---------------------------------------------------------------------
-//  Sahne efektleri
-// ---------------------------------------------------------------------
-// Arka plan katmani depth 100, karakter parcalari depth 0. Gradyan
-// ikisinin arasina girsin diye yonetmen 50'ye aliniyor; on plan
-// efektleri (yazi, flas, sok dalgasi) Draw End'de ciziliyor.
 depth = 50;
 
-// Tum P05 parcalarinin okudugu ortak sarsinti ofseti
 global.p05_sx = 0;
 global.p05_sy = 0;
 
-shake_power = 0;    // darbeyle gelen, sonup giden sarsinti
-rumble      = 0;    // mizrak inmeden onceki surekli ugultu
+shake_power = 0;
+rumble      = 0;
 
-aura        = 0;    // arka plan gradyaninin yogunlugu (0..1)
+aura        = 0;
 aura_target = 0;
-// Gece gogu sahne acilir acilmaz hazir gelmiyor; gozun karanliga
-// alismasi gibi ilk ~8 saniyede yavas yavas beliriyor.
 sky         = 0;
-pulse       = 0;    // nabiz sayaci
+pulse       = 0;
 
-flash       = 0;    // beyaz ekran patlamasi
-eye_glow    = 0;    // Sans'in goz parlamasi
-slash_t     = 0;    // kol savurmasinin biraktigi yay
+flash       = 0;
+eye_glow    = 0;
+slash_t     = 0;
 
-shock = [];         // sok dalgasi halkalari
-spark = [];         // kivilcimlar
-mote  = [];         // yagan kar
-star  = [];         // yildiz alani
+shock = [];
+spark = [];
+mote  = [];
+star  = [];
 
-// Renkler sprite'lardan olculdu: goz #E20BB1, kemik/govde #6B6089
-COL_EYE   = make_colour_rgb(226,  11, 177);   // goz pembesi
-COL_MAG   = make_colour_rgb(255,  96, 220);   // parlak magenta
-COL_DEEP  = make_colour_rgb( 88,  40, 132);   // gradyanin ic moru
-COL_DUST  = make_colour_rgb(150, 140, 178);   // yerden kalkan toz
-// Faz 1'in gece gogune baglayan renkler (o_phase_bg ile ayni degerler)
-COL_NIGHT = make_colour_rgb( 20,  10,  44);   // derin gece indigosu
-COL_STAR  = make_colour_rgb(234, 228, 255);   // soguk beyaz yildiz
-COL_SNOW  = make_colour_rgb(206, 216, 255);   // kar
+COL_EYE   = make_colour_rgb(226,  11, 177);
+COL_MAG   = make_colour_rgb(255,  96, 220);
+COL_DEEP  = make_colour_rgb( 88,  40, 132);
+COL_DUST  = make_colour_rgb(150, 140, 178);
+COL_NIGHT = make_colour_rgb( 20,  10,  44);
+COL_STAR  = make_colour_rgb(234, 228, 255);
+COL_SNOW  = make_colour_rgb(206, 216, 255);
 
-// ---------------------------------------------------------------------
-//  Yildiz alani: sahne Faz 1'in gece goguyle ayni gokyuzunun altinda
-//  geciyor. Ofke buyudukce (aura) yildizlar magentanin altinda kaybolup
-//  gidiyor - Sans'in Papyrus'la baktigi gok, hiddeti kabardikca sonuyor.
-// ---------------------------------------------------------------------
 repeat (86) {
     array_push(star, {
         x:  random(660) - 10,
@@ -99,7 +70,7 @@ repeat (86) {
         hs: random_range(-0.012, 0.012)
     });
 }
-repeat (18) {   // yakin katman: iri, parlak, parildayan
+repeat (18) {
     array_push(star, {
         x:  random(660) - 10,
         y:  random(400),
@@ -111,7 +82,6 @@ repeat (18) {   // yakin katman: iri, parlak, parildayan
     });
 }
 
-// Kar: Faz 1 ile ayni (eskiden yukselen mor zerreciklerdi)
 repeat (30) {
     array_push(mote, {
         x:  random(660) - 10,
@@ -125,11 +95,7 @@ repeat (30) {
     });
 }
 
-// ---------------------------------------------------------------------
-//  Ciziim yardimcilari (Draw ve Draw End bu metotlari kullaniyor)
-// ---------------------------------------------------------------------
 
-/// Tam genislikte dikey renk gecisi (gece zemini)
 p05_vgrad = function(_y0, _y1, _c0, _a0, _c1, _a1) {
     if (_a0 <= 0.002 && _a1 <= 0.002) return;
     draw_primitive_begin(pr_trianglestrip);
@@ -138,7 +104,6 @@ p05_vgrad = function(_y0, _y1, _c0, _a0, _c1, _a1) {
     draw_primitive_end();
 }
 
-/// Yumusak radyal parlama: merkez dolu, kenarlar seffaf
 p05_glow = function(_x, _y, _r, _col, _a, _yscale = 1) {
     if (_a <= 0.002 || _r <= 0) return;
     var _n = 26;
@@ -151,11 +116,9 @@ p05_glow = function(_x, _y, _r, _col, _a, _yscale = 1) {
     draw_primitive_end();
 }
 
-/// Icten disa sonen halka (sok dalgasi). _yscale ile yere yatirilabilir.
 p05_ring = function(_x, _y, _r, _w, _col, _a, _yscale = 1) {
     if (_a <= 0.002 || _r <= 0) return;
     var _n = 40;
-    // ic yari
     draw_primitive_begin(pr_trianglestrip);
     for (var i = 0; i <= _n; i++) {
         var _d  = i * (360 / _n);
@@ -165,7 +128,6 @@ p05_ring = function(_x, _y, _r, _w, _col, _a, _yscale = 1) {
         draw_vertex_colour(_x + _cx * _r,  _y + _cy * _r,  _col, _a);
     }
     draw_primitive_end();
-    // dis yari
     draw_primitive_begin(pr_trianglestrip);
     for (var i = 0; i <= _n; i++) {
         var _d  = i * (360 / _n);
@@ -177,7 +139,6 @@ p05_ring = function(_x, _y, _r, _w, _col, _a, _yscale = 1) {
     draw_primitive_end();
 }
 
-/// Mizrak ele carptigi an: sarsinti + isik + halka + kivilcim
 p05_impact = function(_ix, _iy) {
     shake_power = 17;
     flash       = 1;
@@ -185,10 +146,8 @@ p05_impact = function(_ix, _iy) {
     aura_target = 1;
     slash_t     = 0;
 
-    // Elden yayilan iki halka
     array_push(shock, {x: _ix, y: _iy, r: 10, spd: 13, life: 30, maxlife: 30, col: COL_MAG,   ys: 1.0, w: 9});
     array_push(shock, {x: _ix, y: _iy, r: 0,  spd: 8,  life: 42, maxlife: 42, col: c_white,   ys: 1.0, w: 5});
-    // Ayaklarin dibinde yere yayilan toz halkasi
     array_push(shock, {x: 320,  y: 296, r: 14, spd: 11, life: 36, maxlife: 36, col: COL_EYE, ys: 0.30, w: 12});
 
     repeat (38) {
@@ -204,7 +163,6 @@ p05_impact = function(_ix, _iy) {
             col:  choose(COL_MAG, COL_EYE, c_white)
         });
     }
-    // Ayaklardan kalkan toz
     repeat (16) {
         array_push(spark, {
             x:    320 + random_range(-46, 46),

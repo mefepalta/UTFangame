@@ -1,4 +1,3 @@
-// gentle float + breathing so the logo never sits perfectly still
 var _dy = y + sin(glow * 0.028) * 4;
 var _br = 1 + sin(glow * 0.045) * 0.014;
 var _xs = image_xscale * _br;
@@ -8,7 +7,6 @@ var _prevcol = draw_get_colour();
 
 gpu_set_blendmode(bm_add);
 
-// purple halo behind the logo (triangle fan = smooth radial falloff)
 var _hcol = make_colour_rgb(90, 60, 190);
 var _hr   = 250 * image_xscale;
 var _ha   = (0.22 + 0.06 * sin(glow * 0.05)) * image_alpha;
@@ -21,7 +19,6 @@ for (var _p = 0; _p <= 28; _p++)
 }
 draw_primitive_end();
 
-// a light bloom pass - kept low so the pixel art stays readable
 draw_sprite_ext(sprite_index, image_index, x, _dy, _xs * 1.02, _ys * 1.02, image_angle,
                 c_white, image_alpha * 0.10);
 

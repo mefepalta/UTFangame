@@ -1,10 +1,3 @@
-///@arg x
-///@arg y
-///@arg _scalex
-///@arg _scaley
-///@arg alpha
-///@arg color
-///@arg color_inside
 function DrawGUIRectangle_UI() {
     var _x = argument[0]
     var _y = argument[1]

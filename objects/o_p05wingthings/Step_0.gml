@@ -7,11 +7,9 @@ with (o_p05body) {
     other.pure_y = pure_y - 48;
 }
 
-// Surekli hafif kanat titresimi
 flutter += 0.055;
 var _ang = sin(flutter) * 2.2 + sin(flutter * 0.37) * 1.1;
 
-// Savurmadan once kanatlar iceri toplaniyor, darbede genis aciliyor
 if (_p > 2640 && _p <= 2705) _ang += ((_p - 2640) / 65) * 5;
 if (_p >= 2730) {
     var _t = _p - 2730;
@@ -20,7 +18,6 @@ if (_p >= 2730) {
 
 image_angle = _ang;
 
-// Darbede kisa bir olcek patlamasi
 var _pop = 0;
 if (_p >= 2730) _pop = 0.13 * exp(-(_p - 2730) / 9);
 image_xscale = 2 * (1 + _pop);
@@ -29,7 +26,6 @@ image_yscale = 2 * (1 + _pop);
 x = pure_x + global.p05_sx;
 y = pure_y + global.p05_sy;
 
-// image_speed yukseltildi ki 5 kare 20 adimlik pencereye sigsin
 if (_p > 2705 && _p < 2725) { sprite_index = s_p05wingthing_animation; image_speed = 3; }
 if (_p > 2725) {
     image_index = 4;

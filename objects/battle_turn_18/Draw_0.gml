@@ -1,11 +1,4 @@
-///@desc Pattern cizimleri
 
-//--------------------------------------------------------------------------
-// Kemik bileklikleri
-//--------------------------------------------------------------------------
-// Her bileklik icin once arka yari, sonra on yari ciziliyor ki ust uste
-// binme dogru olsun. Arkadakiler hem soluk hem ince hem yari saydam: tur
-// nesnesi kutunun onune cizdigi icin uzaklik hissini bunlar veriyor.
 if (car_on) and (instance_exists(battle_board))
 {
 	var _uzak = make_color_rgb(70,70,110);
@@ -28,11 +21,6 @@ if (car_on) and (instance_exists(battle_board))
 	draw_set_alpha(1);
 }
 
-//--------------------------------------------------------------------------
-// Kucuk kutular
-//--------------------------------------------------------------------------
-// Alt/ust duvarlar barlarin kendisi (battle_dr_obstacle) tarafindan
-// ciziliyor. Burada sadece kati yan duvarlar var.
 if (box_on) and (instance_exists(battle_board))
 {
 	draw_set_alpha(1);
@@ -49,11 +37,6 @@ if (box_on) and (instance_exists(battle_board))
 	draw_set_color(c_white);
 }
 
-//--------------------------------------------------------------------------
-// Beklenmedik Konuk
-//--------------------------------------------------------------------------
-// Hazirlik ve atilis sirasinda mavi: o an SADECE guc dash isliyor demek.
-// Savrulunca bir an beyaz parliyor. Beklerken hafifce inip cikiyor.
 if (gst_alpha > 0)
 {
 	var _gc = c_white;
@@ -66,16 +49,7 @@ if (gst_alpha > 0)
 	draw_set_alpha(1);
 }
 
-// Blasterlar oyunun kendi nesnesi oldugu icin cizimleri kendilerine ait;
-// burada bir sey yapmiyoruz.
 
-//--------------------------------------------------------------------------
-// Sigara dumani
-//--------------------------------------------------------------------------
-// Her kume yukseldikce buyuyup soluyor. Alfa once hizla aciliyor, sonra
-// karesel sonuyor: duman boyle dagiliyor.
-// spr_papyrus_smoke'un origin'i SAG-ALT kosede (28,24), o yuzden gorsel
-// merkezin kume noktasina denk gelmesi icin cizim yeri kaydiriliyor.
 if (array_length(duman) > 0)
 {
 	for (var _i = 0; _i < array_length(duman); _i++)

@@ -1,4 +1,3 @@
-/// @description Game Over yazisi -- sayfalari yaz
 
 var _v     = 99999;
 var _t_txt = 0;
@@ -20,14 +19,12 @@ if (started) and (!done) {
         while (shown < _target) {
             shown++;
             var _c = string_char_at(_p.txt, shown);
-            // bosluk, satir sonu ve noktalama sessiz
             if (_c != " " && _c != "\n" && _c != "." && _c != ","
              && _c != "!" && _c != "?" && _c != "'" && _c != "-") {
                 audio_play_sound(_p.snd, 1, false);
             }
         }
     } else if (cur < array_length(pages) - 1) {
-        // sayfa bitti: okunacak kadar bekle, sonra sonraki konusmaci
         wait++;
         if (wait >= page_hold) {
             cur++;
@@ -40,8 +37,6 @@ if (started) and (!done) {
     }
 }
 
-// Devam isareti hem giris acildiktan hem de son sayfa yazildiktan sonra
-// beliriyor; yoksa uzun mesajlarda yazi surerken ok yanip sonuyordu.
 if (_v >= _t_rdy) and (done) {
     prompt_a = min(1, prompt_a + 0.04);
     blink++;

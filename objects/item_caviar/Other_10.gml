@@ -1,4 +1,3 @@
-///@desc Use
 Player_Heal(60);
 audio_play_sound(snd_item_heal,0,false);
 Dialog_Add("* You eat the Caviar!{sleep 20}&* You have recovered 60 HP!")

@@ -1,4 +1,3 @@
-///@arg input
 function Input_IsPressed() {
 	var INPUT=argument[0];
 

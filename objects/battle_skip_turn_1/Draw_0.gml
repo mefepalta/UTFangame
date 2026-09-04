@@ -1,16 +1,4 @@
-///@desc Mizrak
 
-//==========================================================================
-// GECICI TESHIS KATMANI
-// Sans'in neden silinmedigini bulmak icin. Kapatmak icin Create_0'daki
-// SAP_TESHIS makrosunu false yap -- baska hicbir yeri degistirmeye gerek yok.
-//
-// EN ONEMLI SATIR "head_a": solda GERCEK deger (engage'de o an ne varsa),
-// parantez icinde BIZIM yazdigimiz deger.
-//   ikisi de 0  -> yazma calisiyor, sorun cizimde (yuzey temizlenmiyor vs.)
-//   gercek 1, yazilan 0 -> baska bir kod bizden SONRA geri aliyor
-//   yazilan -1  -> SapSansAlpha hic cagrilmadi
-//==========================================================================
 if (SAP_TESHIS)
 {
 	var _vx = camera_get_view_x(view_camera[0]);
@@ -51,8 +39,6 @@ if (SAP_TESHIS)
 
 	draw_text(_vx+8,_vy+6,_s);
 
-	// Cizim durumunu varsayilana geri al: yoksa bu font/hizalama diyalog
-	// gibi baska cizimlere sizabilir.
 	draw_set_colour(c_white);
 	draw_set_alpha(1);
 	draw_set_font(-1);
@@ -62,12 +48,6 @@ if (SAP_TESHIS)
 
 if (!sap_on) or (sap_alpha <= 0) { exit; }
 
-//--------------------------------------------------------------------------
-// Sans'tan geriye kalan gozler (A f18'den sahnenin sonuna kadar)
-//--------------------------------------------------------------------------
-// Gif'te Sans silinirken parlayan gozu ve beyaz kas cizgileri ayni
-// parlaklikta kaliyor. engage'in kendi parcalarindan bagimsiz cizildigi
-// icin Sans tamamen saydam olsa da bunlar duruyor.
 if (sap_goz > 0)
 {
 	var _g = SapGoz();
@@ -75,21 +55,11 @@ if (sap_goz > 0)
 		c_white,sap_goz*sap_alpha);
 }
 
-//--------------------------------------------------------------------------
-// A f17 -- SAVURMA: mizrak hala Sans'in elinde, engage/Draw_0 ciziyor
-//--------------------------------------------------------------------------
 if (sap_kip <= 1) { exit; }
 
 var _tx = (sap_sars > 0) ? irandom_range(-sap_sars,sap_sars) : 0;
 var _ty = (sap_sars > 0) ? irandom_range(-sap_sars,sap_sars) : 0;
 
-//--------------------------------------------------------------------------
-// A f18-f30 -- YERINDE DONME
-//--------------------------------------------------------------------------
-// Mizrak yol almiyor: daha ilk kareden oturacagi noktada duruyor ve orada
-// donuyor. Sanatci da tek sprite dondurmemis -- f26'ya kadar capraz, f27'den
-// sonra dikey mizrak. Ikisinin origin'i kendi agirlik merkezinde oldugu icin
-// sprite degisirken mizrak yerinden oynamiyor.
 if (sap_kip == 2)
 {
 	var _p = SapNokta(SAP_UC_DUR);
@@ -108,14 +78,8 @@ if (sap_kip == 2)
 }
 if (sap_kip != 3) { exit; }
 
-//--------------------------------------------------------------------------
-// B -- ASILI DURMA / YUKARI FIRLAMA / DARBE
-//--------------------------------------------------------------------------
 if (sap_faz == 2)
 {
-	// B f8-f19: mizrak yukari firladi. Geriye tepede duran on-kisaltilmis
-	// sekil kaliyor; dikey mizragin pivotunun SAP_UST_Y kadar uzerinde,
-	// bekledigi sure boyunca SAP_UST_OTUR kadar yukari oturuyor.
 	var _p = SapNokta(SAP_UC_DUR);
 	draw_sprite_ext(s_sans_spear_impact,0,
 		_p.x+_tx,
@@ -125,12 +89,8 @@ if (sap_faz == 2)
 	exit;
 }
 
-// faz 0/1 duran mizrak, faz 3 hiz cizgili darbe. Origin'leri uclari ayni
-// noktaya dusecek sekilde secildi, o yuzden tek formul yetiyor.
 var _spr = (sap_faz == 3) ? s_sans_spear_stab : s_sans_spear_vert;
 var _p = SapNokta(sap_uc);
 draw_sprite_ext(_spr,0,_p.x+_tx,_p.y+_ty,SAP_OLCEK,SAP_OLCEK,0,c_white,sap_alpha);
 
-// Darbe aninda kalbi ustune cizmiyoruz: orada mizragin kalbi ortmesi
-// gerekiyor.
 if (sap_faz < 3) { SapKalp(); }

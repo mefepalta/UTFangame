@@ -7,7 +7,6 @@ if(instance_exists(char_box)){
         alarm[1] = 24;
     }
 }
-// Diğer instance_destroy satırları aynı kalacak
 if(instance_exists(_inst_inventory)){
 	instance_destroy(_inst_inventory);
 }

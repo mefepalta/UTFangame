@@ -1,4 +1,3 @@
-///@arg input
 function Input_Unbind() {
 	var INPUT=argument[0];
 

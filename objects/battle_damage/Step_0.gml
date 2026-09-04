@@ -4,9 +4,6 @@ if(y>ystart){
 	y=ystart;
 }
 
-/*if global.go_dodge="miss"{
-	dmg_sprite=spr_battle_damage_miss;
-}*/
 if global.go_dodge="block"{
 	dmg_sprite=spr_blocked_damage;
 }

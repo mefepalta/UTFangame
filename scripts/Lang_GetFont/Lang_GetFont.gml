@@ -1,5 +1,3 @@
-///@arg font_name
-///@arg default*
 function Lang_GetFont() {
 	var KEY=argument[0];
 	var DEF=-1;

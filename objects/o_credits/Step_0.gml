@@ -1,9 +1,6 @@
 creditstimer++;
 fx_t++;
 
-// ---------------------------------------------------------------------
-// Which board is on screen right now, and how it should look
-// ---------------------------------------------------------------------
 var _spr     = -1;
 var _index   = -1;
 var _local   = 0;
@@ -32,7 +29,7 @@ if (_spr != -1)
 	if (_index != panel_current)
 	{
 		panel_current = _index;
-		panel_flash = 1;                 // little burst of light on every new board
+		panel_flash = 1;
 	}
 
 	var _fadein = 80;
@@ -46,13 +43,11 @@ if (_spr != -1)
 		_a = (_dur - _local) / _fadeout;
 	}
 	_a = clamp(_a, 0, 1);
-	panel_alpha = _a * _a * (3 - 2 * _a);            // smoothstep, no harsh cuts
+	panel_alpha = _a * _a * (3 - 2 * _a);
 
 	var _ease = 1 - power(1 - clamp(_local / _fadein, 0, 1), 3);
 	var _life = clamp(_local / _dur, 0, 1);
 
-	// slides in from the right, settles in the middle and keeps a very
-	// slow drift so the board never looks frozen
 	panel_x     = lerp(320 + 70, 320, _ease) - _life * 22;
 	panel_y     = 300 - sprite_get_height(_spr) * 0.5
 	            + (1 - _ease) * 14
@@ -67,9 +62,6 @@ else
 
 panel_flash = max(0, panel_flash - 0.02);
 
-// ---------------------------------------------------------------------
-// Starfield drift
-// ---------------------------------------------------------------------
 for (var _i = 0; _i < array_length(stars); _i++)
 {
 	var _s = stars[_i];
@@ -88,9 +80,6 @@ for (var _i = 0; _i < array_length(stars); _i++)
 	}
 }
 
-// ---------------------------------------------------------------------
-// Shooting stars
-// ---------------------------------------------------------------------
 shot_timer--;
 if (shot_timer <= 0)
 {

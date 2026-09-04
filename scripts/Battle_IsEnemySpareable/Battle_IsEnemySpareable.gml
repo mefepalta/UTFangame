@@ -1,4 +1,3 @@
-///@arg enemy_slot
 function Battle_IsEnemySpareable() {
 	var ENEMY=argument[0];
 

@@ -1,4 +1,3 @@
-///@arg string
 function GetColorFromString() {
 	var STR=argument[0];
 

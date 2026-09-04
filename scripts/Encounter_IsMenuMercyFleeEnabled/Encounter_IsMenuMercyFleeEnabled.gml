@@ -1,4 +1,3 @@
-///@arg encounter_id
 function Encounter_IsMenuMercyFleeEnabled() {
 	var ID=argument[0];
 

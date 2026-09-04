@@ -1,4 +1,3 @@
-///@arg hp
 function Player_SetHp() {
 	var HP=argument[0];
 

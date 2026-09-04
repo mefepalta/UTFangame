@@ -480,6 +480,7 @@
     {"name":"s_p25_silhouette","order":11,"path":"sprites/s_p25_silhouette/s_p25_silhouette.yy",},
     {"name":"s_p3sheet","order":3,"path":"sprites/s_p3sheet/s_p3sheet.yy",},
     {"name":"s_phaseframe","order":15,"path":"sprites/s_phaseframe/s_phaseframe.yy",},
+    {"name":"s_phasetile","order":16,"path":"sprites/s_phasetile/s_phasetile.yy",},
     {"name":"s_phonecallmuffet","order":36,"path":"sprites/s_phonecallmuffet/s_phonecallmuffet.yy",},
     {"name":"s_phonecallsans","order":35,"path":"sprites/s_phonecallsans/s_phonecallsans.yy",},
     {"name":"s_phonecallundyne","order":37,"path":"sprites/s_phonecallundyne/s_phonecallundyne.yy",},

@@ -1,17 +1,3 @@
-///@arg bones
-///@arg speed
-///@arg size
-///@arg color
-///@arg out
-///@arg len
-///@arg len_x
-///@arg len_y
-///@arg tag (set "true" if you're using argument 11-13)
-///@arg dir*
-///@arg move_speed*
-///@arg in_out_anim*
-///@arg anim_duration*
-///@arg anim_duration_back*
 function MakeBoneCircle(){
 	var dir=0
 	var move_speed=0

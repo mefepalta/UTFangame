@@ -68,13 +68,6 @@ if (room == room_battle_1)
 	{
 		Battle_SetBoardSizeCubic(65,65,180,180);
 	}
-	// CEKICLER TEKLI. Eskiden her patlamada UST ve ALT duvardan ayni anda
-	// birer cekic geliyordu. Ayni anda soldan sinus bosluklu kemik gecidi
-	// akiyor ve ustten nisanli blaster iniyor: dikey alan zaten kapali,
-	// iki cekic ayni anda gelince kacacak yer kalmiyordu.
-	// Simdi her patlamada TEK cekic var, dordu de farkli kose/yon:
-	//   ust-sol -> alt-sol -> alt-sag -> ust-sag
-	// (AlphysHammer'in ilk argumani duvar: 1 = ust, 0 = alt.)
 	if (_timer == 960)
 	{
 		AlphysHammer(1,_wl+75,_wt,-1,1,1);
@@ -109,13 +102,6 @@ if (room == room_battle_1)
 	{
 		Battle_SetBoardSizeCubic(65,65,65,65);
 	}
-	// UST TARAMA. Blasterlar artik DAHA HIZLI geliyor ve DAHA CABUK ates
-	// ediyor. RegularBlaster'in son argumani yerine oturma suresi (kare),
-	// 8. argumani ise oturduktan sonra ateslemeden onceki bekleme:
-	//   yerlesme 22 -> 13 kare, bekleme 4 -> 1 kare.
-	// Isinin omru (7. arguman, 14) ve 18 karelik dogum araligi ayni kaldi:
-	// taramanin ekranda ilerleyisi degismesin, sadece her blaster kendi
-	// icinde hizlansin istendi.
 	if (_timer >= 1690) and (_timer <= 1800) and (_timer % 18 == 4)
 	{
 		var _sw = ((_timer-1690) div 18);
@@ -146,7 +132,7 @@ if (room == room_battle_1)
 	{
 		Battle_SetSoul(battle_soul_red);
 		Battle_SetBoardSizeCubic(65,65,125,125);
-		Battle_SetMenuDialog("* ...")
+		Battle_SetMenuDialog("* Alphys crushes a rock while&  staring you dead in the eyes.")
 		if (instance_exists(o_sans_blockp2))
 		{
 			o_sans_blockp2.sprite_index = spr_p2_comeatmebro;

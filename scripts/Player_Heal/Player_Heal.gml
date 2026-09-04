@@ -1,4 +1,3 @@
-///@arg heal
 function Player_Heal() {
     var HEAL=argument[0];
 

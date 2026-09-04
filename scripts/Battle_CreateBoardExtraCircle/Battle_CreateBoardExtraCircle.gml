@@ -1,6 +1,3 @@
-///@arg x
-///@arg y
-///@arg radius
 function Battle_CreateBoardExtraCircle(){
 	var X = argument[0];
 	var Y = argument[1];
@@ -13,5 +10,3 @@ function Battle_CreateBoardExtraCircle(){
 	return circle;
 }
 
-//创建一个圆形的加框
-//Create a Extra-Board that is circle

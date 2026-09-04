@@ -1,8 +1,5 @@
-//菜单
 if(_state==BATTLE_STATE.MENU){
-	//按钮
 	if(_menu==BATTLE_MENU.BUTTON){
-		//左/右
 		if(Input_IsPressed(INPUT.LEFT)){
 			var button=_menu_choice_button;
 			button-=1;
@@ -24,7 +21,6 @@ if(_state==BATTLE_STATE.MENU){
 			Battle_SetMenuChoiceButton(button);
 		}
 		
-		//确定
 		if(Input_IsPressed(INPUT.CONFIRM)){
 			audio_play_sound(snd_menu_confirm,0,false);
 			switch(_menu_choice_button){
@@ -48,9 +44,7 @@ if(_state==BATTLE_STATE.MENU){
 		}
 	}else
 	
-	//战斗目标
 	if(_menu==BATTLE_MENU.FIGHT_TARGET){
-		//上/下
 		if(Input_IsPressed(INPUT.UP)){
 			var enemy=_menu_choice_enemy-1;
 			if(enemy>=0){
@@ -65,22 +59,18 @@ if(_state==BATTLE_STATE.MENU){
 			}
 		}
 		
-		//灵魂位置
 		battle_soul.x=lerp(battle_soul.x,battle_board.x-battle_board.left-5+40,0.5);
 		battle_soul.y=lerp(battle_soul.y,battle_board.y-battle_board.up-5+36+32*_menu_choice_enemy,0.5);
 		
-		//返回
 		if(Input_IsPressed(INPUT.CANCEL)){
 			Battle_SetMenu(BATTLE_MENU.BUTTON);
 		}
-		//确定
 		if(Input_IsPressed(INPUT.CONFIRM)){
 			audio_play_sound(snd_menu_confirm,0,false);
 			Battle_SetMenu(BATTLE_MENU.FIGHT_AIM);
 		}
 	}else
 	
-	//战斗动画
 	if(_menu==BATTLE_MENU.FIGHT_ANIM){
 		if(_menu_fight_anim_time>0){
 			_menu_fight_anim_time-=1;
@@ -89,7 +79,6 @@ if(_state==BATTLE_STATE.MENU){
 		}
 	}else
 	
-	//战斗伤害
 	if(_menu==BATTLE_MENU.FIGHT_DAMAGE){
 		if(_menu_fight_damage_time>0){
 			_menu_fight_damage_time-=1;
@@ -98,9 +87,7 @@ if(_state==BATTLE_STATE.MENU){
 		}
 	}else
 	
-	//行动目标
 	if(_menu==BATTLE_MENU.ACT_TARGET){
-		//上/下
 		if(Input_IsPressed(INPUT.UP)){
 			var enemy=_menu_choice_enemy-1;
 			if(enemy>=0){
@@ -115,24 +102,19 @@ if(_state==BATTLE_STATE.MENU){
 			}
 		}
 		
-		//灵魂位置
 		battle_soul.x=lerp(battle_soul.x,battle_board.x-battle_board.left-5+40,0.5);
 		battle_soul.y=lerp(battle_soul.y,battle_board.y-battle_board.up-5+36+32*_menu_choice_enemy,0.5);
 		
-		//返回
 		if(Input_IsPressed(INPUT.CANCEL)){
 			Battle_SetMenu(BATTLE_MENU.BUTTON);
 		}
-		//确定
 		if(Input_IsPressed(INPUT.CONFIRM)){
 			audio_play_sound(snd_menu_confirm,0,false);
 			Battle_SetMenu(BATTLE_MENU.ACT_ACTION);
 		}
 	}else
 	
-	//行动内容
 	if(_menu==BATTLE_MENU.ACT_ACTION){
-		//上/下
 		if(Input_IsPressed(INPUT.UP)){
 			var action=_menu_choice_action-2;
 			if(action>=0){
@@ -146,7 +128,6 @@ if(_state==BATTLE_STATE.MENU){
 				Battle_SetMenuChoiceAction(action);
 			}
 		}
-		//左/右
 		if(Input_IsPressed(INPUT.LEFT)){
 			if(_menu_choice_action%2==1){
 				var action=_menu_choice_action-1;
@@ -165,11 +146,9 @@ if(_state==BATTLE_STATE.MENU){
 			}
 		}
 		
-		//灵魂位置
 		battle_soul.x=lerp(battle_soul.x,battle_board.x-battle_board.left-5+40+256*(_menu_choice_action%2),0.5);
 		battle_soul.y=lerp(battle_soul.y,battle_board.y-battle_board.up-5+36+32*floor(_menu_choice_action/2),0.5);
 		
-		//返回/确定
 		if(Input_IsPressed(INPUT.CANCEL)){
 			Battle_SetMenu(BATTLE_MENU.ACT_TARGET);
 		}else if(Input_IsPressed(INPUT.CONFIRM)){
@@ -178,21 +157,7 @@ if(_state==BATTLE_STATE.MENU){
 		}
 	}else
 	
-	//物品
 	if(_menu==BATTLE_MENU.ITEM){
-		//上/下
-		/*if(Input_IsPressed(INPUT.UP)){
-			var slot=Battle_GetMenuChoiceItem()-2
-			if(slot>=0){
-				audio_play_sound(snd_menu_switch,0,false);
-				Battle_SetMenuChoiceItem(slot);
-			}
-		}else if(Input_IsPressed(INPUT.DOWN)){
-			var slot=Battle_GetMenuChoiceItem()+2
-			if(slot<Item_GetNumber()){
-				audio_play_sound(snd_menu_switch,0,false);
-				Battle_SetMenuChoiceItem(slot);
-			}*/
 			if(Input_IsPressed(INPUT.CANCEL)){
 			Battle_SetMenu(BATTLE_MENU.BUTTON);
 			}
@@ -201,10 +166,7 @@ if(_state==BATTLE_STATE.MENU){
 			Battle_EndMenu();
 		}
 		
-		//battle_soul.x=lerp(battle_soul.x,battle_board.x-battle_board.left-5+40,0.5);
-		//battle_soul.y=lerp(battle_soul.y,battle_board.y-battle_board.up-5+36+32*(Battle_GetMenuChoiceItem()-_menu_choice_item_first),0.5);
 	}else if(_menu==BATTLE_MENU.MERCY){
-		//上/下
 		if(Input_IsPressed(INPUT.UP)){
 			var mercy=Battle_GetMenuChoiceMercy()-1;
 			if(mercy>=0){
@@ -219,11 +181,9 @@ if(_state==BATTLE_STATE.MENU){
 			}
 		}
 		
-		//灵魂位置
 		battle_soul.x=lerp(battle_soul.x,battle_board.x-battle_board.left-5+40,0.5);
 		battle_soul.y=lerp(battle_soul.y,battle_board.y-battle_board.up-5+36+32*_menu_choice_mercy,0.5);
 		
-		//取消/确定
 		if(Input_IsPressed(INPUT.CANCEL)){
 			Battle_SetMenu(BATTLE_MENU.BUTTON);
 		}else if(Input_IsPressed(INPUT.CONFIRM)){
@@ -233,7 +193,6 @@ if(_state==BATTLE_STATE.MENU){
 	}
 }
 
-//对话
 if(_state==BATTLE_STATE.DIALOG){
 	if(!instance_exists(_dialog[0])){
 		if(!Dialog_IsEmpty()){
@@ -246,7 +205,6 @@ if(_state==BATTLE_STATE.DIALOG){
 	}
 }
 
-//回合准备
 if(_state==BATTLE_STATE.TURN_PREPARATION){
 	if(Battle_IsTurnPreparationAutoEnd()){
 		if(!instance_exists(battle_dialog_enemy) && !Battle_IsBoardTransforming()){
@@ -255,16 +213,13 @@ if(_state==BATTLE_STATE.TURN_PREPARATION){
 	}
 }
 
-//回合内
 if(_state==BATTLE_STATE.IN_TURN){
 	if(_turn_time>0){
 		_turn_time-=1;
 	}else if(_turn_time==0){
-		//Battle_EndTurn();
 	}
 }
 
-//面板重置
 if(_state==BATTLE_STATE.BOARD_RESETTING){
 	if(!Battle_IsBoardTransforming()){
 		Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.BOARD_RESETTING_END);
@@ -278,7 +233,6 @@ if(_state==BATTLE_STATE.RESULT){
 	}
 }
 
-//检查战斗结束
 if(_state!=BATTLE_STATE.RESULT && Battle_GetEnemyNumber()==0){
 	Battle_SetState(BATTLE_STATE.RESULT);
 	Battle_SetNextState(BATTLE_STATE.RESULT);

@@ -1,5 +1,3 @@
-///@arg enemy_slot
-///@arg spareable
 function Battle_SetEnemySpareable() {
 	var ENEMY=argument[0];
 	var SPAREABLE=argument[1];

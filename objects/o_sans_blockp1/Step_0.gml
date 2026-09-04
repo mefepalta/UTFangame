@@ -1,6 +1,3 @@
-// Bloklama pozu "Sans gizlendi" (_head_alpha == 0) durumundan anlasiliyor.
-// Yer vurusunda da Sans gizleniyor ama orada oynayan kendi vurus sprite'i;
-// blok sprite'i devreye girerse ikisi ust uste biner.
 if (instance_exists(o_smaaash)) and (o_smaaash._ready)
 {
 	image_alpha = 0;
@@ -36,7 +33,7 @@ with (o_p1final_fall)
 {
 	if (p1finalattackval)
 	{
-		other.destroy = true;														  
+		other.destroy = true;
 	}
 }
 if (destroy == true)

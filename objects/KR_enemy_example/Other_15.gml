@@ -1,4 +1,3 @@
-///@desc Menu End
 switch(Battle_GetMenuChoiceButton()){
 	case BATTLE_MENU_CHOICE_BUTTON.ACT:
 		switch(Battle_GetMenuChoiceAction()){

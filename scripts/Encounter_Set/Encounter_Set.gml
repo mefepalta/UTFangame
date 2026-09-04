@@ -1,14 +1,3 @@
-///@arg id
-///@arg enemy_0
-///@arg enemy_1
-///@arg enemy_2
-///@arg menu_dialog
-///@arg bgm*
-///@arg menu_mercy_flee_enabled*
-///@arg pause_bgm*
-///@arg quick*
-///@arg soul_x*
-///@arg soul_y*
 function Encounter_Set() {
 	var ID=argument[0];
 	var ENEMY_0=argument[1];

@@ -1,5 +1,3 @@
-///@arg button_choice
-///@arg call_event*
 function Battle_SetMenuChoiceButton() {
 	var BUTTON=argument[0];
 	var CALL=true;

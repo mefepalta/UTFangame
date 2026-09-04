@@ -1,4 +1,3 @@
-///@arg fleeable
 function Battle_SetFleeable() {
 	var FLEEABLE=argument[0];
 

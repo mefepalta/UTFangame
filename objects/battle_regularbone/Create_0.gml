@@ -10,17 +10,14 @@ _alpha=1
 _inside=0
 _angle_speed=0
 _bottom = 0
-_dynamic = false  // Default kapalı
-_dynamic_speed = 1.0    // Hız çarpanı
-_dynamic_dir = 1        // 1 ileri, -1 geri
-_dynamic_rate = 0.03    // Hiz sonumleme orani. Dusurulunce kemik daha YAVAS
-                        // baslar ama ayni mesafede doner: donus mesafesi
-                        // hiz/oran ile olceklendigi icin oran yariya inince
-                        // ayni noktaya yarim hizla varilir.
-_dynamic_lifetime = 120  // Kaç frame yaşayacak, ayarlayabilirsin
-_dynamic_scale = false   // Y-scale ayrı kontrol
-_scale_offset = 0       // Y-scale dalgalanması için
-_snake_time = random(100);  // Her kemik farklı fazdan başlasın
+_dynamic = false
+_dynamic_speed = 1.0
+_dynamic_dir = 1
+_dynamic_rate = 0.03
+_dynamic_lifetime = 120
+_dynamic_scale = false
+_scale_offset = 0
+_snake_time = random(100);
 _snake_freq_x = random_range(0.05, 0.12);
 _snake_freq_y = random_range(0.03, 0.09);
 _snake_amp_x = random_range(1.5, 3.0);

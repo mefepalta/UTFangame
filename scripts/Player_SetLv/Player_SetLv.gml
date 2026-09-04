@@ -1,4 +1,3 @@
-///@arg lv
 function Player_SetLv() {
 	var LV=argument[0];
 

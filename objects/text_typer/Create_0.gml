@@ -1,4 +1,3 @@
-//text_typer args
 text="";
 _speed=0;
 _char_per_frame=1;
@@ -34,7 +33,6 @@ _choice_x[1]=0;
 _choice_y[0]=0;
 _choice_macro="";
 
-//text_single args
 _font=0;
 _scale_x=1;
 _scale_y=1;
@@ -62,7 +60,6 @@ _shadow_y=0.5;
 _effect=-1;
 _gui=false;
 
-//group init
 event_user(5);
 
 width=0;

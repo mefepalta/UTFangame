@@ -1,4 +1,3 @@
-///@arg file_name
 function Lang_LoadFileToString() {
 
 	var FILE_NAME=argument[0];

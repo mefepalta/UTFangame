@@ -1,4 +1,3 @@
-///@arg exp
 function Player_SetExp() {
 	var EXP=argument[0];
 

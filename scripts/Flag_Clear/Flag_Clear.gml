@@ -1,4 +1,3 @@
-///@arg type
 function Flag_Clear() {
 	var TYPE=argument[0];
 

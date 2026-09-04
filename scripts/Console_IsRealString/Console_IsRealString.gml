@@ -1,4 +1,3 @@
-///@arg string
 function Console_IsRealString() {
 	var CHECK=argument[0];
 

@@ -1,59 +1,6 @@
-/*if _color = 0{
-	real_color = c_white
 	
-	if _alpha = 1{
-		if (place_meeting(x,y,battle_soul)){
-			if global.kr=false{
-				Battle_CallSoulEventBulletCollision();
-			}else if global.kr=true{
-				if count%frequency_damage=0{
-					//Player_Hurt(1)
-					//Player_IsKarmaHappening(true)
-					if (!instance_exists(hurtkr)) {
-						instance_create_depth(0, 0, 0, hurtkr)
-					}
-					//audio_play_sound(snd_hurt,0,false)
-				}
-			}
-		}
-	}		
-}else if _color = 1{
-	real_color = c_aqua
 	
-	if _alpha = 1{
-		if (place_meeting(x,y,battle_soul)){
-			if (Input_IsHeld(INPUT.LEFT) or Input_IsHeld(INPUT.RIGHT) or Input_IsHeld(INPUT.UP) or Input_IsHeld(INPUT.DOWN)){
-				if global.kr=false{
-					Battle_CallSoulEventBulletCollision();
-				}else if global.kr=true{
-					if count%frequency_damage=0{
-						if (!instance_exists(hurtkr)) {
-						instance_create_depth(0, 0, 0, hurtkr)
-					}
-					}
-				}
-			}
-		}
-	}
-}else if _color = 2{
-	real_color = c_orange
 	
-	if _alpha = 1{
-		if (place_meeting(x,y,battle_soul)){
-			if !(Input_IsHeld(INPUT.LEFT) or Input_IsHeld(INPUT.RIGHT) or Input_IsHeld(INPUT.UP) or Input_IsHeld(INPUT.DOWN)){
-				if global.kr=false{
-					Battle_CallSoulEventBulletCollision();
-				}else if global.kr=true{
-					if count%frequency_damage=0{
-						if (!instance_exists(hurtkr)) {
-						instance_create_depth(0, 0, 0, hurtkr)
-					}
-					}
-				}
-			}
-		}
-	}
-}*/
 if (_color = 0){
 	real_color=make_color_rgb(70, 70, 110);
 	
@@ -64,9 +11,6 @@ if (_color = 0){
 					instance_create_depth(0, 0, 0, hurtkr)
 				}
 			}else{
-				// FAZ 2 -- klasik hasar. Kemik artik YOK EDILMIYOR: uzun
-				// kemikler ve duvarlar tek dokunusta kaybolmasin. Ust uste
-				// vurmayi Battle_HurtNormal'in dokunulmazligi engelliyor.
 				Battle_HurtNormal(DMG_BONE);
 			}
 		}
@@ -84,8 +28,6 @@ if (_color = 1){
 						instance_create_depth(0, 0, 0, hurtkr)
 					}
 				}else{
-					// FAZ 2. Eskiden bu dal HIC YOKTU: KR kapaliyken mavi
-					// kemikler tamamen zararsizdi.
 					Battle_HurtNormal(DMG_BONE_BLUE);
 				}
 			}
@@ -103,8 +45,6 @@ if (_color = 2){
 						instance_create_depth(0, 0, 0, hurtkr)
 					}
 				}else{
-					// FAZ 2. Eskiden burada global.kr kontrolu YOKTU: KR
-					// kapali olsa bile turuncu kemik hurtkr uretiyordu.
 					Battle_HurtNormal(DMG_BONE_ORANGE);
 				}
 			}
@@ -112,25 +52,20 @@ if (_color = 2){
 	}
 }
 
-///Draw the bones
 if _inside = 0{
 	depth=DEPTH_BATTLE.BULLET{
 		surface_set_target(Battle_GetBoardSurface()){
 			if _center = 0{
 				if _bottom = 0{
 					_sprite = spr_bone_origin_down
-					//sprite_index = spr_bone_origin_down_hitbox
 				}else if _bottom = 1{
 					_sprite = spr_bone_origin_down_nobottom
-					//sprite_index = spr_bone_origin_down_hitbox
 				}
 			}else if _center = 1{
 				if _bottom = 0{
 					_sprite = spr_bone_origin_center
-					//sprite_index = spr_bone_origin_center_hitbox
 				}else if _bottom = 1{
 					_sprite = spr_bone_origin_center_nobottom
-					//sprite_index = spr_bone_origin_center_hitbox
 				}
 			}
 			draw_sprite_ext(_sprite,_papyrus,x,y,1,_length/18,_angle,real_color,_alpha)
@@ -148,18 +83,14 @@ if _inside = 0{
 		if _center = 0{
 				if _bottom = 0{
 					_sprite = spr_bone_origin_down
-					//sprite_index = spr_bone_origin_down_hitbox
 				}else if _bottom = 1{
 					_sprite = spr_bone_origin_down_nobottom
-					//sprite_index = spr_bone_origin_down_hitbox
 				}
 			}else if _center = 1{
 				if _bottom = 0{
 					_sprite = spr_bone_origin_center
-					//sprite_index = spr_bone_origin_center_hitbox
 				}else if _bottom = 1{
 					_sprite = spr_bone_origin_center_nobottom
-					//sprite_index = spr_bone_origin_center_hitbox
 				}
 			}
 		draw_sprite_ext(_sprite,_papyrus,x,y,1,_length/18,_angle,real_color,_alpha)

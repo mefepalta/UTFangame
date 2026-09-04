@@ -1,4 +1,3 @@
-// o_save -> Step Event (testing shortcuts)
 if (keyboard_check_pressed(ord("S"))) {
     ini_open(savefile);
     ini_write_real("PlayerData", "DeathCount", global.death_count);

@@ -1,5 +1,3 @@
-///@arg menu
-///@arg call_event*
 function Battle_SetMenu() {
 	var MENU=argument[0];
 	var CALL=true;
@@ -15,23 +13,17 @@ function Battle_SetMenu() {
 	Battle_SetDialog("",false,false);
 	Battle_SetDialog("",false,true);
 	
-	////////////////////////////////////////
-	//按钮
 	if(MENU==BATTLE_MENU.BUTTON){
 		Battle_SetDialog(Battle_GetMenuDialog());
 	}
 	
-	////////////////////////////////////////
-	//战斗/行动目标
 	if(MENU==BATTLE_MENU.FIGHT_TARGET || MENU==BATTLE_MENU.ACT_TARGET){
-		//越界归零
 		if(Battle_GetMenuChoiceEnemy()>=Battle_GetEnemyTargetNumber()){
 			Battle_SetMenuChoiceEnemy(0,false);
 		}
 		
 		var text="";
 		var proc=0;
-		//创建敌人列表文字
 		repeat(3){
 			if(Battle_IsEnemyTargetable(proc)){
 				if(Battle_IsEnemySpareable(proc)){
@@ -55,13 +47,10 @@ function Battle_SetMenu() {
 			}
 		}
 	}
-	////////////////////////////////////////
-	//行动内容
 	if(MENU==BATTLE_MENU.ACT_ACTION){
 		var ENEMY=Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy());
 		var num=Battle_GetEnemyActionNumber(ENEMY);
 	
-		//越界归零
 		if(Battle_GetMenuChoiceAction()>=num){
 			Battle_SetMenuChoiceAction(0,false);
 		}
@@ -70,7 +59,6 @@ function Battle_SetMenu() {
 		var text="";
 		var text2="";
 		var target=0;
-		//创建行动列表文字
 		repeat(Battle_GetEnemyActionNumber(ENEMY)){
 			if(!target){
 				text+=Battle_GetEnemyActionName(ENEMY,proc)+"&";
@@ -86,23 +74,19 @@ function Battle_SetMenu() {
 		Battle_SetDialog(text2,true,true);
 	}
 
-	//物品
 	if(MENU==BATTLE_MENU.ITEM){
 		Battle_SetMenuChoiceItem(0,false);
 		instance_create_depth(0,0,0,battle_menu_item_ui);
 	}
 
-	//仁慈
 	if(MENU==BATTLE_MENU.MERCY){
 		var text="";
 		if(!Battle_IsMenuChoiceMercyOverride()){
-			//越界归零
 			if(Battle_GetMenuChoiceMercy()>Battle_IsMenuMercyFleeEnabled()){
 				Battle_SetMenuChoiceMercy(0,false);
 			}
 		
 			var proc=0;
-			//仁慈菜单文字
 			repeat(3){
 				if(Battle_IsEnemySpareable(proc)){
 					text+="{color `yellow`}";
@@ -112,7 +96,6 @@ function Battle_SetMenu() {
 			}
 			text+=Lang_GetString("battle.menu.mercy.spare");
 		
-			//逃跑是否可用
 			if(Battle_IsMenuMercyFleeEnabled()){
 				text+="&{color `white`}";
 				text+=Lang_GetString("battle.menu.mercy.flee");
@@ -132,7 +115,6 @@ function Battle_SetMenu() {
 		Battle_SetDialog(text,true);
 	}
 	
-	////////////////////////////////////////
 	if(CALL){
 		Battle_CallEnemyEvent(BATTLE_ENEMY_EVENT.MENU_SWITCH);
 	}

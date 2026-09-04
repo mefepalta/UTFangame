@@ -1,5 +1,3 @@
-///@arg choice_mercy_slot
-///@arg name
 function Battle_SetMenuChoiceMercyOverrideName() {
 	var SLOT=argument[0];
 	var NAME=argument[1];

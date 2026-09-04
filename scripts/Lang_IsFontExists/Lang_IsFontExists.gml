@@ -1,4 +1,3 @@
-///@arg font_name
 function Lang_IsFontExists() {
 	var KEY=argument[0];
 

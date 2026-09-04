@@ -17,9 +17,6 @@ if (_state == 0)
 }
 else
 {
-	// Sutunun icindeyken hasar. Sprite 200 px yuksekliginde ve origin'i
-	// altta oldugu icin carpma noktasindan yukari dogru uzaniyor.
-	// Carpisma genisligi de olcekle birlikte buyuyor.
 	var _top = strike_y - sprite_get_height(spr_alphys_shocker_breaker)*bolt_scale;
 	var _hw = bolt_width*bolt_scale;
 	if (collision_rectangle(bolt_x-_hw,_top,bolt_x+_hw,strike_y,battle_soul,false,true))

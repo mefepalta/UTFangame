@@ -1,5 +1,3 @@
-///@arg cmd
-///@arg list
 function Console_ParseCmd() {
 	if(GMU_CONSOLE_ENABLED){
 		var CMD=argument[0];

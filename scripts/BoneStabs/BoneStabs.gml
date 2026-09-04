@@ -1,10 +1,3 @@
-///@arg dir
-///@arg *height
-///@arg *width
-///@arg *offset
-///@arg *wait
-///@arg *stay
-///@arg *angle
 function BoneStab(){
 	var inst=instance_create_depth(0,0,0,battle_bullet_wbonestab)
 	inst.dir = argument[0];

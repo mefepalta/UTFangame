@@ -1,4 +1,3 @@
-///@arg slot
 function Player_Load() {
 	var SLOT=argument[0];
 

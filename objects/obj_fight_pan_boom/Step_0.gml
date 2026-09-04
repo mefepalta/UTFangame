@@ -9,7 +9,7 @@ if perfect = "perfect"{
 }else if perfect="normal"{
 	image_blend=c_white
 }else if perfect="bad"{
-	image_blend=c_white ///you can change it to c_red if you want
+	image_blend=c_white
 }
 if image_alpha = 0{
 	instance_destroy()

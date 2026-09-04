@@ -1,6 +1,3 @@
-///@arg target
-///@arg var_name*
-///@arg skip*
 function Anim_Destroy() {
 	var TARGET=argument[0];
 	var VAR_NAME="";

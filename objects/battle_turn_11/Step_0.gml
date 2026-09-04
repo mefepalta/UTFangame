@@ -1,4 +1,3 @@
-// Tur baslarken Sans'in kafasi diyalog ifadesinden idle animasyonuna doner
 if (room == room_battle_1) and (_timer == 1)
 {
 	battle_enemy_engage.p2_head_sprite = spr_p2_idle;
@@ -169,8 +168,6 @@ if (room == room_battle_1)
 
 	if (fade_at > 0) and (_timer == fade_at+20)
 	{
-		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
-		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
 		Battle_SetBoardSizeCubic(69,65,73,73,26);
 	}
 	if (fade_at > 0) and (_timer == fade_at+64)
@@ -195,8 +192,6 @@ if (room == room_battle_1)
 	{
 		audio_play_sound(snd_impact,2,false);
 		Battle_SlamDown();
-		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
-		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
 		Battle_SetBoardSizeCubic(69,65,122,122,34);
 	}
 	if (fade_at > 0) and (_timer == fade_at+352)
@@ -419,8 +414,6 @@ if (room == room_battle_1)
 	exit;
 }
 
-// 12 vurus, T11_ILK'ten baslayip T11_ARA kare arayla. Yon ve bosluk her
-// vuruste karisik torbadan cekiliyor (bkz. Create_0).
 if (_timer >= T11_ILK) and (_timer <= T11_SON) and (((_timer-T11_ILK) mod T11_ARA) == 0)
 {
 	T11Vurus();

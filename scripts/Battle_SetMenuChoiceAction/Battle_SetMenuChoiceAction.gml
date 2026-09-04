@@ -1,5 +1,3 @@
-///@arg action_choice
-///@arg call_event*
 function Battle_SetMenuChoiceAction() {
 	var ACTION=argument[0];
 	var CALL=true;

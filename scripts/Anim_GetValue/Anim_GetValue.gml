@@ -1,8 +1,3 @@
-///@arg tween
-///@arg ease
-///@arg time
-///@arg arg_0*
-///@arg arg_1*
 function Anim_GetValue() {
 	var TWEEN=argument[0];
 	var EASE=argument[1];

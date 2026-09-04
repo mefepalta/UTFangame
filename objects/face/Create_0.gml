@@ -9,7 +9,6 @@ _talking_previous=false;
 image_xscale=2;
 image_yscale=2;
 
-//Custom
 idle_sprite[0]=-1;
 idle_image[0]=0;
 idle_speed[0]=0;

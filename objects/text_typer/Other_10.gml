@@ -1,4 +1,3 @@
-///@desc New Char
 var font=0;
 
 if(ord(_char)<128){

@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 Battle_SetBoardSizeCubic(65,65,185,185);
 with (battle_enemy_engage)
@@ -23,18 +22,15 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
-	// Diyalog ATAK BITTIKTEN SONRA basliyor. O yuzden burada diyalog kutusu
-	// acmiyoruz; acsaydik turn preparation kapanmaz ve atak hic baslamazdi.
 	if (instance_exists(sansy)) { instance_destroy(sansy); }
 
 	with (battle_enemy_engage)
 	{
 		p2_head_sprite = spr_p2_head;
-		pap_state = 2;		// ucu de sahnede
+		pap_state = 2;
 		alp_state = 2;
 	}
 
-	// Metin Step_0'da, atak bitince kullanilacak.
 	phase2_text="{speaker 2}{font 2}{voice 2}{alp_head 1}I've been waiting a&long time for this!{pause}{clear}{alp_head 4}You guys scram!{pause}{clear}{alp_head 1}I've got this!{pause}{clear}"
 	+"{speaker 0}{font 3}{voice 3}{head 13}Captain...&Are you sure?{pause}{clear}"
 	+"{speaker 2}{font 2}{voice 2}{alp_head 0}I've fought my fair&share of humans&before.{pause}{clear}{alp_head 0}I know what I'm&doing.{pause}{clear}{alp_head 5}THAT...{sleep 20} AND the&score's looking like&a solid 0 to 1&right now...{pause}{clear}{alp_head 5}And I've never been&more livid in my&life!{pause}{clear}"
@@ -43,10 +39,6 @@ if (room == room_battle_1)
 	+"{speaker 1}{font 4}{voice 4}{pap_head 1}LESS WORK FOR&ME.";
 }
 
-// SURRENDER ACT: bu tur ACT'tan geldiyse Sans'in kendi tur repligi yerine
-// teslim yayinin repligi oynuyor (bkz. scripts/Surrender). Son turda (12)
-// replik burada degil atagin sonunda oynadigi icin bu blok atlanir.
-// Normal FIGHT akisinda global.surrender_turn false, blok hic calismaz.
 if (Surrender_BasindaKonusur())
 {
 	sansy.text = Surrender_Text();

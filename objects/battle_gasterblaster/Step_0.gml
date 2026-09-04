@@ -2,8 +2,6 @@ _counter++;
 BlasterDuration-=1;
 direction = image_angle;
 
-//Turuncu ruh modu: blaster koridorun bir parcasi, her sey gibi asagi kayiyor.
-//Hiz koridordan okunuyor, yani dash atilinca bu da hizlaniyor.
 if(dr_mode){
 	var DR_SPD=4;
 	if(instance_exists(battle_dr_corridor)){
@@ -16,8 +14,6 @@ if _counter = 1{
 	if _stage = "coming"{
 		audio_play_sound(snd_gb_charge,0,false)
 		
-		//dr_mode'da konum animasyonu yok: blaster dogdugu yerde duruyor ve
-		//sadece yukaridaki koridor kaymasiyla iniyor.
 		if(!dr_mode){
 			Anim_Create(id,"x",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,x,-(x-_target_x),BlasterDuration)
 			Anim_Create(id,"y",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,y,-(y-_target_y),BlasterDuration)
@@ -60,8 +56,6 @@ if _stage = "preparing for the blast"{
 			Camera_Shake(3,4,2,2)
 		}
 		_stage = "shoot!"
-		//Geri tepme sadece normal modda: dr_mode'da blaster nisan aldigi
-		//dogrultuda sabit kaliyor.
 		if(!dr_mode){
 			speed=-15
 		}
@@ -69,7 +63,7 @@ if _stage = "preparing for the blast"{
 		if(instance_exists(_beam)){
 			alarm[1]=10
 			Anim_Create(_beam,"image_alpha",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,1,10)
-			Anim_Create(_beam,"image_yscale",ANIM_TWEEN.LINEAR,ANIM_EASE.IN_OUT,0,image_yscale,10)	
+			Anim_Create(_beam,"image_yscale",ANIM_TWEEN.LINEAR,ANIM_EASE.IN_OUT,0,image_yscale,10)
 			alarm[0]=10
 		}
 	}

@@ -1,11 +1,7 @@
-// =====================================================================
-//  Mizrak: sarj parlamasi -> hiz cizgileri -> hayalet iz -> mizrak
-// =====================================================================
 if (image_alpha <= 0) exit;
 
 gpu_set_blendmode(bm_add);
 
-// ---- yukarida sarj olurken cevresinde toplanan isik ------------------
 if (state == 1) {
     var _c = charge;
     var _n = 18;
@@ -18,7 +14,6 @@ if (state == 1) {
     draw_primitive_end();
 }
 
-// ---- dususte arkada kalan hiz cizgileri ------------------------------
 if (state == 2 && fall_speed > 1) {
     var _len = fall_speed * 5;
     for (var i = 0; i < 7; i++) {
@@ -33,18 +28,16 @@ if (state == 2 && fall_speed > 1) {
     }
 }
 
-// ---- hayalet iz -------------------------------------------------------
 var _cnt = array_length(trail);
 for (var i = 0; i < _cnt; i++) {
     var _t = trail[i];
-    var _f = (i + 1) / _cnt;                 // eskiden yeniye
+    var _f = (i + 1) / _cnt;
     draw_sprite_ext(sprite_index, image_index,
                     _t.x + global.p05_sx, _t.y + global.p05_sy,
                     image_xscale, image_yscale, image_angle,
                     COL_SPEAR, _f * _f * 0.35 * image_alpha);
 }
 
-// ---- mizragin kendi parlamasi ----------------------------------------
 var _glow = (state == 3) ? 0.75 * exp(-land_t / 10) : (state == 2 ? 0.30 : 0.18 * charge);
 if (_glow > 0.01) {
     var _n2 = 20;
@@ -59,10 +52,8 @@ if (_glow > 0.01) {
 
 gpu_set_blendmode(bm_normal);
 
-// ---- mizragin kendisi -------------------------------------------------
 draw_self();
 
-// Carpma aninda bir kare beyaz parlama
 if (state == 3 && land_t < 5) {
     gpu_set_blendmode(bm_add);
     draw_sprite_ext(sprite_index, image_index, x, y,

@@ -1,4 +1,3 @@
-///@arg phone_slot
 function Phone_Remove() {
 	var SLOT=argument[0];
 

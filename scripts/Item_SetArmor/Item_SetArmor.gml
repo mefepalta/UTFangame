@@ -1,4 +1,3 @@
-///@arg item
 function Item_SetArmor() {
 	var ITEM=argument[0];
 

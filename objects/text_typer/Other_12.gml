@@ -1,4 +1,3 @@
-///@desc Command
 var cmd=_list_cmd;
 
 switch(cmd[|0]){
@@ -628,39 +627,27 @@ switch(cmd[|0]){
         battle_enemy_engage.squish = cmd[|1];
         break;
 
-	// ---- PHASE 2 KADROSU: PAPYRUS & ALPHYS ----
 	case "pap_head":
         battle_enemy_engage.pap_head_image = cmd[|1];
         break;
 	case "alp_head":
         battle_enemy_engage.alp_head_image = cmd[|1];
         break;
-	// Sprite adi backtick ile yazilir, orn: {alp_head_spr `spr_alphys_head_mad`}
 	case "pap_head_spr":
         battle_enemy_engage.pap_head_sprite = (is_string(cmd[|1]) ? asset_get_index(cmd[|1]) : cmd[|1]);
         break;
 	case "alp_head_spr":
         battle_enemy_engage.alp_head_sprite = (is_string(cmd[|1]) ? asset_get_index(cmd[|1]) : cmd[|1]);
         break;
-	// 0 = sahne disinda, 1 = sahneye giriyor, 2 = sahnede,
-	// 3 = sahneden cikiyor, 4 = sahnenin ortasina geciyor
 	case "pap_state":
         battle_enemy_engage.pap_state = cmd[|1];
         break;
 	case "alp_state":
         battle_enemy_engage.alp_state = cmd[|1];
         break;
-	// Sans icin ayni durumlar
 	case "sans_state":
         battle_enemy_engage.p2_state = cmd[|1];
         break;
-	// Canlandirma sahnesi: 1 = Papyrus, 2 = Alphys
-	// Muzik susar, ekran kararir, ruh belirir ve patlamayla karakter gelir.
-	//
-	// Sahne karakter basina yalnizca BIR kez oynar. Ayni tur tekrar oynarsa
-	// (orn. oyuncu ITEM secip turu atlatinca tur numarasi sabit kalir)
-	// karakter dogrudan yerine konur ve beklenmez; bu yuzden beklemeyi
-	// {sleep} yerine burada set ediyoruz.
 	case "revive":
         var _rev_who=cmd[|1];
         var _rev_key=(_rev_who==1 ? "p2_revived_pap" : "p2_revived_alp");
@@ -668,8 +655,6 @@ switch(cmd[|0]){
 
         if(!_rev_done && instance_exists(o_monster_soul)){
             o_monster_soul.start(_rev_who);
-            // Sadece tohum: sahne aktif oldugu surece o_monster_soul beklemeyi
-            // her adim tazeliyor, sure sahnenin uzunluguyla kendiliginden esitleniyor.
             _skipping=false;
             _sleep=5;
         }else{
@@ -686,10 +671,6 @@ switch(cmd[|0]){
             }
         }
         break;
-	// Konusma balonunu konusan karakterin ustune tasir
-	// 0 = Sans, 1 = Papyrus, 2 = Alphys
-	// Sadece kimin konustugunu soyluyoruz; balonun konumunu ve hangi yana
-	// acilacagini battle_dialog_enemy her adim kendi hesapliyor.
 	case "speaker":
         battle_dialog_enemy.SPEAKER = cmd[|1];
         break;

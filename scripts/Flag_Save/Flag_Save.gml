@@ -1,5 +1,3 @@
-///@arg type
-///@arg path*
 function Flag_Save() {
 	var TYPE=argument[0];
 	var PATH="";

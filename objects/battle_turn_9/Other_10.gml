@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 Battle_SetBoardSizeCubic(65,65,150,150);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 with (battle_enemy_engage)
@@ -26,16 +25,12 @@ if (room == room_battle_1)
 	with (battle_enemy_engage)
 	{
 		p2_head_sprite = spr_p2_head;
-		pap_state = 0;		// Papyrus henuz yok
-		alp_state = 2;		// Alphys 8. turdan beri sahnede
+		pap_state = 0;
+		alp_state = 2;
 	}
 	sansy.text="{font 3}{voice 3}{head 11}When things got a&little too&overwhelming...{pause}{clear}{head 2}Papyrus was always&there to soften the&blow...{pause}{clear}{head 1}He helped so many&people this way...";
 }
 
-// SURRENDER ACT: bu tur ACT'tan geldiyse Sans'in kendi tur repligi yerine
-// teslim yayinin repligi oynuyor (bkz. scripts/Surrender). Son turda (12)
-// replik burada degil atagin sonunda oynadigi icin bu blok atlanir.
-// Normal FIGHT akisinda global.surrender_turn false, blok hic calismaz.
 if (Surrender_BasindaKonusur())
 {
 	sansy.text = Surrender_Text();

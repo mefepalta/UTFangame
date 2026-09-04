@@ -1,14 +1,7 @@
-/// @description Game Over sahnesi -- cizim
 
 var _ox = shake_x;
 var _oy = shake_y;
 
-// ==================================================================
-//  RUH HALESI
-//  Arka plan zaten siyah oldugu icin klasik koyu vinyet is gormuyor;
-//  bunun yerine ruhun arkasina kalp atisiyla nefes alan sonuk kizil
-//  bir hale konuldu. Catlaktan sonra sonuyor.
-// ==================================================================
 if (!burst_done && soul_scale > 0) {
     var _fade = (val_ < T_CRACK) ? 1 : max(0, 1 - (val_ - T_CRACK) / 90);
     var _ha   = 0.17 * _fade * soul_pulse * clamp(soul_scale, 0, 1);
@@ -26,9 +19,6 @@ if (!burst_done && soul_scale > 0) {
     }
 }
 
-// ==================================================================
-//  KIRIK PARCALAR -- halkanin ARKA yarisi (elin arkasinda kalanlar)
-// ==================================================================
 for (var i = 0; i < array_length(shards); i++) {
     var _s = shards[i];
     if (!_s.behind) continue;
@@ -36,12 +26,6 @@ for (var i = 0; i < array_length(shards); i++) {
                     _s.sc, _s.sc, _s.draw_rot, c_white, 1);
 }
 
-// ==================================================================
-//  GASTER ELI
-//  Yukselirken belirir, ruhu ezerken bir kere kasilir, sonra parcalarin
-//  altinda yavasca nefes alarak asili kalir. Aci hicbir karede degismez --
-//  bir el takla atmaz.
-// ==================================================================
 if (hand_t > 0) {
     var _e  = 1 - power(1 - hand_t, 2);
     var _hy = lerp(home_y + 18, home_y + 38, _e)
@@ -51,9 +35,6 @@ if (hand_t > 0) {
                     SOUL_SCALE, SOUL_SCALE, 0, c_white, _e);
 }
 
-// ==================================================================
-//  RUH (patlamaya kadar)
-// ==================================================================
 if (!burst_done && soul_alpha > 0 && soul_scale > 0) {
     var _s = soul_scale * soul_pulse * SOUL_SCALE;
     draw_sprite_ext(s_go_soul, soul_frame,
@@ -61,9 +42,6 @@ if (!burst_done && soul_alpha > 0 && soul_scale > 0) {
                     _s, _s, 0, c_white, soul_alpha);
 }
 
-// ==================================================================
-//  KIRIK PARCALAR -- halkanin ON yarisi (elin onunde gecenler)
-// ==================================================================
 for (var i = 0; i < array_length(shards); i++) {
     var _s = shards[i];
     if (_s.behind) continue;
@@ -71,9 +49,6 @@ for (var i = 0; i < array_length(shards); i++) {
                     _s.sc, _s.sc, _s.draw_rot, c_white, 1);
 }
 
-// ==================================================================
-//  KIVILCIMLAR
-// ==================================================================
 if (array_length(sparks) > 0) {
     draw_set_color(c_red);
     for (var i = 0; i < array_length(sparks); i++) {
@@ -86,9 +61,6 @@ if (array_length(sparks) > 0) {
     draw_set_alpha(1);
 }
 
-// ==================================================================
-//  PATLAMA ISINLARI
-// ==================================================================
 if (array_length(beams) > 0) {
     draw_set_color(c_red);
     for (var i = 0; i < array_length(beams); i++) {
@@ -106,9 +78,6 @@ if (array_length(beams) > 0) {
     draw_set_alpha(1);
 }
 
-// ==================================================================
-//  KUL
-// ==================================================================
 if (array_length(embers) > 0) {
     draw_set_color(c_maroon);
     for (var i = 0; i < array_length(embers); i++) {
@@ -119,9 +88,6 @@ if (array_length(embers) > 0) {
     draw_set_alpha(1);
 }
 
-// ==================================================================
-//  TAM EKRAN BEYAZ
-// ==================================================================
 if (white_a > 0.001) {
     draw_set_color(c_white);
     draw_set_alpha(white_a);
@@ -129,9 +95,6 @@ if (white_a > 0.001) {
     draw_set_alpha(1);
 }
 
-// ==================================================================
-//  PARAZIT CUBUKLARI (snd_noise ile ayni karelerde)
-// ==================================================================
 if (array_length(bars) > 0) {
     draw_set_color(c_white);
     for (var i = 0; i < array_length(bars); i++) {

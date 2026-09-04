@@ -1,5 +1,3 @@
-///@arg item_slot
-///@arg item_id
 function Item_Set() {
 	var SLOT=argument[0];
 	var ITEM=argument[1];

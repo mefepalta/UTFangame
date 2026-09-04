@@ -1,5 +1,3 @@
-///@arg heal_hp
-///@arg new_line*
 function Item_GetTextHeal() {
 	var HEAL=argument[0];
 	var LINE=true;

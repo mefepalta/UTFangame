@@ -1,4 +1,3 @@
-///@arg slot
 function Flag_SetSaveSlot() {
 	var SLOT=argument[0];
 

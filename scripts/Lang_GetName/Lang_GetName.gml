@@ -1,5 +1,3 @@
-///@arg lang_id
-///@arg default*
 function Lang_GetName() {
 	var ID=argument[0];
 	var DEF="";

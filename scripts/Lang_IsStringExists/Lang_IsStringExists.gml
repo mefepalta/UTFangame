@@ -1,4 +1,3 @@
-///@arg string_name
 function Lang_IsStringExists() {
 	var KEY=argument[0];
 

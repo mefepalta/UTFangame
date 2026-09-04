@@ -1,8 +1,3 @@
-///@arg x1
-///@arg y1
-///@arg x2
-///@arg y2
-///@arg *warn_time
 function battle_warn(){
 	inst = instance_create_depth(0,0,0,battle_obj_warn)
 	inst.x1 = argument[0]

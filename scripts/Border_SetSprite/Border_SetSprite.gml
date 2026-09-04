@@ -1,6 +1,3 @@
-///@arg sprite
-///@arg fade*
-///@arg time*
 function Border_SetSprite() {
 	var SPRITE=argument[0];
 	var FADE=true;

@@ -1,4 +1,3 @@
-///@arg input
 function Demo_RemoveInput() {
 	var INPUT=argument[0];
 

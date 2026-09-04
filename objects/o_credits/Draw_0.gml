@@ -1,10 +1,5 @@
 var _prevcol = draw_get_colour();
 
-// ---------------------------------------------------------------------
-// Nebula pools + starfield, drawn additively on top of s_creditsbg.
-// The clouds are triangle fans (bright centre -> transparent rim) so they
-// fade out smoothly instead of showing a circle edge.
-// ---------------------------------------------------------------------
 gpu_set_blendmode(bm_add);
 
 for (var _n = 0; _n < array_length(nebula); _n++)
@@ -52,9 +47,6 @@ gpu_set_blendmode(bm_normal);
 draw_set_alpha(1);
 draw_set_colour(c_white);
 
-// ---------------------------------------------------------------------
-// The credits board: a soft pool of light with the text blooming on top
-// ---------------------------------------------------------------------
 if (panel_sprite != -1) and (panel_alpha > 0.004)
 {
 	var _w    = sprite_get_width(panel_sprite);
@@ -63,8 +55,6 @@ if (panel_sprite != -1) and (panel_alpha > 0.004)
 
 	gpu_set_blendmode(bm_add);
 
-	// soft horizontal lens of light behind the text - built from two
-	// triangle strips so it has no visible edges at all
 	var _bcol = make_colour_rgb(80, 110, 210);
 	var _cx   = panel_x;
 	var _cy   = panel_y + _h * 0.5;
@@ -88,7 +78,6 @@ if (panel_sprite != -1) and (panel_alpha > 0.004)
 		draw_primitive_end();
 	}
 
-	// bloom copies of the text itself
 	for (var _g = 1; _g <= 3; _g++)
 	{
 		var _sc = panel_scale * (1 + _g * 0.014);

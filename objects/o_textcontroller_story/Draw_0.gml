@@ -1,1 +1,0 @@
-// Boş — text_typer kendi çiziyor

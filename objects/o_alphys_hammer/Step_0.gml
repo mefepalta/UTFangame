@@ -2,7 +2,6 @@ _t++;
 
 switch (_state)
 {
-	// ---- duvara dik belirip bekleme ----
 	case 0:
 		_alpha = min(1,_t/8);
 		_angle = start_angle;
@@ -17,7 +16,6 @@ switch (_state)
 		}
 		break;
 
-	// ---- geriye yatma: yavas, sonunda iyice yavaslayarak ----
 	case 1:
 		_alpha = 1;
 		_angle = lerp(start_angle,pull_angle,1-power(1-_t/pull_time,2));
@@ -29,7 +27,6 @@ switch (_state)
 		}
 		break;
 
-	// ---- ileri vurus: hizlanarak iniyor ----
 	case 2:
 		_angle = lerp(pull_angle,0,power(_t/strike_time,2));
 		if (_t >= strike_time)
@@ -44,7 +41,6 @@ switch (_state)
 		}
 		break;
 
-	// ---- carpma sonrasi bolt dalgalari ----
 	case 3:
 		_angle = 0;
 		if (_wave < wave_count) and (_t >= _wave*wave_delay)
@@ -59,7 +55,6 @@ switch (_state)
 		}
 		break;
 
-	// ---- kalkip kaybolma ----
 	case 4:
 		_angle = lerp(0,start_angle,_t/leave_time);
 		_alpha = 1 - (_t/leave_time);

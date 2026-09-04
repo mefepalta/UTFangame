@@ -11,8 +11,8 @@ char_voice[1] = 5;
 char_voice[2] = 6;
 char_voice[3] = -1;
 
-char_font[0] = 3;  // font_sans
-char_font[1] = 0;  // dialog font
+char_font[0] = 3;
+char_font[1] = 0;
 char_font[2] = 0;
 char_font[3] = 0;
 

@@ -1,0 +1,9 @@
+depth=DEPTH_BATTLE.BULLET_OUTSIDE_HIGH*2-1;
+x=0
+y=0
+image_xscale=200000000
+image_yscale=200000000
+sprite_index=spr_pixel
+startAlpha=1
+duration=50;
+Anim_Create(id,"image_alpha",0,1,startAlpha,-startAlpha,duration);

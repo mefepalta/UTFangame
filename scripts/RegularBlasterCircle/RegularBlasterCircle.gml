@@ -4,7 +4,7 @@ function RegularBlasterCircle(Xcirc,Ycirc,CircSpeed,CenterDistance,BFreq,BSpeed,
 	circle_setup.x_ = Xcirc
 	circle_setup.y_ = Ycirc
 	circle_setup.blaster_speed = CircSpeed
-	circle_setup.frequency_ = BFreq 
+	circle_setup.frequency_ = BFreq
 	circle_setup.blastspeed = BSpeed
 	circle_setup.blastdurab = BLDurability
 	circle_setup.distance_ = CenterDistance

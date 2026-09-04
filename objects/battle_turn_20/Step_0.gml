@@ -10,17 +10,12 @@ var top_box = (battle_board.y-battle_board.up)+2;
 
 if (room == room_battle)
 {
-	// Teslim yolunun kapanisi: perde indikten sonra overworld'e geciliyor.
 	if (teslim_cikis) and (_timer >= teslim_kare+T20_TESLIM_KARARMA+T20_TESLIM_BEKLE)
 	{
 		global.surrender_turn = false;
-		// Overworld'de hangi konusmanin oynayacagini bu belirliyor:
-		// teslim yolu mu, yoksa Sans'i bagislama yolu mu.
 		global.surrender_son = true;
 		audio_stop_all();
 		room_goto(room_area_aftersans);
-		// trigger_warp ile ayni duzen: fader kalici oldugu icin perde yeni
-		// odada geri aciliyor, yoksa ekran siyah kalirdi.
 		Fader_Fade(-1,0,T20_TESLIM_ACILMA);
 		exit;
 	}
@@ -171,28 +166,17 @@ if (room == room_battle)
 		RegularBone(right_box,bottom_box,32,-3,0,0,0,0,1,0,0,0,0,true);
 		RegularBone(right_box,top_box,90,-3,0,180,0,0,1,0,0,0,0,true);
 	}
-	// YENI ACILIS -- Sans'in ziplayip inmesi yerine AYAK VURUSLARI.
-	// o_p1final_fall gizli calisiyor: sahnenin devami (gb sahnesi) onun
-	// sayacina bagli oldugu icin nesne isliyor ama cizilmiyor.
 	if (_timer == T20_YV_BAS)
 	{
-		// Sahnenin uc parcasi (tekmeler / dusus / blaster) birbirine
-		// girmesin diye gb nesnelerinin KENDI zamanlamasi burada kapatiliyor.
-		// Eskiden o_p1final_fall bu karede baslatiliyordu ve sayaci
-		// (p1finalattackval) blasteri 250. karede, yani tam tekmelerin
-		// ortasinda yukari kaldiriyordu. Artik dusus de blaster de kendi
-		// karelerinde, buradan tetikleniyor.
 		with (o_p1final_sansgbfront) { manuel = true; }
 		with (o_p1final_gbtop)       { manuel = true; }
 		with (o_smaaash)
 		{
-			hiz = 0;			// kareleri turun kendisi suruyor (bkz. YvAdim)
+			hiz = 0;
 			prev_frame = -1;
 			image_index = 0;
 			_ready = true;
 		}
-		// Kirilmanin merkezi: Sans'in ayaginin bastigi nokta (o_smaaash odada
-		// 329'da duruyor), kutunun dikey ortasi.
 		catlak_ox = clamp(329-battle_board.x,-battle_board.left+14,battle_board.right-14);
 		catlak_oy = (battle_board.down-battle_board.up)/2;
 		yv_on = true;
@@ -203,9 +187,6 @@ if (room == room_battle)
 	YvAdim();
 	CatlakAdim();
 
-	// Vuruslar bitti: vurus sprite'i kalkiyor ve faz 1 Sans'i gizli kaliyor
-	// (o_smaaash kapanirken saydamliklari geri yukluyor, her adim tekrar
-	// sifirliyoruz). Bosluk bolumunde Sans'i o_p1final_fall temsil ediyor.
 	if (_timer > T20_YV_BAS) and (_timer < T20_VOID_SON) and (!yv_on)
 	{
 		if (o_smaaash._ready) { with (o_smaaash) { _ready = false; hiz = 1; } }
@@ -219,39 +200,25 @@ if (room == room_battle)
 		}
 	}
 
-	//----------------------------------------------------------------------
-	// 2. KISIM -- kutu kiriliyor ve siyah bosluga dusuyoruz
-	//----------------------------------------------------------------------
 	if (_timer == T20_VOID_BAS) { VoidKir(); }
-	// Beyaz perde aciliyor: altinda kutu kirilmis, bosluk kurulmus oluyor.
 	if (_timer == T20_BEYAZ_ACIL) { Fader_Fade(1,0,T20_BEYAZ_CIKIS); }
 	VoidAdim();
 
-	// Sans yukaridan dusup sahneye giriyor.
 	if (_timer == T20_SANS_DUSUS)
 	{
 		with (o_p1final_fall)
 		{
 			gizli = false;
 			image_index = 0;
-			// Sprite 800x800 ve Sans karenin ICINDE x 282..493, y 252..501
-			// araliginda duruyor. Odadaki eski yeri (-64,-256) onu ekranin
-			// ortasina koyuyordu, yani "dusme" yerine oldugu yerde beliriyordu.
-			// -512'de Sans tam ekranin ustunde kaliyor; oradan asagi suzuluyor.
-			x = -68;			// 320 - (282+493)/2 : yatayda ortali
+			x = -68;
 			y = -512;
 			target_x = -68;
-			target_y = 372;		// hedefi hemen veriyoruz ki beklemeden dussun
-			// 0.05 cok hizliydi: Sans ekrani ~35 karede gecip kayboluyordu.
-			// 0.02 ile gecis ~90 kare (1.5 sn) suruyor.
+			target_y = 372;
 			move_speedy = 0.02;
 			p1finalattack = true;
 		}
 	}
 
-	// s_p1final_sansfall artik TEK kare oldugu icin nesnenin kendi
-	// "image_index == 21'de kaybol" kurali hic calismiyor; dusus bittiginde
-	// gizlemeyi tur ustleniyor.
 	if (_timer == T20_SANS_DUSUS+T20_DUSUS_SURE)
 	{
 		with (o_p1final_fall)
@@ -261,12 +228,9 @@ if (room == room_battle)
 		}
 	}
 
-	// Sans asagidan blastere binmis halde yukseliyor.
 	if (_timer == T20_GB_GELIS) { GbGelis(); }
 	if (_timer == T20_GB_GOZ)   { GbGoz(); }
 
-	// Blasterden yayilan cemberler: T20_CEM_ARA kare arayla, her biri bir
-	// oncekinin TERSI yonde donerek.
 	if (_timer >= T20_CEM_BAS) and (cem_no < T20_CEM_ADET)
 	and (((_timer-T20_CEM_BAS) mod T20_CEM_ARA) == 0)
 	{
@@ -275,23 +239,12 @@ if (room == room_battle)
 	}
 	CemberAdim();
 
-	// NOT: pattern'ler arasi goz parlamasi, butun pattern'ler bittikten
-	// sonra tek seferde gelecek; simdilik burada yok.
 
-	// 2. pattern: Sans saga kayar, sola bakan blaster gelir.
 	if (_timer == T20_P2_BAS) { Gb2Basla(); }
 	Gb2Adim();
-	// Pattern bitti: kapanis sahnesi basliyor (Sans guluyor -> sinematik
-	// kesikler -> blaster catliyor -> hepsi asagi dusuyor).
 	if (_timer == T20_P2_SON) { Gb2Bitir(); SonBasla(); }
 	SonAdim();
 
-	//---------------------------------------------- can gostergesi (faz 1)
-	// Kalbin ustundeki "can / max can" yazisi -- faz 2'nin son atagindaki
-	// gostergenin aynisi (cizimi Draw_0'da, ortak).
-	// SADECE BUYUK KUTU BOLUMUNDE: bosluga dustugumuzde kutu butun ekrani
-	// kapliyor ve alttaki can bari gorunmuyor, gosterge tam orada gerekli.
-	// Kutu normale dondugunde (T20_VOID_SON) alttaki bar zaten okunuyor.
 	var _can = Player_GetHp();
 	if (can_onceki < 0) { can_onceki = _can; }
 	if (_can < can_onceki) and (_timer >= T20_VOID_BAS) and (_timer < T20_VOID_SON)
@@ -303,19 +256,7 @@ if (room == room_battle)
 	if (can_bekle > 0) { can_bekle -= 1; }
 	else if (can_alpha > 0) { can_alpha = max(0,can_alpha-can_sonme); }
 
-	// Bosluk kapaniyor ve kutu kuculuyor -- hepsi beyaz perdenin ARKASINDA.
-	// Perde de tam bu anda yavasca aciliyor, is bittiginde duzenlenmis
-	// savas alani ortaya cikiyor.
 	if (_timer == T20_VOID_SON) { VoidBitir(); SonPerdeKapat(); }
-	// NOT: faz 1'in FINALI (kutunun geri acilmasi, Sans'in toparlanmasi,
-	// yenilgi konusmasi) toplam 2100 kare ileri alindi -- 3290 yerine
-	// 5390'da basliyor. Aradaki bosluk blaster pattern'leri ve kapanis
-	// sahnesi icin.
-	//
-	// NOT: 2085-2950 arasindaki eski "blaster'a binmis Sans" sahnesi
-	// (o_p1final_gbtop / gbsans / slash zinciri) bu bolum yeniden
-	// yazildigi icin devre disi. Sans'in asagidan blastera binerek gelmesi
-	// ve kalan atak patternleri sonraki adimda buraya gelecek.
 	if (false) and (_timer == 2085)
 	{
 	    Battle_SetBoardSize(270,65,300,-210);
@@ -357,18 +298,17 @@ if (room == room_battle)
 		{
 			var slash = instance_create_depth(o_p1final_gbsans.x - 102, o_p1final_gbsans.y + 56, -99999, o_p1final_sansslash);
         
-	        // Calculate direction towards player
 			var dir = point_direction(o_p1final_gbsans.x, o_p1final_gbsans.y, battle_soul.x, battle_soul.y);
 	        slash.direction = dir;
 	        slash.speed = 7;
 	        slash.image_angle = dir + 180;
 
-	        attack_done = true; // Prevents multiple slashes per frame
+	        attack_done = true;
 	    }
 	}
 	else
 	{
-	    attack_done = false; // Reset when not on frame 3
+	    attack_done = false;
 	}
 	if (false) and (_timer == 2950)
 	{
@@ -397,10 +337,6 @@ if (room == room_battle)
 		instance_create_depth(o_p1final_gbtop.x + random_range(-200,70),o_p1final_gbtop.y + random_range(-100,100),-999999999,o_p1final_explosion);
 		instance_create_depth(o_p1final_gbtop.x + random_range(-200,70),o_p1final_gbtop.y + random_range(-100,100),-999999999,o_p1final_explosion_1);
 	}
-	// NOT: beyaz perde artik BURADA degil. Eskiden Sans indikten ve kutu
-	// kuculdukten SONRA aciliyordu, yani is bittikten sonra; simdi Sans
-	// slash'i yiyip duserken aciliyor (bkz. SonPerdeAc) ve boslugun
-	// kapanmasini ortuyor.
 	if (false) and (_timer == 3220)
 	{
 		with (o_p1final_gbtop)
@@ -411,9 +347,6 @@ if (room == room_battle)
 			target_y = 904;
 		}
 	}
-	// NOT: kutu artik burada tek karede zipmiyor -- VoidBitir (T20_VOID_SON)
-	// onu 54 karede bu olcuye getiriyor, boylece boslugun kapanmasiyla
-	// finalin kutusu tek bir hareket oluyor.
 	if (_timer == 5420)
 	{
 		battle_soul.x = right_box - 120;
@@ -441,27 +374,16 @@ if (room == room_battle)
 			instance_destroy();
 		}
 	}
-	// SANS'IN INISI
-	// Eskiden lerp ile iniyordu: basta hizli, sonra giderek yavaslayan bir
-	// hareket -- dusmenin TERSI. Ustelik 75 karede kesiliyordu, yani 22
-	// karelik animasyonun ancak ucte biri oynuyordu ve savas sprite'i
-	// birden yerine geciyordu.
-	// Simdi final faz'daki inisler gibi: mesafe t^2 ile artiyor (hizlanan
-	// dusus) ve animasyon tam olarak inis boyunca bir kez oynuyor.
 	if (_timer == T20_FIN_DUS_BAS)
 	{
-		// Nesne bir sekilde yoksa yeniden yaratiliyor: bu sahne onsuz
-		// sessizce atlanip Sans birden savas pozunda beliriyordu.
 		if (!instance_exists(o_p1final_fall_1))
 		{
 			instance_create_depth(-64,-608,-99999,o_p1final_fall_1);
 		}
 		with (o_p1final_fall_1)
 		{
-			// Kendi lerp'i devre disi: hareketi tur suruyor.
 			move_speedy = 0;
 			target_y = y;
-			// Sprite tek kare: animasyon yok.
 			image_index = 0;
 			image_speed = 0;
 			image_alpha = 1;
@@ -492,8 +414,6 @@ if (room == room_battle)
 			mask_index = leg_sprite1;
 			_body_x = 1;
 		}
-		// Inis sprite'i tek karede kaybolmuyor: savas Sans'i belirirken
-		// uzerinde soluyor, boylece gecis gorunmuyor.
 		with (o_p1final_fall_1)
 		{
 			Anim_Create(id,"image_alpha",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,image_alpha,-image_alpha,FIN_DUS_CIK);
@@ -513,24 +433,8 @@ if (room == room_battle)
 		Battle_SetBoardSize(65,65,65,65);
 		Battle_SetSoul(battle_soul_red);
 		audio_play_sound(snd_ding,2,false);
-		// Halka yavasladi: donme hizi 5 -> 3.2 derece/kare. Blasterler arasi
-		// ACI ayni kalsin diye siklik da 5 -> 8 kare oldu (5*5 = 3.2*8 = 25.6
-		// derece), yani ayni desen daha yavas geliyor. Sure 400 -> 500:
-		// yavaslayinca ayni tur sayisi daha uzun suruyor.
 		RegularBlasterCircle(battle_board.x,battle_board.y,3.2,175,8,45,8,20,1,500);
 
-		// ARKA PLAN SOLUYOR. Faz 2'nin son atagi da ayni seyi yapiyor:
-		// dev halka gelirken arka plan cekiliyor, geriye sadece kalp,
-		// blasterler ve siyah kaliyor.
-		//
-		// Mekanizma hazir: o_phase_bg her kare kendi alfasini
-		// battle_turn_20.sf_grad'dan okuyor (bkz. o_phase_bg/Step_0) ve
-		// atak nesnesi yok olunca son degerinde kaliyor. Burada sadece
-		// sf_grad'i sifira dogru canlandirmak yetiyor.
-		//
-		// 240 kare (4 sn): halka 500 kare suruyor, yani solma halkanin
-		// ilk yarisinda tamamlaniyor -- 5750'deki muzik kesilmesiyle ve
-		// 6220'deki yenilgi diyalogu ile cakismiyor.
 		Anim_Destroy(id,"sf_grad");
 		Anim_Create(id,"sf_grad",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,sf_grad,-sf_grad,240);
 	}
@@ -545,9 +449,6 @@ if (room == room_battle)
 			_head_sprite = spr_sans_head;
 		}
 		anotherTest = instance_create_depth(0,0,0,battle_dialog_enemy);
-		// SURRENDER: 12. tur repligi atagin SONUNDA oynuyor -- turun basinda
-		// degil (bkz. scripts/Surrender). Normal FIGHT yolunda asagidaki
-		// yenilgi konusmasi oynuyor.
 		if (Surrender_Aktif())
 		{
 			anotherTest.text = Surrender_Text();
@@ -563,10 +464,6 @@ if (room == room_battle)
 		{
 			if (Surrender_Aktif())
 			{
-				// TESLIM YOLUNUN SONU. Dovus burada bitiyor: tur kapatilmiyor,
-				// menuye donulmuyor, faz 1'in son duzlugu (finalstretch)
-				// baslatilmiyor. Ekran kararip overworld'e geciliyor --
-				// Sans'in kalan replikleri orada (PDF: Overworld).
 				if (!teslim_cikis)
 				{
 					teslim_cikis = true;
@@ -576,9 +473,6 @@ if (room == room_battle)
 			}
 			else
 			{
-				// Gain sifirlaniyor: faz 1.5 gecisi bu parcayi ASSET uzerinden
-				// 0'a soluyor (battle_enemy_engage/Step_0). Olup yeniden
-				// denendiginde sessiz baslamasin.
 				audio_sound_gain(snd_chance,1,0);
 				audio_play_sound(snd_chance,1,true);
 				Battle_SetMenuDialog("* ...")
@@ -596,36 +490,12 @@ if (room == room_battle)
 
 if (room == room_battle_1)
 {
-	// Faz 2'nin acilis kurulumu.
-	//
-	// _wiggle: bacak ve govde salinimini suruyor (battle_enemy_engage).
-	// Faz 1'in sonunda false yapiliyor ve nesne odalar arasinda yasadigi
-	// icin faz 2'ye de kapali giriyordu -- Sans donup kaliyordu.
 	if (_timer == 1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
 		battle_enemy_engage._wiggle = true;
 	}
 
-	//======================================================================
-	// FAZIN SON ATAGI -- 1. KISIM (kirmizi / mavi)
-	//======================================================================
-	// Yapi kullanicinin tarifinden, hizlar atakfinal_1.gif'ten olculdu
-	// (kayit 640x480 = oyun cozunurlugu, 30 fps -> oyun karesi 2 x GIF).
-	// Kutu olculdu: 68,68,80,80 (x 239-398, y 251-387), atak boyunca sabit.
-	//
-	//   1  sag alttan + sol ustten, ortada capraz kesisiyorlar
-	//   2  onlar cikarken sag ustten + sol alttan ayni sey
-	//   3  SLAM UP, sag ustten uzunlugu artan 5 kemik
-	//   4  onlar cikarken soldan 4 adet UST bosluklu kemik
-	//   5  iki ust koseden de uzunlugu artan 5'er kemik
-	//   6  SLAM DOWN, ust ortadan inen yatay kemik + altta yukari bakan
-	//      iki blaster
-	//   7  ust koselerde asagi bakan blasterlar + iki yandan ALT bosluklu
-	//   8  iki yandan ORTA bosluklu kemikler, kisim biter
-	//
-	// KEMIKLER SANS SPRITE'I: RegularBone'un 10. argumani 0.
-	//======================================================================
 	if (_timer == 20)
 	{
 		instance_create_depth(0,0,0,battle_soul_red_effect);
@@ -633,31 +503,24 @@ if (room == room_battle_1)
 		Anim_Destroy(battle_board,"down");
 		Anim_Destroy(battle_board,"left");
 		Anim_Destroy(battle_board,"right");
-		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
-		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
 		Battle_SetBoardSizeCubic(71,65,80,80,18);
 		Battle_SetSoul(battle_soul_red);
 		battle_soul.x = battle_board.x;
 		battle_soul.y = battle_board.y;
 	}
 
-	//------------------------------------ 1: sag alt + sol ust, capraz
-	// Olcum: ikisi de 4 px/kare, ortada (x 318) kesisiyorlar.
 	if (_timer == 38)
 	{
-		F2Ust(4,84);			// sol ustten saga
-		F2Alt(-4,84);			// sag alttan sola
+		F2Ust(4,84);
+		F2Alt(-4,84);
 	}
 
-	//------------------------- 2: onlar cikarken karsi koselerden aynisi
-	// Olcum: ikinci cift kare 72'de giriyor (ilk cift tam kutuyu gecmisken).
 	if (_timer == 72)
 	{
-		F2Ust(-4,84);			// sag ustten sola
-		F2Alt(4,84);			// sol alttan saga
+		F2Ust(-4,84);
+		F2Alt(4,84);
 	}
 
-	//--------------------- 3: SLAM UP + sag ustten uzunlugu artan 5 kemik
 	if (_timer == 112) { Battle_SlamUp(); audio_play_sound(snd_impact,2,false); }
 
 	if (_timer == 124) { F2Ust(-5,24); }
@@ -666,30 +529,26 @@ if (room == room_battle_1)
 	if (_timer == 148) { F2Ust(-5,78); }
 	if (_timer == 156) { F2Ust(-5,96); }
 
-	//----------------- 4: onlar cikarken soldan 4 UST bosluklu kemik
 	if (_timer == 196) { F2Bosluk(5,0); }
 	if (_timer == 214) { F2Bosluk(5,0); }
 	if (_timer == 232) { F2Bosluk(5,0); }
 	if (_timer == 250) { F2Bosluk(5,0); }
 
-	//------------- 5: iki ust koseden de uzunlugu artan 5'er kemik
 	if (_timer == 290) { F2Ust(-5,24); F2Ust(5,24); }
 	if (_timer == 298) { F2Ust(-5,42); F2Ust(5,42); }
 	if (_timer == 306) { F2Ust(-5,60); F2Ust(5,60); }
 	if (_timer == 314) { F2Ust(-5,78); F2Ust(5,78); }
 	if (_timer == 322) { F2Ust(-5,96); F2Ust(5,96); }
 
-	//------ 6: SLAM DOWN + ust ortadan inen yatay kemik + alttan blaster
 	if (_timer == 370) { Battle_SlamDown(); audio_play_sound(snd_impact,2,false); }
 
 	if (_timer == 384)
 	{
-		F2InenYatay(2);			// alt/ust kenara paralel, asagi iniyor
-		F2AltBlaster(-46);		// kutunun altinda, yukari bakiyor
+		F2InenYatay(2);
+		F2AltBlaster(-46);
 		F2AltBlaster(46);
 	}
 
-	//------ 7: ust koselerde asagi bakan blaster + iki yandan ALT bosluklu
 	if (_timer == 460)
 	{
 		F2UstBlaster(-56);
@@ -700,114 +559,71 @@ if (room == room_battle_1)
 	if (_timer == 510) { F2Bosluk(5,2);  }
 	if (_timer == 510) { F2Bosluk(-5,2); }
 
-	//------------------------ 8: iki yandan ORTA bosluklu, kisim biter
 	if (_timer == 570) { F2Bosluk(5,1);  }
 	if (_timer == 570) { F2Bosluk(-5,1); }
 	if (_timer == 610) { F2Bosluk(5,1);  }
 	if (_timer == 610) { F2Bosluk(-5,1); }
 
-	//======================================================================
-	// 2. KISIM
-	//======================================================================
-	// Kutu: karenin azicik genis hali. Kare 68,68,68,68 olurdu; genisletilmis
-	// hali 68,68,85,85 (170 x 136).
-	//
-	//   1  SLAM DOWN
-	//   2  ustten kutudan genis MAVI kemik (Sans sprite) yelpaze yapiyor:
-	//      asagi inip yon degistirip yukari cikiyor
-	//   3  mavi kemik inerken kemik duvari (Papyrus sprite)
-	//   4  duvardan ziplanan an SLAM RIGHT + soldan kemik geciti
-	//      (bosluklar sinuse gore kayiyor)
-	//   5  kutu X'te daraliyor (karenin 1/3'u), SLAM LEFT; sag ust ve sag
-	//      altta SOLA bakan blasterlar -- sol orta guvenli nokta
-	//   6  ardindan sag ortadan merkezi nisan alan blaster
-	//   7  kutu ilk haline doner, DORT yonden kemik duvari, merkez guvenli
-	//   8  duvarlar cikar cikmaz KIRMIZI ruha donus
-	//======================================================================
 	if (_timer == 660)
 	{
 		Anim_Destroy(battle_board,"up");
 		Anim_Destroy(battle_board,"down");
 		Anim_Destroy(battle_board,"left");
 		Anim_Destroy(battle_board,"right");
-		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
-		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
 		Battle_SetBoardSizeCubic(71,65,85,85,20);
 	}
 
-	//---------------------------------------------------------- 1: slam down
 	if (_timer == 690) { Battle_SlamDown(); audio_play_sound(snd_impact,2,false); }
 
-	//------------------------------- 2: buyuk MAVI kemik, yelpaze hareketi
-	// _dynamic modu hizi -1'e dogru lerp'liyor: kemik yavaslar, durur ve
-	// geri doner. Oran 0.012 -> donus 57. karede, yani genis bir yay.
 	if (_timer == 710) { F2MaviYelpaze(); }
 
-	//----------------------- 3: mavi kemik inerken kemik duvari (Papyrus)
 	if (_timer == 790) { F2Duvar(DIR.DOWN,52,45,120); }
 
-	//------------- 4: duvardan ziplanan an SLAM RIGHT + soldan kemik geciti
 	if (_timer == 880)
 	{
 		Battle_SlamRight();
 		audio_play_sound(snd_impact,2,false);
 	}
 
-	// Kemik geciti: bosluklar sinuse gore kayiyor, dalga cizerek geliyorlar.
 	if (_timer >= 910) and (_timer <= 1090)
 	{
 		if ((_timer-910) % 18 == 0) { F2Gecit(5,(_timer-910)/18,54); }
 	}
 
-	//------------------ 5: kutu X'te daraliyor + SLAM LEFT + sola blasterlar
-	// Kare yari genisligi 68; 1/3'u ~23.
 	if (_timer == 1130)
 	{
 		Anim_Destroy(battle_board,"left");
 		Anim_Destroy(battle_board,"right");
-		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
-		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
 		Battle_SetBoardSizeCubic(71,65,23,23,24);
 	}
 
 	if (_timer == 1160) { Battle_SlamLeft(); audio_play_sound(snd_impact,2,false); }
 
-	// Sag ust ve sag altta sola bakan blasterlar: ortadaki serit acik kaliyor,
-	// yani kutunun SOL ORTASI guvenli nokta.
 	if (_timer == 1190)
 	{
 		F2SolaBlaster(-46);
 		F2SolaBlaster(46);
 	}
 
-	//------------------------- 6: sag ortadan merkezi nisan alan blaster
 	if (_timer == 1270) { F2SolaBlaster(0); }
 
-	//--------------- 7: kutu ilk haline doner, DORT yonden duvar, merkez acik
 	if (_timer == 1350)
 	{
 		Anim_Destroy(battle_board,"up");
 		Anim_Destroy(battle_board,"down");
 		Anim_Destroy(battle_board,"left");
 		Anim_Destroy(battle_board,"right");
-		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
-		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
 		Battle_SetBoardSizeCubic(71,65,85,85,26);
 	}
 
-	// Kutu 170 x 136. Yanlardan 58 boy -> ortada 54 px acik kaliyor,
-	// alt/usten 44 boy -> ortada 48 px acik. Merkez guvenli nokta.
 	if (_timer == 1400)
 	{
-		// Sure 60: uyari 50 + 60 = kare 1510'da bitiyorlar, kutu 1520'de
-		// sekil degistirdigi icin tam ondan once sahneden cikmis oluyorlar.
 		F2Duvar(DIR.LEFT,58,50,60);
 		F2Duvar(DIR.RIGHT,58,50,60);
 		F2Duvar(DIR.UP,44,50,60);
 		F2Duvar(DIR.DOWN,44,50,60);
 	}
 
-	//------------------------- 8: duvarlar cikinca KIRMIZI ruha donus
 	if (_timer == 1460)
 	{
 		instance_create_depth(0,0,0,battle_soul_red_effect);
@@ -815,17 +631,6 @@ if (room == room_battle_1)
 	}
 
 
-	//======================================================================
-	// 3. KISIM -- ALPHYS: dalga kemikleri, platform, shocker breaker
-	//======================================================================
-	// battle_turn_14'teki bolumun aynisi. Kutunun dibine sirali kemikler
-	// diziliyor; shocker breaker CARPTIGI anda o noktadan bir dalga
-	// yayiliyor ve kemik boylari dalgayla degisiyor. Oyuncu bu sirada
-	// gidip gelen platformun uzerinde duruyor (mavi ruh).
-	//
-	// Shocker uyari suresi 44, dalga da tam 44 kare sonra basliyor: yani
-	// yildirim indigi anda deniz kabariyor.
-	//======================================================================
 	if (_timer == 1520)
 	{
 		Anim_Destroy(battle_board,"up");
@@ -843,14 +648,12 @@ if (room == room_battle_1)
 		f2_plat = makeplatform(battle_board.x-120,battle_board.y+18,64,2.2,0,1,0);
 	}
 
-	// Dalga ve platform her kare guncelleniyor.
 	if (_timer > 1560) and (_timer < 2520)
 	{
 		F2DenizAdim(34,120,3,50,70);
 		F2PlatformAdim();
 	}
 
-	//-------------------- shocker breaker + 44 kare sonra dalga
 	if (_timer == 1640) { AlphysShocker(battle_board.x-110,battle_board.y+58,44); }
 	if (_timer == 1684) { F2Dalga(battle_board.x-110); }
 
@@ -872,7 +675,6 @@ if (room == room_battle_1)
 	if (_timer == 2420) { AlphysShocker(battle_board.x+90,battle_board.y+58,44); }
 	if (_timer == 2464) { F2Dalga(battle_board.x+90); }
 
-	//---------------------------------------------------------- kisim biter
 	if (_timer == 2520)
 	{
 		F2DenizTemizle();
@@ -882,49 +684,10 @@ if (room == room_battle_1)
 	}
 
 
-	//======================================================================
-	// 4. KISIM -- MIZRAKLAR + KOSE CEKICLERI + FIRLATILAN DONEN KEMIK
-	//======================================================================
-	// Mizrak dalgalari battle_turn_17'deki sirayla; her dalganin kendi
-	// arenasi var (SpearArena), yani kutu mizrak patternine gore genisliyor.
-	// Buyuk arenada koselerden sirayla Alphys'in cekici vuruyor.
-	//
-	// Bu sure boyunca Sans'in SOL kolu firlatma pozunda (battle_turn_8 ayni
-	// isi sag kolla yapiyor) ve elinden DONEN kemikler cikiyor: tek parca,
-	// duz yol, kendi ekseninde donerek. Kisim bitince kol eski haline doner.
-	//======================================================================
 
-	// Sol kol: sure dolunca kendiliginden eski sprite'ina doner.
 	if (f2_kol_geri > 0) and (_timer == f2_kol_geri) { F2KolGeri(); }
 
-	//==================================================================
-	//  MIZRAK DALGALARI %65 KISALTILDI + KOSE CEKICLERI KALDIRILDI
-	//==================================================================
-	//  battle_turn_17'de yapilanin aynisi: her dalganin mermi penceresi
-	//  ~500 -> 175 kare. Salvo ARALIKLARI (26/45/20/70 ve Spear1Gap) hic
-	//  degismedi, yani dalgalarin temposu ve zorlugu ayni; sadece daha
-	//  kisa suruyorlar. Arenalar arasi geciler (40 bosluk + 60 giris)
-	//  oldugu gibi kaldi.
-	//
-	//    dalga      eski pencere     yeni pencere    salvo (eski->yeni)
-	//    spear4     2620 - 3120      2620 - 2795      20 -> 7
-	//    spear5     3220 - 3720      2895 - 3070      12 -> 4
-	//    spear3     3820 - 4260      3170 - 3345      23 -> 9
-	//    spear1     4360 - 4860      3445 - 3620      17 -> 6
-	//    spear2     4900 - 5400      3660 - 3835       8 -> 3
-	//    shocker    3260 - 3701      2935 - 3033      10 -> 3
-	//    buyuk bolt 3860 - 4220      3210 - 3330       4 -> 2
-	//    donen kemik 4400 - 5380     3445 - 3805       6 -> 3
-	//
-	//  KOSE CEKICLERI (F2Cekic) TAMAMEN KALDIRILDI: buyuk arenada dort
-	//  koseden sirayla vuran cekicler mizrak halkalariyla ust uste
-	//  binince kacacak yer kalmiyordu.
-	//
-	//  Kisim 5440 yerine 3875'te bitiyor; SONRAKI BUTUN _timer degerleri
-	//  1565 kare one cekildi.
-	//==================================================================
 
-	//------------------------------------------------- 1. dalga: spear4
 	if (_timer == 2560)
 	{
 		SpearArena(4);
@@ -938,7 +701,6 @@ if (room == room_battle_1)
 		if ((_timer-2620) % 26 == 0) { Spear4(); }
 	}
 
-	//------------------------------------------------- 2. dalga: spear5
 	if (_timer == 2835) { SpearArena(5); }
 
 	if (_timer >= 2895) and (_timer <= 3070)
@@ -946,12 +708,10 @@ if (room == room_battle_1)
 		if ((_timer-2895) % 45 == 0) { Spear5(); }
 	}
 
-	// Shocker breakerlar: mizraklar iki yandan gelirken alt kenarda patliyorlar.
 	if (_timer == 2935) { AlphysShocker(battle_board.x-120,battle_board.y+battle_board.down-4,40); }
 	if (_timer == 2984) { AlphysShocker(battle_board.x+ 70,battle_board.y+battle_board.down-4,40); }
 	if (_timer == 3033) { AlphysShocker(battle_board.x- 40,battle_board.y+battle_board.down-4,40); }
 
-	//------------------------------------------------- 3. dalga: spear3
 	if (_timer == 3110) { SpearArena(3); }
 
 	if (_timer >= 3170) and (_timer <= 3345)
@@ -959,16 +719,12 @@ if (room == room_battle_1)
 		if ((_timer-3170) % 20 == 0) { Spear3(); }
 	}
 
-	// Homing mizraklar gelirken yukaridan dusup patlayan yildirim boltlari.
 	if (_timer == 3210) { AlphysBigBolt(battle_board.x-44,-60,270,6,5,2.4); }
 	if (_timer == 3330) { AlphysBigBolt(battle_board.x+38,-60,270,6,7,2.4); }
 
-	//---------------------------------- 4. dalga: spear1, BUYUK arena
 	if (_timer == 3385)
 	{
 		SpearArena(2);
-		// Kol pozu ve elindeki kemik sadece BUYUK kutulu bolumde: spear1 ve
-		// spear2 dalgalari boyunca ates ediyor, 3835'te kol iniyor.
 		F2KolFirlat(3835);
 		f2_s1_next = 3445;
 		f2_s1_n = 0;
@@ -986,7 +742,6 @@ if (room == room_battle_1)
 		}
 	}
 
-	//---------------------------------- 5. dalga: spear2, hiz takviyesi
 	if (_timer == 3660) { Spear2Speed(true); }
 
 	if (_timer >= 3660) and (_timer <= 3835)
@@ -994,9 +749,6 @@ if (room == room_battle_1)
 		if ((_timer-3660) % 70 == 0) { Spear2(); }
 	}
 
-	//------------------ Sans'in elinden firlayan donen kemikler
-	// Elindeki kemik her kare kola sabitleniyor: kutu ya da Sans yer
-	// degistirse de kemik kolun ucunda kaliyor.
 	if (f2_kol_geri > 0) and (instance_exists(o_fakebone))
 	{
 		var _el = F2El();
@@ -1004,13 +756,11 @@ if (room == room_battle_1)
 		o_fakebone.y = _el.ey;
 	}
 
-	// Ates: sadece buyuk kutulu spear1/spear2 boyunca, 180 karede bir.
 	if (_timer >= 3445) and (_timer <= 3805)
 	{
 		if ((_timer-3445) % 180 == 0) { F2DonenKemik(7,9); }
 	}
 
-	//---------------------------------------------------------- kisim biter
 	if (_timer == 3875)
 	{
 		Spear2Speed(false);
@@ -1022,16 +772,6 @@ if (room == room_battle_1)
 	}
 
 
-	//======================================================================
-	// 5. KISIM -- SON KIRMIZI/MAVI
-	//======================================================================
-	// Kutu dikdortgen halini aliyor (65,65,283,283 -> 566x130).
-	// Soldan alttan 6'li kemik gruplari geciyor; boylari 105 oldugu icin
-	// ustte 25 px bosluk var. Her ucuncu grup 152'ye uzayip ust duvara
-	// carpiyor ve o bosluk kapaniyor.
-	// Uzerine kalbe nisan alan ince blasterlar ve homing mizraklar biniyor;
-	// ucu birden calisinca kismin sonuna dogru yogunluk artiyor.
-	//======================================================================
 
 	if (_timer == 3935)
 	{
@@ -1042,44 +782,27 @@ if (room == room_battle_1)
 		Battle_SetBoardSizeCubic(65,65,120,120,30);
 	}
 
-	//------------------------------------------- alttan gecen kemik gruplari
-	// 60 karede bir yeni grup, hiz 3. Kutu 240 px, grup 70 px ve gruplar
-	// arasi 180 px oldugu icin ekranda surekli iki grup bulunuyor -- senkron
-	// vurusun anlamli olmasi bunu gerektiriyor.
 	if (_timer >= 3995) and (_timer <= 5195)
 	{
 		if ((_timer-3995) % 60 == 0) { F2AltGrup(2.5); }
 	}
 
-	// Senkron vurus: ekrandaki gruplarin hepsi ayni anda yukari vuruyor.
-	// 120 karede bir: 60 kare uzun, 60 kare kisa (bkz. F2GrupVur).
 	if (_timer >= 4055) and (_timer <= 5235)
 	{
 		if ((_timer-4055) % 120 == 0) { F2GrupVur(); }
 	}
 
-	//--------------------------------------------- kalbe nisan alan blasterlar
-	// Kemik gruplari basladiktan bir sure sonra giriyorlar.
 	if (_timer == 4335) { F2NisanBlaster(true); }
 	if (_timer == 4535) { F2NisanBlaster(false); }
 	if (_timer == 4735) { F2NisanBlaster(true); }
 	if (_timer == 4935) { F2NisanBlaster(false); }
 	if (_timer == 5135) { F2NisanBlaster(true); }
 
-	//------------------------------------------------------ homing mizraklar
-	// En son onlar giriyor, kismin sonuna dogru ucu birden calisiyor.
-	//
-	// Aralik 60 -> 120: bu kisimda kemik gruplari saniyede bir 175'e
-	// uzayip TAVANA carpiyor, yani ust serit duzenli olarak kapaniyor.
-	// Nisan alan mizraklar da 60 karede bir gelince kalbin hem gruplarin
-	// arasindan gecip hem mizraktan kacacak yeri kalmiyordu. 11 mizrak
-	// yerine 6.
 	if (_timer >= 4635) and (_timer <= 5235)
 	{
 		if ((_timer-4635) % 120 == 0) { Spear3(); }
 	}
 
-	//---------------------------------------------------------- kisim biter
 	if (_timer == 5335)
 	{
 		with (o_alphys_spear) { instance_destroy(); }
@@ -1087,23 +810,6 @@ if (room == room_battle_1)
 	}
 
 
-	//======================================================================
-	// 6. KISIM -- SARI RUH
-	//======================================================================
-	// 109 hedef, 22 saniye. Sekiz yonun hepsi dengeli kullaniliyor
-	// (en az 12, en cok 15 hedef). Dalgalar:
-	//   1  acilis turu      -- sekiz yon saat yonunde iki tur
-	//   2  karsit ciftler   -- 180 derece donmeye zorluyor, en sikisik yer
-	//   3  capraz buyukler  -- altinda sekiz yonlu akis surerken
-	//   4  dikey aynalar    -- 90/270 kapali, arkalarinda buyukler
-	//   5  capraz aynalar   -- dort capraz kapali, akis kardinallerde
-	//   kopru             -- kardinal aynalar: atis istemiyorlar, oyuncu
-	//                        bu sirada finalin sarjlarini biriktiriyor
-	//   final             -- DELME HATLARI: dort caprazdan dorder hedef.
-	//                        16 hedef 90 karede geliyor, kucuk atisla
-	//                        144 kare gerekirdi; tek cozum hat basina bir
-	//                        guc vurusu (buyuk mermi delip geciyor).
-	//======================================================================
 
 	if (_timer == 5395) { F2SariBasla(); }
 
@@ -1111,128 +817,122 @@ if (room == room_battle_1)
 	{
 		sari_t += 1;
 
-		if (sari_t == 43) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 150
-		if (sari_t == 54) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 161
-		if (sari_t == 65) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 172
-		if (sari_t == 76) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 183
-		if (sari_t == 87) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 194
-		if (sari_t == 98) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 205
-		if (sari_t == 109) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 216
-		if (sari_t == 120) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 227
-		if (sari_t == 131) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 238
-		if (sari_t == 142) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 249
-		if (sari_t == 153) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 260
-		if (sari_t == 164) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 271
-		if (sari_t == 175) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 282
-		if (sari_t == 186) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 293
-		if (sari_t == 197) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 304
-		if (sari_t == 208) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 315
-		if (sari_t == 233) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 340
-		if (sari_t == 243) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 350
-		if (sari_t == 255) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 362
-		if (sari_t == 265) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 372
-		if (sari_t == 277) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 384
-		if (sari_t == 287) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 394
-		if (sari_t == 299) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 406
-		if (sari_t == 309) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 416
-		if (sari_t == 321) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 428
-		if (sari_t == 331) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 438
-		if (sari_t == 343) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 450
-		if (sari_t == 353) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 460
-		if (sari_t == 365) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 472
-		if (sari_t == 375) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 482
-		if (sari_t == 387) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 494
-		if (sari_t == 397) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 504
-		if (sari_t == 423) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 530
-		if (sari_t == 439) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 546
-		if (sari_t == 455) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 562
-		if (sari_t == 464) { DrTarget(DR_TARGET.BIG,45,1.9); }                                                            // varis 640
-		if (sari_t == 471) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 578
-		if (sari_t == 487) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 594
-		if (sari_t == 503) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 610
-		if (sari_t == 519) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 626
-		if (sari_t == 524) { DrTarget(DR_TARGET.BIG,225,1.9); }                                                            // varis 700
-		if (sari_t == 535) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 642
-		if (sari_t == 551) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 658
-		if (sari_t == 567) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 674
-		if (sari_t == 583) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 690
-		if (sari_t == 584) { DrTarget(DR_TARGET.BIG,135,1.9); }                                                            // varis 760
-		if (sari_t == 599) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 706
-		if (sari_t == 615) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 722
-		if (sari_t == 631) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 738
-		if (sari_t == 647) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 754
-		if (sari_t == 663) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 770
-		if (sari_t == 693) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 800
-		if (sari_t == 704) { DrTarget(DR_TARGET.MIRROR,90,2.4); }                                                            // soner 830
-		if (sari_t == 709) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 816
-		if (sari_t == 725) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 832
-		if (sari_t == 739) { DrTarget(DR_TARGET.MIRROR,270,2.4); }                                                            // soner 865
-		if (sari_t == 741) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 848
-		if (sari_t == 757) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 864
-		if (sari_t == 764) { DrTarget(DR_TARGET.BIG,90,1.9); }                                                            // varis 940
-		if (sari_t == 773) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 880
-		if (sari_t == 789) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 896
-		if (sari_t == 805) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 912
-		if (sari_t == 821) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 928
-		if (sari_t == 829) { DrTarget(DR_TARGET.BIG,270,1.9); }                                                            // varis 1005
-		if (sari_t == 837) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 944
-		if (sari_t == 853) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 960
-		if (sari_t == 869) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 976
-		if (sari_t == 893) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 1000
-		if (sari_t == 894) { DrTarget(DR_TARGET.MIRROR,45,2.4); }                                                            // soner 1020
-		if (sari_t == 908) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 1015
-		if (sari_t == 923) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 1030
-		if (sari_t == 924) { DrTarget(DR_TARGET.MIRROR,135,2.4); }                                                            // soner 1050
-		if (sari_t == 938) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 1045
-		if (sari_t == 953) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 1060
-		if (sari_t == 954) { DrTarget(DR_TARGET.MIRROR,225,2.4); }                                                            // soner 1080
-		if (sari_t == 964) { DrTarget(DR_TARGET.BIG,45,1.9); }                                                            // varis 1140
-		if (sari_t == 968) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 1075
-		if (sari_t == 983) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 1090
-		if (sari_t == 984) { DrTarget(DR_TARGET.MIRROR,315,2.4); }                                                            // soner 1110
-		if (sari_t == 998) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 1105
-		if (sari_t == 1013) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 1120
-		if (sari_t == 1028) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 1135
-		if (sari_t == 1039) { DrTarget(DR_TARGET.BIG,225,1.9); }                                                            // varis 1215
-		if (sari_t == 1043) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 1150
-		if (sari_t == 1058) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 1165
-		if (sari_t == 1073) { DrTarget(DR_TARGET.NORMAL,0,3.2); }                                                            // varis 1180
-		if (sari_t == 1088) { DrTarget(DR_TARGET.NORMAL,90,3.2); }                                                            // varis 1195
-		if (sari_t == 1103) { DrTarget(DR_TARGET.NORMAL,180,3.2); }                                                            // varis 1210
-		if (sari_t == 1118) { DrTarget(DR_TARGET.NORMAL,270,3.2); }                                                            // varis 1225
-		if (sari_t == 1124) { DrTarget(DR_TARGET.MIRROR,0,2.4); }                                                            // soner 1250
-		if (sari_t == 1164) { DrTarget(DR_TARGET.MIRROR,180,2.4); }                                                            // soner 1290
-		if (sari_t == 1223) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 1330 (hat0)
-		if (sari_t == 1233) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 1340 (hat0)
-		if (sari_t == 1243) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 1350 (hat0)
-		if (sari_t == 1243) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 1350 (hat1)
-		if (sari_t == 1253) { DrTarget(DR_TARGET.NORMAL,45,3.2); }                                                            // varis 1360 (hat0)
-		if (sari_t == 1253) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 1360 (hat1)
-		if (sari_t == 1263) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 1370 (hat1)
-		if (sari_t == 1263) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 1370 (hat2)
-		if (sari_t == 1273) { DrTarget(DR_TARGET.NORMAL,135,3.2); }                                                            // varis 1380 (hat1)
-		if (sari_t == 1273) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 1380 (hat2)
-		if (sari_t == 1279) { DrTarget(DR_TARGET.BIG,0,1.9); }                                                            // varis 1455
-		if (sari_t == 1283) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 1390 (hat2)
-		if (sari_t == 1283) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 1390 (hat3)
-		if (sari_t == 1293) { DrTarget(DR_TARGET.NORMAL,225,3.2); }                                                            // varis 1400 (hat2)
-		if (sari_t == 1293) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 1400 (hat3)
-		if (sari_t == 1303) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 1410 (hat3)
-		if (sari_t == 1313) { DrTarget(DR_TARGET.NORMAL,315,3.2); }                                                            // varis 1420 (hat3)
-		if (sari_t == 1319) { DrTarget(DR_TARGET.BIG,180,1.9); }                                                            // varis 1495
+		if (sari_t == 43) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 54) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 65) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 76) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 87) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 98) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 109) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 120) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 131) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 142) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 153) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 164) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 175) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 186) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 197) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 208) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 233) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 243) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 255) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 265) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 277) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 287) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 299) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 309) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 321) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 331) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 343) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 353) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 365) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 375) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 387) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 397) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 423) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 439) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 455) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 464) { DrTarget(DR_TARGET.BIG,45,1.9); }
+		if (sari_t == 471) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 487) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 503) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 519) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 524) { DrTarget(DR_TARGET.BIG,225,1.9); }
+		if (sari_t == 535) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 551) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 567) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 583) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 584) { DrTarget(DR_TARGET.BIG,135,1.9); }
+		if (sari_t == 599) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 615) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 631) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 647) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 663) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 693) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 704) { DrTarget(DR_TARGET.MIRROR,90,2.4); }
+		if (sari_t == 709) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 725) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 739) { DrTarget(DR_TARGET.MIRROR,270,2.4); }
+		if (sari_t == 741) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 757) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 764) { DrTarget(DR_TARGET.BIG,90,1.9); }
+		if (sari_t == 773) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 789) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 805) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 821) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 829) { DrTarget(DR_TARGET.BIG,270,1.9); }
+		if (sari_t == 837) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 853) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 869) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 893) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 894) { DrTarget(DR_TARGET.MIRROR,45,2.4); }
+		if (sari_t == 908) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 923) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 924) { DrTarget(DR_TARGET.MIRROR,135,2.4); }
+		if (sari_t == 938) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 953) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 954) { DrTarget(DR_TARGET.MIRROR,225,2.4); }
+		if (sari_t == 964) { DrTarget(DR_TARGET.BIG,45,1.9); }
+		if (sari_t == 968) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 983) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 984) { DrTarget(DR_TARGET.MIRROR,315,2.4); }
+		if (sari_t == 998) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 1013) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 1028) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 1039) { DrTarget(DR_TARGET.BIG,225,1.9); }
+		if (sari_t == 1043) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 1058) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 1073) { DrTarget(DR_TARGET.NORMAL,0,3.2); }
+		if (sari_t == 1088) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
+		if (sari_t == 1103) { DrTarget(DR_TARGET.NORMAL,180,3.2); }
+		if (sari_t == 1118) { DrTarget(DR_TARGET.NORMAL,270,3.2); }
+		if (sari_t == 1124) { DrTarget(DR_TARGET.MIRROR,0,2.4); }
+		if (sari_t == 1164) { DrTarget(DR_TARGET.MIRROR,180,2.4); }
+		if (sari_t == 1223) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 1233) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 1243) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 1243) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 1253) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
+		if (sari_t == 1253) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 1263) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 1263) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 1273) { DrTarget(DR_TARGET.NORMAL,135,3.2); }
+		if (sari_t == 1273) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 1279) { DrTarget(DR_TARGET.BIG,0,1.9); }
+		if (sari_t == 1283) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 1283) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 1293) { DrTarget(DR_TARGET.NORMAL,225,3.2); }
+		if (sari_t == 1293) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 1303) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 1313) { DrTarget(DR_TARGET.NORMAL,315,3.2); }
+		if (sari_t == 1319) { DrTarget(DR_TARGET.BIG,180,1.9); }
 
 		if (sari_t == sari_son) { F2SariBitir(); }
 	}
 
 
-	//======================================================================
-	// SERITLER -- asagidan yukariya suzulup gidis yonunu gosteriyorlar
-	//======================================================================
 	if (serit_on)
 	{
-		// Son bolumde turuncu ruh yok, yani carpan 1: seritler sabit hizda
-		// akiyor. Kontrol yine de duruyor cunku ileride koridorda da
-		// kullanilirsa dash ile hizlanmalari gerekir.
 		var _sm = 1;
 		if (instance_exists(battle_soul_orange_dr)) { _sm = battle_soul_orange_dr.world_mul; }
 		var _sn = array_length(seritler);
@@ -1240,98 +940,34 @@ if (room == room_battle_1)
 		{
 			var _sr = seritler[_i];
 			_sr.y -= _sr.hiz*_sm;
-			// Ustten cikan serit altta yeniden doguyor: sayilari sabit kaliyor.
 			if (_sr.y+_sr.boy < 0) { seritler[_i] = F2SeritYap(true); }
 		}
 	}
 
-	//======================================================================
-	// KORIDORUN HER KARE CALISAN BOLUMLERI
-	//======================================================================
-	// Kutular, blaster isaretcileri, karusel ve Konuk. Hepsi kendi
-	// bayragiyla kapali duruyor (box_on / car_on / gst_on), yani koridor
-	// acilana kadar hicbiri calismiyor -- turun onceki kisimlarina
-	// dokunmuyorlar.
-	//======================================================================
 
-	//======================================================================
-	// 7. KISIM -- TURUNCU RUH KORIDORU
-	//======================================================================
-	// Sari bolum bitiyor, ekran karariyor, karanlikta kalp turuncuya
-	// donuyor ve koridor aciliyor.
-	//
-	// TUR 18'DEN FARKLAR (hepsi zorluk yonunde):
-	//   zincir bar sayisi 6-7 -> 9-10   zincirin kopmadan surmesi gereken
-	//                                   mesafe uzadi
-	//   mavi pencere      60  -> 52/48  hizalanma payi daraldi
-	//   zincir sapmasi    +-20 -> +-30    kalp 50 px gidebiliyor, gereken 34
-	//   ziplama zinciri   4   -> 6 ve 8 sekizlide dunya 1.97 kata cikiyor
-	//   kutu sayisi       4   -> 5      son kutu bolumunde
-	//   karusel: JumpUnit her ziplama zincirinin sonuna kendisi bir
-	//   bileklik koyuyor (tur 18 de boyle). Serbest CarMark kullanilmiyor:
-	//   kutu/zincir bolumlerinin uzerine binip pattern ic ice geciyordu.
-	//   Konuk             8   -> 12     savurma sayisi
-	//
-	// TABAN HIZ 4'TE KALIYOR. 5 denendi ve uc pattern de oynanamaz oldu:
-	// sarj 40 kare sabit, dunya %25 hizlaninca zincir barlarinda kalp 35 px
-	// gidebilirken 64 px gerekiyordu, kutularda 60 kare varken 70 gerekiyordu.
-	// Butun bar araliklari / kutu bosluklari / serit sapmalari bu hiza gore
-	// hesaplandi; taban degistirilirse hepsi yeniden hesaplanmali.
-	//
-	// Bolum tetikleri kare degil YOL: dunya dash ile hizlandigi icin sabit
-	// kareler iyi oynayan oyuncuya bosluk acardi.
-	//
-	// Bolumlerin KALBE VARDIGI yollar. Tur 18 gibi hicbiri ic ice degil:
-	// her bolum bir oncekinden 110 px sonra basliyor. Patternler ust uste
-	// binerse hasar almamak imkansiz oluyor.
-	//   A  zincir barlari       440 -  1280
-	//   B  kutular + blaster   1390 -  2760
-	//   C  ziplama (3 halka)   2870 -  3780
-	//   D  zincir + blaster    3890 -  4730
-	//   E  ziplama (6 halka)   4840 -  6530
-	//   F  kutular + blaster   6640 -  8010
-	//   G  zincir barlari      8120 -  9040
-	//   H  ziplama (8 halka)   9150 - 11360
-	//   I  kutular + blaster  11470 - 13260
-	//   J  final zinciri      13370 - 14290
-	//   KONUK -- tek basina, koridor tamamen bittikten sonra (14450)
-	//
-	// Tek kasitli ust uste binme: zincir barlarinin arasindaki blaster.
-	// Tur 18de de oyle.
-	//======================================================================
 
-	// Sari bittikten sonra ekran karariyor. ANI kesme: eskiden 30 karede
-	// yavas yavas soluyordu, turuncuya gecis sunuk duruyordu. Diger turlar
-	// da ani kesiyor (bkz. battle_turn_13 -- Fader_Fade(-1,1,1)).
-	// Geri ACILMA yavas kaldi: sert kesip yumusak acmak dogru okunuyor.
 	if (_timer == 6995) { Fader_Fade(0,1,1); }
 
-	// Karanlikta degisim: kutu koridor bicimini aliyor, kalp turuncu
 	if (_timer == 7035) { F2TuruncuBasla(); }
 
-	// Ekran geri aciliyor, kalp artik turuncu. Bu da ANI: perde inerken
-	// oldugu gibi kalkarken de sert kesiyor -- son atagin tur arasi
-	// perdesiyle ayni davranis (F2SfKaraBit: Fader_Fade(1,0,1)).
 	if (_timer == 7055) { Fader_Fade(1,0,1); }
 
-	//---------------------------------------------------------- koridor yolu
 	if (instance_exists(battle_dr_corridor))
 	{
 		yol += battle_dr_corridor.scroll_spd;
 	}
 
-	//------------------------------------------------------- bolum tetikleri
 	if (bolum == 0) and (_timer >= 7115)
 	{
 		bolum = 1;
 		yol = 0;
-		ChainRunX(8,120,56,[-22,22,-22,22,-22,22,-22,22]);	// A
+		ChainRunX(8,120,56,[-22,22,-22,22,-22,22,-22,22]);
 	}
 
 	if (bolum == 1) and (yol >= 795)
 	{
 		bolum = 2;
-		BoxRun(4,104,110,310,40);							// B
+		BoxRun(4,104,110,310,40);
 		BlastMark(700,-1);
 	}
 
@@ -1344,14 +980,14 @@ if (room == room_battle_1)
 	if (bolum == 3) and (yol >= 3450)
 	{
 		bolum = 4;
-		ChainRunX(8,120,56,[22,-22,22,-22,22,-22,22,-22]);	// D
+		ChainRunX(8,120,56,[22,-22,22,-22,22,-22,22,-22]);
 		BlastMark(700,1);
 	}
 
 	if (bolum == 4) and (yol >= 3900)
 	{
 		bolum = 5;
-		JumpUnit(900,[40,-40,45,-35,40,-40]);				// E: alti halka
+		JumpUnit(900,[40,-40,45,-35,40,-40]);
 	}
 
 	if (bolum == 5) and (yol >= 6045)
@@ -1364,7 +1000,7 @@ if (room == room_battle_1)
 	if (bolum == 6) and (yol >= 7680)
 	{
 		bolum = 7;
-		ChainRunX(9,115,56,[-22,22,-22,22,-22,22,-22,22,-22]);	// G
+		ChainRunX(9,115,56,[-22,22,-22,22,-22,22,-22,22,-22]);
 	}
 
 	if (bolum == 7) and (yol >= 7960)
@@ -1376,7 +1012,7 @@ if (room == room_battle_1)
 	if (bolum == 8) and (yol >= 10875)
 	{
 		bolum = 9;
-		BoxRun(5,100,110,310,40);							// I
+		BoxRun(5,100,110,310,40);
 		BlastMark(1100,1);
 		BlastMark(1700,-1);
 	}
@@ -1384,17 +1020,9 @@ if (room == room_battle_1)
 	if (bolum == 9) and (yol >= 12930)
 	{
 		bolum = 10;
-		ChainRunX(9,115,56,[22,-22,22,-22,22,-22,22,-22,22]);	// J: en dar pencere
+		ChainRunX(9,115,56,[22,-22,22,-22,22,-22,22,-22,22]);
 	}
 
-	//------------------------------------------------ FINAL: BEKLENMEDIK KONUK
-	// Konuk bir mini-boss; baska patternlerle ayni anda calisirsa hasar
-	// almamak imkansiz (guc dash 40 kare basili tutmak istiyor, o sure
-	// boyunca oyuncu zaten kemik kirmakla mesgul). Koridor tamamen bittikten
-	// SONRA, tek basina geliyor. Dunya akmaya devam ediyor ama artik hicbir
-	// sey dogmuyor: tek is sarj edip dogru anda birakmak.
-	// Guvenlik siniri: Konuk'un atilisi yana kacarak da atlatilabildigi icin
-	// hic puskurtmeyen oyuncuda bolum sonsuza kadar surerdi.
 	if (bolum == 10) and (yol >= atak_yol)
 	{
 		bolum = 11;
@@ -1417,16 +1045,10 @@ if (room == room_battle_1)
 	{
 		var _kmul = 1;
 		if (instance_exists(battle_soul_orange_dr)) { _kmul = battle_soul_orange_dr.world_mul; }
-		// Kutular ve blasterlar barlarla ayni hizda kayiyor (bar spd_y'si 4),
-		// boylece duvarlar kutulardan hic ayrilmiyor.
-		// Koridorun taban hizindan okunuyor. Once sabit 4 yaziliydi (tur
-		// 18'in taban hizi); taban degistirilince kutu kenarlari barlarla
-		// desenkron kayiyordu.
 		var _kay = battle_dr_corridor.scroll_base*_kmul;
 		var _nb = array_length(boxes);
 		for (var _i = 0; _i < _nb; _i++) { boxes[_i].y += _kay; }
 
-		// Kalp bir kutunun icindeyse kati yan duvarlar arasinda tutuluyor
 		for (var _i = 0; _i < _nb; _i++)
 		{
 			var _kb = boxes[_i];
@@ -1437,10 +1059,6 @@ if (room == room_battle_1)
 			}
 		}
 
-		// Ekranin altina inen kutular listeden dusuyor, hepsi bitince bolum
-		// kendini kapatiyor. BoxStop cagirmiyoruz cunku o butun barlari yok
-		// eder ve o sirada hala inen bir duvar varsa gozle gorulur sekilde
-		// kaybolurdu.
 		for (var _i = _nb-1; _i >= 0; _i--)
 		{
 			if (boxes[_i].y-boxes[_i].h/2 > 520) { array_delete(boxes,_i,1); }
@@ -1448,10 +1066,6 @@ if (room == room_battle_1)
 		if (array_length(boxes) == 0) { box_on = false; }
 	}
 
-	//----------------------------------------------------------------------
-	// Blaster isaretcileri. Kutu bolumune bagli degiller: her bolum
-	// BlastMark ile kendi blasterini koyabiliyor.
-	//----------------------------------------------------------------------
 	if (array_length(blasts) > 0)
 	{
 		var _bmul = 1;
@@ -1474,24 +1088,14 @@ if (room == room_battle_1)
 		}
 	}
 
-	//----------------------------------------------------------------------
-	// Bileklikler
-	//----------------------------------------------------------------------
-	// Kalbin USTUNDEN gecen kapali halkalar: yerdeyken zararsizlar, ama
-	// ziplayan kalp iceri girip carpiyor. Beyaz barlarin tam tersi.
-	//----------------------------------------------------------------------
 	if (car_on)
 	{
 		var _cmul = 1;
 		if (instance_exists(battle_soul_orange_dr)) { _cmul = battle_soul_orange_dr.world_mul; }
-		// Donus gorsel: dunya hizlanmasi buraya yumusatilarak yansiyor.
 		car_ang += car_spin*(1+(_cmul-1)*0.4);
 		var _cn = array_length(cars);
 		for (var _i = 0; _i < _cn; _i++) { cars[_i].y += battle_dr_corridor.scroll_base*_cmul; }
 
-		// Ekranin altina inen bileklikler listeden dusuyor. Once bolum
-		// gecisinde CarStop cagriliyordu ama son bileklik o esikten sonra
-		// geliyordu: kalbin altindan gecerken bir anda yok oluyordu.
 		for (var _i = _cn-1; _i >= 0; _i--)
 		{
 			if (cars[_i].y > 560) { array_delete(cars,_i,1); }
@@ -1499,7 +1103,6 @@ if (room == room_battle_1)
 		_cn = array_length(cars);
 		if (_cn == 0) { car_on = false; }
 
-		// Sadece havadaki kalp bileklige carpiyor
 		var _havada = false;
 		if (instance_exists(battle_soul_orange_dr)) { _havada = battle_soul_orange_dr.airborne; }
 
@@ -1513,7 +1116,6 @@ if (room == room_battle_1)
 				for (var _i = 0; _i < car_n; _i++)
 				{
 					var _sg = CarSeg(_i,cars[_c].y);
-					// Arka yari kutunun arkasindan geciyor, tehdit degil
 					if (_sg.on <= 0.15) { continue; }
 					var _kal = 5*_sg.sc/2+2;
 					if (battle_soul.x+_sw > min(_sg.x1,_sg.x2)) and (battle_soul.x-_sw < max(_sg.x1,_sg.x2))
@@ -1525,7 +1127,6 @@ if (room == room_battle_1)
 						}
 						else
 						{
-							// FAZ 2 -- klasik hasar (bkz. scripts/Macro_Battle)
 							Battle_HurtNormal(DMG_CAR);
 						}
 					}
@@ -1534,13 +1135,6 @@ if (room == room_battle_1)
 		}
 	}
 
-	//======================================================================
-	// BEKLENMEDIK KONUK
-	//======================================================================
-	// Ayrintili aciklama Create_0'da. Ozet: sadece GUC DASH puskurtuyor ve
-	// savrulmadan savrulmaya gecen sure 56 kare, guc dash'in istedigi 40
-	// karelik sarj tam oturuyor.
-	//======================================================================
 	if (gst_on) and (instance_exists(battle_soul))
 	{
 		gst_t += 1;
@@ -1552,7 +1146,6 @@ if (room == room_battle_1)
 
 		if (gst_state == 0)
 		{
-			// Uzakta bekliyor, yavasca saga sola surukleniyor
 			gst_y += (gst_home_y-gst_y)*0.08;
 			gst_x += gst_vx;
 			if (gst_x < _gl) { gst_x = _gl; gst_vx = abs(gst_vx); }
@@ -1571,8 +1164,6 @@ if (room == room_battle_1)
 		}
 		else if (gst_state == 1)
 		{
-			// Hazirlik: titriyor ve son ana kadar kalbi takip ediyor. Guc
-			// dash'i sarj edip birakmak icin acilan pencere burasi.
 			gst_tx = battle_soul.x;
 			gst_ty = battle_soul.y;
 			if (gst_t > gst_hazir)
@@ -1585,7 +1176,6 @@ if (room == room_battle_1)
 		}
 		else if (gst_state == 2)
 		{
-			// Atilis. Dunya da hizlaniyor: dash atmisiz gibi.
 			if (instance_exists(battle_soul_orange_dr))
 			{
 				battle_soul_orange_dr.speed_boost = 1;
@@ -1595,7 +1185,6 @@ if (room == room_battle_1)
 			gst_y += lengthdir_y(gst_spd,_gd);
 			if (gst_y > 520) or (gst_t > 90)
 			{
-				// Isabet etmeden gecti, geri donuyor
 				gst_state = 3;
 				gst_t = 0;
 				gst_rvx = 0;
@@ -1604,7 +1193,6 @@ if (room == room_battle_1)
 		}
 		else
 		{
-			// Savrulma sonrasi yerine donus
 			gst_x += gst_rvx;
 			gst_y += gst_rvy;
 			gst_rvx *= 0.92;
@@ -1618,12 +1206,6 @@ if (room == room_battle_1)
 			}
 		}
 
-		// Puskurtme. Menzil kontrolu Konuk'un buyuk govdesi icin biraz
-		// genisletildi (+22), yoksa sprite'in kenari kalbe degiyor ama
-		// merkez menzilin disinda kaliyordu.
-		//
-		// strike_pow == 2 SART: sadece guc dash isliyor. Ufak dash, yani
-		// Z'ye basar basmaz cikan vurus, Konuk'a gecmiyor.
 		if (gst_state == 1) or (gst_state == 2)
 		{
 			var _gmes = point_distance(battle_soul.x,battle_soul.y,gst_x,gst_y);
@@ -1658,13 +1240,9 @@ if (room == room_battle_1)
 				}
 				else
 				{
-					// FAZ 2 -- klasik hasar (bkz. scripts/Macro_Battle)
 					Battle_HurtNormal(DMG_GUEST);
 				}
 
-				// CARPISMA TEPKISI -- battle_turn_18 ile ayni.
-				// Kalp Konuk'un TERSI yone itilip eski x'ine donuyor,
-				// Konuk savrulup bekleme noktasina cekiliyor.
 				var _yon = sign(battle_soul.x-gst_x);
 				if (_yon == 0) { _yon = choose(-1,1); }
 				kon_tep_x0  = battle_soul.x;
@@ -1674,8 +1252,6 @@ if (room == room_battle_1)
 				kon_tep_t = 0;
 				battle_soul.moveable = false;
 
-				// gst_cycle ARTMIYOR: o sayac oyuncunun basarili
-				// savurmalarini sayiyor, kalbe carpmak lehe sayilmamali.
 				var _kd = point_direction(battle_soul.x,battle_soul.y,gst_x,gst_y);
 				gst_rvx = lengthdir_x(12,_kd);
 				gst_rvy = lengthdir_y(12,_kd);
@@ -1688,14 +1264,6 @@ if (room == room_battle_1)
 		}
 	}
 
-	//======================================================================
-	// KONUK CARPMASI -- KALBIN GERI TEPMESI  (battle_turn_18 ile ayni)
-	//======================================================================
-	// Once T18_TEP_ITME karede Konuk'un tersine itiliyor, sonra
-	// T18_TEP_DONUS karede tam olarak eski x'ine donuyor; bitince kontrol
-	// geri veriliyor. gst_on'dan bagimsiz calisiyor ki bolum tam o sirada
-	// bitse bile kalp yarim yolda kalmasin.
-	//======================================================================
 	if (kon_tep_t >= 0)
 	{
 		if (instance_exists(battle_soul))
@@ -1725,24 +1293,6 @@ if (room == room_battle_1)
 	}
 
 
-	//======================================================================
-	// 8. KISIM -- SIYAH BOSLUK, UC KARAKTER BIRDEN
-	//======================================================================
-	// Konuk yenildi. Turuncu ruh yukari kayip ekrandan cikiyor, ekran
-	// BEYAZA patliyor (RGB kaymasiyla), beyazin icinde kalp kirmiziya
-	// donuyor ve kutu ekranin tamami oluyor. Geriye siyah bir bosluk
-	// kaliyor; artik kacacak kenar yok.
-	//
-	// Ucu birden saldiriyor:
-	//   Sans    devasa dairesel kemikler -- ice kapanan halkalar, tek kapi
-	//   Alphys  yildirim boltlari -- carpacak yuzey olmadigi icin rastgele
-	//           yuksekliklerde patliyorlar (o_alphys_bigbolt.serbest_y)
-	//   Papyrus hancerler -- dort kenardan kalbe nisan aliyorlar
-	//
-	// Halkalarin kapisi her seferinde donuyor, yani oyuncu once kapiyi
-	// bulup oraya gitmek zorunda; bunu yaparken boltlar ve hancerler
-	// nereye gidebilecegini kisitliyor.
-	//======================================================================
 
 	if (bolum == 12) and (_timer == bitis_kare+30) { F2SonKayma(); }
 	if (bolum == 12) and (_timer == bitis_kare+80) { F2SonBeyaz(); }
@@ -1758,12 +1308,6 @@ if (room == room_battle_1)
 	{
 		son_t += 1;
 
-		//------------------------------------------- SANS: dairesel kemikler
-		// 190 karede bir yeni halka. Yaricap 240, hiz 1.6 -> halka 150
-		// karede merkeze variyor. Kemikler yaricap dogrultusunda durdugu
-		// icin aralarinda bosluk var ve oyuncu oralardan geciyor; halka
-		// kuculdukce bosluklar da daraliyor. Baslangic acisi her halkada
-		// 55 derece donuyor ki bosluklar hep ayni yerde olmasin.
 		if (son_t >= 60) and (son_t <= 1440)
 		{
 			if ((son_t-60) % 190 == 0)
@@ -1773,22 +1317,12 @@ if (room == room_battle_1)
 			}
 		}
 
-		//--------------------------------------------- ALPHYS: yildirimlar
-		// 200 karede bir, rastgele sutunda ve rastgele yukseklikte.
-		// Eskiden 95 kareydi (14 bolt): halkalarin kapisini ararken bir de
-		// bunlar yagiyordu, siyah boslukta kacacak yer kalmiyordu. 200 ile
-		// 7 bolt kaliyor -- tehdit sürüyor ama nefes alacak yer var.
 		if (son_t >= 130) and (son_t <= 1460)
 		{
 			if ((son_t-130) % 200 == 0) { F2SerbestBolt(); }
 		}
 
-		// PAPYRUS'UN HANCERLERI KALDIRILDI. Sans'in ice kapanan halkalari
-		// zaten tek bir kapi birakiyor; dort kenardan nisan alan hancerler
-		// o kapiya giden yolu da kapatinca bolum kacinilmaz oluyordu.
-		// (Ayni gerekce 9. kisimdaki hancerler icin de gecerli.)
 
-		//------------------------------------------------------ kisim biter
 		if (son_t == 1560)
 		{
 			son_on = false;
@@ -1800,49 +1334,15 @@ if (room == room_battle_1)
 	}
 
 
-	//======================================================================
-	// 9. KISIM -- MAVI RUH: YUKSELEN PLATFORM PARKURU
-	//======================================================================
-	// Basamaklar asagidan cikip yukari gidiyor; kalp ustlerinde durdugu
-	// surece onlarla yukseliyor. Beklemek olum demek: hayatta kalmak icin
-	// surekli bir alt basamaga atlamak gerekiyor.
-	//
-	// Basamaklar dar (90-150 px) ve saga sola kaydirilmis, bazilarinin
-	// ucunda platforma BAGLI kemik var (platformla birlikte yukseliyor).
-	// Yani her inis bir ziplama: ya kemigin ustunden atlayacaksin ya da
-	// basamagin bos ucundan gececeksin.
-	//
-	// IKI ANI OLUM: ekranin altina dusmek (y > 500) ve tavana degmek
-	// (y < 14). Kutunun tabani y=720'de, yani ekranin cok altinda:
-	// boylece dusen kalp bir zemine konmuyor, gercekten dusuyor.
-	//
-	// Ustune yandan gelen dinamik kemikler, Alphys'in nisan alan
-	// mizraklari ve Papyrus'un hancerleri biniyor. Ucu de kademeli
-	// giriyor, ilk basamaklarda sadece parkur var.
-	//======================================================================
 
 	if (son_bitis > 0) and (_timer == son_bitis+60) { F2MaviKay(); }
 
-	// Kayma bitti: mavi ruha geciliyor.
 	if (mavi_gecis > 0)
 	{
 		mavi_gecis -= 1;
 		if (mavi_gecis == 0) { F2MaviBasla(); }
 	}
 
-	//---------------------------------------------------- can gostergesi
-	// Kalbin ustundeki "can / max can" yazisi.
-	//
-	// SADECE KUTU EKRANIN TAMAMINI KAPLADIGINDA. Kutu (DEPTH_BATTLE.BOARD
-	// = -600) alttaki can barinin (UI = -300) ONUNDE ciziliyor, yani kutu
-	// buyudugunde bar kayboluyor ve gosterge gerekli oluyor. Kutu normal
-	// olculerdeyken bar zaten okunuyor, gosterge fazlalik kaliyordu.
-	//
-	// Olcu bolum bayraklarina degil KUTUNUN KENDISINE bakiyor: yeni bir
-	// bolum eklenirse ya da kutu olcusu degisirse kendiliginden dogru
-	// calisiyor. Ekran 640x480; iki px pay yuvarlama icin.
-	// Su an gecen bolumler: 8. kisim siyah bosluk (320,160,320,320) ve
-	// 9. kisim platform parkuru (320,400,320,320).
 	var _tam_kutu = false;
 	if (instance_exists(battle_board))
 	{
@@ -1859,8 +1359,6 @@ if (room == room_battle_1)
 		can_bekle = can_bekle_max;
 	}
 	can_onceki = _can;
-	// Kutu kuculdugu anda gosterge de kayboluyor: hasar tam kapanistan
-	// once alinmissa yazi kucuk kutunun uzerinde asili kalmasin.
 	if (!_tam_kutu) { can_alpha = 0; can_bekle = 0; }
 	else if (can_bekle > 0) { can_bekle -= 1; }
 	else if (can_alpha > 0) { can_alpha = max(0,can_alpha-can_sonme); }
@@ -1869,13 +1367,6 @@ if (room == room_battle_1)
 	{
 		mavi_t += 1;
 
-		//--------------------------------------------------- basamaklar
-		// 78 karede bir yeni basamak: 109 px / 1.4 px-kare.
-		// Aralik 99'dan 109'a cikti ki guclendirilen ziplama (90 px)
-		// bir ust basamaga yetismesin.
-		// Dizi bitince uretim DURUYOR: onceden % ile basa sariyordu, yani
-		// "son platform" diye bir sey olmuyordu. Son basamak ayrica
-		// kaydediliyor, final onun uzerine konulunca basliyor.
 		if ((mavi_t % 78) == 0) and (!mavi_final) and (mavi_adim < array_length(mavi_parkur))
 		{
 			var _sp = F2Basamak(mavi_parkur[mavi_adim]);
@@ -1883,69 +1374,34 @@ if (room == room_battle_1)
 			mavi_adim += 1;
 		}
 
-		//--------------------------------------------- iki ani olum kosulu
-		// Finalde kapali: kalp bilerek ortaya kayip hizla asagi iniyor,
-		// acik kalsa alt cizgide olurdu.
 		if (instance_exists(battle_soul)) and (!mavi_final)
 		{
-			// Esikler sinir kemik duvarlarinin IC KENARIYLA ayni:
-			// duvara degmekle olmek ayni an oluyor, yoksa once kemikten
-			// hasar alip sonra oluyordun.
-			if (battle_soul.y > 460) { F2MaviOlum(); }		// alt duvara dedi
-			if (battle_soul.y < 20)  { F2MaviOlum(); }		// ust duvara dedi
+			if (battle_soul.y > 460) { F2MaviOlum(); }
+			if (battle_soul.y < 20)  { F2MaviOlum(); }
 		}
 
-		//------------------------------------------------- Alphys mizraklari
-		// Spear3 kutu boyutundan bagimsiz: arenayi degistirmeden calisiyor.
-		// Aralik 170 -> 280: parkurda kalp zaten basamak arasi zamanlamayla
-		// ugrasiyor, nisan alan mizrak o sirada sik gelince ziplama araligi
-		// kalmiyordu. 9 mizrak yerine 6.
 		if (mavi_t >= 500) and (mavi_t <= 1980)
 		{
 			if ((mavi_t-500) % 280 == 0) { Spear3(); }
 		}
 
-		// PAPYRUS'UN HANCERLERI BURADAN DA KALDIRILDI (bkz. 8. kisim):
-		// basamak parkuru + kemikler + mizrak zaten dolu, dort kenardan
-		// nisan alan hancerler kacacak yer birakmiyordu.
 
-		//------------------------------------------------ yatay blasterler
-		// Ikinci yaridan itibaren: kalbin o andaki yuksekligine nisan alip
-		// ekrani boydan boya kesiyorlar. Hazirlik ~45 kare, yani "hemen
-		// yukseklik degistir" uyarisi. Buyuk ziplamalarla ayni bolgede
-		// olduklari icin sadece kacmak degil, nereye kacacagini secmek
-		// gerekiyor.
 		if (mavi_t >= 1100) and (mavi_t <= 2020)
 		{
 			if ((mavi_t-1100) % 130 == 0)
 			{
-				// Kenar once degiskene aliniyor: uclu operatoru dogrudan
-				// arguman icinde kullanmak GML'de guvenilir degil, blaster
-				// her seferinde ayni yandan geliyordu.
 				var _kn = ((mavi_t-1100) div 130) % 4;
 				F2LabBlaster(_kn);
 			}
 		}
 
-		//------------------------------------------------------ FINAL
-		// Tetik SABIT KARE DEGIL: kalp son platformun uzerine konunca
-		// basliyor. Onceden 2130'da basliyordu ve oyuncu o an hala
-		// birkac basamak yukarida oluyordu.
-		// battle_platform1 kalbin bindigi platformu battle_soul.inst_plat
-		// icinde tutuyor.
 		if (!mavi_final) and (instance_exists(mavi_son)) and (instance_exists(battle_soul))
 		{
 			if (battle_soul.inst_plat == mavi_son) { F2MaviFinal(); }
 		}
 
-		// Guvenlik: kalp son platforma hic konmazsa (yanindan gecip
-		// ustteki bir basamakta kalabilir) final yine de baslasin.
 		if (!mavi_final) and (mavi_t >= 2500) { F2MaviFinal(); }
 
-		// Final zinciri kendi sayacinda: tetik degisken oldugu icin
-		// sabit karelere baglanamaz.
-		// Beyaz perde her kare hedefine dogru gidiyor. Anim sistemine
-		// bagli degil: hedefi degistiren tek sey F2FinalBeyaz/F2FinalAcil.
 		if (final_beyaz < final_beyaz_hedef)
 		{
 			final_beyaz = min(final_beyaz_hedef,final_beyaz+final_beyaz_ac);
@@ -1955,7 +1411,6 @@ if (room == room_battle_1)
 			final_beyaz = max(final_beyaz_hedef,final_beyaz-final_beyaz_kapa);
 		}
 
-		// Kalbin ekranin ortasina kaymasi: sabit adimlarla, elle.
 		if (final_kay > 0) and (instance_exists(battle_soul))
 		{
 			battle_soul.x += final_kay_x;
@@ -1968,17 +1423,12 @@ if (room == room_battle_1)
 			}
 		}
 
-		// Inisler elle suruluyor: hizlanarak dusme, Anim_Create'e bagli
-		// degil. Ilki ekranin altina, ikincisi kutunun dibine.
 		if (final_dus1) and (instance_exists(battle_soul))
 		{
 			final_hiz += final_ivme;
 			battle_soul.y += final_hiz;
 			if (battle_soul.y >= 740) { final_dus1 = false; }
 		}
-		// Kutu ve gercek ruh her kare yerine sabitleniyor. Iptal
-		// edilemeyen bir kutu animasyonu kalsa bile bu, onun uzerine
-		// yaziyor -- savas ekrani kesin olarak yerinde duruyor.
 		if (final_kutu)
 		{
 			battle_board.up = BATTLE_BOARD.UP;
@@ -1992,9 +1442,6 @@ if (room == room_battle_1)
 			}
 		}
 
-		// Sahte kalbin inisi: sadece bir sayi, cizimi Draw_0 yapiyor.
-		// Kutuya "vardiginda" gercek ruh zaten dipte bekliyor, sahte
-		// kalp kayboluyor ve perde kalkiyor.
 		if (sahte_on)
 		{
 			sahte_hiz += final_ivme;
@@ -2009,25 +1456,14 @@ if (room == room_battle_1)
 		if (mavi_final)
 		{
 			final_t += 1;
-			if (final_t == 50)  { F2FinalKirmizi(); }	// kirmizi + ortaya kayma (45 kare)
-			if (final_t == 100) { F2FinalBeyaz(); }		// beyaz + RGB
-			// Temizlik once: perde 116da tam opak oluyor, platformlar 118de
-			// gorunmeden kalkiyor ve ANCAK ONDAN SONRA kalp asagi iniyor.
-			// Onceden inis 115te basliyordu ve kalp daha duran
-			// platformlarin arasindan geciyordu.
+			if (final_t == 50)  { F2FinalKirmizi(); }
+			if (final_t == 100) { F2FinalBeyaz(); }
 			if (final_t == 118) { F2FinalTemizle(); }
-			if (final_t == 122) { F2FinalIn(); }		// mavi + hizli inis (40 kare)
-			// Ilk inis 122de basliyor ve 82 kare suruyor (t=204).
-			// 205: perde tam opakken gercek savas ekrani kuruluyor VE
-			// sahte kalp ayni karede dusmeye basliyor.
+			if (final_t == 122) { F2FinalIn(); }
 			if (final_t == 205) { F2FinalSahne(); }
 		}
 
-		// Inis animasyonla suruldugu icin suresi kesin: 165 + 75 = 240.
-		// Onceden battle_soul.jump_state beklenordu ama kalp kutunun
-		// disinda basladigi icin o kontrol hic tetiklenmiyordu.
 
-		// Perde soldukten sonra bolum kapaniyor.
 		if (final_bitis > 0)
 		{
 			final_bitis -= 1;
@@ -2039,10 +1475,6 @@ if (room == room_battle_1)
 
 
 
-	//----------------------------------------------------- kapanis diyalogu
-	// Balonlar sirayla: bir onceki kapaninca sonraki aciliyor. Sira
-	// bitince tur kapaniyor ve motor faz gecisini devraliyor.
-	// Diyalog bitti, toz soluyor: sayac dolunca tur kapaniyor.
 	if (sf_dlg_bekle > 0)
 	{
 		sf_dlg_bekle -= 1;
@@ -2051,26 +1483,15 @@ if (room == room_battle_1)
 			sf_dlg = -1;
 			sf_dlg_bekle = -1;
 
-			// FINAL PHASE burada aciliyor: Sans artik bloklamiyor,
-			// gercekten hasar aliyor ve muzik surrender'a geciyor.
-			// Gorunum henuz degismiyor -- oyuncunun bu ilk vurusunu faz 2
-			// Sans'i yiyor, yaralanmis hali sonraki turda geliyor
-			// (bkz. scripts/P25).
 			P25Baslat();
 
 			Battle_EndTurn();
 		}
 	}
 
-	// Kule donenlerin solmasi. Parcacik efekti aninda basliyor, sprite
-	// da bu sure boyunca saydamlasiyor.
-	// Dagilma sayaclari: karakterin alfasini artik burasi surmuyor
-	// (F2SfToz aninda 0 yapiyor ve cizimi Draw_0 devraliyor), bunlar
-	// sadece diyalogun efekt bitene kadar beklemesini sagliyor.
 	if (sf_toz_pap > 0) { sf_toz_pap -= 1; }
 	if (sf_toz_alp > 0) { sf_toz_alp -= 1; }
 
-	// Dagilan karakterlerin sayaclari. Suresi dolan listeden dusuyor.
 	for (var _dgi = array_length(sf_dag)-1; _dgi >= 0; _dgi--)
 	{
 		sf_dag[_dgi].t += 1;
@@ -2086,18 +1507,11 @@ if (room == room_battle_1)
 		{
 			var _dlg = instance_create_depth(0,0,0,battle_dialog_enemy);
 			_dlg.text = sf_dlg_metin[sf_dlg];
-			// Diyalogdaki toz anlari: 4. balon Papyrus'un son sozu,
-			// 7. balon Alphys'in. Balon kapanirken degil, balon ACILIRKEN
-			// degil -- BIR SONRAKI balona gecerken tetikleniyor, yani
-			// replik bitmis oluyor.
 			if (sf_dlg == 4) { F2SfToz(true); }
 			sf_dlg += 1;
 		}
 		else
 		{
-			// Son balon bitti: Alphys kule donuyor. Tur, solma bitene
-			// kadar bekliyor (sf_dlg_bekle), yoksa efekt gorunmeden
-			// menuye donuluyordu.
 			if (sf_toz_alp < 0) and (sf_dlg_bekle < 0)
 			{
 				F2SfToz(false);
@@ -2106,34 +1520,19 @@ if (room == room_battle_1)
 		}
 	}
 
-	//======================================================================
-	// SON ATAK -- atak20.gif'in birebir karsiligi
-	//======================================================================
-	// Kare numaralari GIF'ten dogrudan alindi: GIF 1740 kare / 29 sn = 60 fps
-	// ve oyun da 60 fps, yani GIF kare numarasi = sf_t. Asagidaki her sabit
-	// (kare no, px derinlik, hiz, aci) GIF karelerinin piksel taramasindan
-	// cikti; ayrintili dokum icin bkz. Create_0'daki zaman cizelgesi.
 	if (sf_bekle > 0)
 	{
 		sf_bekle -= 1;
 		if (sf_bekle == 0) { F2SfBasla(); }
 	}
 
-	// Arka plan gradienti her kare hedefe dogru soluyor. Sifira inince
-	// ekran GIF'teki gibi siyah kaliyor.
 	if (sf_grad != sf_grad_hedef)
 	{
-		// Adim 0.02 -> 0.006: gradient cok daha YAVAS saydamlasiyor
-		// (tam gecis 50 kare yerine ~167 kare, yaklasik 2.8 sn).
 		if (sf_grad > sf_grad_hedef) { sf_grad = max(sf_grad_hedef,sf_grad-0.006); }
 		else                         { sf_grad = min(sf_grad_hedef,sf_grad+0.006); }
 		with (o_bg_gradient) { image_alpha = other.sf_grad; }
 	}
 
-	//----------------------------------------------------- kutu kenarlari
-	// Dort kenar BAGIMSIZ: GIF'te 333'te sadece sag kenar kayiyor, 353'te
-	// sol/sag 16-21 karede giderken dikey kenarlar ayni anda 80 karelik
-	// cok daha yavas bir gecis yapiyor. Tek bir kutu gecisi bunu veremiyor.
 	if (instance_exists(battle_board))
 	{
 		for (var _ki = 0; _ki < 4; _ki++)
@@ -2154,16 +1553,12 @@ if (room == room_battle_1)
 		}
 	}
 
-	//------------------------------------------------------ uyari seritleri
 	for (var _ui = array_length(sf_uy)-1; _ui >= 0; _ui--)
 	{
 		sf_uy[_ui].kalan -= 1;
 		if (sf_uy[_ui].kalan <= 0) { array_delete(sf_uy,_ui,1); }
 	}
 
-	//------------------------------------------------------------ taraklar
-	// Kemiklerin BOYU her kare guncelleniyor: tarak iceri kayarak giriyor,
-	// bir sure duruyor, sonra geri cekiliyor. Profil GIF'ten olculdu.
 	for (var _ti = array_length(sf_tk)-1; _ti >= 0; _ti--)
 	{
 		var _tk = sf_tk[_ti];
@@ -2195,16 +1590,11 @@ if (room == room_battle_1)
 		}
 	}
 
-	//------------------------------------------------ koridorda sahne kaymasi
-	// Kadro sola kayiyor; hepsi ekranin solundan cikinca kisa bir bekleme
-	// olup sagdan tekrar giriyorlar. Kalp yerinde durdugu icin hareket
-	// eden tek sey bu -- "saga dogru kosuyoruz" hissini o veriyor.
 	if (sf_kay_on) and (instance_exists(battle_enemy_engage))
 	{
 		if (sf_kay_bekle > 0)
 		{
 			sf_kay_bekle -= 1;
-			// Bekleme bitti: sahnenin sagina isinlanip yeniden basliyorlar.
 			if (sf_kay_bekle == 0) { battle_enemy_engage.kay_x = sf_kay_uc; }
 		}
 		else
@@ -2214,13 +1604,6 @@ if (room == room_battle_1)
 		}
 	}
 
-	// KAYMAYI SLAM CARPMASINDA DURDUR. Mavi ruhun impact bayragi slam ile
-	// 1 oluyor ve kalp duvara/kutuya YAPISINCA 0'a donuyor
-	// (battle_soul_blue/Step_0). Iki asama gerekiyor cunku slam bir kare
-	// sonra (alarm ile) basliyor: once bayragin kalktigini gorup sonra
-	// dustugunu bekliyoruz.
-	// kay_x sifirlanmiyor: kadro oldugu yerde kaliyor, geri donusu zaten
-	// F2SfSiyah perde arkasinda yapiyor.
 	if (sf_kay_dur == 1)
 	{
 		if (instance_exists(battle_soul_blue)) and (battle_soul_blue.impact == 1) { sf_kay_dur = 2; }
@@ -2235,9 +1618,6 @@ if (room == room_battle_1)
 		}
 	}
 
-	// Koridorun mavi gorunumlu kalbi: gercekte SERBEST (kirmizi) ruh,
-	// sadece sprite'i mavi. GIF'te koridorda yercekimi yok -- kalp iki
-	// eksende de serbest hareket ediyor ama mavi gorunuyor.
 	if (sf_mavi_gorunum) and (instance_exists(battle_soul))
 	{
 		battle_soul.sprite_index = spr_battle_soul_blue;
@@ -2248,26 +1628,12 @@ if (room == room_battle_1)
 	{
 		sf_t += 1;
 
-		//------------------------------------------------ blaster halkasi
-		// GIF: halka 2.7 derece/kare doniyor ve 2 karede bir yeni blaster
-		// geliyor (olculen dis aci ilerlemesi ve kemer yogunlugu).
 		if (sf_bl_on)
 		{
 			sf_bl_aci += SF_BL_DON;
 			if (sf_t % 2 == 0) { F2SfBlaster(); }
 		}
 
-		//--------------------------------------------------------- ASAMA 1
-		// GIF 24-178: mavi ruh, kutunun bir kenarina slam, once KIRMIZI
-		// UYARI SERIDI (duvarin ayak izi), sonra o kenardan kemik taragi.
-		// Uyari ~22 kare gorunuyor, tarak ~10 karede girip cekiliyor,
-		// derinlik 24-27 px (serit 40-45 px).
-		//
-		// GIF'te bu uc slam sag/asagi/sol; bizde YONLER RASTGELE
-		// (F2SfBasla dort kenardan ucunu kariyor). Zamanlama, derinlik ve
-		// serit kalinligi GIF'ten aynen kaliyor -- degisen tek sey hangi
-		// duvarin hedef oldugu. Ilk slam'in iki tarak turu var, digerlerinin
-		// birer tane: bu da GIF'teki dagilim.
 		if (sf_t == 24)
 		{
 			Battle_SetSoul(battle_soul_blue);
@@ -2288,14 +1654,9 @@ if (room == room_battle_1)
 		if (sf_t == 146) { F2SfUyari(sf_slam[2],F2SfUyKal(sf_slam[2]),21); }
 		if (sf_t == 169) { F2SfTarak(sf_slam[2],24,4,3,3); }
 
-		//--------------------------------------------------------- ASAMA 2
-		// GIF 151-345: ekrani DIKEY gecen 198 px'lik uzun yatay kemikler.
-		// Iki serit: sol (merkez x 229) yukaridan asagi, sag (merkez 430)
-		// asagidan yukari; her serit 40 karede bir, ucer kemik, 5.56 px/kare.
 		if (sf_t == 151) or (sf_t == 191) or (sf_t == 231) { F2SfSuzul(229,true); }
 		if (sf_t == 176) or (sf_t == 216) or (sf_t == 256) { F2SfSuzul(430,false); }
 
-		// GIF 173: ruh kirmiziya doner, kare kutuda serbest.
 		if (sf_t == 173)
 		{
 			Battle_SetSoul(battle_soul_red);
@@ -2303,20 +1664,12 @@ if (room == room_battle_1)
 			battle_soul.moveable = 1;
 		}
 
-		//--------------------------------------------------------- ASAMA 3
-		// GIF 305: kalp mavi GORUNUR ama serbest kalir.
-		// GIF 333: once SADECE sag kenar aciliyor (7.65 px/kare).
-		// GIF 353: sol kenar 15.1 px/kare ile kaciyor, sag kenar yavaslayip
-		//          5.25 px/kare devam ediyor, dikey kenarlar ayni anda ama
-		//          80 karelik cok daha yavas bir gecisle koridora iniyor.
 		if (sf_t == 305)
 		{
 			Battle_SetSoul(battle_soul_red);
 			battle_soul.moveable = 1;
 			sf_mavi_gorunum = true;
 		}
-		// Kadro kaymasi kutu acilmaya baslarken devreye giriyor: kalp daha
-		// sag duvara varmadan arka plan hareket etmeye basliyor.
 		if (sf_t == 333) { sf_kay_on = true; }
 
 		if (sf_t == 333) { F2SfKen(3,230,20); }
@@ -2328,19 +1681,12 @@ if (room == room_battle_1)
 			F2SfKen(1,SF_KOR_D,80);
 		}
 
-		//--------------------------------------------------------- ASAMA 4
-		// GIF 432-607: koridorda 4 karede bir tavan/taban kemik cifti.
-		// Aradaki bosluk hep 36 px; boslugun yeri 13 kemiklik sinus cizip
-		// 275 ile 324 arasinda gidip geliyor (44 cift).
 		if (sf_t >= 432) and (sf_t <= 608) and ((sf_t-432) % 4 == 0)
 		{
 			F2SfKorDalga(sf_dalga_i);
 			sf_dalga_i += 1;
 		}
 
-		//--------------------------------------------------------- ASAMA 5
-		// GIF 631-786: 9 adet 3'lu kemik grubu, tavan/taban donusumlu.
-		// Aralar GIF'ten birebir (22,21,20,18,18,15,23,18 kare).
 		if (sf_t == 631) { F2SfKorUclu(true);  }
 		if (sf_t == 653) { F2SfKorUclu(false); }
 		if (sf_t == 674) { F2SfKorUclu(true);  }
@@ -2351,67 +1697,28 @@ if (room == room_battle_1)
 		if (sf_t == 768) { F2SfKorUclu(false); }
 		if (sf_t == 786) { F2SfKorUclu(true);  }
 
-		//--------------------------------------------------------- ASAMA 6
-		// GIF 811-857: 2 karede bir (30 px arayla) 24 cift; bosluk her
-		// ciftte 2 px daralarak 76'dan 30'a iniyor.
 		if (sf_t >= 811) and (sf_t <= 857) and ((sf_t-811) % 2 == 0)
 		{
 			F2SfHuni(sf_huni_i);
 			sf_huni_i += 1;
 		}
 
-		//--------------------------------------------------------- ASAMA 7
-		// GIF 898-926: koridor sagdan kapaniyor (9.1 px/kare), dis sag
-		// kenar 410'da duruyor. Sonra yarim koridorda bir uyari + tarak.
-		//
-		// Kapanma baslarken kalp GERCEK mavi ruha donuyor ve saga slam
-		// ediliyor: koridorun dalga/huni bolumu serbest hareket
-		// istiyordu, ama daralan kutuda GIF'teki gibi saga savrulup sag
-		// duvara yapismasi ve oradan ziplayabilmesi gerekiyor. Sahte mavi
-		// gorunum kapaniyor, yoksa Step her kare image_angle'i ezip mavi
-		// ruhun yercekimi yonunu gostermesini engellerdi.
 		if (sf_t == 898)
 		{
 			F2SfKen(3,SF_KOR_YARIM_R,28);
 			Battle_SetSoul(battle_soul_blue);
 			sf_mavi_gorunum = false;
 			battle_soul.moveable = 1;
-			// F2SfSlam uzerinden: vurus sesi orada.
 			F2SfSlam(DIR.RIGHT);
-			// Kadro kaymasi bu slam'in CARPMASINDA duracak (asagida
-			// sf_kay_dur). Koridor kapaniyor, kalp saga yapisiyor: arka
-			// planin kaymaya devam etmesi "hala kosuyoruz" diyordu.
 			sf_kay_dur = 1;
 		}
 		if (sf_t == 978)  { F2SfUyari(DIR.RIGHT,48,22); }
 		if (sf_t == 1002) { F2SfTarak(DIR.RIGHT,50,5,26,0); }
 
-		//--------------------------------------------------------- ASAMA 8
-		// GIF 1031-1055: ekran UI dahil TAMAMEN siyah, 25 kare.
 		if (sf_t == 1031) { F2SfSiyah(); }
 		if (sf_t == 1056) { F2SfSiyahBit(); }
 
-		//--------------------------------------------------------- ASAMA 9
-		// GIF 1058-1312: kare kutuda dort tur daha. Bu sefer uyari cogu
-		// zaman IKI kenarda birden ve tarak cok daha derin (42-52 px).
-		// GIF'te dongu 58 kare: uyari (~35) -> tarak (~12) -> slam.
-		//
-		// FARK: her turun ARASINA 8. asamadaki gibi TAM SIYAH perde
-		// konuldu (SF_KARA = 25 kare). Slam de perdenin arkasinda
-		// atiliyor, yani perde kalktiginda kalp yeni duvarina yapismis
-		// oluyor. Her ara perde sonraki her seyi 25 kare oteliyor, o
-		// yuzden asagidaki kare numaralari GIF'inkinden +0 / +25 / +50 /
-		// +75 kaydirilmis halde.
-		//
-		//   tur A  uyari 1058  tarak 1093            (GIF ile ayni)
-		//   siyah  1108 - 1133
-		//   tur B  uyari 1141  tarak 1178            (+25)
-		//   siyah  1190 - 1215
-		//   tur C  uyari 1224  tarak 1262            (+50)
-		//   siyah  1274 - 1299
-		//   tur D  uyari 1306  tarak 1344            (+75)
 
-		// ---- tur A
 		if (sf_t == 1058)
 		{
 			F2SfUyari(DIR.UP,47,34);
@@ -2422,12 +1729,9 @@ if (room == room_battle_1)
 			F2SfTarak(DIR.UP,42,6,8,0);
 			F2SfTarak(DIR.DOWN,48,6,8,0);
 		}
-		// Perde arkasinda kalp SIRADAKI turun taraklarinin kesistigi koseye
-		// isinlaniyor: tur B soldan + ustten geliyor -> SOL UST kose.
 		if (sf_t == 1108) { F2SfKara(DIR.UP,DIR.LEFT,DIR.UP); }
 		if (sf_t == 1133) { F2SfKaraBit(); }
 
-		// ---- tur B
 		if (sf_t == 1141)
 		{
 			F2SfUyari(DIR.LEFT,48,36);
@@ -2438,11 +1742,9 @@ if (room == room_battle_1)
 			F2SfTarak(DIR.LEFT,48,5,6,0);
 			F2SfTarak(DIR.UP,47,5,6,0);
 		}
-		// Tur C sagdan + alttan geliyor -> SAG ALT kose.
 		if (sf_t == 1190) { F2SfKara(DIR.DOWN,DIR.RIGHT,DIR.DOWN); }
 		if (sf_t == 1215) { F2SfKaraBit(); }
 
-		// ---- tur C
 		if (sf_t == 1224)
 		{
 			F2SfUyari(DIR.RIGHT,48,36);
@@ -2453,17 +1755,11 @@ if (room == room_battle_1)
 			F2SfTarak(DIR.RIGHT,51,5,6,0);
 			F2SfTarak(DIR.DOWN,52,5,6,0);
 		}
-		// Tur D sadece SOLDAN geliyor: kose yok, kalp sol kenara isinlaniyor
-		// (dikey konumu oldugu gibi kaliyor).
 		if (sf_t == 1274) { F2SfKara(DIR.UP,DIR.LEFT); }
 		if (sf_t == 1299) { F2SfKaraBit(); }
 
-		// ---- tur D
 		if (sf_t == 1306) { F2SfUyari(DIR.LEFT,48,37); }
 
-		// GIF 1269 (+75): ruh kirmiziya doner (blaster halkasinda serbest
-		// kacis) ve ayni karede soldan gelen SON tarak baslar: 7 karede
-		// giriyor, 31 kare duruyor, 6 karede geri cekiliyor.
 		if (sf_t == 1344)
 		{
 			Battle_SetSoul(battle_soul_red);
@@ -2472,27 +1768,8 @@ if (room == room_battle_1)
 			F2SfTarak(DIR.LEFT,44,7,31,6);
 		}
 
-		//-------------------------------------------------------- ASAMA 10
-		// GIF 1281 (+75 = 1356): dev gaster blaster halkasi.
-		// Uretim SF_BL_DUR'da kesiliyor, atak SF_BL_BITIS'te bitiyor:
-		// aradaki 150 kare, son blaster'in ucup ates edip isinini
-		// sondurmesi icin (~125 kare). Onceki halinde bu ara 60 kareydi
-		// ve kapanis diyalogu son isinlari yarida kesiyordu.
-		// Blaster halkasindan ONCE Sans'in bosta durma animasyonu final
-		// faz temposuna iniyor. O ana kadarki hizli salinimla dev halkaya
-		// girmek dogal durmuyordu; burada yavaslayip sakinlesiyor.
-		// Gecis yumusak: battle_enemy_engage/Step_0 hedefe lerp ile gidiyor.
 		if (sf_t == 1150) { global.p2_anim_hedef = 0.2; }
 
-		// MUZIK: dev halka basladiginda ses kisiliyor, halka bitene kadar
-		// da tamamen susuyor. Iki asama:
-		//   1356      -> 1 saniyede 1.0'dan 0.3'e (belirgin bir kisilma)
-		//   SF_BL_DUR -> kalan 150 karede (2.5 sn) 0.3'ten 0'a, yani
-		//                SF_BL_BITIS'te -- atagin bittigi kare -- tam sessizlik.
-		//
-		// Faz 2 temasi BGM sistemiyle DEGIL dogrudan audio_play_sound ile
-		// caliyor (battle_turn_0), o yuzden BGM_SetVolume ona ulasmiyor:
-		// gain, calarken saklanan ses ID'si uzerinden veriliyor.
 		if (sf_t == 1356)
 		{
 			F2SfHalka();
@@ -2504,8 +1781,6 @@ if (room == room_battle_1)
 			if (audio_is_playing(global.p2_bgm)) { audio_sound_gain(global.p2_bgm,0,2500); }
 		}
 
-		// Atak biter, kapanis diyalogu baslar.
-		// Emniyet: gain 0 parcayi durdurmuyor, sadece susturuyor.
 		if (sf_t == SF_BL_BITIS)
 		{
 			if (audio_is_playing(global.p2_bgm)) { audio_stop_sound(global.p2_bgm); }

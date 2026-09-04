@@ -1,22 +1,14 @@
 t += 1;
 
-// Girişteki fazladan parlaklik ~2 saniyede yerine oturuyor
 settle = max(settle - 0.008, 0);
 
-// Faz 2'nin son atagi (battle_turn_20) arka plani karartiyor. Eskiden bunu
-// o_bg_gradient'in image_alpha'sindan yapiyordu; o kaldirildigi icin ayni
-// degeri buradan takip ediyoruz, boylece atak kodu degismeden calisiyor.
-// (Atak nesnesi yok olunca deger 1'e geri DONMEMELI; eskiden de
-//  o_bg_gradient'in image_alpha'si son degerinde kaliyordu.)
 if (instance_exists(battle_turn_20)) {
     alpha = battle_turn_20.sf_grad;
 }
 
 if (!fire)
 {
-    // ---- FAZ 1: yildizlar, bulutsu, kar, kayan yildiz -----------------
 
-    // Yildizlar cok yavas kayiyor ve yanip sonuyor
     for (var i = 0; i < array_length(star); i++) {
         var _s = star[i];
         _s.x  += _s.hs;
@@ -24,7 +16,6 @@ if (!fire)
         if (_s.x < -12) _s.x = 652; else if (_s.x > 652) _s.x = -12;
     }
 
-    // Bulutsu kutleleri yatay suzuluyor
     for (var i = 0; i < array_length(nebula); i++) {
         var _nb = nebula[i];
         _nb.x  += _nb.hs;
@@ -32,7 +23,6 @@ if (!fire)
         if (_nb.x < -220) _nb.x = 860; else if (_nb.x > 860) _nb.x = -220;
     }
 
-    // Kar yagiyor, ruzgarla sagi solu yaliyor
     for (var i = 0; i < array_length(snow); i++) {
         var _f = snow[i];
         _f.y  += _f.vs;
@@ -42,7 +32,6 @@ if (!fire)
         if (_f.x < -12) _f.x = 652; else if (_f.x > 652) _f.x = -12;
     }
 
-    // Seyrek kayan yildiz (~7 saniyede bir)
     if (irandom(420) == 0) {
         var _dir = choose(-1, 1);
         array_push(shoot, {
@@ -63,9 +52,7 @@ if (!fire)
 }
 else
 {
-    // ---- FAZ 2: duman, kivilcim, kul ----------------------------------
 
-    // Duman kumeleri yatay suzuluyor, kenardan cikinca karsi taraftan giriyor
     for (var i = 0; i < array_length(smoke); i++) {
         var _s = smoke[i];
         _s.x  += _s.hs;
@@ -75,7 +62,6 @@ else
         if (_s.y < -60)  _s.y = 180; else if (_s.y > 190) _s.y = -50;
     }
 
-    // Lav nehrinden duzensiz araliklarla kivilcim firliyor
     if (irandom(5) == 0) {
         array_push(spark, {
             x: random_range(120, 520),
@@ -86,7 +72,6 @@ else
             sz: random_range(1.0, 2.4)
         });
     }
-    // Arada bir daha buyuk bir puskurme (~4 saniyede bir)
     if (irandom(240) == 0) {
         var _bx = random_range(140, 500);
         repeat (irandom_range(10, 18)) {
@@ -105,12 +90,11 @@ else
         _k.life--;
         _k.x  += _k.hs;
         _k.y  += _k.vs;
-        _k.vs += 0.035;          // yavaslayip geri dusuyor
+        _k.vs += 0.035;
         _k.hs *= 0.995;
         if (_k.life <= 0 || _k.y > 500) array_delete(spark, i, 1);
     }
 
-    // Kul yagiyor (Faz 1'in yukselen zerreciklerinin tam tersi)
     for (var i = 0; i < array_length(ash); i++) {
         var _a = ash[i];
         _a.y  += _a.vs;

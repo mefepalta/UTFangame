@@ -1,21 +1,11 @@
-/// @desc Canlandirma sahnesi
-// Draw GUI'de degil, dunya katmaninda ciziliyor: border nesnesi Draw GUI End'de
-// display_set_gui_maximize cagirip GUI'yi yeniden olcekliyor ve Post-Draw'da
-// application_surface'i kendisi kompozitliyor. Bu yuzden GUI koordinatlari
-// guvenilir degildi. depth = -9000000 oldugu icin tum savas nesnelerinin
-// (en dusugu DEPTH_BATTLE.BULLET_OUTSIDE_HIGH = -1000) uzerine cizilir.
 if (!active) { exit; }
 
 var _w = room_width;
 var _h = room_height;
 
-// soul_x / soul_y zaten dunya koordinati
 var _sx = soul_x + soul_shake_x;
 var _sy = soul_y + soul_shake_y;
 
-//--------------------------------------------------------------------------
-// Ekrani karart (ruh haric her sey kaybolur)
-//--------------------------------------------------------------------------
 if (black_alpha > 0)
 {
 	draw_set_colour(c_black);
@@ -24,12 +14,6 @@ if (black_alpha > 0)
 	draw_set_alpha(1);
 }
 
-//--------------------------------------------------------------------------
-// Kalp parcalari: ekranin cesitli yerlerinden gelip ruhun yerinde birlesir.
-// spr_battle_soul_slice_white, kirmizi orijinalin beyaza boyanmis kopyasi.
-// Once gpu_set_fog ile boyamayi denemistim ama surucuye bagli calisiyor ve
-// parcalar oyunda kirmizi kaliyordu; hazir beyaz sprite kesin cozum.
-//--------------------------------------------------------------------------
 if (piece_p > 0) and (piece_p < 1)
 {
 	for (var i = 0; i < PIECE_N; i++)
@@ -38,7 +22,6 @@ if (piece_p > 0) and (piece_p < 1)
 		if (_pp > 0)
 		{
 			_pp = min(_pp,1);
-			// hizlanarak gelsinler: sonda kalbe carpiyor hissi
 			var _e = _pp*_pp;
 			var _ix = _sx + piece_ox[i]*(1-_e);
 			var _iy = _sy + piece_oy[i]*(1-_e);
@@ -47,14 +30,11 @@ if (piece_p > 0) and (piece_p < 1)
 	}
 }
 
-//--------------------------------------------------------------------------
-// Isinlar: ruhtan disari firlayan konik huzmeler
-//--------------------------------------------------------------------------
 if (beam_alpha > 0) and (beam_len > 0)
 {
 	draw_set_colour(c_white);
 	draw_set_alpha(beam_alpha);
-	var _half = 9;						// isinin dis ucundaki yari genislik
+	var _half = 9;
 	for (var i = 0; i < beam_n; i++)
 	{
 		var _a = beam_spin + i*(360/beam_n);
@@ -67,21 +47,15 @@ if (beam_alpha > 0) and (beam_len > 0)
 	draw_set_alpha(1);
 }
 
-//--------------------------------------------------------------------------
-// Merkezden buyuyen beyaz daire
-//--------------------------------------------------------------------------
 if (circle_r > 0)
 {
 	draw_set_colour(c_white);
 	draw_circle(_sx,_sy,circle_r,false);
 }
 
-//--------------------------------------------------------------------------
-// Ruh: koyu griden bembeyaza.
-//--------------------------------------------------------------------------
 if (soul_alpha > 0)
 {
-	var _v = 60 + soul_bright*195;					// 60 -> 255
+	var _v = 60 + soul_bright*195;
 	var _col = make_colour_rgb(_v,_v,_v);
 	var _sc = 2 * soul_scale;
 
@@ -89,9 +63,6 @@ if (soul_alpha > 0)
 }
 
 
-//--------------------------------------------------------------------------
-// Tam beyaz parlama
-//--------------------------------------------------------------------------
 if (flash_alpha > 0)
 {
 	draw_set_colour(c_white);
@@ -100,9 +71,6 @@ if (flash_alpha > 0)
 	draw_set_alpha(1);
 }
 
-//--------------------------------------------------------------------------
-// Patlamada savrulan parcalar: ayni noktadan firlayip duserler
-//--------------------------------------------------------------------------
 if (debris_on) and (debris_alpha > 0)
 {
 	for (var i = 0; i < DEBRIS_N; i++)
@@ -111,9 +79,6 @@ if (debris_on) and (debris_alpha > 0)
 	}
 }
 
-//--------------------------------------------------------------------------
-// Karakter belirdikten sonra uzerinde buyuyup saydamlasan beyaz daire
-//--------------------------------------------------------------------------
 if (ring_alpha > 0) and (ring_r > 0)
 {
 	draw_set_colour(c_white);

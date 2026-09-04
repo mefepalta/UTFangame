@@ -1,4 +1,3 @@
-///@arg bgm_slot
 function BGM_IsSlotValid() {
 	var SLOT=argument[0];
 

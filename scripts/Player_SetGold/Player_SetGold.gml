@@ -1,4 +1,3 @@
-///@arg gold
 function Player_SetGold() {
 	var GOLD=argument[0];
 

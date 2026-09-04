@@ -1,4 +1,3 @@
-///@arg number
 function Battle_SetMenuChoiceMercyOverrideNumber() {
 	var NUMBER=argument[0];
 

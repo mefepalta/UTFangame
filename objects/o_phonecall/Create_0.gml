@@ -1,4 +1,3 @@
-/// Enum for character IDs
 enum Speaker {
     Char1,
     Char2,
@@ -6,7 +5,6 @@ enum Speaker {
     Neutral
 }
 
-// Dialogue script
 dialogue = [
     { speaker: Speaker.Neutral, text: "* (Ring, ring...)", expression: -1},
     { speaker: Speaker.Char1, text: "* ...", expression: 3 },
@@ -108,7 +106,6 @@ dialogue = [
 	{ speaker: Speaker.Neutral, text: "* (Click...)", expression: -1, music:noone }
 ];
 
-// Character data as an array indexed by enum
 char_data = array_create(4);
 
 char_data[Speaker.Char1]  = { portrait: s_phonecallsans, sound: snd_text_voice_sans, font: fnt_sansow };
@@ -116,7 +113,6 @@ char_data[Speaker.Char2]  = { portrait: s_phonecallundyne, sound: snd_text_voice
 char_data[Speaker.Char3]  = { portrait: s_phonecallmuffet, sound: snd_text_voice_default, font: font_determination_mono_4 };
 char_data[Speaker.Neutral] = { portrait: noone, sound: noone, font: font_determination_mono_4 };
 
-// Dialogue state
 dialogue_index = 0;
 current_text = "";
 current_music = noone;
@@ -124,8 +120,7 @@ char_index = 0;
 text_speed = 2;
 text_timer = 0;
 text_done = false;
-text_pos = 0; // current position in dialogue text
+text_pos = 0;
 
-// Visibility delay
 visible = false;
 alarm[0] = room_speed * 2;

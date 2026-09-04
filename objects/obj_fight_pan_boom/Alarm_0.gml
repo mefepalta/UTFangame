@@ -73,14 +73,4 @@ if perfect = "perfect"
 	rightL2.image_blend=c_white
 	rightL3.image_blend=c_white
 	rightL4.image_blend=c_white
-}/*else if perfect = "bad"
-{
-	left.image_blend=c_red
-	right.image_blend=c_red
-	down.image_blend=c_red
-	up.image_blend=c_red
-	rightL.image_blend=c_red
-	rightL2.image_blend=c_red
-	rightL3.image_blend=c_red
-	rightL4.image_blend=c_red
 }

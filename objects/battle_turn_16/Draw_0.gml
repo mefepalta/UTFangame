@@ -1,11 +1,4 @@
-///@desc Pattern cizimleri
 
-//--------------------------------------------------------------------------
-// Kemik bileklikleri
-//--------------------------------------------------------------------------
-// Her bileklik icin once arka yari, sonra on yari ciziliyor ki ust uste
-// binme dogru olsun. Arkadakiler hem soluk hem ince hem yari saydam: tur
-// nesnesi kutunun onune cizdigi icin uzaklik hissini bunlar veriyor.
 if (car_on) and (instance_exists(battle_board))
 {
 	var _uzak = make_color_rgb(70,70,110);
@@ -28,11 +21,6 @@ if (car_on) and (instance_exists(battle_board))
 	draw_set_alpha(1);
 }
 
-//--------------------------------------------------------------------------
-// Kucuk kutular
-//--------------------------------------------------------------------------
-// Alt/ust duvarlar barlarin kendisi (battle_dr_obstacle) tarafindan
-// ciziliyor. Burada sadece kati yan duvarlar var.
 if (box_on) and (instance_exists(battle_board))
 {
 	draw_set_alpha(1);
@@ -49,5 +37,3 @@ if (box_on) and (instance_exists(battle_board))
 	draw_set_color(c_white);
 }
 
-// Blasterlar oyunun kendi nesnesi oldugu icin cizimleri kendilerine ait;
-// burada bir sey yapmiyoruz.

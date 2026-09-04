@@ -1,4 +1,3 @@
-///@arg lv
 function Player_GetLvAtk() {
 	var LV=argument[0];
 

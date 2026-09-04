@@ -1,5 +1,3 @@
-// Hedefleme oku, HP bari ve hasar sayisi bu konumu kullaniyor.
-// Hizalama her adim degisebildigi icin ciziim konumunu buraya kopyaliyoruz.
 if (_enemy_slot >= 0) and (instance_exists(battle_enemy_engage))
 {
 	x = battle_enemy_engage.pap_draw_x;

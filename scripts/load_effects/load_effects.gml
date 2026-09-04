@@ -1,5 +1,4 @@
 function fancy_text(xx,yy,text,angle,scale_x,scale_y,spd,alpha){
-// Doesn't need anything else, as simple as that
 if rgb=undefined
 rgb=0
 rgb+=spd
@@ -11,18 +10,17 @@ draw_text_ext_transformed_color(xx,yy,text,100,10000,scale_x,scale_y,angle,col1,
 }
 
 function Blur_screen(duration,amount,horizontal,vertical){
-// Requires Blur shader (included)
 var shader_blur=instance_create_depth(0,0,-1000000,blur_shader)
-shader_blur.duration=duration            //sets duration
-shader_blur.var_blur_amount=amount       //sets blur amount
-shader_blur.has_horizontal=horizontal    //sets if there is horizontal blur
-shader_blur.has_vertical=vertical        //sets if there is vertical blur
+shader_blur.duration=duration
+shader_blur.var_blur_amount=amount
+shader_blur.has_horizontal=horizontal
+shader_blur.has_vertical=vertical
 return shader_blur
 }
 
 function invert_color(){
-	if !global.easyeyes{		//global.easyeyes is just a thing in my game, you can delete it
-	if !instance_exists(colorinv)//the object to invert the colors of the screen (included)
+	if !global.easyeyes{
+	if !instance_exists(colorinv)
 	instance_create_depth(0,0,-500,colorinv)
 	with(colorinv)
 	{
@@ -34,18 +32,8 @@ function invert_color(){
 }
 }
 
-/*function Shock_wave(xx,yy,spd,amplitude,refract,width,duration){
-//Creates a shockwave effect (bends the screen for a bit and stuff), WIP, requires shockwave shader(not included)
-var shock=instance_create_depth(xx,yy,0,obj_shockwave)
-shock.shockSpeed=spd
-shock.var_shock_amplitude=amplitude
-shock.var_shock_refraction=refract
-shock.var_shock_width=width
-shock.duration=duration
-return shock}*/
 
 function rgb_shake1(amt,fade,time){
-//Basic RGB effect that wont break is most circumstances, obj_rgb is included
 if fade=undefined
 {
 	fade=0
@@ -61,7 +49,6 @@ return rgb1
 }
 
 function rgb_shake2(dis_min,dis_max,displace){
-//RGB effect but its green and purple rather than green and blue, obj_rgb2 is included
 if displace=undefined
 displace=3.5
 if !instance_exists(obj_rgb2)
@@ -76,7 +63,6 @@ with(rgb2)
 return rgb2}
 
 function rgb_shake3(dx,dy,mode,green){
-//Multi-use RGB effect, requires rgb shader(included) and obj_rgb3(included)(WIP)
 if !instance_exists(obj_rgb3)
 var rgb3=instance_create_depth(0,0,0,obj_rgb3)
 rgb3=obj_rgb3
@@ -92,7 +78,6 @@ with(rgb3)
 return rgb3}
 
 function load_particles(){
-//Stupid thing that doesn't work, WIP
 function basic_particles(shape,life_min,life_max){
 if shape=undefined
 shape=pt_shape_pixel
@@ -111,10 +96,8 @@ global.temp_particle_type=_p
 }
 
 function draw_shadow(){
-//Makes a shadow appear in the end of an fading bullet, mostly for blaster beams,
-//obj_scrglitch is included and can be used as glitching the screen, just set the amax to not 0
 if instance_exists(obj_scrglitch)
-ins_dest(obj_scrglitch)	
+ins_dest(obj_scrglitch)
 var sha=ins_create(0,0,-1000,obj_scrglitch)
 with(sha)
 amax=0

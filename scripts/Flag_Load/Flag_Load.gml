@@ -1,4 +1,3 @@
-///@arg type
 function Flag_Load() {
 	var TYPE=argument[0];
 	var PATH="";

@@ -1,12 +1,3 @@
-///@arg X
-///@arg length
-///@arg vspeed
-///@arg color
-///@arg out
-///@arg size
-///@arg k
-///@arg udf
-///@arg uds
 function MakeBoneSeaV() {
 
 	var Animsin = 0

@@ -1,4 +1,3 @@
-///@arg encounter_id
 function Encounter_IsExists() {
 	var ENCOUNTER=argument[0];
 

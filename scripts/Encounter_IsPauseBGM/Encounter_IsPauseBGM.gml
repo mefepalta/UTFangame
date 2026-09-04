@@ -1,4 +1,3 @@
-///@arg encounter_id
 function Encounter_IsPauseBGM() {
 	var ID=argument[0];
 

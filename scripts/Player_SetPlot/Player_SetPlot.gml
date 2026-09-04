@@ -1,4 +1,3 @@
-///@arg plot
 function Player_SetPlot() {
 	var PLOT=argument[0];
 

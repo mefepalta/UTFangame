@@ -1,18 +1,3 @@
-///@arg x
-///@arg y
-///@arg length
-///@arg hspeed
-///@arg vspeed
-///@arg color
-///@arg out
-///@arg rot
-///@arg auto_destroy
-///@arg bottom
-///@arg angle
-///@arg mspd
-///@arg mx
-///@arg my
-///@arg *duration
 function MakeBoneV() {
 	var X = argument[0];
 	var Y = argument[1];

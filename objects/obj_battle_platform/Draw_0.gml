@@ -1,4 +1,4 @@
-var _color = sticky ? c_lime : c_fuchsia;	
+var _color = sticky ? c_lime : c_fuchsia;
 var	_sprite = spr_battle_platform1;
 var _angle = image_angle;
 var _alpha = image_alpha;

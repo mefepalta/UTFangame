@@ -1,7 +1,3 @@
-///@arg x
-///@arg y
-///@arg size
-///@arg precision
 function Battle_CreateBoardExtraRoundrect(){
 	var X = argument[0];
 	var Y = argument[1];
@@ -15,5 +11,3 @@ function Battle_CreateBoardExtraRoundrect(){
 	return roundrect;
 }
 
-//创建一个圆角矩形的加框
-//Create a Extra-Board that is roundrect

@@ -2,9 +2,6 @@ if Input_IsPressed(INPUT.CONFIRM){
 	room_goto(room_menu);
 }
 
-// ---------------------------------------------------------------------
-// Presentation
-// ---------------------------------------------------------------------
 fx_t++;
 if (_hint) { hint_t++; }
 
@@ -17,9 +14,6 @@ if (view_enabled) and (view_visible[0])
 	vh_ = camera_get_view_height(_cam);
 }
 
-// --- ambient specks --------------------------------------------------
-// hint_half_size kamerayi 2. karede 320x240 yapiyor; parcaciklari ondan
-// sonra dagit, yoksa 640x480 alanina saciliyorlar
 if (array_length(dust) == 0) and (fx_t >= 3)
 {
 	for (var _d = 0; _d < 55; _d++)
@@ -49,9 +43,8 @@ for (var _i = 0; _i < array_length(dust); _i++)
 {
 	var _f = dust[_i];
 	_f.sway += _f.swaysp;
-	_f.py   -= _f.vy;                       // drifts upwards, like embers
+	_f.py   -= _f.vy;
 	_f.px   += sin(_f.sway) * 0.28;
-	// wrap on every side, so a camera change never strands a speck offscreen
 	if (_f.py < vy_ - 4)        { _f.py = vy_ + vh_ + 4; _f.px = vx_ + random(vw_); }
 	if (_f.py > vy_ + vh_ + 4)  { _f.py = vy_ - 4;       _f.px = vx_ + random(vw_); }
 	if (_f.px < vx_ - 4)        { _f.px = vx_ + vw_ + 4; }
@@ -68,7 +61,6 @@ for (var _j = 0; _j < array_length(stars); _j++)
 	}
 }
 
-// --- the spear landing -----------------------------------------------
 if (!impacted) and (_spear == true) and (instance_exists(o_spear))
 {
 	if (o_spear.x >= 295)
@@ -103,12 +95,11 @@ for (var _p = array_length(sparks) - 1; _p >= 0; _p--)
 	_sp.px += _sp.vx;
 	_sp.py += _sp.vy;
 	_sp.vx *= 0.94;
-	_sp.vy = _sp.vy * 0.94 + 0.10;          // a little gravity
+	_sp.vy = _sp.vy * 0.94 + 0.10;
 	_sp.life++;
 	if (_sp.life > _sp.max) { array_delete(sparks, _p, 1); }
 }
 
-// --- the logo itself: eases in, then takes the hit --------------------
 logo_punch = lerp(logo_punch, 1, 0.11);
 if (instance_exists(o_logo))
 {

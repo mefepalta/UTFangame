@@ -1,5 +1,3 @@
-///@arg info
-///@arg default*
 function Battle_GetTurnInfo() {
 	var INFO=argument[0];
 	var DEFAULT=0;

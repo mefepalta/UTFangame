@@ -1,4 +1,4 @@
-depth = -1000;          // this object owns the vignette / scanlines / fade
+depth = -1000;
 
 yesorno = false;
 image_alpha = 0;

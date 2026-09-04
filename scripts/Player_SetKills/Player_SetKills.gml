@@ -1,4 +1,3 @@
-///@arg kills
 function Player_SetKills() {
 	var KILLS=argument[0];
 

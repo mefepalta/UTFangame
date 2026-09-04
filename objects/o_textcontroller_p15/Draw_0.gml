@@ -1,15 +1,3 @@
-// =====================================================================
-//  ARKA PLAN (depth 150: siyah zeminin ustunde, Sans'in arkasinda)
-//
-//  Faz 0.5'teki gece gogunun yerine burada YANGIN var: zeminden yukari
-//  zayiflayan sicak katmanlar, aralarindan yukselen alev dilleri ve
-//  savrulan korlar.
-//
-//  Anlatici bolumunde ("The ground convulses...", "melting the walls
-//  like wax") sahnenin altina Faz 2'nin volkani siziyor: lav ufku,
-//  tirtikli kaya sirti ve yagan kul. Oda gecisinde oyuncu ayni yerde
-//  kaliyor, sadece kamera savasa geciyor.
-// =====================================================================
 var _sx = global.p15_sx * 0.45;
 var _sy = global.p15_sy * 0.45;
 var _pl = 1 + sin(pulse) * 0.05 + beat * 0.12;
@@ -17,18 +5,13 @@ var _a  = aura;
 
 gpu_set_blendmode(bm_add);
 
-// ---- yerden yukselen isi katmanlari ----------------------------------
-// Alt kenar en sicak; yukari cikildikca kizila donup sonuyor.
 p15_vgrad(480 + _sy, 372 + _sy, COL_EMBER, _a * 0.52, COL_BLOOD, _a * 0.34);
 p15_vgrad(372 + _sy, 236 + _sy, COL_BLOOD, _a * 0.34, COL_BLOOD, _a * 0.13);
 p15_vgrad(236 + _sy,  96 + _sy, COL_BLOOD, _a * 0.13, COL_BLOOD, 0);
 
-// ---- yerdeki kor yatagi ----------------------------------------------
 p15_glow(320 + _sx, 470 + _sy, 340 * _pl, COL_FIRE,  _a * 0.30, 0.38);
 p15_glow(320 + _sx, 478 + _sy, 170 * _pl, COL_GOLD,  _a * _a * 0.26, 0.30);
 
-// ---- alev dilleri: zeminden yukari dogru salinan sicak sutunlar ------
-// (P05'te tepeden inen tek bir dikey huzme vardi; burasi tersi.)
 if (_a > 0.05) {
     for (var i = 0; i < 5; i++) {
         var _fx = 130 + i * 115 + sin(pulse * 0.7 + i * 2.1) * 26 + _sx;
@@ -43,18 +26,13 @@ if (_a > 0.05) {
     }
 }
 
-// ---- volkan zemini: anlatici bolumunde beliriyor ----------------------
-// Faz 2'nin (room_battle_1) kalderasiyla ayni dil: dalgalanan lav ufku,
-// on planda tirtikli kaya sirti. Oda gecisinde sahne devam ediyor.
 if (volc > 0.01) {
     var _v  = volc;
     var _lb = 0.5 + 0.5 * sin(pulse * 1.4);
 
-    // lav ufkundan yayilan genis isik
     p15_glow(320 + _sx, VLAVA_Y + _sy, 400 * _pl, COL_EMBER, 0.26 * _v, 0.42);
     p15_glow(320 + _sx, VLAVA_Y + _sy, 220 * _pl, COL_FIRE,  0.20 * _v, 0.34);
 
-    // dalgalanan lav bandi
     var _vn = 36;
     draw_primitive_begin(pr_trianglestrip);
     for (var i = 0; i <= _vn; i++) {
@@ -77,7 +55,6 @@ if (volc > 0.01) {
     draw_primitive_end();
 
     gpu_set_blendmode(bm_normal);
-    // on plandaki kaya sirti
     draw_primitive_begin(pr_trianglestrip);
     for (var i = 0; i < array_length(vridge); i++) {
         draw_vertex_colour(vridge[i].x, vridge[i].y + _sy, COL_ROCK, 0.95 * _v);
@@ -85,7 +62,6 @@ if (volc > 0.01) {
     }
     draw_primitive_end();
     gpu_set_blendmode(bm_add);
-    // sirtin tepesindeki akkor kenar
     draw_primitive_begin(pr_trianglestrip);
     for (var i = 0; i < array_length(vridge); i++) {
         draw_vertex_colour(vridge[i].x, vridge[i].y - 4 + _sy, COL_FIRE, 0);
@@ -94,12 +70,9 @@ if (volc > 0.01) {
     draw_primitive_end();
 }
 
-// ---- Sans'in arkasindaki sicak cekirdek ------------------------------
-// (dogrusal: kare alinca sahnenin ilk yarisi neredeyse zifiri kaliyordu)
 p15_glow(320 + _sx, 250 + _sy, 220 * _pl, COL_BLOOD, _a * 0.42);
 p15_glow(320 + _sx, 262 + _sy, 130 * _pl, COL_EMBER, _a * _a * 0.34);
 
-// ---- anlatici bolumu: isik Sans'in ruhundan tasiyor -------------------
 if (current_line >= LINE_NARRATOR && instance_exists(o_p15_eye)) {
     var _ex = o_p15_eye.x + _sx, _ey = o_p15_eye.y + _sy;
     p15_glow(_ex, _ey, 110 + _a * 230, COL_EMBER, _a * 0.34);
@@ -107,11 +80,9 @@ if (current_line >= LINE_NARRATOR && instance_exists(o_p15_eye)) {
     p15_glow(_ex, _ey,  22 + _a *  55, COL_GOLD,  _a * 0.22);
 }
 
-// ---- yukselen korlar --------------------------------------------------
-// Yanip sonuyorlar; buyukleri daha sari, kucukleri daha kizil.
 for (var i = 0; i < array_length(mote); i++) {
     var _m = mote[i];
-    var _fk = 0.45 + 0.55 * (0.5 + 0.5 * sin(_m.ph));      // yanip sonme
+    var _fk = 0.45 + 0.55 * (0.5 + 0.5 * sin(_m.ph));
     draw_set_alpha(_m.a * _fk * (0.30 + aura * 0.95));
     draw_set_colour(_m.sz > 1.8 ? COL_GOLD : COL_EMBER);
     var _s = _m.sz * (0.75 + _fk * 0.45);
@@ -121,7 +92,6 @@ for (var i = 0; i < array_length(mote); i++) {
 draw_set_alpha(1);
 gpu_set_blendmode(bm_normal);
 
-// ---- yagan kul: volkan zeminiyle birlikte beliriyor --------------------
 if (volc > 0.01) {
     draw_set_colour(COL_ASH);
     for (var i = 0; i < array_length(ash); i++) {

@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 Battle_SetBoardSizeCubic(65,65,125,125);
 with (battle_enemy_engage)
@@ -26,8 +25,6 @@ if (room == room_battle_1)
 	with (battle_enemy_engage)
 	{
 		p2_head_sprite = spr_p2_head;
-		// Papyrus bu turun ortasinda canlaniyor. Tur tekrar oynarsa sahne bir
-		// daha oynamaz, o yuzden bastan sahnede duruyor.
 		pap_state = (global.p2_revived_pap ? 2 : 0);
 		alp_state = 2;
 	}
@@ -37,10 +34,6 @@ if (room == room_battle_1)
 	+"{speaker 0}{font 3}{voice 3}{head 6}These powers make no&sense.{pause}{clear}{head 2}But I guess I can&solve the mysteries of&that, later.";
 }
 
-// SURRENDER ACT: bu tur ACT'tan geldiyse Sans'in kendi tur repligi yerine
-// teslim yayinin repligi oynuyor (bkz. scripts/Surrender). Son turda (12)
-// replik burada degil atagin sonunda oynadigi icin bu blok atlanir.
-// Normal FIGHT akisinda global.surrender_turn false, blok hic calismaz.
 if (Surrender_BasindaKonusur())
 {
 	sansy.text = Surrender_Text();

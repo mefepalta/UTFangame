@@ -16,12 +16,12 @@ if (instance_exists(_inst_text)) {
     instance_destroy(_inst_text);
 }
 
-var _text_x = (char_portrait[spk] != noone) ? 160 : 60; // Portreli=160, portresiz=60
+var _text_x = (char_portrait[spk] != noone) ? 160 : 60;
 _inst_text = instance_create_depth(_text_x, 336, 0, text_typer);
 _inst_text.text = "{gui true}{shadow true}{scale 2}{speed 1}{depth " + string(depth-1) + "}";
 _inst_text.text += "{voice " + string(char_voice[spk]) + "}";
 _inst_text.text += "{font " + string(char_font[spk]) + "}";
-if (spk == 2) { // Muffet wave efekti
+if (spk == 2) {
     _inst_text.text += "{effect 1}";
 }
 _inst_text.text += current.text + "{pause}{end}";

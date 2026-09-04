@@ -5,7 +5,6 @@ if(!instance_exists(battle_board)){
 var B_TOP=battle_board.y-battle_board.up;
 var B_BOT=battle_board.y+battle_board.down;
 
-//Dünya hızını ruh belirliyor (güç hareketi + zıplama zinciri)
 var BOOST=0;
 var MUL=1;
 if(instance_exists(battle_soul_orange_dr)){
@@ -14,13 +13,11 @@ if(instance_exists(battle_soul_orange_dr)){
 }
 scroll_spd=scroll_base*MUL;
 
-//Gri şeritlerin akışı
 scroll_off+=scroll_spd;
 if(scroll_off>=stripe_gap){
 	scroll_off-=stripe_gap*floor(scroll_off/stripe_gap);
 }
 
-//Kalbin altına doğru giden şeffafımsı kalpler (şeritlerle aynı mantık)
 if(instance_exists(battle_soul)){
 	after_timer-=1;
 	if(after_timer<=0){
@@ -41,19 +38,16 @@ for(var i=array_length(after_imgs)-1;i>=0;i--){
 	}
 }
 
-//Engeller yukarıdan iniyor
 if(spawn_on){
 	spawn_timer-=1;
 	if(spawn_timer<=0){
 		spawn_timer=spawn_delay;
 
-		//Taban hız veriliyor; hızlanmayı ruhun world_mul'u uyguluyor
 		var OBS=instance_create_depth(battle_board.x,B_TOP-24,DEPTH_BATTLE.BULLET,battle_dr_obstacle);
 		OBS.spd_y=scroll_base;
 	}
 }
 
-//Zıplama daireleri sabit piksel aralığıyla iniyor ki zincirlenebilsinler
 if(ring_on){
 	ring_dist+=scroll_spd;
 	if(ring_dist>=ring_gap){

@@ -1,5 +1,3 @@
-///@arg sprite_name
-///@arg default*
 function Lang_GetSprite() {
 	var KEY=argument[0];
 	var DEF=-1;

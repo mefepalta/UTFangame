@@ -1,4 +1,3 @@
-///@desc Reset
 x=0;
 y=0;
 width=640;

@@ -9,7 +9,6 @@ with (o_p15_body)
 }
 
 angle_timer += 0.04;
-// Sag kolun aynasi
 image_angle = base_angle + sin(angle_timer) * -2 + _beat * 5;
 
 x = pure_x + global.p15_sx;

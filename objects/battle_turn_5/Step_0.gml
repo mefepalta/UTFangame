@@ -14,7 +14,6 @@ if (room ==  room_battle)
 	{
 		Battle_SetSoul(battle_soul_blue);
 	    Battle_SetBoardSizeCubic(65,65,90,90);
-		//audio_play_sound(snd_impact,2,false);
 	}
 	if (_timer > 20) and (_timer % 20 == 0) and (_timer < 420)
 	{
@@ -537,13 +536,3 @@ if (room == room_battle_1)
 	}
 }
 
-	/*if (_timer % 40 == 0) and (_timer >  10)
-	{
-		var bone = RegularBone(left_box,bottom_box,80,3,0,0,0,0,1,0,0,0,0,true);
-		bone._dynamic = true;          // Pendulum hareketi
-		bone._dynamic_lifetime = 180;  // 3 saniye (opsiyonel, default 120)
-		bone._base_hspeed = 3;
-		bone._base_vspeed = 0;
-		var bone1 = RegularBone(right_box,top_box,80,-1,0,180,0,0,1,0,0,0,0,true);
-		bone1._dynamic_scale = true;    // Y-scale dalgalanması (opsiyonel)
-	}*/

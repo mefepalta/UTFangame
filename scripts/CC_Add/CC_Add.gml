@@ -1,5 +1,3 @@
-///@arg text
-///@arg time*
 function CC_Add() {
 	var TEXT=argument[0];
 	var TIME=60;

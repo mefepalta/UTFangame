@@ -1,5 +1,3 @@
-// KAPANIS SAHNESI: parca serbest kaldiysa rig'i takip etmiyor, kendi
-// balistik yoluyla dusuyor ve ekranin altinda yok oluyor.
 if (serbest)
 {
 	v_t += 1;

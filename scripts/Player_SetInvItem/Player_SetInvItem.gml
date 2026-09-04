@@ -1,4 +1,3 @@
-///@arg inv_item
 function Player_SetInvItem() {
 	var INV=argument[0];
 

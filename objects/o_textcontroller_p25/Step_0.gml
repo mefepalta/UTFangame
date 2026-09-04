@@ -1,14 +1,12 @@
 p05++;
 
-// Time since game start
 var elapsed = (current_time - start_time) / 1000;
 
-// Start new line when its time is reached
 if (current_line + 1 < array_length(dialogue)) {
     if (elapsed >= dialogue[current_line + 1].time) {
         current_line++;
         line_start_time = elapsed;
-        last_chars = 0; // reset when new line starts
+        last_chars = 0;
     }
 }
 
@@ -57,4 +55,3 @@ if (p05 > 2950)
 	room_goto(room_battle);
 }
 	
-//if(keyboard_check_pressed(vk_space)) room_goto(room_battle);

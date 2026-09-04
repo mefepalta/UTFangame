@@ -1,5 +1,3 @@
-///@arg alpha
-///@arg time
 function Battle_FadeFader() {
 	var ALPHA=argument[0];
 	var TIME=argument[1];

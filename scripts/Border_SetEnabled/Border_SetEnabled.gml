@@ -1,4 +1,3 @@
-///@arg enabled
 function Border_SetEnabled() {
 	var ENABLED=argument[0];
 	if(ENABLED && variable_global_exists("border_enabled") && !global.border_enabled){

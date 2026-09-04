@@ -1,5 +1,3 @@
-///@arg target
-///@arg var_name
 function Anim_GetSpeed() {
 	var TARGET=argument[0];
 	var VAR_NAME=argument[1];

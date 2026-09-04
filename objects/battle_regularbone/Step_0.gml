@@ -3,7 +3,6 @@ count++;
 
 sprite_index = _sprite;
 
-///Destroy the bone
 if(autoDestroy){
 	if x > 640+50 or x < -50 or y > 480+50 or y < -50{
 		instance_destroy()

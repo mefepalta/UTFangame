@@ -1,4 +1,3 @@
-///@arg input
 function Input_GetState() {
 	var INPUT=argument[0];
 

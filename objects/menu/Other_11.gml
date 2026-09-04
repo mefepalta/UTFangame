@@ -1,4 +1,3 @@
-///@desc Change Text Color
 if(instance_exists(_change_inst)){
 	var list=_change_inst._list_inst;
 	var proc=0;

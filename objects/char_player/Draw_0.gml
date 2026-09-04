@@ -1,24 +1,12 @@
-draw_self();
+if (room == room_area_beforesans || room == room_area_aftersans)
+{
+	OW_ShadowDrawLitTinted(make_color_rgb(70, 80, 110), make_color_rgb(95, 100, 112), 0.8, OW_WindowLight(x, y));
+}
+else
+{
+	draw_self();
+}
 if (!instance_exists(o_temp_sprite))
 {
 	instance_create_layer(x, y, "Instances", o_temp_sprite);
 }
-/*
-{
-	if(keyboard_check(vk_enter)){
-		draw_set_color(c_red);
-		if(dir==DIR.UP){
-			draw_rectangle(x-sprite_width/2+4,y-5,x+sprite_width/2-4,y-sprite_height+5,true);
-		}
-		if(dir==DIR.DOWN){
-			draw_rectangle(x-sprite_width/2+4,y-sprite_height+20,x+sprite_width/2-4,y+15,true);
-		}
-		if(dir==DIR.LEFT){
-			draw_rectangle(x,y-sprite_height+19,x+sprite_width/2-15,y,true);
-		}
-		if(dir==DIR.RIGHT){
-			draw_rectangle(x,y-sprite_height+19,x+sprite_width/2+15,y,true);
-		}
-	}
-}
-*/

@@ -1,9 +1,9 @@
-var timeout = 90 // How much time to pass to cancel the attack if player doesn't attack.
-var keep_indicator = 1 // Keep the indicator after the first punch?
+var timeout = 90
+var keep_indicator = 1
 
 if(_input_acceptable){
 	if _timer >= 0 {
-		_timer--;	
+		_timer--;
 	}
 	if((_dir==DIR.LEFT&&_aim_x<=battle_board.x-battle_board.left-sprite_get_width(spr_battle_menu_fight_aim)/2) || (_dir==DIR.RIGHT&&_aim_x>=battle_board.x+battle_board.right+sprite_get_width(spr_battle_menu_fight_aim)/2)||(_timer==0&&_pressed<1)){
 			Battle_SetMenuFightDamage(-1);
@@ -11,7 +11,7 @@ if(_input_acceptable){
 			_input_acceptable=false;
 			_timer=-1;
 			if instance_exists(_indicator){
-				instance_destroy(_indicator);	
+				instance_destroy(_indicator);
 			}
 	}
 	
@@ -35,7 +35,7 @@ if(_input_acceptable){
 			var Y=Battle_GetEnemyCenterPosY(ENEMY);
 			instance_create_depth(X+random_range(-50,50),Y+random_range(-50,50),0,battle_menu_fight_anim_glove_mini);
 			if instance_exists(_indicator) && !keep_indicator {
-				instance_destroy(_indicator);	
+				instance_destroy(_indicator);
 			}
 		}
 		_pressed++;
@@ -45,7 +45,7 @@ if(_input_acceptable){
 		_timer=-1;
 		_override=0;
 		if instance_exists(_indicator){
-			instance_destroy(_indicator);	
+			instance_destroy(_indicator);
 		}
 		
 		var ATK=Player_GetAtkTotal();

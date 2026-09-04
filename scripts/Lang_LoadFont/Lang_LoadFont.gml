@@ -1,4 +1,3 @@
-///@arg lang_id/name
 function Lang_LoadFont() {
 	var LANG=argument[0];
 

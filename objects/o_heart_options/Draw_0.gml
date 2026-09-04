@@ -12,9 +12,6 @@ var _x1 = panel_cx + panel_w * 0.5;
 var _y0 = panel_top;
 var _y1 = panel_bot;
 
-// ---------------------------------------------------------------------
-// Panel plate: flat in the middle, feathered at every edge
-// ---------------------------------------------------------------------
 var _padx = 30, _pady = 20;
 var _pa   = 0.70 * _a;
 var _rowsy = [_y0, _y0 + _pady, _y1 - _pady, _y1];
@@ -37,14 +34,10 @@ for (var _r = 0; _r < 3; _r++)
 	draw_primitive_end();
 }
 
-// thin frame
 draw_set_alpha(_a * 0.30);
 draw_set_colour(make_colour_rgb(170, 190, 245));
 draw_roundrect_ext(_x0 + 10, _y0 + 8, _x1 - 10, _y1 - 8, 6, 6, true);
 
-// ---------------------------------------------------------------------
-// Title
-// ---------------------------------------------------------------------
 draw_set_font(font_determination_mono_2);
 line_h = string_height("Mg");
 draw_set_valign(fa_top);
@@ -56,9 +49,6 @@ draw_text(panel_cx, title_y, "OPTIONS");
 draw_set_alpha(_a * 0.28);
 draw_line(_x0 + 34, title_y + 17, _x1 - 34, title_y + 17);
 
-// ---------------------------------------------------------------------
-// Rows
-// ---------------------------------------------------------------------
 var _n = array_length(menu_items);
 for (var _i = 0; _i < _n; _i++)
 {
@@ -67,7 +57,6 @@ for (var _i = 0; _i < _n; _i++)
 
 	if (_sel)
 	{
-		// soft band of light under the selected row
 		var _bcy = _ry + line_h * 0.5;
 		var _bhh = 11;
 		gpu_set_blendmode(bm_add);
@@ -89,7 +78,6 @@ for (var _i = 0; _i < _n; _i++)
 		gpu_set_blendmode(bm_normal);
 	}
 
-	// label
 	draw_set_halign(fa_left);
 	draw_set_alpha(_a * (_sel ? 1 : 0.70));
 	draw_set_colour(_sel ? c_white : make_colour_rgb(168, 174, 198));
@@ -97,7 +85,6 @@ for (var _i = 0; _i < _n; _i++)
 
 	if (_i == 5)
 	{
-		// ---- volume slider -------------------------------------------
 		var _bw = 74, _bhgt = 6;
 		var _bx1 = text_right;
 		var _bx0 = _bx1 - _bw;
@@ -127,7 +114,6 @@ for (var _i = 0; _i < _n; _i++)
 	}
 	else
 	{
-		// ---- value ---------------------------------------------------
 		var _on  = false;
 		var _lbl = "";
 		switch (_i)
@@ -157,17 +143,11 @@ for (var _i = 0; _i < _n; _i++)
 	}
 }
 
-// ---------------------------------------------------------------------
-// Control hint
-// ---------------------------------------------------------------------
 draw_set_halign(fa_center);
 draw_set_alpha(_a * 0.62);
 draw_set_colour(make_colour_rgb(160, 166, 192));
 draw_text(panel_cx, hint_y, "Z Toggle    X Back");
 
-// ---------------------------------------------------------------------
-// Restore draw state
-// ---------------------------------------------------------------------
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 draw_set_alpha(1);

@@ -1,13 +1,10 @@
-// Update global timer if not already done
 if (!variable_global_exists("bob_timer")) {
     global.bob_timer = 0;
 }
 global.bob_timer += 0.01;
 
-// Bobbing movement
-var bob = sin(global.bob_timer) * 0.005; // move up/down
+var bob = sin(global.bob_timer) * 0.005;
 y = base_y + bob;
 
-// Stretch based on bobbing speed (differential)
-var stretch = cos(global.bob_timer) * 0.05; // ±0.1 scale
+var stretch = cos(global.bob_timer) * 0.05;
 image_yscale = 0.4 + stretch/4;

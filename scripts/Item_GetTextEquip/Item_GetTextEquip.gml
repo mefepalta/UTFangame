@@ -1,4 +1,3 @@
-///@arg item_name
 function Item_GetTextEquip() {
 	var NAME=argument[0];
 

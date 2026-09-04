@@ -1,4 +1,3 @@
-///@desc Soul Collision
 if (global.kr)
 {
 	if (!instance_exists(hurtkr))
@@ -8,7 +7,5 @@ if (global.kr)
 }
 else
 {
-	// FAZ 2 -- klasik hasar. Sok alani duruyor, tekrar vurmasini
-	// dokunulmazlik penceresi ayarliyor.
 	Battle_HurtNormal(DMG_SHOCKER);
 }

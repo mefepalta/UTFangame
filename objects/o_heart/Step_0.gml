@@ -22,16 +22,16 @@ y = lerp(y, target_y, move_speed);
 
 switch (heartcounter)
 {
-	case 3: 
+	case 3:
 	target_y = 234;
 	break;
-	case 2: 
+	case 2:
 	target_y = 266;
 	break;
-	case 1: 
+	case 1:
 	target_y = 298;
 	break;
-	case 0: 
+	case 0:
 	target_y = 330;
 	break;
 }

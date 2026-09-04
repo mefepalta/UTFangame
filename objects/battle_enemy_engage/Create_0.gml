@@ -1,40 +1,20 @@
-// Faz 2 bosta durma animasyonunun zaman birikeni (bkz. Step_0).
-// Her iki faz dalindan once tanimlaniyor.
 p2_anim_t=0;
 
-//==========================================================================
-//  FAZ 1 -> FAZ 1.5 GECISI
-//==========================================================================
-//  Belirleyici darbe inince (global.p1sanshp) eskiden AYNI KARE
-//  room_goto(room_p15) caliyordu: vurus ekranda gorunmeden, muzik calarken,
-//  perde bile inmeden sahne kesiliyordu.
-//
-//  Artik uc asama var:
-//    1) BEKLE    -- darbe okunuyor. Sans yarali pozunda kaliyor (asagidaki
-//                   _head_image = 15 blogu), hasar sayisi ve sarsinti
-//                   oynuyor, muzik ayni anda soluyor.
-//    2) KARARMA  -- perde iniyor.
-//    3) SIYAH    -- tam siyahta kisa bir bekleme, sonra oda degisiyor.
-//  room_p15 de siyahtan aciliyor (bkz. o_textcontroller_p15/Create_0).
-//==========================================================================
-#macro P15_BEKLE    50	/// darbenin okunmasi icin bekleme (kare)
-#macro P15_KARARMA  55	/// perdenin inme suresi
-#macro P15_SIYAH    20	/// tam siyahta bekleme
+#macro P15_BEKLE    50
+#macro P15_KARARMA  55
+#macro P15_SIYAH    20
 
-p15_gecis = 0;			/// 0 = gecis baslamadi; >0 ise kacinci karesinde
-/// Faz 2 temasinin ses ID'si (battle_turn_0 dolduruyor). Son atakta
-/// muzigi kismak icin gerekiyor; parca BGM sistemi disinda caliyor.
+p15_gecis = 0;
 global.p2_bgm = -1;
 global.p2_anim_hiz=1;
 global.p2_anim_hedef=1;
 
 	depth=DEPTH_BATTLE.ENEMY;
-	global._enemy_phase_pose = 1; // Default
+	global._enemy_phase_pose = 1;
 	_enemy_slot=1;
 	_body_speed=0;
 	_body_loop=true;
 	_action_step=1;
-	//items = [item_sour_tea, item_caviar, item_green_apple, item_green_apple1,item_maleficent_tyrant,item_maleficent_tyrant1,item_maleficent_tyrant2,item_ramen];
 
 	global.slam_power = 0.15*5
 	global.slam_damage = false
@@ -46,17 +26,13 @@ global.p2_anim_hedef=1;
 		Player_SetHpMax(1);
 	}
 
-	//Angular Movement Shit
-	// For smooth oscillating movement
 	wing_angle = 0;
 	arm_angle = 0;
 	head_angle = 0;
 
-	// Speed of oscillation
 	wing_speed = 4;
 	arm_speed = 2;
 	head_speed = 0.5;
-	/////
 
 	_surface = -1
 	index_img=0
@@ -114,13 +90,13 @@ global.p2_anim_hedef=1;
 	global.hardmode=false;
 	global.easymode=false;
 	global.krmore=0;
-	global.kr=true; //Sets the damage type, true is karma, false is normal hit
+	global.kr=true;
 	global.battleIntro = true;
 	global.dodge=false;
 	global.discord=true;
 	global.enemy_animation="animation";
 	global.mercy=50;
-	global.go_dodge="block";     /// Set this to "missed" so enemy can miss the bullets
+	global.go_dodge="block";
 
 	Flag_Set(FLAG_TYPE.STATIC,FLAG_STATIC.BATTLE_MENU_FIGHT_OBJ,battle_menu_fight_knife);
 	Border_SetEnabled(global.border_enabled);
@@ -245,24 +221,17 @@ global.p2_anim_hedef=1;
 	_hp=5000;
 	_hp_max=5000;
 
-	/*Anim_Create(camera,"x",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,180,-180,90);
-	Anim_Create(camera,"y",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,150,-150,90);*/
 	Anim_Create(camera,"scale_x",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,2,-1,90);
 	Anim_Create(camera,"scale_y",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,2,-1,90);
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//Angular Movement Shit
-	// For smooth oscillating movement
 	p2_wing_angle_diddler = 0;
 	p2_arm_angle_diddler = 0;
 	p2_head_angle_diddler = 0;
 
-	// Speed of oscillation
 	p2_wing_speed_diddler = 4;
 	p2_arm_speed_diddler = 2;
 	p2_head_speed_diddler = 0.5;
-	/////
 
 	_surface = -1
 	index_img=0
@@ -320,13 +289,13 @@ global.p2_anim_hedef=1;
 	global.hardmode=false;
 	global.easymode=false;
 	global.krmore=0;
-	global.kr=true; //Sets the damage type, true is karma, false is normal hit
+	global.kr=true;
 	global.battleIntro = true;
 	global.dodge=false;
 	global.discord=true;
 	global.enemy_animation="animation";
 	global.mercy=50;
-	global.go_dodge="block";     /// Set this to "missed" so enemy can miss the bullets
+	global.go_dodge="block";
 
 	Flag_Set(FLAG_TYPE.STATIC,FLAG_STATIC.BATTLE_MENU_FIGHT_OBJ,battle_menu_fight_knife);
 	Border_SetEnabled(global.border_enabled);
@@ -421,24 +390,10 @@ global.p2_anim_hedef=1;
 	p2_cape_y=0;
 	p2_cape_image=0;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// PHASE 2 KADROSU: PAPYRUS & ALPHYS
-// state: 0 = sahnede degil, 1 = beliriyor, 2 = sahnede, 3 = sahneden ayriliyor
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Karakterler alpha ile degil, ekran disina kayarak girip cikiyor.
-	// state: 0 = sahne disinda, 1 = sahneye giriyor, 2 = sahnede, 3 = sahneden cikiyor
-	//
-	// Konumlar sabit degil: sahnedeki karakter sayisina gore Step_0'da
-	// hesaplaniyor. Tek karakter ortada durur, iki/uc karakterde ekran esit
-	// parcalara bolunur ve herkes kendi parcasinin ortasina yerlesir.
-	// Soldan saga sira: Papyrus, Sans, Alphys.
-	// Yeni savas = canlandirma sahneleri bastan oynayabilir
 	global.p2_revived_pap=false;
 	global.p2_revived_alp=false;
 
-	// FINAL PHASE (P25) sahnesi her savasin basinda sifirlaniyor; yoksa
-	// bir onceki denemeden kalan "yenildi" durumu yeni savasa tasinirdi.
 	global.p25phase=0;
 	global.p25_dlg=false;
 	global.p25_iska=false;
@@ -446,46 +401,35 @@ global.p2_anim_hedef=1;
 	global.p25_kacis=0;
 
 
-	layout_margin=40;		// kenarlarda birakilan bosluk
-	layout_speed=0.07;		// yer degistirme hizi
-	off_left=-180;			// sahne disi (sol) x
-	off_right=820;			// sahne disi (sag) x
+	layout_margin=40;
+	layout_speed=0.07;
+	off_left=-180;
+	off_right=820;
 
-	p2_state=2;				// Sans normalde sahnede
-	// Uc karakteri birlikte yana kaydirmak icin ortak ofset. draw_x
-	// degerleri her kare yerlesime dogru lerp lendigi icin onlara
-	// dogrudan yazilamiyor; bu ofset cizim aninda ekleniyor.
+	p2_state=2;
 	kay_x=0;
 
-	p2_draw_x=320;			// Sans'in ciziim x'i (nesnenin x'i sabit kalir)
-	p2_off_x=0;				// = p2_draw_x - x
-	p2_shake_x=0;			// SADECE Sans'a vurulunca titrer
-	p2_snap=false;			// true ise bir sonraki adimda hedefe isinlanir
+	p2_draw_x=320;
+	p2_off_x=0;
+	p2_shake_x=0;
+	p2_snap=false;
 
-	// Sans senaryo geregi sahne disinda mi? o_sans_blockp2 bunu okuyor,
-	// yoksa oyuncu vurdugunda alphalar 0 olunca blok sprite'i ortada beliriyor.
 	p2_offstage=false;
 
-	// Sans slotunu birakmiyor (tur dagitimi ona bagli) ama sahne disindayken
-	// FIGHT/ACT hedef listesinde gorunmemeli. Bkz. Battle_EnemyTargetable.
 	_not_targetable=false;
 
 	pap_state=0;
 	pap_alpha=1;
-	pap_draw_x=-180;		// sahne disinda (sol) basliyor
+	pap_draw_x=-180;
 	pap_shake_x=0;
-	pap_snap=false;			// true ise bir sonraki adimda hedefe isinlanir
+	pap_snap=false;
 	pap_wiggle=0;
-	pap_bob=0;				// nefes salinimi (bacak skew'i de bunu takip eder)
+	pap_bob=0;
 	pap_arm_angle=0;
 	pap_head_sprite=spr_papyrus_head;
 	pap_head_image=0;
 	pap_body_sprite=spr_papyrus_body;
-	// 1. kare govdeye AYRI bir el daha ekliyor; spr_papyrus_arm ile birlikte
-	// Papyrus iki elli gorunuyordu. Dogrusu 0. kare.
 	pap_body_image=0;
-	// Sigara pozunda (spr_papyrus_smoking) kafa ve kol o sprite'in
-	// icinde; ayri cizilen parcalar bunlarla gizleniyor.
 	pap_head_alpha=1;
 	pap_arm_alpha=1;
 	pap_legs_sprite=spr_papyrus_legs;
@@ -493,20 +437,17 @@ global.p2_anim_hedef=1;
 	pap_arm_sprite=spr_papyrus_arm;
 	pap_arm_image=0;
 
-	// Papyrus'un bloklamasi: onunden bir kemik duvari yukseliyor.
-	// Yukselme sprite'in 4 karesine cizilmis, o yuzden kareleri oynatiyoruz.
-	// Sprite zaten 2x cizilmis (146x222) ve origin'i alt-orta, o yuzden olcek 1.
 	pap_block_sprite=spr_papyrus_blockwall_up;
-	pap_block_state=0;			// 0 = yok, 1 = yukseliyor, 2 = bekliyor, 3 = iniyor
+	pap_block_state=0;
 	pap_block_image=0;
-	pap_block_speed=0.5;		// kare/adim
-	pap_block_hold=45;			// tepede bekleme suresi (adim)
+	pap_block_speed=0.5;
+	pap_block_hold=45;
 	pap_block_timer=0;
-	pap_block_shake_x=0;		// vurus aninda Papyrus degil DUVAR titrer
+	pap_block_shake_x=0;
 
 	alp_state=0;
 	alp_alpha=1;
-	alp_draw_x=820;			// sahne disinda (sag) basliyor
+	alp_draw_x=820;
 	alp_shake_x=0;
 	alp_snap=false;
 	alp_wiggle=0;
@@ -519,18 +460,15 @@ global.p2_anim_hedef=1;
 	alp_body_image=0;
 	alp_armleft_sprite=spr_alphys_arm_left;
 	alp_armright_sprite=spr_alphys_arm_right;
-	alp_eye_sprite=spr_alphys_eye;		// gozunun uzerindeki parlama efekti
+	alp_eye_sprite=spr_alphys_eye;
 	alp_eye_image=0;
 	alp_eye_visible=true;
 
 	_hp=5000;
 	_hp_max=5000;
 
-	/*Anim_Create(camera,"x",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,180,-180,90);
-	Anim_Create(camera,"y",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,150,-150,90);*/
 	Anim_Create(camera,"scale_x",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,2,-1,90);
 	Anim_Create(camera,"scale_y",ANIM_TWEEN.EXPO,ANIM_EASE.OUT,2,-1,90);
 	
 
-// Game Over mesaji icin merhamet turu penceresi (bkz. Step_0 sonu).
 go_mercy_hold = 0;

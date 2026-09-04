@@ -13,23 +13,20 @@ template=0;
 
 x_box=0
 y_box=0
-xscale_box=4.2    //// ORIGINAL SIZE
-yscale_box=1.8	  //// ORIGINAL SIZE
+xscale_box=4.2
+yscale_box=1.8
 
 fast=false;
 
 MODE = 0
-SIDE = 0   /// 0 IS NORMAL, 1 IS THE OPPOSITE SIDE
+SIDE = 0
 SPIKE = true
 
-/// Balonun hangi karakterin ustunde duracagi ({speaker} etiketi ile ayarlanir)
-/// 0 = Sans, 1 = Papyrus, 2 = Alphys. Ofsetler Step_0'da her adim
-/// yeniden hesaplaniyor ki karakter sahnede yururken balon onu takip etsin.
 SPEAKER = 0
 SPEAKER_X = 0
 SPEAKER_Y = 0
-SPEAKER_HALFW = 70		/// konusanin govde yari genisligi
-SPEAKER_GAP = 18		/// karakterle balon arasindaki bosluk
+SPEAKER_HALFW = 70
+SPEAKER_GAP = 18
 
 _spike_extra_x = 0
 _spike_extra_y = 0

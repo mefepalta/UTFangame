@@ -1,6 +1,3 @@
-///@arg target
-///@arg var_name
-///@arg paused
 function Anim_SetPause() {
 	var TARGET=argument[0];
 	var VAR_NAME=argument[1];

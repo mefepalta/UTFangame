@@ -4,9 +4,7 @@ if (dialogue_index >= array_length(dialogue)) exit;
 var current = dialogue[dialogue_index];
 var data = char_data[current.speaker];
 
-// --- Music handling (check once per dialogue line)
 if (variable_struct_exists(current, "music")) {
-    // Only change if it's not already playing
     if (current_music != current.music) {
         if (current_music != noone) {
             audio_stop_sound(current_music);
@@ -16,7 +14,6 @@ if (variable_struct_exists(current, "music")) {
     }
 }
 
-// --- Typing effect ---
 if (!text_done) {
     text_timer++;
     if (text_timer >= text_speed) {
@@ -37,14 +34,12 @@ if (!text_done) {
     }
 }
 
-// --- Skip typing (X) ---
 if (Input_IsPressed(INPUT.CANCEL) && !text_done) {
     current_text = current.text;
     text_done = true;
     char_index = string_length(current.text);
 }
 
-// --- Next (Z) ---
 if (Input_IsPressed(INPUT.CONFIRM) && text_done) {
     dialogue_index++;
     if (dialogue_index < array_length(dialogue)) {
@@ -52,13 +47,11 @@ if (Input_IsPressed(INPUT.CONFIRM) && text_done) {
         current_text = "";
         text_done = false;
     } else {
-        // Dialogue ended -> stop music
         if (current_music != noone) {
             audio_stop_sound(current_music);
             current_music = noone;
         }
 
-        // Trigger alarm instead of destroying immediately
-        alarm[1] = room_speed * 3; // 1 second delay (adjust as needed)
+        alarm[1] = room_speed * 3;
     }
 }

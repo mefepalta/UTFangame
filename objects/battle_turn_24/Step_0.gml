@@ -1,6 +1,3 @@
-//==========================================================================
-// FINAL PHASE 4. tur -- taban + tavan cifti, ortada genis gecit
-//==========================================================================
 var left_box   = (battle_board.x-battle_board.left)-5;
 var right_box  = (battle_board.x+battle_board.right)+5;
 var top_box    = (battle_board.y-battle_board.up)+2;
@@ -8,15 +5,11 @@ var bottom_box = (battle_board.y+battle_board.down)-2;
 
 if (room == room_battle_1)
 {
-	// FINAL PHASE olum sahnesi: Sans yenildiyse bu tur atak yapmiyor,
-	// onun yerine son sozlerini / vedasini soyluyor (bkz. scripts/P25).
 	if (global.p25phase >= 3)
 	{
 		if (P25Sahne()) { Battle_EndTurn(); }
 		exit;
 	}
-	// Ayni anda tabandan ve tavandan birer kemik; ortada 40 px'lik
-	// gecit kaliyor (kutu ici 130 px, kemikler 45'er px).
 	if (_timer == 70)  { F25Cift(right_box,45,45,-3); }
 	if (_timer == 200) { F25Cift(right_box,60,30,-3); }
 	if (_timer == 330) { F25Cift(right_box,30,60,-3); }

@@ -1,6 +1,3 @@
-// Canlandirma sahnesi oynarken metin bos oldugu icin balon bombos duruyordu.
-// Tam karanlikta zaten ustu ortuluyor ama kararma ve acilma anlarinda
-// goruniyordu; sahne boyunca hic cizmiyoruz.
 if (instance_exists(o_monster_soul))
 {
 	if (o_monster_soul.active) { exit; }

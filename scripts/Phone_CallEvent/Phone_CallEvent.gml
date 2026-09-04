@@ -1,6 +1,3 @@
-///@arg phone_id
-///@arg phone_event
-///@arg phone_slot*
 function Phone_CallEvent() {
 	var PHONE=argument[0];
 	var EVENT=argument[1];

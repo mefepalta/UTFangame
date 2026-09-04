@@ -1,4 +1,3 @@
-///@arg enemy_obj/inst
 function Battle_IsEnemyValid() {
 	var ENEMY=argument[0];
 

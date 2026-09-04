@@ -1,5 +1,4 @@
 function Anim_Init() {
-	//GMU_Anim v3.0.0
 
 	global._gmu_anim_list=ds_list_create();
 	global._gmu_anim_data=ds_map_create();

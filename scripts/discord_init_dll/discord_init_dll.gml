@@ -1,14 +1,9 @@
 function discord_init_dll() {
 
-	/*
 
-	Use esta função atens de todoas as outras, para inicializar as DLLs
 
-	-----------------------------------------
 
-	Discord Rich Presence for Game Maker made by Aouab
 
-	*/
 
 	dll = "discord_rich_presence.dll";
 

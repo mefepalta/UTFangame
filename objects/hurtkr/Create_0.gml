@@ -16,27 +16,22 @@ if global.dodge==false{
 				}
 			}else{
 				Player_Hurt(2+global.krmore);
-				//global.hpcolor-=2+global.krmore;
 				alarm[0]=6
 			}
 		}else{
 			if global.easymode == false {
 				if global.hardmode == false {
 					Player_Hurt(1);
-					//global.hpcolor-=1;
 					alarm[0]=hit_kr
 				}else{
 					Player_Hurt(1);
-					//global.hpcolor-=1;
 					alarm[0]=hit_kr
 				}
 			}else{
 				Player_Hurt(1);
-				//global.hpcolor-=1;
 				alarm[0]=6
 			}
 		}
-			//audio_play_sound(snd_hurt,0,false);
 		if(kr<90){
 			if global.easymode == false {
 				if global.hardmode == false {
@@ -73,10 +68,8 @@ if global.dodge==false{
 				if global.easymode == false {
 					if global.hardmode == false {
 						alarm[0]=hit_kr
-						//global.hpcolor-=hit
 					}else{
 						alarm[0]=hit_kr
-						//global.hpcolor-=hit
 					}
 				}else{
 					alarm[0]=6

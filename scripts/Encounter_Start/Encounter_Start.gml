@@ -1,6 +1,3 @@
-///@arg encounter_id
-///@arg anim*
-///@arg exclamation*
 function Encounter_Start() {
 	var ENCOUNTER=argument[0];
 	var ANIM=true;
@@ -36,7 +33,6 @@ function Encounter_Start() {
 		}
 		return true;
 	}else{
-		//Console_OutputLine("Encounter_Start() failed!");
 		Console_OutputLine("Encounter ID "+string(ENCOUNTER)+" doesn't exists!");
 		return false;
 	}

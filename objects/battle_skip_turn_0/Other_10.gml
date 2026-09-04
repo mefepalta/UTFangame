@@ -1,10 +1,6 @@
-///@desc Turn Preparation Start
 Battle_SetBoardSizeCubic(65,65,120,120);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 
-// Asagidaki global.sanstalk diyaloglari phase 1'e ait. Phase 2'de bunlar
-// calisirsa yanlis replik (ya da default'taki yer tutucu) cikiyor; balon da
-// kapanmadigi icin turn preparation bitmiyor. Phase 2'de balonu hemen kapat.
 if (room == room_battle_1)
 {
 	with (battle_dialog_enemy)
@@ -14,9 +10,6 @@ if (room == room_battle_1)
 	exit;
 }
 
-// FAZ 1 SON DUZLUK: burada da iskalamak hicbir sey yapmamali. Asagidaki
-// sanstalk replikleri son duzluge ait degil; balon aciliyor ama hemen
-// kapatiliyor ve tur sessizce bitiyor (bkz. Step_0 icindeki ayni kosul).
 if (global.finalstretch >= 1)
 {
 	with (battle_dialog_enemy)
@@ -26,9 +19,6 @@ if (global.finalstretch >= 1)
 	exit;
 }
 
-// 1-12 arasi replikler scripts/Surrender'da tutuluyor: gercek atak
-// oynarken de ayni metin kullanildigi icin tek kaynaktan okunuyor.
-// Bu turlar normalde battle_turn_9..20'ye gidiyor; burasi yedek yol.
 switch (global.sanstalk)
 {
 	case 23:

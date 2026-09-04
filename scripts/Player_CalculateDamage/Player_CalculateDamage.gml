@@ -1,6 +1,3 @@
-///@arg base_damage
-///@arg damage_min*
-///@arg damage_max*
 function Player_CalculateDamage() {
 
 	var DAMAGE=argument[0];

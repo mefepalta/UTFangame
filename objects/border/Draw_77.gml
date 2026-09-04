@@ -14,14 +14,14 @@ if(_enabled){
 	if(sprite_exists(_sprite)){
 		draw_sprite_ext(_sprite,0,(SW-960*SF)/2,(SH-540*SF)/2,960/sprite_get_width(_sprite)*SF,540/sprite_get_height(_sprite)*SF,0,c_white,_alpha);
 	}else{
-		draw_sprite_ext(spr_pixel,0,(SW-960*SF)/2,(SH-540*SF)/2,SW,SH,0,c_black,_alpha);	
-		if _enable_fancy_border // Fancy Border
+		draw_sprite_ext(spr_pixel,0,(SW-960*SF)/2,(SH-540*SF)/2,SW,SH,0,c_black,_alpha);
+		if _enable_fancy_border
 		{
-			var borderalpha = 0.5*_alpha; // Fancy Border's Alpha (0.5 by default)
+			var borderalpha = 0.5*_alpha;
 			var xoffset = 0;
 			var yoffset = -90;
 		    draw_surface_stretched(application_surface, SX+xoffset*SF, BY+yoffset*SF, SW, SH+180*SF);
-			draw_sprite_ext(spr_pixel,0,(SW-960*SF)/2,(SH-540*SF)/2,SW,SH,0,fader.color,fader.alpha); // Fader
+			draw_sprite_ext(spr_pixel,0,(SW-960*SF)/2,(SH-540*SF)/2,SW,SH,0,fader.color,fader.alpha);
 			draw_sprite_ext(spr_pixel,0,(SW-960*SF)/2,(SH-540*SF)/2,SW,SH,0,c_black,1-borderalpha);
 			draw_sprite_ext(spr_border_outline,0,(SW-960*SF)/2,(SH-540*SF)/2,960/sprite_get_width(spr_border_outline)*SF,540/sprite_get_height(spr_border_outline)*SF,0,c_white,_alpha);
 		}

@@ -3,7 +3,6 @@ image_yscale=3;
 if(_input_acceptable){
 	if _missed && ((_dir==DIR.LEFT&&_aim_x2<=battle_board.x-battle_board.left+100-sprite_get_width(spr_battle_menu_fight_aim)/2) || (_dir==DIR.RIGHT&&_aim_x2>=battle_board.x+battle_board.right-100+sprite_get_width(spr_battle_menu_fight_aim)/2)){
 			Anim_Destroy(id,"_aim_alpha");
-			//Anim_Destroy(id,"_aim_alpha2");
 			Anim_Create(id,"_aim_alpha2",ANIM_TWEEN.LINEAR,ANIM_EASE.IN,1,-1,5);
 			Anim_Destroy(id,"_aim_scale");
 			Anim_Destroy(id,"_aim_scale2");
@@ -69,7 +68,7 @@ if(_input_acceptable){
 			damage*=(1-DISTANCE/WIDTH)*2;
 		}
 		if _perfect && _perfect2 {
-			damage+=irandom_range(8,12);	
+			damage+=irandom_range(8,12);
 		}
 		damage=round(damage);
 		if(damage<=0){

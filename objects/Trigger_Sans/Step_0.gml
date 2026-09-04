@@ -71,7 +71,7 @@ if (room == room_area_beforesans)
 	break;
 	case 3:
 	if (gop1 == 350){
-		Dialog_Add("{font 3}{voice 3}* Heh...{pause}{clear}* You startled me.{pause}{clear}* For a second there, I&  could've sworn you were about to hit me.{pause}{clear}* But the hitting comes DURING&  the duel.{pause}{clear}* And I had my guard down.{pause}{clear}* Humans still have honor,&  right?");
+		Dialog_Add("{font 3}{voice 3}* Heh...{pause}{clear}* You startled me.{pause}{clear}* For a second there, I&  could've sworn you were&  about to hit me.{pause}{clear}* But the hitting comes DURING&  the duel.{pause}{clear}* And I had my guard down.{pause}{clear}* Humans still have honor,&  right?");
 	    Dialog_Start();
 	}
 	break;
@@ -127,35 +127,22 @@ if (room == room_area_aftersans)
 {
 	if (gop1 == 100)
 	{
-		// Iki farkli son: dovus teslim yoluyla bittiyse (12. Surrender turu)
-		// PDF'teki Overworld konusmasi, Sans bagislanarak bittiyse eski
-		// metin oynuyor.
-		// NOT: Dialog_Add once, Dialog_Start sonra cagrilmali -- eskiden
-		// ters sirada idi ve balon bos kuyrukla aciliyordu.
 		if (global.surrender_son)
 		{
-			Dialog_Add("{font 3}{voice 3}* But I realize something...{pause}{clear}* Fighting you... is kinda&  pointless, isn't it?{pause}{clear}* I mean... just by the way&  you're staring...{pause}{clear}* You already admitted defeat.{pause}{clear}* I was wrong.{pause}{clear}* Destroying you won't fix a&  thing.{pause}{clear}* Because by the looks of it...{pause}{clear}* You already destroyed&  yourself.{pause}{clear}* Well... guess this goes&  without saying, but...{pause}{clear}* You're free to go.{pause}{clear}* I know you won't destroy the&  world.{pause}{clear}* You can't.{pause}{clear}* You can't, can you?{pause}{clear}* Sorry, but the barrier&  requires a \"human\" soul in&  order to break.{pause}{clear}* I'm afraid yours would be of&  no use to us.{pause}{clear}* So go.{pause}{clear}* Go live out the rest of your&  life on the surface, have a&  ball.{pause}{clear}* But will you ever find it in&  your heart to forgive&  yourself, I wonder?{pause}{clear}* ...{pause}{clear}* Looking too far into the&  future, am I?{pause}{clear}* It's up to you, anyway.{pause}{clear}* Well, Captain... Brother...{pause}{clear}* I did it. I beat the largest&  threat the underground has&  ever faced...{pause}{clear}* And I did it in the only way&  that matters.{pause}{clear}* Farewell, creature.{pause}{clear}* May our paths wind long and&  stray far from one another.");
+			Dialog_Add("{font 3}{voice 3}* But I realize something...{pause}{clear}* Fighting you... is kinda&  pointless, isn't it?{pause}{clear}* I mean... just by the way&  you're staring...{pause}{clear}* You already admitted&  defeat.{pause}{clear}* I was wrong.{pause}{clear}* Destroying you won't fix a&  thing.{pause}{clear}* Because by the looks of&  it...{pause}{clear}* You already destroyed&  yourself.{pause}{clear}* Well... guess this goes&  without saying, but...{pause}{clear}* You're free to go.{pause}{clear}* I know you won't destroy&  the world.{pause}{clear}* You can't.{pause}{clear}* You can't, can you?{pause}{clear}* Sorry, but the barrier&  requires a \"human\" soul in&  order to break.{pause}{clear}* I'm afraid yours would be of&  no use to us.{pause}{clear}* So go.{pause}{clear}* Go live out the rest of your&  life on the surface, have a&  ball.{pause}{clear}* But will you ever find it in&  your heart to forgive&  yourself, I wonder?{pause}{clear}* ...{pause}{clear}* Looking too far into the&  future, am I?{pause}{clear}* It's up to you, anyway.{pause}{clear}* Well, Captain... Brother...{pause}{clear}* I did it. I beat the largest&  threat the underground has&  ever faced...{pause}{clear}* And I did it in the only way&  that matters.{pause}{clear}* Farewell, creature.{pause}{clear}* May our paths wind long and&  stray far from one another.");
 		}
 		else
 		{
-			Dialog_Add("{font 3}{voice 3}* I...{pause 5} can hardly stand.{pause}{clear}* Human...{pause 5} you are the&weirdest person I've ever met.{pause}{clear}* You have no idea how much I&want to return the favor you&gave us...{pause}{clear}* Though no matter how hard I&try, my magic is...{pause 5} limited.{pause}{clear}* ...{pause}{clear}* You refused to strike me&down...{pause 5} you didn't think twice&about sparing my life.{pause}{clear}* So what now?{pause}{clear}* Are you going to meet the&Queen?{pause 5} Then what will you do?{pause}{clear}* ...{pause}{clear}* Whatever...{pause}{clear}* Not that I owe you anything.{pause}{clear}* You left us in a state far&worse than before. {pause}{clear}* At least then we had some&kind of people to fill the&kingdom.{pause}{clear}* ...{pause 5}What are you waiting for?&A hug? Get out of here.");
+			Dialog_Add("{font 3}{voice 3}* I...{pause 5} can hardly stand.{pause}{clear}* Human...{pause 5} you are the&weirdest person I've ever met.{pause}{clear}* You have no idea how much I&want to return the favor you&gave us...{pause}{clear}* Though no matter how hard I&try, my magic is...{pause 5} limited.{pause}{clear}* ...{pause}{clear}* You refused to strike me&down...{pause 5} you didn't think twice&about sparing my life.{pause}{clear}* So what now?{pause}{clear}* Are you going to meet the&Queen?{pause 5} Then what will you do?{pause}{clear}* ...{pause}{clear}* Whatever...{pause}{clear}* Not that I owe you&anything.{pause}{clear}* You left us in a state far&worse than before. {pause}{clear}* At least then we had some&kind of people to fill the&kingdom.{pause}{clear}* ...{pause 5}What are you waiting&for? A hug? Get out of here.");
 		}
 		Dialog_Start();
 	}
 }
 
-// SOFTLOCK ONARIMI -- beforesans
-// Konusmanin bitisi eskiden yalnizca death_count 0 (_dialog_done) ve 1
-// (_dialog_done1) icin izleniyordu. 2..9 ve default dallarindaki tek
-// parcali konusmalar bittiginde hicbir sey olmuyor, oyuncu da trigger
-// icinde moveable=false birakildigi icin odada sonsuza kadar kilitli
-// kaliyordu. Artik uc yol da ayni bayragi kaldiriyor.
 if (room == room_area_beforesans)
 {
 	if (_dialog_done) or (_dialog_done1) { _konusma_bitti = true; }
 
-	// Tek parcali dallar: konusma acildiktan sonra hem balon hem yazici
-	// kapandiysa replik bitmistir. (Balon 350. karede aciliyor.)
 	if (global.death_count >= 2) and (gop1 > 355)
 	and (!instance_exists(ui_dialog)) and (!instance_exists(text_typer))
 	{
@@ -182,7 +169,7 @@ if (!instance_exists(text_typer)) and (go_battle > 90) and (room == room_area_af
 	}
 	if (!instance_exists(o_temp_sprite_1))
 	{
-		instance_create_layer(760, 165, "Instances", o_temp_sprite_1);
+		instance_create_layer(770, 165, "Instances", o_temp_sprite_1);
 	}
 }
 if (!instance_exists(text_typer)) and (go_battle > 360) and (room == room_area_aftersans)
@@ -198,11 +185,5 @@ if (!instance_exists(text_typer)) and (go_battle > 360) and (room == room_area_a
 		instance_destroy();
 	}
 	char_player.image_alpha = 1;
-}
-/*if go_battle = 1{
-	Encounter_Start(0);
-}
-if go_battle = 93{
-	room_goto(room_p05);
 }
 

@@ -1,4 +1,3 @@
-///@arg list
 function Console_ProcessCmd() {
 	if(GMU_CONSOLE_ENABLED){
 		var LIST=argument[0];

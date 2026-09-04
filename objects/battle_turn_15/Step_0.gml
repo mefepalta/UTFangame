@@ -329,9 +329,6 @@ if (room == room_battle_1)
 		PapIdle();
 	}
 
-	// 40 kare uyari + 45 kare uzama. Cagri 2250'den 2210'a CEKILDI ki
-	// kemikler yine 2295'te tamamlansin: 2340'taki platform hareketi ve
-	// 2420'deki sok bolumun geri kalanina gore ayarli, kaymamalari lazim.
 	if (_timer == 2210)
 	{
 		ForestMake(20,64,45,40);

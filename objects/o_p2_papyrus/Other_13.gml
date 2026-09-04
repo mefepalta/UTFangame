@@ -1,7 +1,4 @@
-///@desc Menu Switch
 
-// Bu olay TUM dusmanlar icin cagriliyor. Secili hedef biz degilsek karismayalim,
-// yoksa birine vurunca hepsi hasar alip titriyor.
 var _target = Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy());
 
 switch(Battle_GetMenu()){
@@ -17,7 +14,6 @@ switch(Battle_GetMenu()){
             break;
         }
 
-        // Papyrus her vurusu onunde yukselen kemik duvariyla blokluyor.
         var dmg=-1;
         var hp_orig=_hp;
 
@@ -28,14 +24,10 @@ switch(Battle_GetMenu()){
         inst.bar_hp_target=_hp;
         inst.bar_visible=false;
 
-        // Duvar slash animasyonuyla birlikte kalkti (battle_menu_fight_anim_knife).
-        // Burada sadece bekleme suresini tazeliyoruz; state'i sifirdan
-        // baslatmiyoruz, yoksa vurus bittikten sonra bir daha cikiyordu.
         with(battle_enemy_engage){
             pap_block_timer = pap_block_hold;
         }
 
-        // Papyrus degil, darbeyi yiyen DUVAR titrer
         audio_play_sound(snd_damage,0,false);
         var shake=instance_create_depth(0,0,0,shaker);
         shake.target=battle_enemy_engage;

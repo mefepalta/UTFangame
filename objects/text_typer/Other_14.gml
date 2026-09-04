@@ -1,4 +1,3 @@
-///@desc Update Position
 if(x!=xprevious||y!=yprevious){
 	var CHANGE_X=x-xprevious;
 	var CHANGE_Y=y-yprevious;

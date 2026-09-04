@@ -121,9 +121,6 @@ if (room == room_battle_1)
 	}
 	if (_timer > 3460) and (_timer < 3944) { FanStep(); }
 
-	// 1) Slam down. Tek grup: iki yandan dortten sekiz kemik ayni karede doguyor.
-	//    Hizlar kalbin ziplama yayina gore ayarli -- once en uzun/en hizli, sonra sirayla
-	//    daha kisa ve daha yavas olanlar, hepsi tek ziplamayla gecilecek sekilde.
 	if (_timer == 1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
@@ -160,9 +157,6 @@ if (room == room_battle_1)
 	}
 
 
-	// 2) Kutu kucuk kareye donup surekli donmeye basliyor. Boltlar kutunun AABB sinirinda
-	//    patladigi icin dogus genisligi +-48 pikselle sinirli -- hicbiri kutuyu siyirip kacamiyor.
-	//    Arada ince blaster lar dogrudan oyuncunun o anki konumuna kilitleniyor.
 	if (_timer == 500)
 	{
 		Battle_SetBoardSizeCubic(65,65,65,65,40);
@@ -262,16 +256,9 @@ if (room == room_battle_1)
 	}
 
 
-	// 3) Kutu 4x4 = 16 hucre. Uc satir ve uc sutun AYNI karede ates ediyor, geriye
-	//    tek bir guvenli hucre kaliyor. Alti blaster ayni karede doguyor ve sayaclari
-	//    esitlendigi icin doluslari da atislari da birebir ayni karede.
 	if (_timer == 1450)
 	{
 		battle_board.angle = 0;
-		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin diye
-		// buyume yukari kaydirildi. Toplam yukseklik AYNI (200), yani izgara
-		// hala 4 esit serit -- GridBeam artik seritleri gercek kenarlardan
-		// olctugu icin kutunun asimetrik olmasi sorun degil.
 		Battle_SetBoardSizeCubic(135,65,100,100,44);
 	}
 
@@ -316,9 +303,6 @@ if (room == room_battle_1)
 	}
 
 
-	// 4) Mavi ruh, kutu kenarlari arasinda gidip gelen platformun uzerinde.
-	//    Kemikler once uyari sesiyle 40 karede yerden yukseliyor. Shocker in yildirimi
-	//    dustugu anda o noktadan dalga yayiliyor: yakindaki kemikler cok, uzaktakiler az oynuyor.
 	if (_timer == 2180)
 	{
 		Battle_SetSoul(battle_soul_blue);
@@ -416,9 +400,6 @@ if (room == room_battle_1)
 	}
 
 
-	// 5) Normal kucuk kare kutu. Tek dalga: kemikler kutunun disindan, 60 karede
-	//    yavasca uzayarak merkeze dogru geliyor ve donuyor; sonda yine kisalarak gidiyorlar.
-	//    Kalbin guvenli yeri tam orta nokta.
 	if (_timer == 3410)
 	{
 		Battle_SetBoardSizeCubic(65,65,65,65,44);
@@ -440,8 +421,6 @@ if (room == room_battle_1)
 	}
 
 
-	// 6) Bitis: kutunun disindan, dort kenarin orta noktasindan dort blaster
-	//    ayni karede dogup ayni karede ates ediyor.
 	if (_timer == 3970)
 	{
 		var _b0 = RegularBlaster(-120,battle_board.y,battle_board.x-battle_board.left-64,battle_board.y,0,0,40,16,2,2,46);

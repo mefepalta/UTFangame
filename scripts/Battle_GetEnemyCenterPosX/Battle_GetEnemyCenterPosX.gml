@@ -1,4 +1,3 @@
-///@arg enemy_slot
 function Battle_GetEnemyCenterPosX() {
 	var ENEMY=argument[0];
 

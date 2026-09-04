@@ -248,8 +248,6 @@ if (room == room_battle_1)
 	if (fade_at > 0) and (_timer > fade_at+1060) and (_timer < fade_at+1530) and ((_timer mod 26) == 0) { BarsSpawn(2.2); }
 	if (fade_at > 0) and (_timer == fade_at+30)
 	{
-		// ALT KENAR SABIT: alt kenar varsayilan yerinde (DOWN = 65) kalsin
-		// diye buyume yukari kaydirildi. Toplam yukseklik AYNI.
 		Battle_SetBoardSizeCubic(69,65,158,158,30);
 	}
 	if (fade_at > 0) and (_timer == fade_at+66)

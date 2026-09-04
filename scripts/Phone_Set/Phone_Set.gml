@@ -1,5 +1,3 @@
-///@arg phone_slot
-///@arg phone_id
 function Phone_Set() {
 	var SLOT=argument[0];
 	var PHONE=argument[1];

@@ -1,4 +1,3 @@
-///@arg enemy_slot
 function Battle_GetEnemy() {
 	var ENEMY=argument[0];
 

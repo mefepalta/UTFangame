@@ -75,7 +75,6 @@ if (room == room_battle_1)
 		Battle_SlamDown();
 		RegularBlaster(320,-50,left_box - 50,bottom_box - 20,0,0,10,20,2,2,50);
 		RegularBlaster(320,-50,right_box + 50,bottom_box - 20,180,180,10,20,2,2,50);
-		//MakeBoneCircle(20,3,40,0,30,40,left_box,top_box,1,0,1,250,260,260,360)
 	}
 	if (_timer = 100)
 	{
@@ -125,7 +124,7 @@ if (room == room_battle_1)
 	{
 		o_sans_blockp2.sprite_index = spr_p2_comeatmebro;
 		Battle_SetSoul(battle_soul_red);
-		Battle_SetMenuDialog("* Papyrus is trying hard not&  to fall asleep.")
+		Battle_SetMenuDialog("* He talks about them like&  they're still here.")
 		Battle_EndTurn();
 	}
 }

@@ -1,5 +1,3 @@
-///@arg mercy_choice
-///@arg call_event*
 function Battle_SetMenuChoiceMercy() {
 	var MERCY=argument[0];
 	var CALL=true;

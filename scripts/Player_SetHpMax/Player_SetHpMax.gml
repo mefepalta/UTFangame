@@ -1,4 +1,3 @@
-///@arg hp_max
 function Player_SetHpMax() {
 	var HP_MAX=argument[0];
 

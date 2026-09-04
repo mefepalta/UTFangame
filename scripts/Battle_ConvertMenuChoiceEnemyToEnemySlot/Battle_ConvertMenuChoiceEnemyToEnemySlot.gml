@@ -1,8 +1,6 @@
-///@arg menu_choice_enemy
 function Battle_ConvertMenuChoiceEnemyToEnemySlot() {
 	var CHOICE_ENEMY=argument[0];
 
-	// Liste yalnizca hedeflenebilir dusmanlardan olusuyor
 	if(CHOICE_ENEMY<Battle_GetEnemyTargetNumber()){
 		var proc=0;
 		var proc2=0;

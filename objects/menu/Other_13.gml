@@ -1,4 +1,3 @@
-///@desc Update Menu 1 Text Color
 _change_inst=_inst_naming_letters;
 _change_color=c_white;
 event_user(1);

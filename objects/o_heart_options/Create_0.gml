@@ -1,4 +1,3 @@
-// In o_optionsmenu Create event
 menu_items = [
     "Fullscreen",
     "Border",
@@ -7,17 +6,17 @@ menu_items = [
     "No Hit",
     "Volume"
 ];
-menu_index = 0; // currently selected option
+menu_index = 0;
 window_scales = [0.5,1,2];
 window_scale_labels = ["x0.5","x1","x2"];
 
 
 image_alpha = 0;
-target_alpha = 0; // Start invisible
+target_alpha = 0;
 fade_speed = 0.05;
 
-target_x = 310; // Left of menu text
-target_y = 350; // First option position
+target_x = 310;
+target_y = 350;
 
 global.fullscreen = false;
 if(!variable_global_exists("border_enabled")){
@@ -30,16 +29,11 @@ global.window_scale_index = floor(clamp(global.window_scale_index,0,array_length
 global.window_scale = window_scales[global.window_scale_index];
 global.no_heal = false;
 global.no_hit = false;
-global.volume = 1;        // actual game volume
-global.display_volume = global.volume; // used for bar animation
+global.volume = 1;
+global.display_volume = global.volume;
 
-// ---------------------------------------------------------------------
-// Panel layout. The options screen is drawn as one centred panel; the
-// numbers below are recalculated every step from the visible area so the
-// panel always lands in the middle of the screen.
-// ---------------------------------------------------------------------
 optt = 0;
-line_h = 14;          // measured from the real font in the Draw event
+line_h = 14;
 
 panel_w   = 250;
 row_sp    = 22;

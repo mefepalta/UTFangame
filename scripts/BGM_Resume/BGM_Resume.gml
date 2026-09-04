@@ -1,4 +1,3 @@
-///@arg bgm_slot
 function BGM_Resume() {
 	var SLOT=argument[0];
 

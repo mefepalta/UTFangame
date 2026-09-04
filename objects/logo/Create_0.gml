@@ -4,11 +4,7 @@ alarm[0]=200;
 alarm[1]=201;
 alarm[2]=400;
 
-// ---------------------------------------------------------------------
-// Title screen presentation. Timings above are untouched: the spear still
-// starts at 201 and the hint still appears at 400.
-// ---------------------------------------------------------------------
-depth = 10;                 // this object paints the backdrop, behind the logo
+depth = 10;
 
 fx_t        = 0;
 hint_t      = 0;
@@ -19,7 +15,6 @@ impact_x    = 320;
 impact_y    = 210;
 sparks      = [];
 
-// visible rectangle (filled in every step)
 vx_ = 0;
 vy_ = 0;
 vw_ = room_width;

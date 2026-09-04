@@ -1,4 +1,3 @@
-///@arg time
 function Battle_SetMenuFightDamageTime() {
 	var TIME=argument[0];
 

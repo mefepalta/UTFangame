@@ -1,6 +1,5 @@
 
 
-//depth=DEPTH_BATTLE.BULLET_OUTSIDE_HIGH*2
 
 _width=30
 _bone_number=3
@@ -31,8 +30,8 @@ bone_length = _width / _bone_number;
 	box_width = total_bone_width;
 	box_height = bone_height;
 
-	box_x = _general_x-10; 
-	box_y = _bone_y-_bone_length_target; 
+	box_x = _general_x-10;
+	box_y = _bone_y-_bone_length_target;
 
 if _dir = DIR.DOWN{
 	_bone_y = (battle_board.y+battle_board.down);

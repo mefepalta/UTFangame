@@ -6,31 +6,26 @@ image_speed = 0;
 image_index = 0;
 image_alpha = 0;
 
-// ---------------- AYARLAR ----------------
-bolt_scale = 3;			/// buyuk boltun olcegi
-spin       = 6;			/// kendi ekseninde donme (derece/kare)
+bolt_scale = 3;
+spin       = 6;
 fade_in    = 8;
 
-boom_scale = 0.6;		/// patlama sprite'inin baslangic olcegi
-boom_grow  = 0.22;		/// kare basina buyume
-boom_time  = 22;		/// patlama kac kare gorunecek
+boom_scale = 0.6;
+boom_grow  = 0.22;
+boom_time  = 22;
 
-fan_count  = 8;			/// patlamadan cikan bolt sayisi
+fan_count  = 8;
 fan_speed  = 5;
-fan_curve  = 2.6;		/// kare basina yon degisimi -> kavisli yol
-fan_decay  = 0.978;		/// kavis yavas soniyor: toplam ~120 derece donuyor,
-						/// yani belirgin bir yay cizip geri donmeden gidiyor
+fan_curve  = 2.6;
+fan_decay  = 0.978;
 fan_spin   = 8;
 fan_scale  = 1;
-// -----------------------------------------
 
-serbest_y = -1;		/// >= 0 ise kutu yerine bu yukseklikte patlar
+serbest_y = -1;
 
 _state = 0;
 _t = 0;
 
-/// Kutuya degdigi anda patlar: BOM sprite'i buyuyerek kaybolur,
-/// cevreye kavis cizen boltlar savrulur.
 Explode = function()
 {
 	_state = 1;

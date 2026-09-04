@@ -1,9 +1,6 @@
-///@arg enemy_slot
 function Battle_ConvertEnemySlotToMenuChoiceEnemy() {
 	var ENEMY=argument[0];
 
-	// Sadece hedeflenebilir dusmanlar listeye giriyor, sira numarasi da
-	// onlara gore hesaplanmali.
 	if(Battle_IsEnemyTargetable(ENEMY)){
 		var proc=0;
 		var proc2=0;

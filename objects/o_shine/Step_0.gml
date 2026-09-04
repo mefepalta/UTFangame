@@ -13,9 +13,6 @@ with (o_textcontroller_p05)
 		audio_play_sound(snd_shine,2,0);
 	}
 
-	// Beyaz ortu darbeden HEMEN SONRA basliyor: boylece 2730'daki carpma
-	// efektleri (sok dalgasi, kivilcim) once goruluyor, parca -> poz
-	// gecisi (2750) ise beyazin altinda kaliyor.
 	if (p05 > 2734) and (p05 <= 2752)
 	{
 		other.target_alpha = other.target_alpha + 0.22;
@@ -25,7 +22,6 @@ with (o_textcontroller_p05)
 		other.target_alpha = other.target_alpha - 0.16;
 	}
 
-	// Odaya gecis: yeniden ve yavasca beyaza
 	if (p05 > 2790)
 	{
 		other.sprite_index = Sprite214;

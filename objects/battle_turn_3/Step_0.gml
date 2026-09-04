@@ -36,33 +36,17 @@ if (room == room_battle)
 	{
 		Battle_SetBoardSizeCubic(65,65,110,110);
 	}
-	// NOT: burada eskiden left_box+120'den yukselen bir kemik vardi. O nokta
-	// kutunun tam ortasi; duvarin boslugu ortaya dustugunde oyuncuyu
-	// boslugun icinde sikistiriyordu, o yuzden kaldirildi. Zemindeki yatay
-	// kemik (asagidaki %70) dokusu saglamaya devam ediyor.
-	// NOT: burada vurus boyunca soldan saga suzulen bir zemin kemigi vardi.
-	// Dalga tavandan geldiginde oyuncu zaten asagi serite inmek zorunda
-	// oluyor ve bu kemik tam oraya denk geliyordu; kaldirildi.
 	if (_timer == 650)
 	{
 		with (o_smaaash)
 		{
-			// Yukselme sesini o_smaaash 0. karede kendisi caliyor; burada bir
-			// daha calmiyoruz. prev_frame sifirlaniyor ki dongunun kare
-			// olaylari (ozellikle 7. karedeki carpma) bastan yakalansin.
 			prev_frame = -1;
-			hiz = T3_SLAM_HIZ;	// dongu ~114 kare: dalga rahatca tarayip bitiyor
+			hiz = T3_SLAM_HIZ;
 			image_index = 0;
 			_ready = true;
 		}
 	}
 
-	// Uc dalga: carpmalar 750, 892 ve 1034. Sonuncusu 1132'de tarayip
-	// bitiyor, bolum 1200'de kapaniyor -- hicbir dalga yarida kesilmiyor.
-	// Sok dalgasi tam YERE CARPMA karesinde basliyor -- kol kalkarken
-	// oyuncu vurusun geldigini goruyor, carpma aninda da sarsinti + dalga
-	// birlikte cikiyor. 1000'den sonra yeni dalga yok ki sonuncusu bolum
-	// bitmeden tarayip bitsin.
 	if (_timer >= 650) and (_timer <= 1050) and (o_smaaash.vurdu)
 	{
 		DalgaBasla();
@@ -73,7 +57,7 @@ if (room == room_battle)
 		with (o_smaaash)
 		{
 			_ready = false;
-			hiz = 1;	// diger sahneler icin varsayilan tempoya donuyor
+			hiz = 1;
 		}
 		DalgaTemizle();
 		anotherTest = instance_create_depth(0,0,0,battle_dialog_enemy);

@@ -1,7 +1,3 @@
-///@arg start
-///@arg target
-///@arg time
-///@arg delay*
 function Fader_Fade() {
 	var START=argument[0];
 	var TARGET=argument[1];

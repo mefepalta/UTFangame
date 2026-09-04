@@ -1,6 +1,3 @@
-///@arg item_id
-///@arg item_event
-///@arg item_slot*
 function Item_CallEvent() {
 	var ITEM=argument[0];
 	var EVENT=argument[1];

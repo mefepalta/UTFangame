@@ -1,5 +1,3 @@
-///@arg box_slot
-///@arg item
 function Box_Add() {
 	var SLOT=argument[0];
 	var ITEM=argument[1];

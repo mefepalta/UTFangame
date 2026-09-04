@@ -1,4 +1,3 @@
-///@arg type
 function Flag_GetSavePath() {
 	var TYPE=argument[0];
 

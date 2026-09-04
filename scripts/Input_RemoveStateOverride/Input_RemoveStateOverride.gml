@@ -1,4 +1,3 @@
-///@arg input
 function Input_RemoveStateOverride() {
 	var INPUT=argument[0];
 

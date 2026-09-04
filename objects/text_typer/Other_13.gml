@@ -1,4 +1,3 @@
-///@desc Clear
 _char_x=0;
 _char_y=0;
 

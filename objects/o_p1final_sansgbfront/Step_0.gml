@@ -1,7 +1,5 @@
 if (manuel)
 {
-	// Havada suzuluyor: taban hedefe yaklasirken cizim ince bir sinusla
-	// inip cikiyor.
 	taban_y = lerp(taban_y, target_y, move_speedy);
 	suzul += suzul_hiz;
 	y = taban_y + dsin(suzul)*suzul_genlik;

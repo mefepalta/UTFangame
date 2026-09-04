@@ -1,4 +1,3 @@
-///@arg input
 function Input_IsReleased() {
 	var INPUT=argument[0];
 

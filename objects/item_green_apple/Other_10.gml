@@ -1,4 +1,3 @@
-///@desc Use
 Player_Heal(45);
 audio_play_sound(snd_item_heal,0,false);
 Dialog_Add("* You eat the Green Apple!{sleep 20}&* You have recovered 45 HP!")

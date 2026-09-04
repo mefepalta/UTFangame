@@ -1,4 +1,3 @@
-///@desc Drop
 var rand=irandom(18);
 var sub=0;
 if(rand>3){

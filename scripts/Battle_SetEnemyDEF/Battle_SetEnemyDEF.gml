@@ -1,5 +1,3 @@
-///@arg enemy_slot
-///@arg def
 function Battle_SetEnemyDEF() {
 	var ENEMY=argument[0];
 	var DEF=argument[1];

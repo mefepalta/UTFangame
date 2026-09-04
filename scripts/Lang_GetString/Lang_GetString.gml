@@ -1,5 +1,3 @@
-///@arg string_name
-///@arg default*
 function Lang_GetString() {
 	var KEY=argument[0];
 	var DEF="";

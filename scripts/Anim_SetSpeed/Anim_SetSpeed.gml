@@ -1,7 +1,3 @@
-///@arg target
-///@arg var_name
-///@arg speed
-///@arg fix_sign* Automatically handles negative speed (useful for ping-pong animations)
 function Anim_SetSpeed() {
 	var TARGET=argument[0];
 	var VAR_NAME=argument[1];

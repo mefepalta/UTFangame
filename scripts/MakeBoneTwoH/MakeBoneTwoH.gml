@@ -1,13 +1,3 @@
-///@arg x
-///@arg y
-///@arg vspeed
-///@arg gap
-///@arg auto_destroy
-///@arg angle
-///@arg mspd
-///@arg mx
-///@arg my
-///@arg *duration
 function MakeBoneTwoH() {
 	var X = argument[0];
 	var Y = argument[1];

@@ -1,5 +1,3 @@
-///@arg type
-///@arg raw
 function Flag_SetRaw() {
 	var TYPE=argument[0];
 	var RAW=argument[1];

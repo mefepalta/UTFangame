@@ -1,4 +1,3 @@
-///@desc Turn Preparation Start
 Battle_SetBoardSizeCubic(65,65,150,150);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 with (battle_enemy_engage)
@@ -27,9 +26,7 @@ if (room == room_battle_1)
 	with (battle_enemy_engage)
 	{
 		p2_head_sprite = spr_p2_head;
-		pap_state = 0;		// Papyrus daha sahnede degil
-		// Alphys bu turun ortasinda canlaniyor. Tur tekrar oynarsa (item/ACT
-		// sonrasi) sahne bir daha oynamaz, o yuzden bastan sahnede duruyor.
+		pap_state = 0;
 		alp_state = (global.p2_revived_alp ? 2 : 0);
 	}
 	sansy.text= "{font 3}{voice 3}{head 12}They TRUSTED me,&human. You know how&much that means?!{pause}{clear}{head 13}But I froze.{pause}{clear}{head 21}My legs were stuck to&the floor, I couldn't&move an inch!{pause}{clear}{head 14}I should've fought&with them...{sleep 30} I know&she would have.{pause}{clear}"

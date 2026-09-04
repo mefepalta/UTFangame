@@ -1,4 +1,3 @@
-///@arg phone_slot
 function Phone_IsSlotValid() {
 	var SLOT=argument[0];
 
