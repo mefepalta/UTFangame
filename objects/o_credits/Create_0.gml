@@ -6,12 +6,46 @@ creditstimer = 0;
 audio_stop_sound(snd_chance);
 audio_stop_sound(snd_menu);
 
-panel_start  = 300;
-panel_length = 520;
-panel_list   = [s_credits_0, s_credits_1, s_credits_2, s_credits_3,
-                s_credits_4, s_credits_5, s_credits_6, s_credits_7];
-last_start   = 4560;
-last_length  = 1640;
+// ---------------------------------------------------------------------
+// Credits schedule. One entry per board: which sprite, the step it comes
+// in on, how long it stays and how long its closing fade takes.
+// Boards 0-7 keep the original 520-step rhythm starting at 300, so the
+// whole sequence still lines up with snd_goldenstarlight.
+// ---------------------------------------------------------------------
+credit_schedule = [];
+
+var _boards = [s_credits_0, s_credits_1, s_credits_2, s_credits_3,
+               s_credits_4, s_credits_5, s_credits_6, s_credits_7];
+for (var _b = 0; _b < array_length(_boards); _b++)
+{
+	array_push(credit_schedule, {
+		spr     : _boards[_b],
+		start   : 300 + _b * 520,
+		dur     : 520,
+		fadein  : 80,
+		fadeout : 130
+	});
+}
+
+// "Testing & Feedback" - a normal board, same rhythm as the rest
+array_push(credit_schedule, {
+	spr     : s_credits_8,
+	start   : 4560,
+	dur     : 520,
+	fadein  : 80,
+	fadeout : 130
+});
+
+// the closing message: held long, then a slow fade that finishes at 6200,
+// just before the logo comes back down at 6220
+array_push(credit_schedule, {
+	spr     : s_credits_9,
+	start   : 5180,
+	dur     : 1020,
+	fadein  : 80,
+	fadeout : 500
+});
+
 
 panel_sprite  = -1;
 panel_x       = 320;

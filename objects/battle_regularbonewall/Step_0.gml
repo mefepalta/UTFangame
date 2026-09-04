@@ -16,17 +16,17 @@ if _dir = DIR.DOWN{
 	_bone_x = right_box
 }
 
-if _warning_color_switcher = 0{
-	_warning_color = c_red
-}else if _warning_color_switcher = 1{
-	_warning_color = c_yellow
-}
-
 if _warning_color_switcher < 0{
 	_warning_color_switcher = 1
 }
 if _warning_color_switcher > 1{
 	_warning_color_switcher = 0
+}
+
+if _warning_color_switcher = 0{
+	_warning_color = c_red
+}else if _warning_color_switcher = 1{
+	_warning_color = c_yellow
 }
 
 if _warning_time = 0{

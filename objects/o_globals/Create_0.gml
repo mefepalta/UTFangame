@@ -36,6 +36,9 @@ if (!variable_global_exists("death_count")) {
 if (!variable_global_exists("phase2_unlocked")) {
     global.phase2_unlocked = false;
 }
+if (!variable_global_exists("checkpoint_enabled")) {
+    global.checkpoint_enabled = false;
+}
 if (!variable_global_exists("extras_room")) {
     global.extras_room = noone;
 }

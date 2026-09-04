@@ -4,6 +4,7 @@ menu_items = [
     "Window Size",
     "No Heal",
     "No Hit",
+    "Checkpoint",
     "Volume"
 ];
 menu_index = 0;
@@ -33,10 +34,11 @@ global.volume = 1;
 global.display_volume = global.volume;
 
 optt = 0;
+checkpoint_deny = 0;
 line_h = 14;
 
 panel_w   = 250;
-row_sp    = 22;
+row_sp    = 20;
 panel_cx  = 320;
 panel_cy  = 240;
 panel_top = 133;

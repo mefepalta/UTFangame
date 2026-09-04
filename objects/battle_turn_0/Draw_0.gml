@@ -1,1 +1,1 @@
-draw_text(50,50,_timer);
+//draw_text(50,50,_timer);

@@ -1,6 +1,38 @@
 Battle_SetBoardSizeCubic(65,65,120,120);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 
+// SANS'I GERI GETIR.
+// battle_menu_fight_knife, oyuncu savururken Sans'in butun parcalarini
+// gizliyor (alpha 0); yerine o_sans_blockp1/p2'nin blok sprite'i cikiyor.
+// Geri acan satirlar SADECE battle_turn_N/Other_10'larda vardi. Iska
+// yapilinca (go_dodge == "miss") sirayi bu tur aldigi icin Sans gizli
+// kaliyor ve ekranda spr_p2_comeatmebro takili kaliyordu.
+// ACT/ITEM turunda zaten gizlenmedigi icin bu blok orada etkisiz.
+// room_battle_1 erken cikisindan ONCE olmali: hata faz 2'de goruluyor.
+// finalstretch sarti SART: faz 1'in son atagi bitince Sans *_alpha1
+// varyantlariyla (yorgun poz) duruyor ve mizrak menusu artik Sans'i
+// gizleyemiyor (o da finalstretch == 0 istiyor). Bu blok kosulsuz
+// calisinca eski kol/bacaklari da geri aciyor ve iki sprite ust uste
+// biniyordu -- Check yapinca goruluyordu.
+if (global.p25phase == 0) and (global.finalstretch == 0)
+{
+	with (battle_enemy_engage)
+	{
+		_head_alpha = 1;
+		_spear_alpha = 1;
+		_armleft_alpha = 1;
+		_armright_alpha = 1;
+		_legs_alpha = 1;
+		p2_armleft_alpha = 1;
+		p2_armright_alpha = 1;
+		p2_body_alpha = 1;
+		p2_cape_alpha = 1;
+		p2_legs_alpha = 1;
+		p2_head_alpha = 1;
+		p2_thingy_alpha = 1;
+	}
+}
+
 if (room == room_battle_1)
 {
 	with (battle_dialog_enemy)

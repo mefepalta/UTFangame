@@ -234,13 +234,13 @@ if (room == room_battle_1)
 	}
 	if (_timer == 590)
 	{
-		RegularBone(left_box,top_box,182,0,3,270,0,0,1,0,0,0,0,true);
-		RegularBone(right_box,bottom_box,182,0,-3,90,0,0,1,0,0,0,0,true);
+		RegularBone(left_box,top_box,200,0,3,270,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,bottom_box,200,0,-3,90,0,0,1,0,0,0,0,true);
 	}
 	if (_timer == 640)
 	{
-		RegularBone(left_box,bottom_box,182,0,-3,270,0,0,1,0,0,0,0,true);
-		RegularBone(right_box,top_box,182,0,3,90,0,0,1,0,0,0,0,true);
+		RegularBone(left_box,bottom_box,200,0,-3,270,0,0,1,0,0,0,0,true);
+		RegularBone(right_box,top_box,200,0,3,90,0,0,1,0,0,0,0,true);
 	}
 	if (_timer == 710)
 	{

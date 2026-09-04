@@ -1,4 +1,5 @@
 optt++;
+checkpoint_deny = max(0, checkpoint_deny - 1);
 
 var _vx = 0, _vy = 0, _vw = room_width, _vh = room_height;
 if (view_enabled) and (view_visible[0])
@@ -16,9 +17,9 @@ panel_cy = _vy + _vh * 0.5;
 var _rows    = array_length(menu_items);
 var _content = 14 + 12 + _rows * row_sp + 10 + 14;
 
-panel_top  = panel_cy - _content * 0.5 - 16;
-panel_bot  = panel_cy + _content * 0.5 + 16;
-title_y    = panel_top + 16;
+panel_top  = panel_cy - _content * 0.5 - 14;
+panel_bot  = panel_cy + _content * 0.5 + 14;
+title_y    = panel_top + 14;
 rows_y     = title_y + 14 + 12;
 hint_y     = rows_y + _rows * row_sp + 10;
 text_left  = panel_cx - panel_w * 0.5 + 46;
@@ -37,6 +38,7 @@ if (global.menu_state == "options") {
     }
 
     if (Input_IsPressed(INPUT.CONFIRM)) {
+        var _denied = false;
         switch (menu_index) {
             case 0:
                 global.fullscreen = !global.fullscreen;
@@ -56,8 +58,22 @@ if (global.menu_state == "options") {
 				break;
             case 3: global.no_heal = !global.no_heal; break;
             case 4: global.no_hit = !global.no_hit; break;
+            case 5:
+				// only meaningful once the player has actually reached phase 2
+				if (global.phase2_unlocked)
+				{
+					global.checkpoint_enabled = !global.checkpoint_enabled;
+				}
+				else
+				{
+					checkpoint_deny = 20;
+					_denied = true;
+					Camera_Shake(2,2,1,1,5,5,0.3,0.3);
+				}
+				break;
         }
-        audio_play_sound(snd_menu_confirm, 1, false);
+        if (_denied) { audio_play_sound(snd_damage, 1, false); }
+        else         { audio_play_sound(snd_menu_confirm, 1, false); }
     }
 	with (o_heartmenuoptions)
 	{
@@ -83,7 +99,7 @@ if (global.menu_state == "options") {
 		}
 	}
 
-    if (menu_index == 5) {
+    if (menu_index == 6) {
         if (keyboard_check_pressed(vk_right)) {
             global.volume = clamp(global.volume + 0.1, 0, 1);
             audio_master_gain(global.volume);

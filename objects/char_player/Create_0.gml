@@ -55,3 +55,13 @@ _moveable_warp=true;
 _moveable_encounter=true;
 _moveable_box=true;
 _moveable_chest = true;
+
+// KR (karmic retribution) yalnizca savas icinde anlamli: degeri sadece
+// battle_enemy_engage'in End Step'i azaltiyor ve o nesne overworld'de yok.
+// Savastan KR > 0 ile cikilirsa deger TEMP bayraginda takili kaliyor ve
+// Player_Heal'i "HP_MAX - KR" ile sinirliyor. Sonuc: overworld'de esya
+// kullaninca "* You have recovered N HP!" yaziyor ama can artmiyor, HP
+// zaten HP_MAX-KR'nin ustundeyse DUSUYOR. (Olculdu: KR=40, HP=60, ramen
+// -> HP 52.) Overworld'e girerken sifirla.
+Player_SetKr(0);
+Player_SetKrTimer(-1);

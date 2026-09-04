@@ -219,6 +219,13 @@ if (room == room_battle)
 		}
 	}
 
+	// Sans ekrana girerken dusus ruzgari
+	if (_timer == T20_SANS_DUSUS+T20_DUS_GORUN)
+	{
+		var _dus_ruzgar = audio_play_sound(snd_swift,2,false);
+		audio_sound_pitch(_dus_ruzgar,T20_DUS_RUZGAR_PITCH);
+	}
+
 	if (_timer == T20_SANS_DUSUS+T20_DUSUS_SURE)
 	{
 		with (o_p1final_fall)
@@ -226,6 +233,10 @@ if (room == room_battle)
 			p1finalattack = false;
 			image_alpha = 0;
 		}
+		// Dusus tamamlandi: boguk bir carpma
+		var _dus_carp = audio_play_sound(snd_impact,2,false);
+		audio_sound_pitch(_dus_carp,T20_DUS_CARP_PITCH);
+		Camera_Shake(3,3,2,2);
 	}
 
 	if (_timer == T20_GB_GELIS) { GbGelis(); }

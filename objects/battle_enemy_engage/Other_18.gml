@@ -53,7 +53,11 @@ if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.MERCY){
     }else{
 		audio_stop_sound(snd_chevalier);
 
-		if (global.p25phase >= 1)
+		// Faz 2'de (room_battle_1) ve final fazda Mercy artik sessiz bir
+		// skip turn; mizrak sahnesi sadece faz 1'e ait. O yuzden burada da
+		// item/act turundaki gibi tur sayaci geri aliniyor -- yoksa Mercy'e
+		// basarak sirasi gelen atak tamamen atlanabiliyordu.
+		if (global.p25phase >= 1) or (room == room_battle_1)
 		{
 			Battle_SetTurnNumber(Battle_GetTurnNumber()-1);
 		}

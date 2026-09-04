@@ -1,6 +1,43 @@
 Battle_SetBoardSizeCubic(65,65,65,65);
 sansy=instance_create_depth(0,0,0,battle_dialog_enemy);
 
+// SANS'I GERI GETIR (battle_skip_turn_0/Other_10 ile ayni gerekce).
+// Bir onceki tur iska ile bittiyse Sans hala gizli olabilir. Mizrak
+// sahnesi icin ayrica sart: SapSansAlpha ilk cagriida "orijinal" alpha'lari
+// kaydediyor -- burada 1'e cekilmezse 0 kaydedip Sans'i hic geri getiremezdi.
+// finalstretch sarti battle_skip_turn_0 ile ayni gerekce: faz 1'in son
+// atagindan sonra Sans yorgun pozda (*_alpha1) duruyor, kosulsuz geri
+// yukleme eski kol/bacaklari da acip iki sprite bindiriyordu. Mizrak
+// sahnesi de zaten finalstretch == 0 istiyor.
+if (global.p25phase == 0) and (global.finalstretch == 0)
+{
+	with (battle_enemy_engage)
+	{
+		_head_alpha = 1;
+		_spear_alpha = 1;
+		_armleft_alpha = 1;
+		_armright_alpha = 1;
+		_legs_alpha = 1;
+		p2_armleft_alpha = 1;
+		p2_armright_alpha = 1;
+		p2_body_alpha = 1;
+		p2_cape_alpha = 1;
+		p2_legs_alpha = 1;
+		p2_head_alpha = 1;
+		p2_thingy_alpha = 1;
+	}
+}
+
+// FAZ 2: Mercy burada faz 1'in mizrak sahnesini de repliklerini de
+// oynatmamali. Item/act turunun (battle_skip_turn_0) yaptiginin aynisi:
+// kutu normal olcusune donuyor, balon hic acilmiyor, tur sessizce bitiyor.
+if (room == room_battle_1)
+{
+	Battle_SetBoardSizeCubic(65,65,120,120);
+	with (battle_dialog_enemy) { instance_destroy(); }
+	exit;
+}
+
 if (global.p25phase == 0) and (global.sanstalk <= 22)
 {
 	sap_bg_on = true;

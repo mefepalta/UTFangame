@@ -83,7 +83,7 @@ for (var _i = 0; _i < _n; _i++)
 	draw_set_colour(_sel ? c_white : make_colour_rgb(168, 174, 198));
 	draw_text(text_left, _ry, menu_items[_i]);
 
-	if (_i == 5)
+	if (menu_items[_i] == "Volume")
 	{
 		var _bw = 74, _bhgt = 6;
 		var _bx1 = text_right;
@@ -123,11 +123,18 @@ for (var _i = 0; _i < _n; _i++)
 			case 2: _on = true;                  _lbl = window_scale_labels[global.window_scale_index]; break;
 			case 3: _on = global.no_heal;        _lbl = _on ? "ON" : "OFF"; break;
 			case 4: _on = global.no_hit;         _lbl = _on ? "ON" : "OFF"; break;
+			case 5:
+				// stays locked until phase 2 has been reached at least once
+				if (!global.phase2_unlocked) { _on = false; _lbl = "LOCKED"; }
+				else { _on = global.checkpoint_enabled; _lbl = _on ? "ON" : "OFF"; }
+				break;
 		}
 
 		draw_set_halign(fa_right);
 		draw_set_alpha(_a * (_sel ? 1 : 0.78));
-		draw_set_colour(_on ? make_colour_rgb(255, 212, 88) : make_colour_rgb(126, 132, 156));
+		var _vcol = _on ? make_colour_rgb(255, 212, 88) : make_colour_rgb(126, 132, 156);
+		if (_i == 5) and (checkpoint_deny > 0) { _vcol = make_colour_rgb(235, 70, 80); }
+		draw_set_colour(_vcol);
 		draw_text(text_right, _ry, _lbl);
 
 		if (_sel) and (_i == 2)

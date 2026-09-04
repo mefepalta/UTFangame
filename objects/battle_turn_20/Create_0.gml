@@ -1815,6 +1815,8 @@ VoidAdim = function()
 VoidBitir = function()
 {
 	CemberTemizle();
+	// Void kapanirken de acilistaki gibi bir ugultu olsun
+	audio_play_sound(snd_noise,1,false);
 	void_on = false;
 	F2SeritDur();
 	with (battle_regularbone) { instance_destroy(); }
@@ -1956,6 +1958,124 @@ CemberAdim = function()
 #macro T20_P2_DIK_ARA   150
 #macro T20_P2_DIK_DON   2.6
 
+// --- Kor nokta carki --------------------------------------------------------
+// Yelpaze kemikleri 136-224 derece arasina gidiyor, isin da agizdan SOLA; yani
+// blasterin sagi/arkasi hicbir atagin ulasamadigi bir kor noktaydi.
+//
+// Cozum: merkezi kutunun SAG KENARININ DISINDA olan, ici bastan asagi kemik
+// dolu, tek parca donen bir cark. Carkin sadece sol hilali kutunun icine
+// giriyor; geri kalani disarida sirasini bekliyor. Cark dondukce kemikler
+// surekli sagdan girip yine sagdan cikiyor -> kor nokta artik kalabalik.
+//
+//        kutu                      cark merkezi (kutunun disi)
+//   +-----------------+ . . . . . . . . o
+//   |          [][][] |  <- sadece bu hilal oyun alaninda
+//   +-----------------+ . . . . . . . . .
+//
+// Kemikler cark ile birlikte donuyor, AYRICA her biri kendi ekseninde donuyor.
+//
+// Performans: kemikler "slot" olarak tutuluyor; bir slot ancak kutunun icine
+// girdiginde gercek instance yaratiliyor, cikinca yok ediliyor. Boylece 40+
+// slot olsa da ayni anda ~15 kemik instance'i yasiyor. Bu ayni zamanda
+// battle_regularbone'un "ekran disina cikinca kendini yok et" kuralina
+// takilmayi da onluyor (cark merkezi x ~712, o kural x > 665'te yok ediyor).
+#macro T20_KOR_TASMA     60   // cark merkezi kutunun sag kenarindan kac px disarida
+#macro T20_KOR_R0        90   // en ic halka yaricapi (TASMA'dan buyuk olmali)
+#macro T20_KOR_R1       277   // en dis halka yaricapi -> hilal x 435'e kadar giriyor
+#macro T20_KOR_HALKA      5   // halka sayisi
+#macro T20_KOR_ARALIK   135   // halka uzerinde kemikler arasi hedef mesafe (px)
+#macro T20_KOR_SAP       16   // yaricap sapmasi (dagiisik dursun diye)
+#macro T20_KOR_HIZ     0.54   // carkin donus hizi (derece/kare)
+#macro T20_KOR_YON       -1   // 1 = saat yonu tersi, -1 = saat yonu
+#macro T20_KOR_BOY       52   // kemik uzunlugu
+#macro T20_KOR_KENDI    3.0   // kemigin kendi ekseninde donus hizi
+#macro T20_KOR_ACIL      10   // kemigin acilma suresi
+#macro T20_KOR_BASLA    150   // Gb2 basladiktan kac kare sonra cark kurulsun
+
+kor = [];
+kor_aci = 0;
+
+KorMerkez = function()
+{
+	if (!instance_exists(battle_board)) { return { x : 712, y : 240 }; }
+	return {
+		x : battle_board.x+battle_board.right+T20_KOR_TASMA,
+		y : battle_board.y+(battle_board.down-battle_board.up)/2
+	};
+};
+
+KorIcerde = function(_x,_y)
+{
+	if (!instance_exists(battle_board)) { return false; }
+	return (_x >= battle_board.x-battle_board.left)
+	   and (_x <= battle_board.x+battle_board.right)
+	   and (_y >= battle_board.y-battle_board.up)
+	   and (_y <= battle_board.y+battle_board.down);
+};
+
+KorTemizle = function()
+{
+	for (var _i = 0; _i < array_length(kor); _i++)
+	{
+		if (instance_exists(kor[_i].b)) { instance_destroy(kor[_i].b); }
+	}
+	kor = [];
+};
+
+KorKur = function()
+{
+	KorTemizle();
+	kor_aci = 0;
+	var _adim = (T20_KOR_R1-T20_KOR_R0)/max(1,T20_KOR_HALKA-1);
+	for (var _h = 0; _h < T20_KOR_HALKA; _h++)
+	{
+		var _r = T20_KOR_R0+_h*_adim;
+		var _n = max(3,round(2*pi*_r/T20_KOR_ARALIK));
+		var _kay = random(360);
+		for (var _i = 0; _i < _n; _i++)
+		{
+			array_push(kor,{
+				b : noone,
+				r : _r+random_range(-T20_KOR_SAP,T20_KOR_SAP),
+				a : _kay+_i*(360/_n)+random_range(-1,1)*(360/_n)*0.28
+			});
+		}
+	}
+	audio_play_sound(snd_exclamation,0,false);
+};
+
+KorAdim = function()
+{
+	if (array_length(kor) == 0) { return; }
+	var _m = KorMerkez();
+	kor_aci += T20_KOR_YON*T20_KOR_HIZ;
+
+	for (var _i = 0; _i < array_length(kor); _i++)
+	{
+		var _s = kor[_i];
+		var _a = _s.a+kor_aci;
+		var _x = _m.x+lengthdir_x(_s.r,_a);
+		var _y = _m.y+lengthdir_y(_s.r,_a);
+
+		if (KorIcerde(_x,_y))
+		{
+			if (!instance_exists(_s.b))
+			{
+				_s.b = RegularBone(_x,_y,0,0,0,random(360),0,0,1,0,1,0,
+					T20_KOR_YON*T20_KOR_KENDI,false);
+				Anim_Create(_s.b,"_length",ANIM_TWEEN.QUAD,ANIM_EASE.OUT,
+					0,T20_KOR_BOY,T20_KOR_ACIL);
+			}
+			_s.b.x = _x;
+			_s.b.y = _y;
+		}
+		else if (instance_exists(_s.b))
+		{
+			instance_destroy(_s.b);
+			_s.b = noone;
+		}
+	}
+};
 p2_on = false;
 p2_t = 0;
 p2_savur = false;
@@ -2055,6 +2175,7 @@ Gb2Adim = function()
 	if ((_t mod T20_P2_YELP_ARA) == 0) { Gb2Yelpaze(); }
 	if ((_t mod T20_P2_DIK_ARA) == 40) { Gb2DikKemik(); }
 	if ((_t mod T20_P2_ISIN_ARA) == 150) { IsinBasla(); }
+	if (_t == T20_KOR_BASLA) { KorKur(); }
 
 	if (p2_savur) and (instance_exists(o_p1final_gbsans))
 	{
@@ -2073,12 +2194,14 @@ Gb2Adim = function()
 	}
 
 	IsinAdim();
+	KorAdim();
 };
 
 Gb2Bitir = function()
 {
 	p2_on = false;
 	IsinDurdur();
+	KorTemizle();
 };
 
 #macro T20_P2_ISIN_ARA  340
@@ -2094,6 +2217,14 @@ Gb2Bitir = function()
 #macro T20_AGIZ_KAY      40
 
 isin_on = false;
+
+// --- Buyuk blaster ses efektleri --------------------------------------------
+// Normal blasterin sesleri (snd_gb_charge / snd_gb_release) pes perdeden
+// calinca dev blastere yakisan agir bir ton veriyor.
+#macro T20_ISIN_SARJ_PITCH 0.78
+#macro T20_ISIN_ATES_PITCH 0.72
+
+isin_sarj_ses = -1;
 isin_faz = 0;
 isin_t = 0;
 isin_x = 0;
@@ -2117,6 +2248,9 @@ IsinBasla = function()
 	isin_t = 0;
 	with (o_p1final_gbtop) { target_x = x; target_y = y; }
 	audio_play_sound(snd_pullback,2,false);
+	// Buyuk blaster sarj oluyor
+	isin_sarj_ses = audio_play_sound(snd_gb_charge,3,false);
+	audio_sound_pitch(isin_sarj_ses,T20_ISIN_SARJ_PITCH);
 };
 
 IsinAdim = function()
@@ -2142,6 +2276,9 @@ IsinAdim = function()
 			if (isin_t >= T20_ISIN_TOPLA)
 			{
 				isin_faz = 2; isin_t = 0;
+				// Buyuk blaster ates ediyor
+				var _isin_ates = audio_play_sound(snd_gb_release,4,false);
+				audio_sound_pitch(_isin_ates,T20_ISIN_ATES_PITCH);
 				audio_play_sound(snd_bighit,2,false);
 			}
 			break;
@@ -2183,6 +2320,7 @@ IsinAdim = function()
 IsinDurdur = function()
 {
 	isin_on = false;
+	if (audio_is_playing(isin_sarj_ses)) { audio_stop_sound(isin_sarj_ses); }
 	if (instance_exists(o_p1final_gbbottom)) { o_p1final_gbbottom.agiz = 0; }
 };
 
@@ -2382,6 +2520,14 @@ SonAdim = function()
 #macro T20_FIN_DUS_EGRI  2.2
 #macro FIN_DUS_CIK        14
 
+// --- Dusus ses efektleri ----------------------------------------------------
+// Ruzgar sesi = snd_swift pes perdeden; carpma oncesi yukselen ton snd_smash_rise
+// (0.49 sn ~= 29 kare) oyle ki tam vurusla bitsin.
+#macro T20_DUS_RUZGAR_PITCH 0.62
+#macro T20_DUS_CARP_PITCH   0.80
+#macro T20_DUS_GORUN          38
+#macro T20_DUS_YUKSEL         29
+
 fin_dus = false;
 fin_dus_t = 0;
 fin_dus_y0 = -608;
@@ -2390,6 +2536,15 @@ FinDusAdim = function()
 {
 	if (!fin_dus) { return; }
 	fin_dus_t += 1;
+	if (fin_dus_t == 1)
+	{
+		var _fd_ruzgar = audio_play_sound(snd_swift,2,false);
+		audio_sound_pitch(_fd_ruzgar,T20_DUS_RUZGAR_PITCH);
+	}
+	if (fin_dus_t == T20_FIN_DUS_SURE-T20_DUS_YUKSEL)
+	{
+		audio_play_sound(snd_smash_rise,2,false);
+	}
 	var _o = min(1,fin_dus_t/T20_FIN_DUS_SURE);
 	var _f = 1-power(1-_o,T20_FIN_DUS_EGRI);
 	with (o_p1final_fall_1)
@@ -2402,5 +2557,6 @@ FinDusAdim = function()
 		fin_dus = false;
 		Camera_Shake(4,5,2,2);
 		audio_play_sound(snd_impact,2,false);
+		audio_play_sound(snd_smash_impact,3,false);
 	}
 };

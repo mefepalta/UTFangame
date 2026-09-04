@@ -1,25 +1,29 @@
 creditstimer++;
 fx_t++;
 
+// ---------------------------------------------------------------------
+// Which board is on screen right now (see credit_schedule in Create)
+// ---------------------------------------------------------------------
 var _spr     = -1;
 var _index   = -1;
 var _local   = 0;
-var _dur     = panel_length;
+var _dur     = 520;
+var _fadein  = 80;
 var _fadeout = 130;
 
-if (creditstimer >= panel_start) and (creditstimer < panel_start + array_length(panel_list) * panel_length)
+for (var _s = 0; _s < array_length(credit_schedule); _s++)
 {
-	_index = (creditstimer - panel_start) div panel_length;
-	_local = (creditstimer - panel_start) mod panel_length;
-	_spr   = panel_list[_index];
-}
-else if (creditstimer >= last_start)
-{
-	_index   = array_length(panel_list);
-	_local   = creditstimer - last_start;
-	_dur     = last_length;
-	_fadeout = 500;
-	_spr     = s_credits_8;
+	var _e = credit_schedule[_s];
+	if (creditstimer >= _e.start) and (creditstimer < _e.start + _e.dur)
+	{
+		_index   = _s;
+		_local   = creditstimer - _e.start;
+		_dur     = _e.dur;
+		_fadein  = _e.fadein;
+		_fadeout = _e.fadeout;
+		_spr     = _e.spr;
+		break;
+	}
 }
 
 panel_sprite = _spr;
@@ -32,7 +36,7 @@ if (_spr != -1)
 		panel_flash = 1;
 	}
 
-	var _fadein = 80;
+	// fade envelope comes from the schedule entry
 	var _a = 1;
 	if (_local < _fadein)
 	{

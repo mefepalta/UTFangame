@@ -1,3 +1,17 @@
+// ===== DEBUG: SONSUZ CAN - TAM SURUMDE BU BLOGU SIL =====
+// D tusu ile ac/kapat. Acikken her karede HP maksimuma cekilir ve KR sifirlanir.
+if(keyboard_check_pressed(ord("D"))){
+	global.debug_godmode=(variable_global_exists("debug_godmode") ? !global.debug_godmode : true);
+	audio_play_sound(snd_menu_confirm,0,false);
+	show_debug_message("DEBUG godmode: "+string(global.debug_godmode));
+}
+if(variable_global_exists("debug_godmode") && global.debug_godmode){
+	Player_SetHp(Player_GetHpMax());
+	Player_SetKr(0);
+	Player_SetKrTimer(-1);
+}
+// ===== DEBUG SONU =====
+
 if(Flag_Get(FLAG_TYPE.STATIC,FLAG_STATIC.HP)<=0){
 	Flag_Set(FLAG_TYPE.TEMP,FLAG_TEMP.GAMEOVER_SOUL_X,x-camera.x);
 	Flag_Set(FLAG_TYPE.TEMP,FLAG_TEMP.GAMEOVER_SOUL_Y,y-camera.y);

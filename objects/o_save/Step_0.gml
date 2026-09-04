@@ -15,3 +15,14 @@ if (keyboard_check_pressed(ord("L"))) {
         show_debug_message("Load failed: file not found at " + savefile);
     }
 }
+
+// The checkpoint option is toggled from the options menu; persist it as
+// soon as it changes so it survives closing the game.
+if (global.checkpoint_enabled != checkpoint_saved) {
+    checkpoint_saved = global.checkpoint_enabled;
+    ini_open(savefile);
+    ini_write_real("PlayerData", "CheckpointEnabled", global.checkpoint_enabled ? 1 : 0);
+    ini_close();
+    show_debug_message("Saved CheckpointEnabled = " + string(global.checkpoint_enabled));
+}
+
