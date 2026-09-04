@@ -60,4 +60,8 @@ Console_OutputLine("Game Name: "+GAME_NAME);
 Console_OutputLine("Game Author: "+GAME_AUTHOR);
 Console_OutputLine("Game Version: "+GAME_VERSION);
 
+// tg_gamepad: hicbir yerde kullanilmayan PS4 tus sprite'lari - VRAM'den atilsin
+var _tg_gamepad = texturegroup_get_textures("tg_gamepad");
+for (var _i = 0; _i < array_length(_tg_gamepad); _i++) { texture_flush(_tg_gamepad[_i]); }
+
 room_goto_next();

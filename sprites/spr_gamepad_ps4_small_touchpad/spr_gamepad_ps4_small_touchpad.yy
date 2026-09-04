@@ -81,8 +81,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"tg_gamepad",
+    "path":"texturegroups/tg_gamepad",
   },
   "type":0,
   "VTile":false,
