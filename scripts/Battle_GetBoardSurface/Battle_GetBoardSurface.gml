@@ -1,10 +1,4 @@
 function Battle_GetBoardSurface() {
-	// Surface'ler ucucudur: GPU cihazi kaybedilirse (device removed) ya da VRAM
-	// yetmezse battle_board'un Pre-Draw'daki surface_create'i basarisiz olur ve
-	// _surface gecersiz kalir. O anda tahtaya cizen ilk nesne
-	// "Trying to set a surface target that does not exist" ile oyunu dusuruyordu
-	// (ornek: battle_regularbonewall/Draw_0). ~20 cagri noktasi var, hepsini tek
-	// yerden koru: gecersizse burada yeniden olustur.
 	with (battle_board)
 	{
 		if (!surface_exists(_surface))

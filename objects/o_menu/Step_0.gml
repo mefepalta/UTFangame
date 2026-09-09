@@ -88,7 +88,7 @@ switch (global.menu_state)
 			{
 				StartRun(room_area_beforesans);
 				global.extras_room = noone;
-				next_room = room_area_beforesans;
+				next_room = (Difficulty_Easy() ? room_disclaimer : room_area_beforesans);
 				transitioning = true;
 			}
 	}

@@ -74,6 +74,10 @@ if (room == room_battle)
 
 if (room == room_battle_1)
 {
+	if (Difficulty_AtakKisa()) and (_timer == 579) { _timer = 959; }
+
+	if (Difficulty_AtakKisa()) and (_timer == 1739) { _timer = 1899; }
+
 
 	if (_timer == arm_reset)
 	{

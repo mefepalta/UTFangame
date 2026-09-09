@@ -15,6 +15,8 @@ dialogue = [
     {time: 45,   text: ""},
 ];
 
+Difficulty_SahneDialog(dialogue, array_length(dialogue));
+
 current_line    = -1;
 start_time      = current_time;
 line_start_time = 0;

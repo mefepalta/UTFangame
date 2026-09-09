@@ -206,6 +206,8 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
+	if (Difficulty_AtakKisa()) and (_timer == 2419) { _timer = 2969; }
+
 	if (_timer == arm_reset)
 	{
 		battle_enemy_engage.p2_armright_sprite = spr_p2_arm_right;

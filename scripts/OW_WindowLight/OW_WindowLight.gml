@@ -1,13 +1,3 @@
-/// @func OW_WindowLight(worldX, worldY)
-/// @desc Returns 0..1: how much of the pale window light (room_area_beforesans /
-///       room_area_aftersans) falls on a point. The windows sit in a regular row
-///       (s_snowy_window instances start at x=200, spaced 108px apart; the sprite
-///       is 47px wide with a top-left origin, so its visual centre is at x=223.5).
-///       Horizontally it's a normal falloff around the nearest window. Vertically
-///       the whole walkable floor band (y=100..216) stays lit enough to read
-///       clearly, but with a gentle gradient - brighter right under the window,
-///       gradually dimmer toward the far edge of the floor - and falls off more
-///       sharply beyond that band.
 function OW_WindowLight(_worldX, _worldY)
 {
 	var _windowSpacing = 108;

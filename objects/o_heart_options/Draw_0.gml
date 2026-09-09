@@ -124,20 +124,19 @@ for (var _i = 0; _i < _n; _i++)
 			case 3: _on = global.no_heal;        _lbl = _on ? "ON" : "OFF"; break;
 			case 4: _on = global.no_hit;         _lbl = _on ? "ON" : "OFF"; break;
 			case 5:
-				// stays locked until phase 2 has been reached at least once
-				if (!global.phase2_unlocked) { _on = false; _lbl = "LOCKED"; }
-				else { _on = global.checkpoint_enabled; _lbl = _on ? "ON" : "OFF"; }
+				_on  = true;
+				_lbl = difficulty_labels[global.difficulty];
 				break;
 		}
 
 		draw_set_halign(fa_right);
 		draw_set_alpha(_a * (_sel ? 1 : 0.78));
 		var _vcol = _on ? make_colour_rgb(255, 212, 88) : make_colour_rgb(126, 132, 156);
-		if (_i == 5) and (checkpoint_deny > 0) { _vcol = make_colour_rgb(235, 70, 80); }
+		if (_i == 5) { _vcol = difficulty_colours[global.difficulty]; }
 		draw_set_colour(_vcol);
 		draw_text(text_right, _ry, _lbl);
 
-		if (_sel) and (_i == 2)
+		if (_sel) and ((_i == 2) or (_i == 5))
 		{
 			var _vw2 = string_width(_lbl);
 			draw_set_alpha(_a * _pulse);

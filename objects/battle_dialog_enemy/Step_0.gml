@@ -15,6 +15,11 @@ if(fast&&Input_IsPressed(INPUT.CONFIRM)){
 			other.SPEAKER_X = alp_draw_x - x;
 			other.SPEAKER_Y = 6;
 		}
+		else if (other.SPEAKER == 9)
+		{
+			other.SPEAKER_X = 0;
+			other.SPEAKER_Y = 0;
+		}
 		else
 		{
 			other.SPEAKER_X = p2_off_x;
@@ -29,7 +34,8 @@ if(fast&&Input_IsPressed(INPUT.CONFIRM)){
 	var _spk_x = battle_enemy_engage.x + SPEAKER_X;
 	var _text_w = xscale_box*47;
 	var _right_edge = _spk_x + SPEAKER_HALFW + SPEAKER_GAP + 15 + _text_w;
-	SIDE = (_right_edge <= 632 ? 0 : 1);
+	SIDE = (SIDE_FORCE >= 0) ? SIDE_FORCE : (_right_edge <= 632 ? 0 : 1);
+	if (SPEAKER == 9) { SIDE = 0; }
 
 	if SIDE = 0{
 		_inst.x=x_box+15;
@@ -43,6 +49,13 @@ if(fast&&Input_IsPressed(INPUT.CONFIRM)){
 		x_box=battle_enemy_engage.x+SPEAKER_X-SPEAKER_HALFW-SPEAKER_GAP
 		y_box=battle_enemy_engage.y+SPEAKER_Y-100
 	}
+	if (SPEAKER == 9)
+	{
+		x_box = 396;
+		y_box = 140;
+		_inst.x = x_box + 15;
+		_inst.y = y_box - yscale_box*20;
+	}
 	if (MODE == 0){
 	if SIDE = 0{
 		_spike_extra_x = 6
@@ -54,6 +67,13 @@ if(fast&&Input_IsPressed(INPUT.CONFIRM)){
 		_spike_extra_y = 0
 		ANGLE_BUBBLE = 180
 		ANGLE_SPIKE = 180
+	}
+	if (SPEAKER == 9)
+	{
+		_spike_extra_x = 212;
+		_spike_extra_y = 0;
+		ANGLE_BUBBLE = 0;
+		ANGLE_SPIKE = 180;
 	}
 	if (SPIKE){
 		_spike_alpha = 1

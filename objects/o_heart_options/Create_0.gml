@@ -4,7 +4,7 @@ menu_items = [
     "Window Size",
     "No Heal",
     "No Hit",
-    "Checkpoint",
+    "Difficulty",
     "Volume"
 ];
 menu_index = 0;
@@ -34,7 +34,12 @@ global.volume = 1;
 global.display_volume = global.volume;
 
 optt = 0;
-checkpoint_deny = 0;
+difficulty_labels  = ["EASY", "NORMAL", "HARD"];
+difficulty_colours = [
+    make_colour_rgb( 96, 220, 110),
+    make_colour_rgb(255, 158,  54),
+    make_colour_rgb(235,  70,  80)
+];
 line_h = 14;
 
 panel_w   = 250;

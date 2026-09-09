@@ -36,9 +36,18 @@ if (!variable_global_exists("death_count")) {
 if (!variable_global_exists("phase2_unlocked")) {
     global.phase2_unlocked = false;
 }
-if (!variable_global_exists("checkpoint_enabled")) {
-    global.checkpoint_enabled = false;
+if (!variable_global_exists("difficulty")) {
+    global.difficulty = DIFFICULTY_NORMAL;
 }
 if (!variable_global_exists("extras_room")) {
     global.extras_room = noone;
 }
+
+global.no_quit = false;
+
+global.easy_dmg4 = false;
+
+global.easy_heal_kid = -1;
+
+global.easy_final = false;
+global.no_fullscreen=false;

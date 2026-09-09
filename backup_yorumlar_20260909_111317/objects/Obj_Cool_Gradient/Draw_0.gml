@@ -1,0 +1,1 @@
+draw_sprite_ext(spr_battle_gradient,0,x,y,image_xscale,image_yscale,0,make_color_rgb(57,37,190),close_gradient);

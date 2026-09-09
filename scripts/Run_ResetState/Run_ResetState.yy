@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Run_ResetState",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Run_ResetState",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

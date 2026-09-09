@@ -8,19 +8,23 @@ if(instance_exists(world)){
 				_dots+=".";
 			}
 
+			var _qt=(variable_instance_exists(id,"_quit_kidding")&&_quit_kidding)
+				? "JUST KIDDING ;)"
+				: "QUITTING"+_dots;
+
 			draw_set_alpha(_quit_alpha);
 			draw_set_font(font_determination_mono_3);
 			draw_set_color(c_black);
-			draw_text(6,8,"QUITTING"+_dots);
-			draw_text(10,8,"QUITTING"+_dots);
-			draw_text(8,6,"QUITTING"+_dots);
-			draw_text(8,10,"QUITTING"+_dots);
-			draw_text(6,6,"QUITTING"+_dots);
-			draw_text(10,6,"QUITTING"+_dots);
-			draw_text(6,10,"QUITTING"+_dots);
-			draw_text(10,10,"QUITTING"+_dots);
+			draw_text(6,8,_qt);
+			draw_text(10,8,_qt);
+			draw_text(8,6,_qt);
+			draw_text(8,10,_qt);
+			draw_text(6,6,_qt);
+			draw_text(10,6,_qt);
+			draw_text(6,10,_qt);
+			draw_text(10,10,_qt);
 			draw_set_color(c_white);
-			draw_text(8,8,"QUITTING"+_dots);
+			draw_text(8,8,_qt);
 			draw_set_alpha(1);
 		}
 	}

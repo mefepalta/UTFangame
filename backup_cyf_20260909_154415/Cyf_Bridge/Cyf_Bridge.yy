@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Cyf_Bridge",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Cyf_Bridge",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

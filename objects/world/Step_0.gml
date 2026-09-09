@@ -1,10 +1,16 @@
 Anim_Step();
 BGM_Step();
 
+if(variable_global_exists("easy_heal_kid") && global.easy_heal_kid>=0 && Dialog_IsEmpty()){
+	Player_SetHp(global.easy_heal_kid);
+	global.easy_heal_kid=-1;
+}
+
 if(!variable_instance_exists(id,"_quit_hold_time")){
 	_quit_hold_time=0;
 	_quit_alpha=0;
 	_quit_dot_count=0;
+	_quit_kidding=false;
 }
 if(!variable_instance_exists(id,"_console_status_time")){
 	_console_status_time=10;
@@ -22,10 +28,15 @@ if(keyboard_check(vk_escape)){
 	_quit_dot_count=1+floor(min(_quit_hold_time-1,89)/30);
 	_quit_alpha=lerp(_quit_alpha,1,0.25);
 	if(_quit_hold_time>=90){
-		game_end();
+		if(variable_global_exists("no_quit")&&global.no_quit){
+			_quit_kidding=true;
+		}else{
+			game_end();
+		}
 	}
 }else{
 	_quit_hold_time=0;
+	_quit_kidding=false;
 	_quit_alpha=lerp(_quit_alpha,0,0.2);
 	if(_quit_alpha<0.01){
 		_quit_alpha=0;
@@ -66,6 +77,10 @@ if(GMU_CONSOLE_ENABLED){
 
 Console_Step();
 
+// Papyrus'un muzik molasinda pencere masaustunun sagina yaslaniyor; tam ekrana
+// gecmek bu duzeni bozdugu icin F4 o sirada calismiyor.
 if(keyboard_check_pressed(vk_f4)&&!keyboard_check(vk_alt)&&!keyboard_check(vk_control)&&!keyboard_check(vk_shift)){
-	window_set_fullscreen(!window_get_fullscreen());
+	if(!(variable_global_exists("no_fullscreen")&&global.no_fullscreen)){
+		window_set_fullscreen(!window_get_fullscreen());
+	}
 }

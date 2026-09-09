@@ -17,9 +17,6 @@ if (global.p25phase >= 1)
 	exit;
 }
 
-// FAZ 2: normal skip turn -- item kullandiktan sonraki tur ne yapiyorsa o.
-// Mizrak sahnesi faz 1'e (room_battle) ait: sprite'lari, Sans'in rig'i ve
-// konumlari oraya gore olculdu, burada calismamali.
 if (room == room_battle_1)
 {
 	if (_timer == 2) { Battle_SetSoul(battle_soul_red); }

@@ -1,0 +1,1 @@
+text="* An abyss shrouded in thick&  shadow is spread out before&  you...{pause}{clear}* The sight of snow granting&  faint flickers of light down&  the hall.{pause}{clear}* The curtains close on the story&  of the Underground.{pause}{clear}* As you sense DETERMINATION in&  every breath, and in every&  heartbeat."

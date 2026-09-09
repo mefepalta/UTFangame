@@ -28,13 +28,22 @@ if (room == room_battle_1)
 		pap_state = (global.p2_revived_pap ? 2 : 0);
 		alp_state = 2;
 	}
-	sansy.text="{font 3}{voice 3}{head 14}My only regret was not&doing the same for&him...{pause}{clear}{head 13}And never having&the courage to&say...{sleep 30} thank you.{pause}{clear}{head 25}Two words...{pause}{clear}Was it really so hard?{pause}{clear}{head 15}What would he even&say...{sleep 30} if he saw me&now?{pause}{clear}"
-	+"{revive 1}"
-	+"{speaker 1}{font 4}{voice 4}{pap_head 9}SURPRISE,&SURPRISE, LITTLE&HUMAN!{pause}{clear}{pap_head 16}YOUR GOOD PAL&PAPYRUS IS BACK&FROM THE DEAD!{pause}{clear}"
-	+"{speaker 0}{font 3}{voice 3}{head 6}These powers make no&sense.{pause}{clear}{head 2}But I guess I can&solve the mysteries of&that, later.";
+	if (Difficulty_Easy())
+	{
+		global.p2_revived_pap = true;
+		with (battle_enemy_engage) { pap_alpha = 1; pap_state = 2; pap_snap = true; }
+		if (instance_exists(sansy)) { instance_destroy(sansy); }
+	}
+	else
+	{
+		sansy.text="{font 3}{voice 3}{head 14}My only regret was not&doing the same for&him...{pause}{clear}{head 13}And never having&the courage to&say...{sleep 30} thank you.{pause}{clear}{head 25}Two words...{pause}{clear}Was it really so hard?{pause}{clear}{head 15}What would he even&say...{sleep 30} if he saw me&now?{pause}{clear}"
+		+"{revive 1}"
+		+"{speaker 1}{font 4}{voice 4}{pap_head 9}SURPRISE,&SURPRISE, LITTLE&HUMAN!{pause}{clear}{pap_head 16}YOUR GOOD PAL&PAPYRUS IS BACK&FROM THE DEAD!{pause}{clear}"
+		+"{speaker 0}{font 3}{voice 3}{head 6}These powers make no&sense.{pause}{clear}{head 2}But I guess I can&solve the mysteries of&that, later.";
+	}
 }
 
-if (Surrender_BasindaKonusur())
+if (instance_exists(sansy) && Surrender_BasindaKonusur())
 {
 	sansy.text = Surrender_Text();
 }

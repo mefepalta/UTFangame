@@ -6,12 +6,6 @@ creditstimer = 0;
 audio_stop_sound(snd_chance);
 audio_stop_sound(snd_menu);
 
-// ---------------------------------------------------------------------
-// Credits schedule. One entry per board: which sprite, the step it comes
-// in on, how long it stays and how long its closing fade takes.
-// Boards 0-7 keep the original 520-step rhythm starting at 300, so the
-// whole sequence still lines up with snd_goldenstarlight.
-// ---------------------------------------------------------------------
 credit_schedule = [];
 
 var _boards = [s_credits_0, s_credits_1, s_credits_2, s_credits_3,
@@ -27,7 +21,6 @@ for (var _b = 0; _b < array_length(_boards); _b++)
 	});
 }
 
-// "Testing & Feedback" - a normal board, same rhythm as the rest
 array_push(credit_schedule, {
 	spr     : s_credits_8,
 	start   : 4560,
@@ -36,8 +29,6 @@ array_push(credit_schedule, {
 	fadeout : 130
 });
 
-// the closing message: held long, then a slow fade that finishes at 6200,
-// just before the logo comes back down at 6220
 array_push(credit_schedule, {
 	spr     : s_credits_9,
 	start   : 5180,

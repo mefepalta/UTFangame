@@ -675,6 +675,10 @@ switch(cmd[|0]){
         battle_dialog_enemy.SPEAKER = cmd[|1];
         break;
 
+	case "side":
+        if(instance_exists(battle_dialog_enemy)){ battle_dialog_enemy.SIDE_FORCE = cmd[|1]; }
+        break;
+
 	case "destroy":
         instance_destroy()
         break;

@@ -1,0 +1,9 @@
+surface_set_target(Battle_GetBoardSurface());{
+	draw_self();
+	if(image_alpha==1){
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x,y,f_scale,f_scale,0,f_colour,f_alpha);
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x2,y,s_scale,s_scale,0,s_colour,s_alpha);
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x3,y,t_scale,t_scale,0,t_colour,t_alpha);
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x4,y,for_scale,for_scale,0,for_colour,for_alpha);
+	}
+}surface_reset_target();

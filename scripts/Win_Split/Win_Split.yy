@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Win_Split",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Win_Split",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

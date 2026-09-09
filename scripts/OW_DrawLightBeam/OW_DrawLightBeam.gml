@@ -1,6 +1,3 @@
-/// @func OW_DrawLightBeam(centerX, topY, bottomY, maxHalfWidth, color, intensity)
-/// @desc Draws one soft, cone-shaped light shaft (pale window light falling onto
-///       the floor) - a smooth shader-based gradient, not a stack of rectangles.
 function OW_DrawLightBeam(_centerX, _topY, _bottomY, _maxHalfWidth, _color, _intensity)
 {
 	static _shader     = shd_ow_lightbeam;

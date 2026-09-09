@@ -316,12 +316,18 @@ if (global.p1sanshp == true) and (room == room_battle)
 if (room == room_battle)
 {
 	global.sansphase = 0;
+
+	if (Difficulty_Easy()) and (!global.p1sanshp) { _head_image = 3; }
 }
 if (room == room_battle_1)
 {
 	global.sansphase = 1;
 	global.kr = false;
+
+	if (Difficulty_Easy()) { _head_image = 4; }
 }
+
+if (Difficulty_KrKapali()) { global.kr = false; }
 
 var _go_cast = 0;
 if (room == room_battle_1)

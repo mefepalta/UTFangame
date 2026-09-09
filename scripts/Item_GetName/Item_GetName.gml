@@ -1,6 +1,8 @@
 function Item_GetName() {
 	var ITEM=argument[0];
 
+	if(Difficulty_Easy() && Item_IsValid(ITEM)){ return "MaxHeal"; }
+
 	if(Item_IsValid(ITEM)){
 		var INST=instance_create_depth(0,0,0,ITEM);
 		var NAME=INST._name;

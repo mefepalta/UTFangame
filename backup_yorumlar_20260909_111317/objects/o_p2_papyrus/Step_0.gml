@@ -1,0 +1,6 @@
+if (_enemy_slot >= 0) and (instance_exists(battle_enemy_engage))
+{
+	x = battle_enemy_engage.pap_draw_x;
+	y = battle_enemy_engage.y - 90;
+	Battle_SetEnemyCenterPos(_enemy_slot,x,y);
+}

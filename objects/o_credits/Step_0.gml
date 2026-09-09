@@ -1,9 +1,6 @@
 creditstimer++;
 fx_t++;
 
-// ---------------------------------------------------------------------
-// Which board is on screen right now (see credit_schedule in Create)
-// ---------------------------------------------------------------------
 var _spr     = -1;
 var _index   = -1;
 var _local   = 0;
@@ -36,7 +33,6 @@ if (_spr != -1)
 		panel_flash = 1;
 	}
 
-	// fade envelope comes from the schedule entry
 	var _a = 1;
 	if (_local < _fadein)
 	{

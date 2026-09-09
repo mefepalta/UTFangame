@@ -8,6 +8,8 @@ if (global.finalstretch >= 1) and (room == room_battle) { global.go_dodge = "dam
 var _target_slot=Battle_ConvertMenuChoiceEnemyToEnemySlot(Battle_GetMenuChoiceEnemy());
 var _hit_sans=(instance_exists(battle_enemy_engage) && _target_slot==battle_enemy_engage._enemy_slot);
 
+var _p1_bitis = (global.p1sanshp and room == room_battle);
+
 _dir=choose(DIR.LEFT,DIR.RIGHT);
 _input_acceptable=true;
 _aim_x=0;
@@ -17,7 +19,7 @@ image_alpha=0;
 image_yscale=2;
 
 if(_dir==DIR.LEFT){
-	if (_hit_sans) and (!global.finalstretch == 1) and (global.p25phase == 0)
+	if (_hit_sans) and (!global.finalstretch == 1) and (global.p25phase == 0) and (!_p1_bitis)
 	{
 		with (battle_enemy_engage)
 		{
@@ -48,7 +50,7 @@ if(_dir==DIR.LEFT){
 	Anim_Create(id,"image_xscale",ANIM_TWEEN.QUINT,ANIM_EASE.OUT,1.3,0.7,40);
 	Anim_Create(id,"_aim_x",ANIM_TWEEN.SINE,ANIM_EASE.IN,_aim_x,-(battle_board.left+battle_board.right+sprite_get_width(spr_battle_menu_fight_aim)),75);
 }else{
-	if (_hit_sans) and (!global.finalstretch == 1) and (global.p25phase == 0)
+	if (_hit_sans) and (!global.finalstretch == 1) and (global.p25phase == 0) and (!_p1_bitis)
 	{
 		with (battle_enemy_engage)
 		{

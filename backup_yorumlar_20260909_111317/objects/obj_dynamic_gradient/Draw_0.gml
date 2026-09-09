@@ -1,0 +1,5 @@
+if !(time%45)
+Anim_Create(self,"alpha",2,0,1,-0.5,15)
+for (var i = 0; i < 640; i++)
+draw_sprite_ext(spr_battle_gradient,0,i,520+sin((i+time)/35)*25,1,2,0,c_aqua,alpha)
+draw_sprite_ext(spr_battle_gradient,0,0,500,640,2.5,0,c_aqua,alpha)

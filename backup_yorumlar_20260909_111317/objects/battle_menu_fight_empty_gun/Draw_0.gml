@@ -1,0 +1,11 @@
+surface_set_target(Battle_GetBoardSurface());{
+	draw_self();
+	if(image_alpha==1){
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x1,y,1,1,0,c_white,_aim_x1_alpha);
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x2,y,1,1,0,c_white,_aim_x2_alpha);
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x3,y,1,1,0,c_white,_aim_x3_alpha);
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x4,y,1,1,0,c_white,_aim_x4_alpha);
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x5,y,1,1,0,c_white,_aim_x5_alpha);
+		draw_sprite_ext(spr_battle_menu_fight_aim,_aim_image,_aim_x6,y,1,1,0,c_white,_aim_x6_alpha);
+	}
+}surface_reset_target();

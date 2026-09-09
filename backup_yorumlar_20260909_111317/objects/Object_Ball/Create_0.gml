@@ -1,0 +1,10 @@
+depth=DEPTH_BATTLE.BG-2;
+x=random_range(0,640);
+y=500;
+image_blend=c_white;
+gravity=0.050;
+gravity_direction=DIR.UP;
+speed=0.7;
+direction=random(360);
+sprite_index=spr_pixel;
+image_xscale=random_range(1,2);

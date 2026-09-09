@@ -849,6 +849,9 @@ F2MaviBasla = function()
 	mavi_son = noone;
 };
 
+
+mavi_firlat_hiz = 8;
+
 F2MaviOlum = function()
 {
 	if (!mavi_on) { return; }
@@ -856,6 +859,28 @@ F2MaviOlum = function()
 	Player_SetHp(1);
 	Battle_CallSoulEventHurt();
 	Camera_Shake(6,6,6,6);
+};
+
+F2MaviSinir = function(_alt)
+{
+	if (!mavi_on) { return; }
+
+	if (Difficulty_Get() == DIFFICULTY_HARD) { F2MaviOlum(); return; }
+
+	Battle_HurtNormal(DMG_BONE);
+
+	if (!_alt) { return; }
+	if (!instance_exists(battle_soul)) { return; }
+
+	battle_soul.y = 458;
+	battle_soul.move = -mavi_firlat_hiz;
+	battle_soul.jump_state = 2;
+	battle_soul.on_platform = 0;
+	battle_soul.on_board = 0;
+	battle_soul.on_block = 0;
+	battle_soul.inst_plat = noone;
+	audio_play_sound(snd_impact,0,false);
+	Camera_Shake(4,4,3,3);
 };
 
 F2MaviBitir = function()
@@ -1815,7 +1840,6 @@ VoidAdim = function()
 VoidBitir = function()
 {
 	CemberTemizle();
-	// Void kapanirken de acilistaki gibi bir ugultu olsun
 	audio_play_sound(snd_noise,1,false);
 	void_on = false;
 	F2SeritDur();
@@ -1958,39 +1982,18 @@ CemberAdim = function()
 #macro T20_P2_DIK_ARA   150
 #macro T20_P2_DIK_DON   2.6
 
-// --- Kor nokta carki --------------------------------------------------------
-// Yelpaze kemikleri 136-224 derece arasina gidiyor, isin da agizdan SOLA; yani
-// blasterin sagi/arkasi hicbir atagin ulasamadigi bir kor noktaydi.
-//
-// Cozum: merkezi kutunun SAG KENARININ DISINDA olan, ici bastan asagi kemik
-// dolu, tek parca donen bir cark. Carkin sadece sol hilali kutunun icine
-// giriyor; geri kalani disarida sirasini bekliyor. Cark dondukce kemikler
-// surekli sagdan girip yine sagdan cikiyor -> kor nokta artik kalabalik.
-//
-//        kutu                      cark merkezi (kutunun disi)
-//   +-----------------+ . . . . . . . . o
-//   |          [][][] |  <- sadece bu hilal oyun alaninda
-//   +-----------------+ . . . . . . . . .
-//
-// Kemikler cark ile birlikte donuyor, AYRICA her biri kendi ekseninde donuyor.
-//
-// Performans: kemikler "slot" olarak tutuluyor; bir slot ancak kutunun icine
-// girdiginde gercek instance yaratiliyor, cikinca yok ediliyor. Boylece 40+
-// slot olsa da ayni anda ~15 kemik instance'i yasiyor. Bu ayni zamanda
-// battle_regularbone'un "ekran disina cikinca kendini yok et" kuralina
-// takilmayi da onluyor (cark merkezi x ~712, o kural x > 665'te yok ediyor).
-#macro T20_KOR_TASMA     60   // cark merkezi kutunun sag kenarindan kac px disarida
-#macro T20_KOR_R0        90   // en ic halka yaricapi (TASMA'dan buyuk olmali)
-#macro T20_KOR_R1       277   // en dis halka yaricapi -> hilal x 435'e kadar giriyor
-#macro T20_KOR_HALKA      5   // halka sayisi
-#macro T20_KOR_ARALIK   135   // halka uzerinde kemikler arasi hedef mesafe (px)
-#macro T20_KOR_SAP       16   // yaricap sapmasi (dagiisik dursun diye)
-#macro T20_KOR_HIZ     0.54   // carkin donus hizi (derece/kare)
-#macro T20_KOR_YON       -1   // 1 = saat yonu tersi, -1 = saat yonu
-#macro T20_KOR_BOY       52   // kemik uzunlugu
-#macro T20_KOR_KENDI    3.0   // kemigin kendi ekseninde donus hizi
-#macro T20_KOR_ACIL      10   // kemigin acilma suresi
-#macro T20_KOR_BASLA    150   // Gb2 basladiktan kac kare sonra cark kurulsun
+#macro T20_KOR_TASMA     60
+#macro T20_KOR_R0        90
+#macro T20_KOR_R1       277
+#macro T20_KOR_HALKA      5
+#macro T20_KOR_ARALIK   135
+#macro T20_KOR_SAP       16
+#macro T20_KOR_HIZ     0.54
+#macro T20_KOR_YON       -1
+#macro T20_KOR_BOY       52
+#macro T20_KOR_KENDI    3.0
+#macro T20_KOR_ACIL      10
+#macro T20_KOR_BASLA    150
 
 kor = [];
 kor_aci = 0;
@@ -2218,9 +2221,6 @@ Gb2Bitir = function()
 
 isin_on = false;
 
-// --- Buyuk blaster ses efektleri --------------------------------------------
-// Normal blasterin sesleri (snd_gb_charge / snd_gb_release) pes perdeden
-// calinca dev blastere yakisan agir bir ton veriyor.
 #macro T20_ISIN_SARJ_PITCH 0.78
 #macro T20_ISIN_ATES_PITCH 0.72
 
@@ -2248,7 +2248,6 @@ IsinBasla = function()
 	isin_t = 0;
 	with (o_p1final_gbtop) { target_x = x; target_y = y; }
 	audio_play_sound(snd_pullback,2,false);
-	// Buyuk blaster sarj oluyor
 	isin_sarj_ses = audio_play_sound(snd_gb_charge,3,false);
 	audio_sound_pitch(isin_sarj_ses,T20_ISIN_SARJ_PITCH);
 };
@@ -2276,7 +2275,6 @@ IsinAdim = function()
 			if (isin_t >= T20_ISIN_TOPLA)
 			{
 				isin_faz = 2; isin_t = 0;
-				// Buyuk blaster ates ediyor
 				var _isin_ates = audio_play_sound(snd_gb_release,4,false);
 				audio_sound_pitch(_isin_ates,T20_ISIN_ATES_PITCH);
 				audio_play_sound(snd_bighit,2,false);
@@ -2520,9 +2518,6 @@ SonAdim = function()
 #macro T20_FIN_DUS_EGRI  2.2
 #macro FIN_DUS_CIK        14
 
-// --- Dusus ses efektleri ----------------------------------------------------
-// Ruzgar sesi = snd_swift pes perdeden; carpma oncesi yukselen ton snd_smash_rise
-// (0.49 sn ~= 29 kare) oyle ki tam vurusla bitsin.
 #macro T20_DUS_RUZGAR_PITCH 0.62
 #macro T20_DUS_CARP_PITCH   0.80
 #macro T20_DUS_GORUN          38

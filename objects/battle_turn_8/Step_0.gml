@@ -15,6 +15,8 @@ var top_box = (battle_board.y-battle_board.up)+2;
 
 if (room == room_battle_1)
 {
+	if (Difficulty_AtakKisa()) and (_timer == 1339) { _timer = 1519; }
+
 	var _wl = battle_board.x-battle_board.left;
 	var _wr = battle_board.x+battle_board.right;
 	var _wt = battle_board.y-battle_board.up;

@@ -1,0 +1,1 @@
+y=char_player.y

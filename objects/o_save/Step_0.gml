@@ -6,23 +6,17 @@ if (keyboard_check_pressed(ord("S"))) {
 }
 
 if (keyboard_check_pressed(ord("L"))) {
-    if (file_exists(savefile)) {
-        ini_open(savefile);
-        global.death_count = ini_read_real("PlayerData", "DeathCount", 0);
-        ini_close();
-        show_debug_message("Loaded death_count = " + string(global.death_count));
-    } else {
-        show_debug_message("Load failed: file not found at " + savefile);
-    }
+    ini_open(savefile);
+    global.death_count = ini_read_real("PlayerData", "DeathCount", 0);
+    ini_close();
+    show_debug_message("Loaded death_count = " + string(global.death_count));
 }
 
-// The checkpoint option is toggled from the options menu; persist it as
-// soon as it changes so it survives closing the game.
-if (global.checkpoint_enabled != checkpoint_saved) {
-    checkpoint_saved = global.checkpoint_enabled;
+if (global.difficulty != difficulty_saved) {
+    difficulty_saved = global.difficulty;
     ini_open(savefile);
-    ini_write_real("PlayerData", "CheckpointEnabled", global.checkpoint_enabled ? 1 : 0);
+    ini_write_real("PlayerData", "Difficulty", global.difficulty);
     ini_close();
-    show_debug_message("Saved CheckpointEnabled = " + string(global.checkpoint_enabled));
+    show_debug_message("Saved Difficulty = " + string(global.difficulty));
 }
 

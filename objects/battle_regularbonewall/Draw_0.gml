@@ -45,9 +45,6 @@ if _dir = DIR.DOWN{
 
 if (_warning_time <= 0) exit;
 
-// Kutu yuzeyi tahta poligonunun disini kirpiyor, duvar genisligi ise kenari tam
-// kapatsin diye kasten tahtadan buyuk veriliyor: kirpilmadan cizilince cercevenin
-// karsilikli iki kenari yutuluyordu. Once tahtanin icine sikistir.
 var _bl = battle_board.x-battle_board.left;
 var _br = battle_board.x+battle_board.right;
 var _bt = battle_board.y-battle_board.up;

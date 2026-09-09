@@ -1,6 +1,9 @@
-if(_state==BATTLE_STATE.MENU){
+if(_state==BATTLE_STATE.MENU) and (!(global.p1sanshp and room == room_battle)){
 	if(_menu==BATTLE_MENU.BUTTON){
-		if(Input_IsPressed(INPUT.LEFT)){
+		var _easy_final_lock = (variable_global_exists("easy_final") && global.easy_final);
+		if(_easy_final_lock){ Battle_SetMenuChoiceButton(0); }
+
+		if(!_easy_final_lock && Input_IsPressed(INPUT.LEFT)){
 			var button=_menu_choice_button;
 			button-=1;
 			if(button<0){
@@ -8,7 +11,7 @@ if(_state==BATTLE_STATE.MENU){
 			}
 			audio_play_sound(snd_menu_switch,0,false);
 			Battle_SetMenuChoiceButton(button);
-		}else if(Input_IsPressed(INPUT.RIGHT)){
+		}else if(!_easy_final_lock && Input_IsPressed(INPUT.RIGHT)){
 			var button=_menu_choice_button;
 			button+=1;
 			if(button>3){

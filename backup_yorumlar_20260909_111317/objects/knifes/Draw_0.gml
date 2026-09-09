@@ -1,0 +1,5 @@
+draw_sprite_ext(spr_undyne_spear,image_index,x,y,1,1,image_angle,c_white,image_alpha)
+draw_sprite_ext(spr_spear_hitbox,image_index,x1,y1,1,1,image_angle,c_white,image_alpha)
+if(collision_line(x+lengthdir_x(2,image_angle+90)+lengthdir_x(image_yscale/2,image_angle),y+lengthdir_y(2,image_angle+90)+lengthdir_y(image_yscale/2,image_angle),x+lengthdir_x(2,image_angle+90)-lengthdir_x(image_yscale/2,image_angle),y+lengthdir_y(2,image_angle+90)-lengthdir_y(image_yscale/2,image_angle),battle_soul,0,0)||collision_line(x-lengthdir_x(1,image_angle+90)+lengthdir_x(image_yscale/2,image_angle),y-lengthdir_y(1,image_angle+90)+lengthdir_y(image_yscale/2,image_angle),x-lengthdir_x(1,image_angle+90)-lengthdir_x(image_yscale/2,image_angle),y-lengthdir_y(1,image_angle+90)-lengthdir_y(image_yscale/2,image_angle),battle_soul,0,0)){
+	Battle_CallSoulEventBulletCollision();
+}

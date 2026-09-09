@@ -1,0 +1,11 @@
+event_inherited();
+box_slot=0;
+image_xscale = 1.3;
+image_yscale = 1.3;
+_anim_done = false;
+res_idle_sprite[DIR.UP] = s_box;
+res_idle_sprite[DIR.DOWN] = s_box;
+res_idle_sprite[DIR.LEFT] = s_box;
+res_idle_sprite[DIR.RIGHT] = s_box;
+sprite_index = s_box;
+image_speed = 0;

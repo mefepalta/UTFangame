@@ -1,0 +1,15 @@
+if(_p!=-1){
+	part_type_destroy(_p);
+	_p=-1;
+}
+if(_ps!=-1){
+	part_system_destroy(_ps);
+	_ps=-1;
+}
+if(surface_exists(_surface)){
+	surface_free(_surface);
+	_surface=-1;
+}
+if(instance_exists(_inst)){
+	instance_destroy(_inst);
+}

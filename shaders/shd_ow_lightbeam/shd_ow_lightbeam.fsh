@@ -9,7 +9,7 @@ uniform float u_intensity;
 
 void main()
 {
-    float y = v_vTexcoord.y; // 0 = top (at the window), 1 = bottom (floor)
+    float y = v_vTexcoord.y;
     float halfWidth = mix(u_topWidthFrac, u_bottomWidthFrac, y);
     float distFromCenter = abs(v_vTexcoord.x - 0.5);
 

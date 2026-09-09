@@ -1,0 +1,109 @@
+if(fast&&Input_IsPressed(INPUT.CONFIRM)){
+	instance_destroy();
+}else if(instance_exists(_inst)){
+	_inst._outline=false;
+
+	with (battle_enemy_engage)
+	{
+		if (other.SPEAKER == 1)
+		{
+			other.SPEAKER_X = pap_draw_x - x;
+			other.SPEAKER_Y = -64;
+		}
+		else if (other.SPEAKER == 2)
+		{
+			other.SPEAKER_X = alp_draw_x - x;
+			other.SPEAKER_Y = 6;
+		}
+		else if (other.SPEAKER == 9)
+		{
+			// Anlatici (Mefe): karaktere bagli degil, sabit sag-ust.
+			other.SPEAKER_X = 0;
+			other.SPEAKER_Y = 0;
+		}
+		else
+		{
+			other.SPEAKER_X = p2_off_x;
+			other.SPEAKER_Y = 0;
+		}
+
+		if (other.SPEAKER == 1)      { other.SPEAKER_HALFW = 75; }
+		else if (other.SPEAKER == 2) { other.SPEAKER_HALFW = 90; }
+		else                         { other.SPEAKER_HALFW = 70; }
+	}
+
+	var _spk_x = battle_enemy_engage.x + SPEAKER_X;
+	var _text_w = xscale_box*47;
+	var _right_edge = _spk_x + SPEAKER_HALFW + SPEAKER_GAP + 15 + _text_w;
+	SIDE = (SIDE_FORCE >= 0) ? SIDE_FORCE : (_right_edge <= 632 ? 0 : 1);
+	if (SPEAKER == 9) { SIDE = 0; }
+
+	if SIDE = 0{
+		_inst.x=x_box+15;
+		_inst.y=y_box-yscale_box*20;
+		x_box=battle_enemy_engage.x+SPEAKER_X+SPEAKER_HALFW+SPEAKER_GAP;
+		y_box=battle_enemy_engage.y+SPEAKER_Y-100
+	}
+	if SIDE = 1{
+		_inst.x=x_box-xscale_box*47;
+		_inst.y=y_box-yscale_box*20;
+		x_box=battle_enemy_engage.x+SPEAKER_X-SPEAKER_HALFW-SPEAKER_GAP
+		y_box=battle_enemy_engage.y+SPEAKER_Y-100
+	}
+	if (SPEAKER == 9)
+	{
+		// Anlatici (Mefe) kutusu: sabit sag-ust. Kutu sol-origin ve ~218px
+		// genis oldugu icin x_box = SOL kenar; kutu x_box..x_box+218 arasi.
+		// Metin SIDE 0 formuluyle (x_box+15) hizalaniyor. INCE AYAR: asagidaki
+		// iki sayi (x_box, y_box).
+		x_box = 396;
+		y_box = 140;
+		_inst.x = x_box + 15;
+		_inst.y = y_box - yscale_box*20;
+	}
+	if (MODE == 0){
+	if SIDE = 0{
+		_spike_extra_x = 6
+		_spike_extra_y = 0
+		ANGLE_BUBBLE = 0
+		ANGLE_SPIKE = 0
+	}else if SIDE = 1{
+		_spike_extra_x = -6
+		_spike_extra_y = 0
+		ANGLE_BUBBLE = 180
+		ANGLE_SPIKE = 180
+	}
+	if (SPEAKER == 9)
+	{
+		// Anlatici kutusu: govde ayni yerde, kuyruk SAG kenarda ve saga bakiyor.
+		_spike_extra_x = 212;
+		_spike_extra_y = 0;
+		ANGLE_BUBBLE = 0;
+		ANGLE_SPIKE = 180;
+	}
+	if (SPIKE){
+		_spike_alpha = 1
+	}else{
+		_spike_alpha = 0
+	}
+}else if (MODE == 1){
+	if SIDE = 0{
+		_spike_extra_x = 4
+		_spike_extra_y = 0
+		ANGLE_BUBBLE = 0
+		ANGLE_SPIKE = 0
+	}else if SIDE = 1{
+		_spike_extra_x = -4
+		_spike_extra_y = 0
+		ANGLE_BUBBLE = 180
+		ANGLE_SPIKE = 180
+	}
+	if (SPIKE){
+		_spike_alpha = 1
+	}else{
+		_spike_alpha = 0
+	}
+}
+}else{
+	instance_destroy();
+}

@@ -140,6 +140,9 @@ function Macro_Battle() {
 #macro DMG_BONE_BLUE       9
 #macro DMG_BONE_ORANGE     9
 
+#macro BLASTER_HITBOX_PAY   2
+#macro BLASTER_ISIN_BANT   12
+
 #macro DMG_BLASTER        12
 #macro DMG_BLASTER_BIG    22
 
@@ -156,6 +159,9 @@ function Macro_Battle() {
 
 #macro DMG_CAR            15
 #macro DMG_GUEST          11
+
+#macro DMG_FAZ2_NORMAL_INDIRIM   4
+#macro DMG_FAZ2_NORMAL_TABAN     2
 
 function Battle_HurtNormal(_dmg,_inv = DMG_INV)
 {

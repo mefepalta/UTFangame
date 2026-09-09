@@ -21,7 +21,7 @@ if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.FIGHT){
         if object_exists(skip_turn)
             instance_create_depth(0, 0, 0, skip_turn);
     } else {
-        var turn = asset_get_index(("battle_turn_" + string(turn_number)));
+        var turn = asset_get_index(("battle_turn_" + string(Difficulty_MapTurn(turn_number))));
         if object_exists(turn)
             instance_create_depth(0, 0, 0, turn);
     }
@@ -53,10 +53,6 @@ if (Battle_GetMenuChoiceButton() == BATTLE_MENU_CHOICE_BUTTON.MERCY){
     }else{
 		audio_stop_sound(snd_chevalier);
 
-		// Faz 2'de (room_battle_1) ve final fazda Mercy artik sessiz bir
-		// skip turn; mizrak sahnesi sadece faz 1'e ait. O yuzden burada da
-		// item/act turundaki gibi tur sayaci geri aliniyor -- yoksa Mercy'e
-		// basarak sirasi gelen atak tamamen atlanabiliyordu.
 		if (global.p25phase >= 1) or (room == room_battle_1)
 		{
 			Battle_SetTurnNumber(Battle_GetTurnNumber()-1);

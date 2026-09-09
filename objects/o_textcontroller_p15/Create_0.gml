@@ -39,6 +39,8 @@ LINE_MUSIC    = 3;
 LINE_STANDUP  = 9;
 LINE_EYECUE   = 6;
 
+Difficulty_SahneDialog(dialogue, LINE_NARRATOR);
+
 audio_stop_all();
 BGM_Stop(5);
 

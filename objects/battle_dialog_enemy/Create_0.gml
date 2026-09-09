@@ -20,6 +20,7 @@ fast=false;
 
 MODE = 0
 SIDE = 0
+SIDE_FORCE = -1
 SPIKE = true
 
 SPEAKER = 0

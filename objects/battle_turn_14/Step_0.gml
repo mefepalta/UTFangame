@@ -113,6 +113,8 @@ if (room == room_battle)
 }
 if (room == room_battle_1)
 {
+	if (Difficulty_AtakKisa()) and (_timer == 2179) { _timer = 3360; }
+
 	if (_timer > 545) and (_timer < 1370) { battle_board.angle += don_hiz; }
 	if (_timer > 2312) and (_timer < 3360)
 	{

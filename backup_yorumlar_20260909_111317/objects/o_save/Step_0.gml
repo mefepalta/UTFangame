@@ -1,0 +1,24 @@
+if (keyboard_check_pressed(ord("S"))) {
+    ini_open(savefile);
+    ini_write_real("PlayerData", "DeathCount", global.death_count);
+    ini_close();
+    show_debug_message("Saved death_count = " + string(global.death_count) + " -> " + savefile);
+}
+
+if (keyboard_check_pressed(ord("L"))) {
+    ini_open(savefile);
+    global.death_count = ini_read_real("PlayerData", "DeathCount", 0);
+    ini_close();
+    show_debug_message("Loaded death_count = " + string(global.death_count));
+}
+
+// The difficulty option is cycled from the options menu; persist it as
+// soon as it changes so it survives closing the game.
+if (global.difficulty != difficulty_saved) {
+    difficulty_saved = global.difficulty;
+    ini_open(savefile);
+    ini_write_real("PlayerData", "Difficulty", global.difficulty);
+    ini_close();
+    show_debug_message("Saved Difficulty = " + string(global.difficulty));
+}
+
