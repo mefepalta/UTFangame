@@ -793,23 +793,21 @@ if (room == room_battle_1)
 
 	if (_timer >= 3995) and (_timer <= 5195)
 	{
-		if ((_timer-3995) % 60 == 0) { F2AltGrup(2.5); }
+		if ((_timer-3995) % 90 == 0) { F2AltGrup(1.7); }
 	}
 
 	if (_timer >= 4055) and (_timer <= 5235)
 	{
-		if ((_timer-4055) % 120 == 0) { F2GrupVur(); }
+		if ((_timer-4055) % 150 == 0) { F2GrupVur(); }
 	}
 
 	if (_timer == 4335) { F2NisanBlaster(true); }
-	if (_timer == 4535) { F2NisanBlaster(false); }
-	if (_timer == 4735) { F2NisanBlaster(true); }
-	if (_timer == 4935) { F2NisanBlaster(false); }
+	if (_timer == 4735) { F2NisanBlaster(false); }
 	if (_timer == 5135) { F2NisanBlaster(true); }
 
 	if (_timer >= 4635) and (_timer <= 5235)
 	{
-		if ((_timer-4635) % 120 == 0) { Spear3(); }
+		if ((_timer-4635) % 200 == 0) { Spear3(); }
 	}
 
 	if (_timer == 5335)
