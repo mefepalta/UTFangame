@@ -74,7 +74,19 @@ if (room == room_battle)
 
 if (room == room_battle_1)
 {
-	if (Difficulty_AtakKisa()) and (_timer == 579) { _timer = 959; }
+	if (Difficulty_AtakKisa()) and (_timer == 579)
+	{
+		_timer = 959;
+		// 175'te baslayan 805 karelik tahta daralmasi (185 -> 90) GERCEK ZAMANLI,
+		// _timer ile birlikte ziplamiyor. Ziplamadan sonra tahta HARD'a gore
+		// ~45 px/kenar genis kaliyordu (980'de 270 px, HARD'da 180) ve 980'deki
+		// 190'lik DIR.UP duvari tahtanin sadece solunu kapliyordu -- sagda
+		// oyuncunun bekleyebildigi bosluk. Kalan mesafeyi 980'e kadar tamamla.
+		Anim_Destroy(battle_board,"left");
+		Anim_Destroy(battle_board,"right");
+		Anim_Create(battle_board,"left" ,ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,battle_board.left ,90-battle_board.left ,21);
+		Anim_Create(battle_board,"right",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,battle_board.right,90-battle_board.right,21);
+	}
 
 	if (Difficulty_AtakKisa()) and (_timer == 1739) { _timer = 1899; }
 

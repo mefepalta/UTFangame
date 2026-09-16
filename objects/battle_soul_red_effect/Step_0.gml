@@ -4,6 +4,7 @@ if (instance_exists(battle_soul))
 	y=battle_soul.y
 	sprite_index=battle_soul.sprite_index
 	image_index=0
+	image_angle=battle_soul.image_angle
 }
 
 if (image_alpha <= 0) { instance_destroy(); }

@@ -300,6 +300,7 @@ if (room == room_battle_1)
 	if (_timer == 2015)
 	{
 		Fader_Fade(-1,1,1);
+		audio_play_sound(snd_noise,1,false);
 	}
 
 	if (_timer == 2030)

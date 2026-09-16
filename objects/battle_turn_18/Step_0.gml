@@ -248,10 +248,12 @@ if (room == room_battle_1)
 			}
 		}
 
+		// Platform + hancer: NORMAL'de hancerler seyrek (2 yerine 4)
+		var _hancer_sik = (Difficulty_Get() != DIFFICULTY_NORMAL);
 		if (kir_t == 880) { HancerYatay(-1); }
-		if (kir_t == 900) { HancerYatay(1); }
-		if (kir_t == 920) { HancerYatay(-1); }
-		if (kir_t == 940) { HancerYatay(1); }
+		if (kir_t == 900) and (_hancer_sik) { HancerYatay(1); }
+		if (kir_t == 920) { HancerYatay(_hancer_sik ? -1 : 1); }
+		if (kir_t == 940) and (_hancer_sik) { HancerYatay(1); }
 
 		if (kir_t == 1000)
 		{
@@ -431,7 +433,18 @@ if (room == room_battle_1)
 
 		for (var _i = _cn-1; _i >= 0; _i--)
 		{
-			if (cars[_i].y > 560) { array_delete(cars,_i,1); }
+			if (cars[_i].y > 560) { CarUyariSil(cars[_i]); array_delete(cars,_i,1); }
+		}
+		for (var _i = 0; _i < array_length(cars); _i++)
+		{
+			var _cu = cars[_i].uyari;
+			if (instance_exists(_cu))
+			{
+				_cu.hx = battle_board.x+58;
+				_cu.hy = cars[_i].y-car_ry*0.6;
+				_cu.ok_dx = 52;
+				_cu.ok_dy = -46;
+			}
 		}
 		_cn = array_length(cars);
 		if (_cn == 0) { car_on = false; }
@@ -516,6 +529,8 @@ if (room == room_battle_1)
 			var _gd = point_direction(gst_x,gst_y,gst_tx,gst_ty);
 			gst_x += lengthdir_x(gst_spd,_gd);
 			gst_y += lengthdir_y(gst_spd,_gd);
+			// Lacivert saldiri yolunda yukari suzulen iz
+			array_push(gst_iz,{ x: gst_x, y: gst_y, t: 0, omur: 24 });
 			if (gst_y > 520) or (gst_t > 90)
 			{
 				gst_state = 3;
@@ -595,6 +610,13 @@ if (room == room_battle_1)
 				Camera_Shake(5,5,3,3);
 			}
 		}
+	}
+
+	for (var _zi = array_length(gst_iz)-1; _zi >= 0; _zi--)
+	{
+		gst_iz[_zi].t += (gst_state == 2) ? 1 : 2;
+		gst_iz[_zi].y -= 1.8;
+		if (gst_iz[_zi].t >= gst_iz[_zi].omur) { array_delete(gst_iz,_zi,1); }
 	}
 
 	if (kon_tep_t >= 0)

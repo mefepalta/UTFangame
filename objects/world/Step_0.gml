@@ -58,6 +58,10 @@ if(FRAME_SKIP>0){
 }
 
 if(keyboard_check_pressed(vk_f2)){
+	// game_restart() ses motorunu SIFIRLAMAZ: calan sesler calmaya, duraklatilan
+	// sesler (flash_on/o_monster_soul audio_pause_all) duraklatilmis kalmaya
+	// devam eder. Temiz baslangic icin once hepsini durdur.
+	audio_stop_all();
 	game_restart();
 }
 

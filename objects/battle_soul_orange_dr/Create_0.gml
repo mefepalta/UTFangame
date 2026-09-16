@@ -6,7 +6,7 @@ image_angle=180;
 
 charging=false;
 charge=0;
-charge_max=40;
+charge_max=Difficulty_DashSarj(DASH_SARJ_HARD);
 orb_timer=0;
 orbs=[];
 
@@ -112,3 +112,15 @@ function do_strike(POW){
 }
 
 instance_create_depth(x,y,0,battle_soul_orange_effect);
+
+// Ilk turuncu ruhta ruhun ustunde DASH ipucu
+Battle_HintDash();
+
+// CAN / MAX_CAN gostergesi (kalbin ustunde).
+// Ayri bir "aktif" bayragi YOK: gosterge bu ruh nesnesinin uzerinde yasiyor.
+// Atak bitip Battle_SetSoul baska bir ruha gecince bu instance yok ediliyor
+// (Battle_SetSoul once instance_destroy(battle_soul) yapiyor), dolayisiyla
+// gosterge kendiliginden kapaniyor.
+can_onceki = -1;
+can_alpha  = 0;
+can_bekle  = 0;

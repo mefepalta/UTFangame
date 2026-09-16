@@ -113,6 +113,15 @@ function Difficulty_AtakKisa()
 	return (Difficulty_Get() != DIFFICULTY_HARD);
 }
 
+// Turuncu ruhun buyuk dash'i icin gereken sarj suresi (kare).
+// HARD'da taban deger korunuyor, HARD disinda kisaltiliyor.
+function Difficulty_DashSarj(_taban)
+{
+	if (!is_real(_taban)) { return _taban; }
+	if (Difficulty_Get() == DIFFICULTY_HARD) { return _taban; }
+	return min(_taban, DASH_SARJ_KOLAY);
+}
+
 
 
 function Difficulty_Konusmaci(_t)
