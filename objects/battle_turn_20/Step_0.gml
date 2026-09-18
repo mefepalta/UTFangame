@@ -499,6 +499,19 @@ if (room == room_battle)
 
 if (room == room_battle_1)
 {
+	// NORMAL kisaltmalari (Difficulty_Normal). Atlanan araliklar:
+	//   2030->2420  shocker/dalga ciftlerinden 3'u          (-390 kare)
+	//   2835->3110  SpearArena(5) mizrak bolumu             (-275 kare)
+	//   4735->5135  sagdan gelen nisan blaster turu         (-400 kare)
+	// Sari, koridor, buyuk kutu ve mavi bolum kisaltmalari asagida kendi
+	// sayaclarinda (sari_t / bolum / son_t / mavi_parkur).
+	if (Difficulty_Normal())
+	{
+		if (_timer == 2030) { _timer = 2420; }
+		if (_timer == 2835) { _timer = 3110; }
+		if (_timer == 4735) { _timer = 5135; }
+	}
+
 	if (_timer == 1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
@@ -823,6 +836,9 @@ if (room == room_battle_1)
 	if (sari_on)
 	{
 		sari_t += 1;
+		// NORMAL: aynali orta bolum (693-1222) atlanir; _timer da ayni kadar
+		// ileri alinir ki 6995'teki kararma ile hizalama bozulmasin (-530 kare)
+		if (Difficulty_Normal()) and (sari_t == 693) { sari_t = 1223; _timer += 530; }
 
 		if (sari_t == 43) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
 		if (sari_t == 54) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
@@ -999,9 +1015,22 @@ if (room == room_battle_1)
 
 	if (bolum == 5) and (yol >= 6045)
 	{
-		bolum = 6;
-		BoxRun(4,100,110,310,40);
-		BlastMark(1200,-1);
+		if (Difficulty_Normal())
+		{
+			// NORMAL: 6-7-8 (kutu, zincir, ziplama) atlanir, dogrudan 9'un
+			// kutu kosusuna gecilir; yol sayaci 9'un esigine cekilir (-4830 yol)
+			bolum = 9;
+			yol = 10875;
+			BoxRun(5,100,110,310,40);
+			BlastMark(1100,1);
+			BlastMark(1700,-1);
+		}
+		else
+		{
+			bolum = 6;
+			BoxRun(4,100,110,310,40);
+			BlastMark(1200,-1);
+		}
 	}
 
 	if (bolum == 6) and (yol >= 7680)
@@ -1352,7 +1381,9 @@ if (room == room_battle_1)
 		}
 
 
-		if (son_t == 1560)
+		// NORMAL: buyuk kutu bolumu 1560 yerine 1140 karede biter (-420 kare)
+		var _son_kapanis = Difficulty_Normal() ? 1140 : 1560;
+		if (son_t == _son_kapanis)
 		{
 			son_on = false;
 			son_bitis = _timer;

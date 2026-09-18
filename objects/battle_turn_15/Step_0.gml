@@ -310,6 +310,7 @@ if (room == room_battle_1)
 		Anim_Destroy(battle_board,"left");
 		Anim_Destroy(battle_board,"right");
 		Battle_SetBoardSizeCubic(165,65,180,180,0);
+		Difficulty_Can(); // NORMAL: turuncu bolum bitti, mavi bolum oncesi can
 		battle_board.angle = 0;
 		Battle_SetSoul(battle_soul_blue);
 		battle_soul.x = battle_board.x;

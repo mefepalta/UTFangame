@@ -172,6 +172,10 @@ function Macro_Battle() {
 #macro DMG_FAZ2_NORMAL_INDIRIM   4
 #macro DMG_FAZ2_NORMAL_TABAN     2
 
+// NORMAL faz 2: uzun ataklarin bolum gecislerinde verilen otomatik can
+// (Difficulty_Can). 999 = tam can; kismi can icin bu sayiyi dusur.
+#macro CAN_FAZ2_NORMAL          999
+
 // Turuncu ruhun (battle_soul_orange_dr) BUYUK dash'i: CONFIRM basili
 // tutulunca charge her karede 1 artiyor, charge_max'a ulasinca "ding" calip
 // birakildiginda do_strike(2) tetikleniyor. Yani bu deger dogrudan "buyuk
