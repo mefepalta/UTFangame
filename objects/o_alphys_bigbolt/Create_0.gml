@@ -28,10 +28,67 @@ fan_scale  = 1;
 // Uygulandigi yer: Explode().
 normal_fan_count = 4;
 
+// Patlamadan cikan boltlarin taban acisi burada, olusturulurken seciliyor
+// (eskiden Explode icinde irandom(359) idi) ki dusus sirasinda Draw_0
+// yonleri onceden gosterebilsin.
+fan_base = irandom(359);
+
+// Yon belirteci: bolt duserken tahmini patlama noktasindan cikacak
+// boltlarin izleyecegi yolu (HARD'da egri, NORMAL'de duz) yanip sonen
+// ok cizgileriyle cizer. Turlerden _b.gosterge = false ile kapatilir.
+// Cizgi uzunlugu = gosterge_adim * fan_speed piksel.
+gosterge       = true;
+gosterge_adim  = 10;
+gosterge_kalin = 2;
+gosterge_col   = c_yellow;
+
 serbest_y = -1;
 
 _state = 0;
 _t = 0;
+
+// Zorluk ayari: HARD fan_* degerlerini aynen kullaniyor; NORMAL daha az
+// sayida ve egrilmeden duz giden bolt uretiyor. Explode ve Draw_0'daki
+// belirtec ayni tabloyu okuyor ki gosterilen yol ile cikan bolt tutsun.
+FanAyar = function()
+{
+	var _f = { adet: fan_count, curve: fan_curve, decay: fan_decay, spin: fan_spin };
+	if (Difficulty_Get() != DIFFICULTY_HARD)
+	{
+		_f.adet  = min(fan_count,normal_fan_count);
+		_f.curve = 0;
+		_f.decay = 1;
+		_f.spin  = 0;
+	}
+	return _f;
+};
+
+// Mevcut hizla ilerlemeye devam edilirse Step_0'daki kosullarla patlamanin
+// gerceklesecegi nokta ([x,y]); tahtaya hic girmeyecekse undefined.
+PatlamaNoktasi = function()
+{
+	var _bl = battle_board.x-battle_board.left;
+	var _br = battle_board.x+battle_board.right;
+	var _bt = battle_board.y-battle_board.up;
+	var _bb = battle_board.y+battle_board.down;
+
+	var _px = x;
+	var _py = y;
+	for (var _i = 0; _i < 200; _i++)
+	{
+		if (serbest_y >= 0)
+		{
+			if (_py >= serbest_y) { return [_px,_py]; }
+		}
+		else if (_px > _bl) and (_px < _br) and (_py > _bt) and (_py < _bb)
+		{
+			return [_px,_py];
+		}
+		_px += hspeed;
+		_py += vspeed;
+	}
+	return undefined;
+};
 
 Explode = function()
 {
@@ -41,29 +98,15 @@ Explode = function()
 	audio_play_sound(kaboom,0,false);
 	Camera_Shake(6,6,1,1,1,1);
 
-	// Zorluk ayari: HARD fan_* degerlerini aynen kullaniyor; NORMAL daha az
-	// sayida ve egrilmeden duz giden bolt uretiyor.
-	var _adet  = fan_count;
-	var _curve = fan_curve;
-	var _decay = fan_decay;
-	var _spin  = fan_spin;
-	if (Difficulty_Get() != DIFFICULTY_HARD)
-	{
-		_adet  = min(fan_count,normal_fan_count);
-		_curve = 0;
-		_decay = 1;
-		_spin  = 0;
-	}
-
-	var _base = irandom(359);
-	for (var _i = 0; _i < _adet; _i++)
+	var _f = FanAyar();
+	for (var _i = 0; _i < _f.adet; _i++)
 	{
 		var _b = instance_create_depth(x,y,DEPTH_BATTLE.BULLET_OUTSIDE_HIGH,o_alphys_bolt);
-		_b.direction = _base + _i*(360/_adet);
+		_b.direction = fan_base + _i*(360/_f.adet);
 		_b.speed = fan_speed;
-		_b.spin  = _spin;
-		_b.curve = _curve;
-		_b.curve_decay = _decay;
+		_b.spin  = _f.spin;
+		_b.curve = _f.curve;
+		_b.curve_decay = _f.decay;
 		_b.scale = fan_scale;
 	}
 };
