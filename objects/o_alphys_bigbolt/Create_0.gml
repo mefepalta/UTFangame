@@ -33,12 +33,16 @@ normal_fan_count = 4;
 // yonleri onceden gosterebilsin.
 fan_base = irandom(359);
 
-// Yon belirteci: bolt duserken tahmini patlama noktasindan cikacak
-// boltlarin izleyecegi yolu (HARD'da egri, NORMAL'de duz) yanip sonen
-// ok cizgileriyle cizer. Turlerden _b.gosterge = false ile kapatilir.
+// Yon belirteci: bolt duserken patlamadan cikacak boltlarin izleyecegi
+// yolu (HARD'da egri, NORMAL'de duz) yanip sonen ok cizgileriyle cizer.
+// Turlerden _b.gosterge = false ile kapatilir.
+// gosterge_yer 0: oklar boltun uzerinde, onunla birlikte duser (varsayilan;
+//   patlama noktasinda bolt gelmeden beliren oklar garip duruyordu).
+// gosterge_yer 1: oklar tahmini patlama noktasinda sabit durur.
 // Cizgi uzunlugu = gosterge_adim * fan_speed piksel.
 gosterge       = true;
-gosterge_adim  = 10;
+gosterge_yer   = 0;
+gosterge_adim  = 14;
 gosterge_kalin = 2;
 gosterge_col   = c_yellow;
 

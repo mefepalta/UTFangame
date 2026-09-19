@@ -1,18 +1,19 @@
 if (_state == 0)
 {
-	// Yon belirteci: tahmini patlama noktasindan, o_alphys_bolt'un Step_0'daki
-	// hareketini (direction += curve; curve *= decay) ayni sirayla simule
-	// ederek her boltun ilk gosterge_adim karelik yolunu ve ucuna ok cizer.
+	// Yon belirteci: boltun uzerinden (gosterge_yer 0) ya da tahmini patlama
+	// noktasindan (1), o_alphys_bolt'un Step_0'daki hareketini
+	// (direction += curve; curve *= decay) ayni sirayla simule ederek her
+	// boltun ilk gosterge_adim karelik yolunu ve ucuna ok cizer.
 	if (gosterge) and (image_alpha > 0)
 	{
-		var _p = PatlamaNoktasi();
+		var _p = (gosterge_yer == 0) ? [x,y] : PatlamaNoktasi();
 		if (!is_undefined(_p))
 		{
 			var _f = FanAyar();
 			var _ga = image_alpha*(0.45+0.4*abs(dsin(_t*6)));
 			draw_set_color(gosterge_col);
 			draw_set_alpha(_ga);
-			draw_circle(_p[0],_p[1],3,false);
+			if (gosterge_yer != 0) { draw_circle(_p[0],_p[1],3,false); }
 			for (var _i = 0; _i < _f.adet; _i++)
 			{
 				var _d = fan_base + _i*(360/_f.adet);
