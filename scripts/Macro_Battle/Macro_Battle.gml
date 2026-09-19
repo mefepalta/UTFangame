@@ -143,6 +143,15 @@ function Macro_Battle() {
 #macro BLASTER_HITBOX_PAY   2
 #macro BLASTER_ISIN_BANT   12
 
+// Tavandan/tabandan kurulan kemik duvarlari (battle_turn_11/12/14 WallMake)
+// kemik sayisini cagrildiklari ANDAKI tahta genisliginden hesapliyor ve
+// kemikleri sabit konumda yaratiyor. Tahta o an hala animasyondaysa ya da
+// sonradan genislerse duvar tahtayi kaplamayi birakip guvenli bosluk
+// biraktiriyordu. Kemikler tahta yuzeyine ciziliyor (RegularBone Inside=0),
+// yani tasan kemikler GORUNMUYOR -- duvari her zaman bu kadar piksel genis
+// kurmak bedava.
+#macro KEMIK_DUVAR_MARJ   120
+
 #macro DMG_BLASTER        12
 #macro DMG_BLASTER_BIG    22
 
@@ -162,6 +171,26 @@ function Macro_Battle() {
 
 #macro DMG_FAZ2_NORMAL_INDIRIM   4
 #macro DMG_FAZ2_NORMAL_TABAN     2
+
+// NORMAL faz 2: uzun ataklarin bolum gecislerinde verilen otomatik can
+// (Difficulty_Can). 999 = tam can; kismi can icin bu sayiyi dusur.
+#macro CAN_FAZ2_NORMAL          999
+
+// Turuncu ruhun (battle_soul_orange_dr) BUYUK dash'i: CONFIRM basili
+// tutulunca charge her karede 1 artiyor, charge_max'a ulasinca "ding" calip
+// birakildiginda do_strike(2) tetikleniyor. Yani bu deger dogrudan "buyuk
+// dash'i cikarmak icin kac kare beklemek gerekiyor" demek. 60 fps.
+// HARD tabani degismiyor; HARD disi zorluklarda kisaltiliyor.
+#macro DASH_SARJ_HARD           40
+#macro DASH_SARJ_KOLAY          24
+
+// Kalbin ustundeki CAN / MAX_CAN gostergesi (turuncu kalp ataklari).
+// Hasar alininca alfa 1'e ziplar, CAN_GOSTERGE_BEKLE kare sabit durur,
+// sonra kare basina CAN_GOSTERGE_SONME kadar soner.
+// battle_turn_20 ayni gostergeyi dev kutu sahnesinde KENDI instance
+// degiskenleriyle kullaniyor; oraya dokunulmadi.
+#macro CAN_GOSTERGE_BEKLE       45
+#macro CAN_GOSTERGE_SONME     0.03
 
 function Battle_HurtNormal(_dmg,_inv = DMG_INV)
 {

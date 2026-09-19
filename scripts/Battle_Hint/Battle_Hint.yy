@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Battle_Hint",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Battle_Hint",
+  "parent":{
+    "name":"Bullet",
+    "path":"folders/Objects/Battle/Bullet.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -65,3 +65,19 @@ if(SHOW && jump_scale!=1){
 }else{
 	event_inherited();
 }
+
+// CAN / MAX_CAN gostergesi -- battle_turn_20/Draw_0 ile ayni bicim
+// (font, 0.5 olcek, 1 px siyah golge). SHOW sartina bagli: ruh gizliyken
+// yazi tek basina havada kalmasin.
+if (SHOW) and (can_alpha > 0)
+{
+	draw_set_alpha(1);
+	draw_set_font(font_determination_sans);
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_bottom);
+	var _yz = string(Player_GetHp())+" / "+string(Player_GetHpMax());
+	draw_text_transformed_color(x+1,y-15,_yz,0.5,0.5,0,c_black,c_black,c_black,c_black,can_alpha);
+	draw_text_transformed_color(x,y-16,_yz,0.5,0.5,0,c_white,c_white,c_white,c_white,can_alpha);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+}

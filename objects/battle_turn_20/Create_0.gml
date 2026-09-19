@@ -320,6 +320,7 @@ F2SariBasla = function()
 
 	sari_on = true;
 	sari_t = 0;
+	Difficulty_Can(); // NORMAL: sari bolum basinda can
 };
 
 F2SariBitir = function()
@@ -397,13 +398,21 @@ CarBone = function(_x1,_x2,_y,_sc,_col,_al)
 
 CarMark = function(_d)
 {
-	array_push(cars,{ y: 400-_d });
+	// Ilk birkac carousel icin "Don't jump!" uyarisi (Battle_HintCarousel sayar)
+	array_push(cars,{ y: 400-_d, uyari: Battle_HintCarousel() });
 	car_on = true;
+};
+
+CarUyariSil = function(_c)
+{
+	if (instance_exists(_c.uyari)) { instance_destroy(_c.uyari); }
+	_c.uyari = noone;
 };
 
 CarStop = function()
 {
 	car_on = false;
+	for (var _i = 0; _i < array_length(cars); _i++) { CarUyariSil(cars[_i]); }
 	cars = [];
 };
 
@@ -428,6 +437,7 @@ gst_ty=400;
 gst_spd=19;
 gst_rvx=0;
 gst_rvy=0;
+gst_iz=[];
 
 kon_tep_t   = -1;
 kon_tep_x0  = 0;
@@ -444,6 +454,15 @@ GuestStart = function(_max)
 	gst_y = -60;
 	gst_vx = 1.4;
 	gst_flash = 0;
+	gst_iz = [];
+	// HARD disinda daha seyrek ve biraz daha yavas saldirir
+	if (Difficulty_Get() != DIFFICULTY_HARD)
+	{
+		gst_bekle = 34;
+		gst_hazir = 38;
+		gst_geri  = 28;
+		gst_spd   = 16;
+	}
 	Anim_Destroy(id,"gst_alpha");
 	Anim_Create(id,"gst_alpha",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,1,25);
 	audio_play_sound(snd_exclamation,0,false);
@@ -554,7 +573,9 @@ JumpUnit = function(_first,_lanes)
 		JumpBar(_d+130-424);
 	}
 	var _td = _first+260*_n;
-	JumpRing(_lanes[_n-1],_td-420);
+	// Carousel'in onundeki halka kirmizi: ziplama, havadayken carousel vurur
+	var _son = JumpRing(_lanes[_n-1],_td-420);
+	_son.kirmizi = true;
 	CarMark(_td+130);
 };
 
@@ -587,6 +608,7 @@ F2TuruncuBasla = function()
 	DrCorridor(false,4);
 	bolum = 0;
 	yol = 0;
+	Difficulty_Can(); // NORMAL: koridor basinda can
 };
 
 
@@ -673,6 +695,7 @@ F2SonAc = function()
 	F2SeritBasla();
 	son_on = true;
 	son_t = 0;
+	Difficulty_Can(); // NORMAL: buyuk kutu basinda can
 };
 
 F2SonKapat = function()
@@ -761,6 +784,19 @@ mavi_parkur = [
 	[330, 160, 0]
 ];
 
+// NORMAL: parkurun orta kismi (indeks 8..15) cikarilir -> 8 basamak, ~624 kare
+// daha kisa. 7 [140] -> 16 [270] gecisi 130 px, diger adimlarla ayni olcekte.
+if (Difficulty_Get() == DIFFICULTY_NORMAL)
+{
+	var _kisa = [];
+	for (var _pi = 0; _pi < array_length(mavi_parkur); _pi++)
+	{
+		if (_pi >= 8) and (_pi <= 15) { continue; }
+		array_push(_kisa,mavi_parkur[_pi]);
+	}
+	mavi_parkur = _kisa;
+}
+
 F2Basamak = function(_adim)
 {
 	var _p = makeplatform(_adim[0],505,_adim[1],0,-mavi_hiz,1,0);
@@ -847,6 +883,7 @@ F2MaviBasla = function()
 	final_kutu = false;
 	sahte_on = false;
 	mavi_son = noone;
+	Difficulty_Can(); // NORMAL: mavi parkur basinda can
 };
 
 

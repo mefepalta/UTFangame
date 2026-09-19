@@ -23,6 +23,7 @@ with (battle_enemy_engage)
 	pap_head_sprite = spr_papyrus_head;
 	pap_state = 2;
 	alp_state = 2;
+	p2_state  = 2;   // atak 10 SansAlphysGizle ile 0 yapiyor; her baslangicta geri al
 }
 
 if (atak == 1) { Difficulty_PapyrusMuzikBasla(); }

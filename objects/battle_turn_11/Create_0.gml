@@ -13,9 +13,13 @@ wall = [];
 WallMake = function(_len,_warn)
 {
 	wall = [];
-	var _w = battle_board.left+battle_board.right;
-	var _n = ceil(_w/11)+1;
-	var _x0 = battle_board.x-battle_board.left;
+	// Duvari tahtadan KEMIK_DUVAR_MARJ kadar genis kur: tahta bu cagridan
+	// sonra genislese bile (animasyon devam ediyorsa ya da sonraki bir boyut
+	// degisikliginde) sagda/solda guvenli bosluk kalmasin. Tasan kemikler
+	// tahta yuzeyine kirpildigi icin gorunmuyor.
+	var _yari = max(battle_board.left,battle_board.right) + KEMIK_DUVAR_MARJ;
+	var _n  = ceil((_yari*2)/11)+1;
+	var _x0 = battle_board.x - _yari;
 	audio_play_sound(snd_exclamation,0,false);
 	for (var _i = 0; _i < _n; _i++)
 	{

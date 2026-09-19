@@ -71,13 +71,21 @@ CarBone = function(_x1,_x2,_y,_sc,_col,_al)
 
 CarMark = function(_d)
 {
-	array_push(cars,{ y: 400-_d });
+	// Ilk birkac carousel icin "Don't jump!" uyarisi (Battle_HintCarousel sayar)
+	array_push(cars,{ y: 400-_d, uyari: Battle_HintCarousel() });
 	car_on = true;
+};
+
+CarUyariSil = function(_c)
+{
+	if (instance_exists(_c.uyari)) { instance_destroy(_c.uyari); }
+	_c.uyari = noone;
 };
 
 CarStop = function()
 {
 	car_on = false;
+	for (var _i = 0; _i < array_length(cars); _i++) { CarUyariSil(cars[_i]); }
 	cars = [];
 };
 
@@ -102,6 +110,7 @@ gst_ty=400;
 gst_spd=19;
 gst_rvx=0;
 gst_rvy=0;
+gst_iz=[];
 
 #macro T18_TEP_MESAFE  70
 #macro T18_TEP_ITME    10
@@ -122,6 +131,15 @@ GuestStart = function(_max)
 	gst_y = -60;
 	gst_vx = 1.4;
 	gst_flash = 0;
+	gst_iz = [];
+	// HARD disinda daha seyrek ve biraz daha yavas saldirir
+	if (Difficulty_Get() != DIFFICULTY_HARD)
+	{
+		gst_bekle = 34;
+		gst_hazir = 38;
+		gst_geri  = 28;
+		gst_spd   = 16;
+	}
 	Anim_Destroy(id,"gst_alpha");
 	Anim_Create(id,"gst_alpha",ANIM_TWEEN.LINEAR,ANIM_EASE.OUT,0,1,25);
 	audio_play_sound(snd_exclamation,0,false);
@@ -232,7 +250,9 @@ JumpUnit = function(_first,_lanes)
 		JumpBar(_d+130-424);
 	}
 	var _td = _first+260*_n;
-	JumpRing(_lanes[_n-1],_td-420);
+	// Carousel'in onundeki halka kirmizi: ziplama, havadayken carousel vurur
+	var _son = JumpRing(_lanes[_n-1],_td-420);
+	_son.kirmizi = true;
 	CarMark(_td+130);
 };
 
@@ -298,6 +318,8 @@ YelpazeKemik = function(_yon,_hiz,_renk)
 	var _h = _hiz*_yon;
 	var _b = RegularBone(_x,KirDip(),152,_h,0,0,_renk,0,1,1,0,0,0,true);
 	KemikDinamik(_b,_h,180);
+	// NORMAL: kemik daha erken geri donsun, karsi tarafa o kadar gitmesin
+	if (Difficulty_Get() == DIFFICULTY_NORMAL) { _b._dynamic_rate = 0.028; }
 	audio_play_sound(snd_stab,2,false);
 	return _b;
 };
@@ -314,9 +336,13 @@ MaviKemik = function(_yon)
 TuruncuKemik = function(_yon)
 {
 	var _x = (_yon > 0) ? KirSol()-10 : KirSag()+10;
-	var _h = 18*_yon;
+	// NORMAL: turuncu kemikler cok daha yavas; yavaslama neredeyse yok ve omur
+	// kutunun obur ucuna varacak kadar uzun (0.015/38 ile kutu ortasinda soluyordu)
+	var _normal = (Difficulty_Get() == DIFFICULTY_NORMAL);
+	var _h = (_normal ? 9 : 18)*_yon;
 	var _b = RegularBone(_x,KirDip(),152,_h,0,0,2,0,1,1,0,0,0,true);
-	KemikDinamik(_b,_h,38);
+	KemikDinamik(_b,_h,_normal ? 52 : 38);
+	if (_normal) { _b._dynamic_rate = 0.004; }
 	audio_play_sound(snd_swift,2,false);
 	return _b;
 };

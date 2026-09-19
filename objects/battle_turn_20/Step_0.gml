@@ -499,6 +499,19 @@ if (room == room_battle)
 
 if (room == room_battle_1)
 {
+	// NORMAL kisaltmalari (Difficulty_Normal). Atlanan araliklar:
+	//   2030->2420  shocker/dalga ciftlerinden 3'u          (-390 kare)
+	//   2835->3110  SpearArena(5) mizrak bolumu             (-275 kare)
+	//   4735->5135  sagdan gelen nisan blaster turu         (-400 kare)
+	// Sari, koridor, buyuk kutu ve mavi bolum kisaltmalari asagida kendi
+	// sayaclarinda (sari_t / bolum / son_t / mavi_parkur).
+	if (Difficulty_Normal())
+	{
+		if (_timer == 2030) { _timer = 2420; }
+		if (_timer == 2835) { _timer = 3110; }
+		if (_timer == 4735) { _timer = 5135; }
+	}
+
 	if (_timer == 1)
 	{
 		battle_enemy_engage.p2_head_sprite = spr_p2_idle;
@@ -793,23 +806,21 @@ if (room == room_battle_1)
 
 	if (_timer >= 3995) and (_timer <= 5195)
 	{
-		if ((_timer-3995) % 60 == 0) { F2AltGrup(2.5); }
+		if ((_timer-3995) % 90 == 0) { F2AltGrup(1.7); }
 	}
 
 	if (_timer >= 4055) and (_timer <= 5235)
 	{
-		if ((_timer-4055) % 120 == 0) { F2GrupVur(); }
+		if ((_timer-4055) % 150 == 0) { F2GrupVur(); }
 	}
 
 	if (_timer == 4335) { F2NisanBlaster(true); }
-	if (_timer == 4535) { F2NisanBlaster(false); }
-	if (_timer == 4735) { F2NisanBlaster(true); }
-	if (_timer == 4935) { F2NisanBlaster(false); }
+	if (_timer == 4735) { F2NisanBlaster(false); }
 	if (_timer == 5135) { F2NisanBlaster(true); }
 
 	if (_timer >= 4635) and (_timer <= 5235)
 	{
-		if ((_timer-4635) % 120 == 0) { Spear3(); }
+		if ((_timer-4635) % 200 == 0) { Spear3(); }
 	}
 
 	if (_timer == 5335)
@@ -825,6 +836,9 @@ if (room == room_battle_1)
 	if (sari_on)
 	{
 		sari_t += 1;
+		// NORMAL: aynali orta bolum (693-1222) atlanir; _timer da ayni kadar
+		// ileri alinir ki 6995'teki kararma ile hizalama bozulmasin (-530 kare)
+		if (Difficulty_Normal()) and (sari_t == 693) { sari_t = 1223; _timer += 530; }
 
 		if (sari_t == 43) { DrTarget(DR_TARGET.NORMAL,90,3.2); }
 		if (sari_t == 54) { DrTarget(DR_TARGET.NORMAL,45,3.2); }
@@ -955,7 +969,7 @@ if (room == room_battle_1)
 
 
 
-	if (_timer == 6995) { Fader_Fade(0,1,1); }
+	if (_timer == 6995) { Fader_Fade(0,1,1); audio_play_sound(snd_noise,1,false); }
 
 	if (_timer == 7035) { F2TuruncuBasla(); }
 
@@ -1001,9 +1015,22 @@ if (room == room_battle_1)
 
 	if (bolum == 5) and (yol >= 6045)
 	{
-		bolum = 6;
-		BoxRun(4,100,110,310,40);
-		BlastMark(1200,-1);
+		if (Difficulty_Normal())
+		{
+			// NORMAL: 6-7-8 (kutu, zincir, ziplama) atlanir, dogrudan 9'un
+			// kutu kosusuna gecilir; yol sayaci 9'un esigine cekilir (-4830 yol)
+			bolum = 9;
+			yol = 10875;
+			BoxRun(5,100,110,310,40);
+			BlastMark(1100,1);
+			BlastMark(1700,-1);
+		}
+		else
+		{
+			bolum = 6;
+			BoxRun(4,100,110,310,40);
+			BlastMark(1200,-1);
+		}
 	}
 
 	if (bolum == 6) and (yol >= 7680)
@@ -1107,7 +1134,18 @@ if (room == room_battle_1)
 
 		for (var _i = _cn-1; _i >= 0; _i--)
 		{
-			if (cars[_i].y > 560) { array_delete(cars,_i,1); }
+			if (cars[_i].y > 560) { CarUyariSil(cars[_i]); array_delete(cars,_i,1); }
+		}
+		for (var _i = 0; _i < array_length(cars); _i++)
+		{
+			var _cu = cars[_i].uyari;
+			if (instance_exists(_cu))
+			{
+				_cu.hx = battle_board.x+58;
+				_cu.hy = cars[_i].y-car_ry*0.6;
+				_cu.ok_dx = 52;
+				_cu.ok_dy = -46;
+			}
 		}
 		_cn = array_length(cars);
 		if (_cn == 0) { car_on = false; }
@@ -1192,6 +1230,8 @@ if (room == room_battle_1)
 			var _gd = point_direction(gst_x,gst_y,gst_tx,gst_ty);
 			gst_x += lengthdir_x(gst_spd,_gd);
 			gst_y += lengthdir_y(gst_spd,_gd);
+			// Lacivert saldiri yolunda yukari suzulen iz
+			array_push(gst_iz,{ x: gst_x, y: gst_y, t: 0, omur: 24 });
 			if (gst_y > 520) or (gst_t > 90)
 			{
 				gst_state = 3;
@@ -1273,6 +1313,13 @@ if (room == room_battle_1)
 		}
 	}
 
+	for (var _zi = array_length(gst_iz)-1; _zi >= 0; _zi--)
+	{
+		gst_iz[_zi].t += (gst_state == 2) ? 1 : 2;
+		gst_iz[_zi].y -= 1.8;
+		if (gst_iz[_zi].t >= gst_iz[_zi].omur) { array_delete(gst_iz,_zi,1); }
+	}
+
 	if (kon_tep_t >= 0)
 	{
 		if (instance_exists(battle_soul))
@@ -1317,11 +1364,13 @@ if (room == room_battle_1)
 	{
 		son_t += 1;
 
+		// Halka kemikler: HARD'da 190 karede bir, diger zorluklarda daha seyrek
+		var _cem_ara = (Difficulty_Get() == DIFFICULTY_HARD) ? 190 : 285;
 		if (son_t >= 60) and (son_t <= 1440)
 		{
-			if ((son_t-60) % 190 == 0)
+			if ((son_t-60) % _cem_ara == 0)
 			{
-				var _k = (son_t-60) div 190;
+				var _k = (son_t-60) div _cem_ara;
 				F2Cember(240,18,1.6,_k*55);
 			}
 		}
@@ -1332,7 +1381,9 @@ if (room == room_battle_1)
 		}
 
 
-		if (son_t == 1560)
+		// NORMAL: buyuk kutu bolumu 1560 yerine 1140 karede biter (-420 kare)
+		var _son_kapanis = Difficulty_Normal() ? 1140 : 1560;
+		if (son_t == _son_kapanis)
 		{
 			son_on = false;
 			son_bitis = _timer;
@@ -1389,18 +1440,21 @@ if (room == room_battle_1)
 			else if (battle_soul.y < 20)  { F2MaviSinir(false); }
 		}
 
-		if (mavi_t >= 500) and (mavi_t <= 1980)
+		// Mizrak ve blasterlar sadece HARD; diger zorluklarda platform + kemik
+		if (Difficulty_Get() == DIFFICULTY_HARD)
 		{
-			if ((mavi_t-500) % 280 == 0) { Spear3(); }
-		}
-
-
-		if (mavi_t >= 1100) and (mavi_t <= 2020)
-		{
-			if ((mavi_t-1100) % 130 == 0)
+			if (mavi_t >= 500) and (mavi_t <= 1980)
 			{
-				var _kn = ((mavi_t-1100) div 130) % 4;
-				F2LabBlaster(_kn);
+				if ((mavi_t-500) % 280 == 0) { Spear3(); }
+			}
+
+			if (mavi_t >= 1100) and (mavi_t <= 2020)
+			{
+				if ((mavi_t-1100) % 130 == 0)
+				{
+					var _kn = ((mavi_t-1100) div 130) % 4;
+					F2LabBlaster(_kn);
+				}
 			}
 		}
 

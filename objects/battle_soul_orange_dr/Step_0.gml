@@ -155,3 +155,16 @@ for(var i=array_length(orbs)-1;i>=0;i--){
 		array_delete(orbs,i,1);
 	}
 }
+
+// CAN gostergesi: battle_turn_20'dekiyle ayni davranis -- sadece HP DUSTUGU
+// karede yanar, bir sure sabit kalir, sonra soner.
+var _can = Player_GetHp();
+if (can_onceki < 0) { can_onceki = _can; }
+if (_can < can_onceki)
+{
+	can_alpha = 1;
+	can_bekle = CAN_GOSTERGE_BEKLE;
+}
+can_onceki = _can;
+if (can_bekle > 0) { can_bekle -= 1; }
+else if (can_alpha > 0) { can_alpha = max(0,can_alpha-CAN_GOSTERGE_SONME); }

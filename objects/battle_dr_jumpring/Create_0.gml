@@ -10,3 +10,4 @@ hit_y=36;
 
 used=false;
 pop=1;
+kirmizi=false;

@@ -3,7 +3,7 @@ event_inherited();
 moveable=false;
 
 sprite_index=spr_dr_soul_yellow;
-image_angle=0;
+image_angle=90;
 aim=90;
 
 charge=0;
@@ -66,3 +66,9 @@ function fire(BIG){
 		small_cd=small_cd_max;
 	}
 }
+
+// Kutu ici sari halka (Alphys Alpha arena_cover2) + ilk seferde POWER SHOT ipucu
+if(!instance_exists(battle_dr_cover)){
+	instance_create_depth(0,0,DEPTH_BATTLE.BULLET+5,battle_dr_cover);
+}
+Battle_HintPowerShot();

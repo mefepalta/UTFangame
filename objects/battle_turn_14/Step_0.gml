@@ -114,6 +114,8 @@ if (room == room_battle)
 if (room == room_battle_1)
 {
 	if (Difficulty_AtakKisa()) and (_timer == 2179) { _timer = 3360; }
+	// NORMAL: donen kutu bolumunde 900-1199 arasi bolt/blaster tekrari atlanir (-300 kare)
+	if (Difficulty_Normal()) and (_timer == 899) { _timer = 1199; }
 
 	if (_timer > 545) and (_timer < 1370) { battle_board.angle += don_hiz; }
 	if (_timer > 2312) and (_timer < 3360)
@@ -262,6 +264,7 @@ if (room == room_battle_1)
 	{
 		battle_board.angle = 0;
 		Battle_SetBoardSizeCubic(135,65,100,100,44);
+		Difficulty_Can(); // NORMAL: atagin ortasinda can
 	}
 
 	if (_timer == 1540)

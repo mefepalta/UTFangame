@@ -113,6 +113,40 @@ function Difficulty_AtakKisa()
 	return (Difficulty_Get() != DIFFICULTY_HARD);
 }
 
+function Difficulty_Normal() { return (Difficulty_Get() == DIFFICULTY_NORMAL); }
+
+// NORMAL faz 2: uzun ataklarin bolum gecislerinde otomatik can. Sadece
+// NORMAL'de ve room_battle_1'de calisir; can zaten doluysa ses/yazi cikmaz.
+// Miktar CAN_FAZ2_NORMAL (Macro_Battle). Ruhun ustunde yesil "+N HP" yazar.
+// Cagrildigi yerler: turn_14 (1450), turn_15 (2030), turn_20 F2SariBasla /
+// F2TuruncuBasla / F2SonAc / F2MaviBasla.
+function Difficulty_Can()
+{
+	if (!Difficulty_Normal())          { return false; }
+	if (room != room_battle_1)         { return false; }
+	if (!instance_exists(battle_soul)) { return false; }
+
+	var _once = Player_GetHp();
+	Player_Heal(CAN_FAZ2_NORMAL);
+	var _fark = Player_GetHp() - _once;
+	if (_fark <= 0) { return false; }
+
+	audio_play_sound(snd_item_heal,0,false);
+	var _h = Battle_Hint("+" + string(_fark) + " HP",1,90);
+	_h.col   = c_lime;
+	_h.blink = 100000; // yanip sonmesin
+	return true;
+}
+
+// Turuncu ruhun buyuk dash'i icin gereken sarj suresi (kare).
+// HARD'da taban deger korunuyor, HARD disinda kisaltiliyor.
+function Difficulty_DashSarj(_taban)
+{
+	if (!is_real(_taban)) { return _taban; }
+	if (Difficulty_Get() == DIFFICULTY_HARD) { return _taban; }
+	return min(_taban, DASH_SARJ_KOLAY);
+}
+
 
 
 function Difficulty_Konusmaci(_t)

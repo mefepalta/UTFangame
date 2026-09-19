@@ -98,6 +98,20 @@ if (box_on) and (instance_exists(battle_board))
 	draw_set_color(c_white);
 }
 
+if (array_length(gst_iz) > 0)
+{
+	var _izc = make_color_rgb(30,55,175);
+	for (var _zi = 0; _zi < array_length(gst_iz); _zi++)
+	{
+		var _iz = gst_iz[_zi];
+		var _o = _iz.t/_iz.omur;
+		var _za = (1-_o)*0.5*gst_alpha;
+		var _zs = gst_scale*(1-0.3*_o);
+		draw_sprite_ext(spr_dr_guest,0,_iz.x,_iz.y,_zs,_zs,0,_izc,_za);
+	}
+	draw_set_alpha(1);
+}
+
 if (gst_alpha > 0)
 {
 	var _gc = c_white;

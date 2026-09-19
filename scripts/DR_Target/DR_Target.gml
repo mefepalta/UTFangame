@@ -11,6 +11,7 @@ function DrTarget(kind,angle)
 	_t.setup(kind);
 	_t.dir = _a+180;
 	if (_spd > 0) { _t.spd = _spd; }
+	if (kind == DR_TARGET.MIRROR) { Battle_HintMirror(_t); }
 	return _t;
 }
 

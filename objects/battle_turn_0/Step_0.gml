@@ -28,6 +28,11 @@ if (_intro_timer > 20)
 }
 if (_timer = 1)
 {
+	// Tahta/ruh monolog icin gizlenmisti (Other_10); normalde monologdaki
+	// {script testScript} geri aciyor. Balon herhangi bir sebeple erken
+	// olurse (checkornot, atlama, vs.) atak gorunmez tahtada baslardi.
+	// testScript idempotent: zaten calistiysa bu satir hicbir sey degistirmez.
+	testScript();
 	battle_enemy_engage.p2_head_sprite = spr_p2_idle;
 	Battle_SetBoardSizeCubic(65,65,130,130);
 	Battle_SlamDown();

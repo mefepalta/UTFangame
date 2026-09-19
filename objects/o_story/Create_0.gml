@@ -27,4 +27,9 @@ paneller = [
 	{ spr : storypanel_16, t : 5652, sure : 857, ani : false, olay : [] },
 ];
 
+// o_storyblack bu sesi audio_sound_gain(...,0,500) ile kisiyor. GameMaker'da
+// bu VARLIK gain'idir: sonraki her calista gecerli ve game_restart()'tan da
+// sag cikar. Story bir kez izlenip (ya da F2 ile yeniden baslatilip) tekrar
+// acilinca muzik 0 gain'de "caliyordu" = sessiz. Calmadan once sifirla.
+audio_sound_gain(snd_balladofhteunderground,1,0);
 audio_play_sound(snd_balladofhteunderground,1,0);

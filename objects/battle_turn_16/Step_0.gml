@@ -299,7 +299,18 @@ if (room == room_battle_1)
 
 		for (var _i = _cn-1; _i >= 0; _i--)
 		{
-			if (cars[_i].y > 560) { array_delete(cars,_i,1); }
+			if (cars[_i].y > 560) { CarUyariSil(cars[_i]); array_delete(cars,_i,1); }
+		}
+		for (var _i = 0; _i < array_length(cars); _i++)
+		{
+			var _cu = cars[_i].uyari;
+			if (instance_exists(_cu))
+			{
+				_cu.hx = battle_board.x+58;
+				_cu.hy = cars[_i].y-car_ry*0.6;
+				_cu.ok_dx = 52;
+				_cu.ok_dy = -46;
+			}
 		}
 		_cn = array_length(cars);
 		if (_cn == 0) { car_on = false; }
